@@ -17,6 +17,18 @@
     <measure number="1">
       <attributes>
         <divisions>3</divisions>
+        <key>
+          <fifths>5</fifths>
+          <mode>minor</mode>
+        </key>
+        <time>
+          <beats>2</beats>
+          <beat-type>2</beat-type>
+        </time>
+        <clef>
+          <sign>G</sign>
+          <line>2</line>
+        </clef>
       </attributes>
       <direction>
         <direction-type>
@@ -30,17 +42,6 @@
         </direction-type>
         <sound tempo="480" />
       </direction>
-      <attributes>
-        <time>
-          <beats>2</beats>
-          <beat-type>2</beat-type>
-        </time>
-      </attributes>
-      <attributes>
-        <key>
-          <fifths>5</fifths>
-        </key>
-      </attributes>
       <direction>
         <direction-type>
           <dynamics>
@@ -4035,6 +4036,7 @@
       <attributes>
         <key>
           <fifths>-3</fifths>
+          <mode>minor</mode>
         </key>
       </attributes>
       <direction placement="below">
@@ -6552,7 +6554,7 @@
       </note>
       <direction>
         <direction-type>
-          <octave-shift type="up" size="8" />
+          <octave-shift type="down" size="8" />
         </direction-type>
       </direction>
       <note>
@@ -7490,6 +7492,7 @@
       <attributes>
         <key>
           <fifths>5</fifths>
+          <mode>minor</mode>
         </key>
       </attributes>
       <direction placement="below">
@@ -9160,6 +9163,7 @@
       <attributes>
         <key>
           <fifths>-3</fifths>
+          <mode>minor</mode>
         </key>
       </attributes>
       <note>

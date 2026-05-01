@@ -41,7 +41,11 @@ Implements the command-line interface. It supports the required input and output
 
 ## src/ly_to_musicxml/converter.py
 
-Orchestrates extraction, parsing, score selection, and output writing. Multi-score inputs preserve additional non-empty scores as sibling files instead of silently dropping them.
+Orchestrates extraction, parsing, score selection, cleanup, and output writing. Multi-score inputs preserve additional non-empty scores in a sibling `stem.exports/` directory instead of silently dropping them.
+
+Known limits:
+
+- Additional outputs are still identified generically as `book-NN-score-NN` because the Lily runtime metadata available here does not reliably expose human-friendly movement or layout names for every emitted score.
 
 ## src/ly_to_musicxml/lilypond.py
 

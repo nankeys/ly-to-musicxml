@@ -59,8 +59,10 @@ ly-to-musicxml "input.ly" -o "output.musicxml"
 If the input produces multiple non-empty scores or books, the converter preserves them by writing multiple MusicXML files.
 
 - The first non-empty score is written to the requested output path.
-- Additional non-empty scores are written as sibling files using the pattern `stem.bookNN.scoreNN.musicxml`.
+- Additional non-empty scores are written into a sibling directory named `stem.exports/` using the pattern `book-NN-score-NN.musicxml`.
 - Empty scores are skipped with warnings.
+
+If you rerun the converter for the same output path, it clears the previous `stem.exports/` directory and any legacy `stem.bookNN.scoreNN.musicxml` files before writing fresh outputs.
 
 For the provided `Shostakovich-String-Quartet-8.ly`, this means the quartet score and the extracted part books are written as separate MusicXML files.
 

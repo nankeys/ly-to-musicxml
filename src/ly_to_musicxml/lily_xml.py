@@ -923,8 +923,8 @@ def _parse_ottava_direction(music: etree.Element, source_lookup: SourceLookup) -
     if ottava_number == 0:
         return DirectionItem(octave_shift=OctaveShift(shift_type="stop", size=8))
     if ottava_number > 0:
-        return DirectionItem(octave_shift=OctaveShift(shift_type="up", size=8 * ottava_number))
-    return DirectionItem(octave_shift=OctaveShift(shift_type="down", size=8 * abs(ottava_number)))
+        return DirectionItem(octave_shift=OctaveShift(shift_type="down", size=8 * ottava_number))
+    return DirectionItem(octave_shift=OctaveShift(shift_type="up", size=8 * abs(ottava_number)))
 
 
 def _parse_clef_from_origin(line: str | None) -> tuple[str, int, int | None] | None:

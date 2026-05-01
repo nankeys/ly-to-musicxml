@@ -93,7 +93,7 @@ def _append_part(root: etree.Element, part: Part) -> None:
                 has_emitted_clef = True
 
         for direction in opening_directions:
-            _append_direction(measure_elem, direction)
+            _append_measure_item(measure_elem, direction, current_divisions)
 
         while index < len(measure.items):
             item = measure.items[index]

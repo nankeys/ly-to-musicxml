@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass, field
 from pathlib import Path
+import shutil
 
 from .lily_xml import parse_lily_xml
 from .lilypond import extract_lily_xml
@@ -41,18 +42,34 @@ def convert_file(
     if not scores_to_write:
         raise RuntimeError("No non-empty scores were produced from the LilyPond input.")
 
+    _cleanup_previous_outputs(primary_output)
+
     written_files: list[Path] = []
     for output_index, (book_index, score_index, score) in enumerate(scores_to_write):
         if output_index == 0:
             target_path = primary_output
         else:
-            target_path = primary_output.with_name(
-                f"{primary_output.stem}.book{book_index:02d}.score{score_index:02d}{primary_output.suffix}"
-            )
+            target_path = _additional_output_path(primary_output, book_index, score_index)
             warnings.append(
-                f"Input contains multiple scores; wrote an additional MusicXML file to {target_path.name}."
+                f"Input contains multiple scores; wrote an additional MusicXML file to {target_path.relative_to(primary_output.parent)}."
             )
         write_score(score, target_path)
         written_files.append(target_path)
 
     return ConversionResult(written_files=written_files, warnings=warnings)
+
+
+def _additional_output_path(primary_output: Path, book_index: int, score_index: int) -> Path:
+    export_dir = primary_output.parent / f"{primary_output.stem}.exports"
+    return export_dir / f"book-{book_index:02d}-score-{score_index:02d}{primary_output.suffix}"
+
+
+def _cleanup_previous_outputs(primary_output: Path) -> None:
+    export_dir = primary_output.parent / f"{primary_output.stem}.exports"
+    if export_dir.exists():
+        shutil.rmtree(export_dir)
+
+    legacy_pattern = f"{primary_output.stem}.book*.score*{primary_output.suffix}"
+    for legacy_file in primary_output.parent.glob(legacy_pattern):
+        if legacy_file.is_file():
+            legacy_file.unlink()
