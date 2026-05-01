@@ -60,14 +60,59 @@ def _append_header(root: etree.Element, score: Score) -> None:
 def _append_part(root: etree.Element, part: Part) -> None:
     part_elem = etree.SubElement(root, "part", id=part.identifier)
     current_divisions = 1
+    has_emitted_clef = False
     for measure in part.measures:
         measure_elem = etree.SubElement(part_elem, "measure", number=str(measure.number))
         if measure.implicit:
             measure_elem.set("implicit", "yes")
-        for item in measure.items:
-            if isinstance(item, AttributesItem) and item.divisions is not None:
-                current_divisions = item.divisions
+        index = 0
+        opening_attributes = AttributesItem()
+        opening_directions: list[DirectionItem] = []
+
+        while index < len(measure.items):
+            item = measure.items[index]
+            if isinstance(item, AttributesItem):
+                if item.divisions is not None:
+                    current_divisions = item.divisions
+                _merge_attributes(opening_attributes, item)
+                index += 1
+                continue
+            if isinstance(item, DirectionItem):
+                opening_directions.append(item)
+                index += 1
+                continue
+            break
+
+        if not has_emitted_clef and opening_attributes.clef_sign is None:
+            opening_attributes.clef_sign = "G"
+            opening_attributes.clef_line = 2
+
+        if _attributes_have_content(opening_attributes):
+            _append_attributes(measure_elem, opening_attributes)
+            if opening_attributes.clef_sign is not None:
+                has_emitted_clef = True
+
+        for direction in opening_directions:
+            _append_direction(measure_elem, direction)
+
+        while index < len(measure.items):
+            item = measure.items[index]
+            if isinstance(item, AttributesItem):
+                merged = AttributesItem()
+                while index < len(measure.items) and isinstance(measure.items[index], AttributesItem):
+                    current = measure.items[index]
+                    if current.divisions is not None:
+                        current_divisions = current.divisions
+                    _merge_attributes(merged, current)
+                    index += 1
+                if _attributes_have_content(merged):
+                    _append_attributes(measure_elem, merged)
+                    if merged.clef_sign is not None:
+                        has_emitted_clef = True
+                continue
+
             _append_measure_item(measure_elem, item, current_divisions)
+            index += 1
         if measure.right_barline:
             barline = etree.SubElement(measure_elem, "barline", location="right")
             style = etree.SubElement(barline, "bar-style")
@@ -116,6 +161,41 @@ def _append_attributes(measure_elem: etree.Element, item: AttributesItem) -> Non
         if item.clef_octave_change is not None:
             octave_change = etree.SubElement(clef, "clef-octave-change")
             octave_change.text = str(item.clef_octave_change)
+
+
+def _merge_attributes(target: AttributesItem, source: AttributesItem) -> None:
+    if source.divisions is not None:
+        target.divisions = source.divisions
+    if source.key_fifths is not None:
+        target.key_fifths = source.key_fifths
+    if source.key_mode is not None:
+        target.key_mode = source.key_mode
+    if source.beats is not None:
+        target.beats = source.beats
+    if source.beat_type is not None:
+        target.beat_type = source.beat_type
+    if source.clef_sign is not None:
+        target.clef_sign = source.clef_sign
+    if source.clef_line is not None:
+        target.clef_line = source.clef_line
+    if source.clef_octave_change is not None:
+        target.clef_octave_change = source.clef_octave_change
+
+
+def _attributes_have_content(item: AttributesItem) -> bool:
+    return any(
+        value is not None
+        for value in (
+            item.divisions,
+            item.key_fifths,
+            item.key_mode,
+            item.beats,
+            item.beat_type,
+            item.clef_sign,
+            item.clef_line,
+            item.clef_octave_change,
+        )
+    )
 
 
 def _append_direction(measure_elem: etree.Element, item: DirectionItem) -> None:

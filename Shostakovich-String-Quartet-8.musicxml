@@ -26,6 +26,18 @@
     <measure number="1" implicit="yes">
       <attributes>
         <divisions>2</divisions>
+        <key>
+          <fifths>-3</fifths>
+          <mode>minor</mode>
+        </key>
+        <time>
+          <beats>4</beats>
+          <beat-type>4</beat-type>
+        </time>
+        <clef>
+          <sign>G</sign>
+          <line>2</line>
+        </clef>
       </attributes>
       <direction>
         <direction-type>
@@ -39,17 +51,6 @@
         </direction-type>
         <sound tempo="126" />
       </direction>
-      <attributes>
-        <time>
-          <beats>4</beats>
-          <beat-type>4</beat-type>
-        </time>
-      </attributes>
-      <attributes>
-        <key>
-          <fifths>-3</fifths>
-        </key>
-      </attributes>
       <note>
         <rest />
         <duration>4</duration>
@@ -3596,6 +3597,18 @@
     <measure number="1" implicit="yes">
       <attributes>
         <divisions>2</divisions>
+        <key>
+          <fifths>-3</fifths>
+          <mode>minor</mode>
+        </key>
+        <time>
+          <beats>4</beats>
+          <beat-type>4</beat-type>
+        </time>
+        <clef>
+          <sign>G</sign>
+          <line>2</line>
+        </clef>
       </attributes>
       <direction>
         <direction-type>
@@ -3609,17 +3622,6 @@
         </direction-type>
         <sound tempo="126" />
       </direction>
-      <attributes>
-        <time>
-          <beats>4</beats>
-          <beat-type>4</beat-type>
-        </time>
-      </attributes>
-      <attributes>
-        <key>
-          <fifths>-3</fifths>
-        </key>
-      </attributes>
       <note>
         <rest />
         <duration>4</duration>
@@ -7004,6 +7006,18 @@
     <measure number="1" implicit="yes">
       <attributes>
         <divisions>2</divisions>
+        <key>
+          <fifths>-3</fifths>
+          <mode>minor</mode>
+        </key>
+        <time>
+          <beats>4</beats>
+          <beat-type>4</beat-type>
+        </time>
+        <clef>
+          <sign>C</sign>
+          <line>3</line>
+        </clef>
       </attributes>
       <direction>
         <direction-type>
@@ -7017,17 +7031,6 @@
         </direction-type>
         <sound tempo="126" />
       </direction>
-      <attributes>
-        <time>
-          <beats>4</beats>
-          <beat-type>4</beat-type>
-        </time>
-      </attributes>
-      <attributes>
-        <key>
-          <fifths>-3</fifths>
-        </key>
-      </attributes>
       <note>
         <rest />
         <duration>4</duration>
@@ -10145,6 +10148,18 @@
     <measure number="1" implicit="yes">
       <attributes>
         <divisions>2</divisions>
+        <key>
+          <fifths>-3</fifths>
+          <mode>minor</mode>
+        </key>
+        <time>
+          <beats>4</beats>
+          <beat-type>4</beat-type>
+        </time>
+        <clef>
+          <sign>F</sign>
+          <line>4</line>
+        </clef>
       </attributes>
       <direction>
         <direction-type>
@@ -10158,17 +10173,6 @@
         </direction-type>
         <sound tempo="126" />
       </direction>
-      <attributes>
-        <time>
-          <beats>4</beats>
-          <beat-type>4</beat-type>
-        </time>
-      </attributes>
-      <attributes>
-        <key>
-          <fifths>-3</fifths>
-        </key>
-      </attributes>
       <direction>
         <direction-type>
           <dynamics>

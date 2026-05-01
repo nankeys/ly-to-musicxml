@@ -10,13 +10,25 @@
   </identification>
   <part-list>
     <score-part id="P1">
-      <part-name>Violin 1</part-name>
+      <part-name>Violin 2</part-name>
     </score-part>
   </part-list>
   <part id="P1">
     <measure number="1" implicit="yes">
       <attributes>
         <divisions>2</divisions>
+        <key>
+          <fifths>-3</fifths>
+          <mode>minor</mode>
+        </key>
+        <time>
+          <beats>4</beats>
+          <beat-type>4</beat-type>
+        </time>
+        <clef>
+          <sign>G</sign>
+          <line>2</line>
+        </clef>
       </attributes>
       <direction>
         <direction-type>
@@ -30,17 +42,6 @@
         </direction-type>
         <sound tempo="126" />
       </direction>
-      <attributes>
-        <time>
-          <beats>4</beats>
-          <beat-type>4</beat-type>
-        </time>
-      </attributes>
-      <attributes>
-        <key>
-          <fifths>-3</fifths>
-        </key>
-      </attributes>
       <note>
         <rest />
         <duration>4</duration>
@@ -67,22 +68,6 @@
     <measure number="4">
       <note>
         <rest />
-        <duration>8</duration>
-        <voice>1</voice>
-        <type>whole</type>
-      </note>
-    </measure>
-    <measure number="5">
-      <note>
-        <rest />
-        <duration>8</duration>
-        <voice>1</voice>
-        <type>whole</type>
-      </note>
-    </measure>
-    <measure number="6">
-      <note>
-        <rest />
         <duration>4</duration>
         <voice>1</voice>
         <type>half</type>
@@ -96,7 +81,7 @@
       </direction>
       <note>
         <pitch>
-          <step>G</step>
+          <step>D</step>
           <octave>4</octave>
         </pitch>
         <duration>4</duration>
@@ -104,10 +89,10 @@
         <type>half</type>
       </note>
     </measure>
-    <measure number="7">
+    <measure number="5">
       <note>
         <pitch>
-          <step>A</step>
+          <step>E</step>
           <alter>-1</alter>
           <octave>4</octave>
         </pitch>
@@ -117,7 +102,7 @@
       </note>
       <note>
         <pitch>
-          <step>F</step>
+          <step>C</step>
           <octave>4</octave>
         </pitch>
         <duration>4</duration>
@@ -125,11 +110,11 @@
         <type>half</type>
       </note>
     </measure>
-    <measure number="8">
+    <measure number="6">
       <note>
         <pitch>
-          <step>E</step>
-          <octave>4</octave>
+          <step>B</step>
+          <octave>3</octave>
         </pitch>
         <duration>6</duration>
         <voice>1</voice>
@@ -141,7 +126,7 @@
       </note>
       <note>
         <pitch>
-          <step>F</step>
+          <step>C</step>
           <octave>4</octave>
         </pitch>
         <duration>2</duration>
@@ -152,10 +137,50 @@
         </notations>
       </note>
     </measure>
+    <measure number="7">
+      <note>
+        <pitch>
+          <step>C</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>8</duration>
+        <tie type="start" />
+        <voice>1</voice>
+        <type>whole</type>
+        <notations>
+          <tied type="start" />
+        </notations>
+      </note>
+    </measure>
+    <measure number="8">
+      <note>
+        <pitch>
+          <step>C</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>4</duration>
+        <tie type="stop" />
+        <voice>1</voice>
+        <type>half</type>
+        <notations>
+          <tied type="stop" />
+        </notations>
+      </note>
+      <note>
+        <pitch>
+          <step>D</step>
+          <alter>-1</alter>
+          <octave>4</octave>
+        </pitch>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>half</type>
+      </note>
+    </measure>
     <measure number="9">
       <note>
         <pitch>
-          <step>F</step>
+          <step>D</step>
           <octave>4</octave>
         </pitch>
         <duration>8</duration>
@@ -166,8 +191,7 @@
     <measure number="10">
       <note>
         <pitch>
-          <step>E</step>
-          <alter>-1</alter>
+          <step>C</step>
           <octave>4</octave>
         </pitch>
         <duration>8</duration>
@@ -182,8 +206,7 @@
     <measure number="11">
       <note>
         <pitch>
-          <step>E</step>
-          <alter>-1</alter>
+          <step>C</step>
           <octave>4</octave>
         </pitch>
         <duration>8</duration>
@@ -200,13 +223,12 @@
     <measure number="12">
       <direction>
         <direction-type>
-          <wedge type="diminuendo" />
+          <wedge type="crescendo" />
         </direction-type>
       </direction>
       <note>
         <pitch>
-          <step>E</step>
-          <alter>-1</alter>
+          <step>C</step>
           <octave>4</octave>
         </pitch>
         <duration>2</duration>
@@ -221,8 +243,7 @@
       </note>
       <note>
         <pitch>
-          <step>E</step>
-          <alter>-1</alter>
+          <step>C</step>
           <octave>4</octave>
         </pitch>
         <duration>1</duration>
@@ -247,7 +268,7 @@
       <note>
         <pitch>
           <step>D</step>
-          <octave>5</octave>
+          <octave>4</octave>
         </pitch>
         <duration>4</duration>
         <voice>1</voice>
@@ -264,7 +285,7 @@
         <pitch>
           <step>E</step>
           <alter>-1</alter>
-          <octave>5</octave>
+          <octave>4</octave>
         </pitch>
         <duration>4</duration>
         <voice>1</voice>
@@ -273,7 +294,7 @@
       <note>
         <pitch>
           <step>C</step>
-          <octave>5</octave>
+          <octave>4</octave>
         </pitch>
         <duration>4</duration>
         <voice>1</voice>
@@ -281,38 +302,67 @@
       </note>
     </measure>
     <measure number="14">
-      <direction placement="below">
+      <direction>
         <direction-type>
-          <words>sf pp</words>
+          <wedge type="crescendo" />
+        </direction-type>
+      </direction>
+      <direction>
+        <direction-type>
+          <dynamics>
+            <pp />
+          </dynamics>
         </direction-type>
       </direction>
       <note>
         <pitch>
           <step>B</step>
-          <octave>4</octave>
+          <octave>3</octave>
         </pitch>
         <duration>8</duration>
-        <tie type="start" />
         <voice>1</voice>
         <type>whole</type>
-        <notations>
-          <tied type="start" />
-        </notations>
       </note>
     </measure>
     <measure number="15">
+      <direction>
+        <direction-type>
+          <wedge type="stop" />
+        </direction-type>
+      </direction>
+      <direction>
+        <direction-type>
+          <wedge type="diminuendo" />
+        </direction-type>
+      </direction>
       <note>
         <pitch>
-          <step>B</step>
+          <step>E</step>
           <octave>4</octave>
         </pitch>
-        <duration>8</duration>
-        <tie type="stop" />
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>half</type>
+        <notations>
+          <slur type="start" number="2" />
+        </notations>
+      </note>
+      <direction>
+        <direction-type>
+          <wedge type="stop" />
+        </direction-type>
+      </direction>
+      <note>
+        <pitch>
+          <step>E</step>
+          <alter>-1</alter>
+          <octave>4</octave>
+        </pitch>
+        <duration>4</duration>
         <tie type="start" />
         <voice>1</voice>
-        <type>whole</type>
+        <type>half</type>
         <notations>
-          <tied type="stop" />
           <tied type="start" />
         </notations>
       </note>
@@ -320,18 +370,32 @@
     <measure number="16">
       <note>
         <pitch>
-          <step>B</step>
+          <step>E</step>
+          <alter>-1</alter>
           <octave>4</octave>
         </pitch>
-        <duration>8</duration>
+        <duration>4</duration>
         <tie type="stop" />
-        <tie type="start" />
         <voice>1</voice>
-        <type>whole</type>
+        <type>half</type>
         <notations>
           <tied type="stop" />
-          <tied type="start" />
+          <slur type="stop" number="2" />
         </notations>
+      </note>
+      <direction placement="below">
+        <direction-type>
+          <words>poco espress.</words>
+        </direction-type>
+      </direction>
+      <note>
+        <pitch>
+          <step>D</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>half</type>
       </note>
     </measure>
     <measure number="17">
@@ -342,31 +406,13 @@
       </direction>
       <note>
         <pitch>
-          <step>B</step>
+          <step>E</step>
+          <alter>-1</alter>
           <octave>4</octave>
         </pitch>
         <duration>4</duration>
-        <tie type="stop" />
         <voice>1</voice>
         <type>half</type>
-        <notations>
-          <tied type="stop" />
-        </notations>
-      </note>
-      <note>
-        <pitch>
-          <step>C</step>
-          <octave>5</octave>
-        </pitch>
-        <duration>2</duration>
-        <voice>1</voice>
-        <type>quarter</type>
-        <notations>
-          <articulations>
-            <accent />
-            <staccato />
-          </articulations>
-        </notations>
       </note>
       <direction>
         <direction-type>
@@ -375,17 +421,15 @@
       </direction>
       <note>
         <pitch>
-          <step>G</step>
+          <step>C</step>
           <octave>4</octave>
         </pitch>
-        <duration>2</duration>
+        <duration>4</duration>
+        <tie type="start" />
         <voice>1</voice>
-        <type>quarter</type>
+        <type>half</type>
         <notations>
-          <articulations>
-            <accent />
-            <staccato />
-          </articulations>
+          <tied type="start" />
         </notations>
       </note>
     </measure>
@@ -399,171 +443,160 @@
       </direction>
       <note>
         <pitch>
-          <step>E</step>
-          <alter>-1</alter>
-          <octave>4</octave>
-        </pitch>
-        <duration>8</duration>
-        <tie type="start" />
-        <voice>1</voice>
-        <type>whole</type>
-        <notations>
-          <tied type="start" />
-          <articulations>
-            <accent />
-          </articulations>
-        </notations>
-      </note>
-    </measure>
-    <measure number="19">
-      <note>
-        <pitch>
-          <step>E</step>
-          <alter>-1</alter>
-          <octave>4</octave>
-        </pitch>
-        <duration>8</duration>
-        <tie type="stop" />
-        <tie type="start" />
-        <voice>1</voice>
-        <type>whole</type>
-        <notations>
-          <tied type="stop" />
-          <tied type="start" />
-        </notations>
-      </note>
-    </measure>
-    <measure number="20">
-      <note>
-        <pitch>
-          <step>E</step>
-          <alter>-1</alter>
-          <octave>4</octave>
-        </pitch>
-        <duration>4</duration>
-        <tie type="stop" />
-        <voice>1</voice>
-        <type>half</type>
-        <notations>
-          <tied type="stop" />
-        </notations>
-      </note>
-      <note>
-        <pitch>
-          <step>E</step>
+          <step>C</step>
           <octave>4</octave>
         </pitch>
         <duration>3</duration>
+        <tie type="stop" />
         <voice>1</voice>
         <type>quarter</type>
         <dot />
         <notations>
-          <slur type="start" number="2" />
+          <tied type="stop" />
         </notations>
       </note>
       <note>
         <pitch>
-          <step>F</step>
+          <step>D</step>
           <octave>4</octave>
         </pitch>
         <duration>1</duration>
         <voice>1</voice>
         <type>eighth</type>
-        <notations>
-          <slur type="stop" number="2" />
-          <articulations>
-            <staccato />
-          </articulations>
-        </notations>
-      </note>
-    </measure>
-    <measure number="21">
-      <note>
-        <pitch>
-          <step>D</step>
-          <octave>4</octave>
-        </pitch>
-        <duration>8</duration>
-        <tie type="start" />
-        <voice>1</voice>
-        <type>whole</type>
-        <notations>
-          <tied type="start" />
-        </notations>
-      </note>
-    </measure>
-    <measure number="22">
-      <note>
-        <pitch>
-          <step>D</step>
-          <octave>4</octave>
-        </pitch>
-        <duration>4</duration>
-        <tie type="stop" />
-        <voice>1</voice>
-        <type>half</type>
-        <notations>
-          <tied type="stop" />
-        </notations>
-      </note>
-      <note>
-        <pitch>
-          <step>D</step>
-          <octave>4</octave>
-        </pitch>
-        <duration>3</duration>
-        <voice>1</voice>
-        <type>quarter</type>
-        <dot />
         <notations>
           <slur type="start" number="3" />
         </notations>
       </note>
       <note>
         <pitch>
-          <step>E</step>
-          <alter>-1</alter>
+          <step>B</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>3</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+        <dot />
+        <notations>
+          <slur type="stop" number="3" />
+        </notations>
+      </note>
+      <note>
+        <pitch>
+          <step>C</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+      </note>
+    </measure>
+    <measure number="19">
+      <note>
+        <pitch>
+          <step>A</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>3</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+        <dot />
+      </note>
+      <note>
+        <pitch>
+          <step>A</step>
+          <alter>1</alter>
+          <octave>3</octave>
+        </pitch>
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+      </note>
+      <note>
+        <pitch>
+          <step>B</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>3</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+        <dot />
+      </note>
+      <note>
+        <pitch>
+          <step>C</step>
           <octave>4</octave>
         </pitch>
         <duration>1</duration>
         <voice>1</voice>
         <type>eighth</type>
         <notations>
-          <slur type="stop" number="3" />
-          <articulations>
-            <staccato />
-          </articulations>
+          <slur type="start" number="4" />
         </notations>
+      </note>
+    </measure>
+    <measure number="20">
+      <note>
+        <pitch>
+          <step>C</step>
+          <alter>1</alter>
+          <octave>4</octave>
+        </pitch>
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+        <notations>
+          <slur type="stop" number="4" />
+        </notations>
+      </note>
+      <note>
+        <rest />
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+      </note>
+      <note>
+        <rest />
+        <duration>2</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+      </note>
+      <note>
+        <rest />
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>half</type>
+      </note>
+    </measure>
+    <measure number="21">
+      <note>
+        <rest />
+        <duration>8</duration>
+        <voice>1</voice>
+        <type>whole</type>
+      </note>
+    </measure>
+    <measure number="22">
+      <note>
+        <rest />
+        <duration>8</duration>
+        <voice>1</voice>
+        <type>whole</type>
       </note>
     </measure>
     <measure number="23">
       <note>
-        <pitch>
-          <step>C</step>
-          <octave>4</octave>
-        </pitch>
+        <rest />
         <duration>8</duration>
-        <tie type="start" />
         <voice>1</voice>
         <type>whole</type>
-        <notations>
-          <tied type="start" />
-        </notations>
       </note>
     </measure>
     <measure number="24">
       <note>
-        <pitch>
-          <step>C</step>
-          <octave>4</octave>
-        </pitch>
+        <rest />
         <duration>4</duration>
-        <tie type="stop" />
         <voice>1</voice>
         <type>half</type>
-        <notations>
-          <tied type="stop" />
-        </notations>
       </note>
       <direction placement="below">
         <direction-type>
@@ -572,8 +605,8 @@
       </direction>
       <note>
         <pitch>
-          <step>D</step>
-          <octave>4</octave>
+          <step>B</step>
+          <octave>3</octave>
         </pitch>
         <duration>4</duration>
         <voice>1</voice>
@@ -588,8 +621,7 @@
       </direction>
       <note>
         <pitch>
-          <step>E</step>
-          <alter>-1</alter>
+          <step>C</step>
           <octave>4</octave>
         </pitch>
         <duration>4</duration>
@@ -603,12 +635,17 @@
       </direction>
       <note>
         <pitch>
-          <step>C</step>
-          <octave>4</octave>
+          <step>A</step>
+          <alter>-1</alter>
+          <octave>3</octave>
         </pitch>
         <duration>4</duration>
+        <tie type="start" />
         <voice>1</voice>
         <type>half</type>
+        <notations>
+          <tied type="start" />
+        </notations>
       </note>
     </measure>
     <measure number="26">
@@ -626,15 +663,16 @@
       </direction>
       <note>
         <pitch>
-          <step>B</step>
+          <step>A</step>
+          <alter>-1</alter>
           <octave>3</octave>
         </pitch>
-        <duration>6</duration>
+        <duration>4</duration>
+        <tie type="stop" />
         <voice>1</voice>
         <type>half</type>
-        <dot />
         <notations>
-          <slur type="start" number="4" />
+          <tied type="stop" />
         </notations>
       </note>
       <direction>
@@ -644,18 +682,331 @@
       </direction>
       <note>
         <pitch>
-          <step>C</step>
-          <octave>4</octave>
+          <step>G</step>
+          <octave>3</octave>
         </pitch>
-        <duration>2</duration>
+        <duration>4</duration>
         <voice>1</voice>
-        <type>quarter</type>
-        <notations>
-          <slur type="stop" number="4" />
-        </notations>
+        <type>half</type>
       </note>
     </measure>
     <measure number="27">
+      <note>
+        <pitch>
+          <step>G</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>8</duration>
+        <tie type="start" />
+        <voice>1</voice>
+        <type>whole</type>
+        <notations>
+          <tied type="start" />
+        </notations>
+      </note>
+    </measure>
+    <measure number="28">
+      <note>
+        <pitch>
+          <step>G</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>4</duration>
+        <tie type="stop" />
+        <voice>1</voice>
+        <type>half</type>
+        <notations>
+          <tied type="stop" />
+        </notations>
+      </note>
+      <note>
+        <pitch>
+          <step>G</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>half</type>
+      </note>
+    </measure>
+    <measure number="29">
+      <direction>
+        <direction-type>
+          <dynamics>
+            <pp />
+          </dynamics>
+        </direction-type>
+      </direction>
+      <note>
+        <pitch>
+          <step>G</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>8</duration>
+        <tie type="start" />
+        <voice>1</voice>
+        <type>whole</type>
+        <notations>
+          <tied type="start" />
+        </notations>
+      </note>
+    </measure>
+    <measure number="30">
+      <note>
+        <pitch>
+          <step>G</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>8</duration>
+        <tie type="stop" />
+        <tie type="start" />
+        <voice>1</voice>
+        <type>whole</type>
+        <notations>
+          <tied type="stop" />
+          <tied type="start" />
+        </notations>
+      </note>
+    </measure>
+    <measure number="31">
+      <note>
+        <pitch>
+          <step>G</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>8</duration>
+        <tie type="stop" />
+        <tie type="start" />
+        <voice>1</voice>
+        <type>whole</type>
+        <notations>
+          <tied type="stop" />
+          <tied type="start" />
+        </notations>
+      </note>
+    </measure>
+    <measure number="32">
+      <note>
+        <pitch>
+          <step>G</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>8</duration>
+        <tie type="stop" />
+        <tie type="start" />
+        <voice>1</voice>
+        <type>whole</type>
+        <notations>
+          <tied type="stop" />
+          <tied type="start" />
+        </notations>
+      </note>
+    </measure>
+    <measure number="33">
+      <note>
+        <pitch>
+          <step>G</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>8</duration>
+        <tie type="stop" />
+        <tie type="start" />
+        <voice>1</voice>
+        <type>whole</type>
+        <notations>
+          <tied type="stop" />
+          <tied type="start" />
+        </notations>
+      </note>
+    </measure>
+    <measure number="34">
+      <note>
+        <pitch>
+          <step>G</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>8</duration>
+        <tie type="stop" />
+        <tie type="start" />
+        <voice>1</voice>
+        <type>whole</type>
+        <notations>
+          <tied type="stop" />
+          <tied type="start" />
+        </notations>
+      </note>
+    </measure>
+    <measure number="35">
+      <note>
+        <pitch>
+          <step>G</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>8</duration>
+        <tie type="stop" />
+        <tie type="start" />
+        <voice>1</voice>
+        <type>whole</type>
+        <notations>
+          <tied type="stop" />
+          <tied type="start" />
+        </notations>
+      </note>
+    </measure>
+    <measure number="36">
+      <note>
+        <pitch>
+          <step>G</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>8</duration>
+        <tie type="stop" />
+        <tie type="start" />
+        <voice>1</voice>
+        <type>whole</type>
+        <notations>
+          <tied type="stop" />
+          <tied type="start" />
+        </notations>
+      </note>
+    </measure>
+    <measure number="37">
+      <note>
+        <pitch>
+          <step>G</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>8</duration>
+        <tie type="stop" />
+        <tie type="start" />
+        <voice>1</voice>
+        <type>whole</type>
+        <notations>
+          <tied type="stop" />
+          <tied type="start" />
+        </notations>
+      </note>
+    </measure>
+    <measure number="38">
+      <note>
+        <pitch>
+          <step>G</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>8</duration>
+        <tie type="stop" />
+        <tie type="start" />
+        <voice>1</voice>
+        <type>whole</type>
+        <notations>
+          <tied type="stop" />
+          <tied type="start" />
+        </notations>
+      </note>
+    </measure>
+    <measure number="39">
+      <note>
+        <pitch>
+          <step>G</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>8</duration>
+        <tie type="stop" />
+        <tie type="start" />
+        <voice>1</voice>
+        <type>whole</type>
+        <notations>
+          <tied type="stop" />
+          <tied type="start" />
+        </notations>
+      </note>
+    </measure>
+    <measure number="40">
+      <note>
+        <pitch>
+          <step>G</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>8</duration>
+        <tie type="stop" />
+        <tie type="start" />
+        <voice>1</voice>
+        <type>whole</type>
+        <notations>
+          <tied type="stop" />
+          <tied type="start" />
+        </notations>
+      </note>
+    </measure>
+    <measure number="41">
+      <note>
+        <pitch>
+          <step>G</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>8</duration>
+        <tie type="stop" />
+        <tie type="start" />
+        <voice>1</voice>
+        <type>whole</type>
+        <notations>
+          <tied type="stop" />
+          <tied type="start" />
+        </notations>
+      </note>
+    </measure>
+    <measure number="42">
+      <note>
+        <pitch>
+          <step>G</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>8</duration>
+        <tie type="stop" />
+        <tie type="start" />
+        <voice>1</voice>
+        <type>whole</type>
+        <notations>
+          <tied type="stop" />
+          <tied type="start" />
+        </notations>
+      </note>
+    </measure>
+    <measure number="43">
+      <note>
+        <pitch>
+          <step>G</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>8</duration>
+        <tie type="stop" />
+        <tie type="start" />
+        <voice>1</voice>
+        <type>whole</type>
+        <notations>
+          <tied type="stop" />
+          <tied type="start" />
+        </notations>
+      </note>
+    </measure>
+    <measure number="44">
+      <note>
+        <pitch>
+          <step>G</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>8</duration>
+        <tie type="stop" />
+        <tie type="start" />
+        <voice>1</voice>
+        <type>whole</type>
+        <notations>
+          <tied type="stop" />
+          <tied type="start" />
+        </notations>
+      </note>
+    </measure>
+    <measure number="45">
       <direction>
         <direction-type>
           <wedge type="diminuendo" />
@@ -663,751 +1014,56 @@
       </direction>
       <note>
         <pitch>
-          <step>C</step>
-          <octave>4</octave>
+          <step>G</step>
+          <octave>3</octave>
         </pitch>
         <duration>8</duration>
+        <tie type="stop" />
+        <tie type="start" />
         <voice>1</voice>
         <type>whole</type>
         <notations>
-          <slur type="start" number="5" />
-        </notations>
-      </note>
-    </measure>
-    <measure number="28">
-      <direction>
-        <direction-type>
-          <wedge type="stop" />
-        </direction-type>
-      </direction>
-      <direction>
-        <direction-type>
-          <dynamics>
-            <pp />
-          </dynamics>
-        </direction-type>
-      </direction>
-      <note>
-        <pitch>
-          <step>G</step>
-          <octave>3</octave>
-        </pitch>
-        <duration>1</duration>
-        <voice>1</voice>
-        <type>eighth</type>
-        <notations>
-          <slur type="stop" number="5" />
-        </notations>
-      </note>
-      <note>
-        <rest />
-        <duration>1</duration>
-        <voice>1</voice>
-        <type>eighth</type>
-      </note>
-      <note>
-        <rest />
-        <duration>2</duration>
-        <voice>1</voice>
-        <type>quarter</type>
-      </note>
-      <note>
-        <rest />
-        <duration>4</duration>
-        <voice>1</voice>
-        <type>half</type>
-      </note>
-    </measure>
-    <measure number="29">
-      <note>
-        <rest />
-        <duration>2</duration>
-        <voice>1</voice>
-        <type>quarter</type>
-      </note>
-      <direction>
-        <direction-type>
-          <dynamics>
-            <pp />
-          </dynamics>
-        </direction-type>
-      </direction>
-      <note>
-        <pitch>
-          <step>E</step>
-          <alter>-1</alter>
-          <octave>5</octave>
-        </pitch>
-        <duration>2</duration>
-        <voice>1</voice>
-        <type>quarter</type>
-        <notations>
-          <slur type="start" number="6" />
-        </notations>
-      </note>
-      <note>
-        <pitch>
-          <step>D</step>
-          <octave>5</octave>
-        </pitch>
-        <duration>2</duration>
-        <voice>1</voice>
-        <type>quarter</type>
-      </note>
-      <note>
-        <pitch>
-          <step>D</step>
-          <alter>-1</alter>
-          <octave>5</octave>
-        </pitch>
-        <duration>2</duration>
-        <voice>1</voice>
-        <type>quarter</type>
-        <notations>
-          <slur type="stop" number="6" />
-        </notations>
-      </note>
-    </measure>
-    <measure number="30">
-      <note>
-        <pitch>
-          <step>C</step>
-          <octave>5</octave>
-        </pitch>
-        <duration>2</duration>
-        <voice>1</voice>
-        <type>quarter</type>
-        <notations>
-          <slur type="start" number="7" />
-        </notations>
-      </note>
-      <note>
-        <pitch>
-          <step>B</step>
-          <octave>4</octave>
-        </pitch>
-        <duration>2</duration>
-        <voice>1</voice>
-        <type>quarter</type>
-      </note>
-      <note>
-        <pitch>
-          <step>B</step>
-          <alter>-1</alter>
-          <octave>4</octave>
-        </pitch>
-        <duration>2</duration>
-        <voice>1</voice>
-        <type>quarter</type>
-      </note>
-      <note>
-        <pitch>
-          <step>A</step>
-          <octave>4</octave>
-        </pitch>
-        <duration>2</duration>
-        <voice>1</voice>
-        <type>quarter</type>
-        <notations>
-          <slur type="stop" number="7" />
-        </notations>
-      </note>
-    </measure>
-    <measure number="31">
-      <note>
-        <pitch>
-          <step>A</step>
-          <alter>-1</alter>
-          <octave>4</octave>
-        </pitch>
-        <duration>6</duration>
-        <voice>1</voice>
-        <type>half</type>
-        <dot />
-        <notations>
-          <slur type="start" number="8" />
-        </notations>
-      </note>
-      <note>
-        <pitch>
-          <step>G</step>
-          <octave>4</octave>
-        </pitch>
-        <duration>2</duration>
-        <voice>1</voice>
-        <type>quarter</type>
-        <notations>
-          <slur type="stop" number="8" />
-        </notations>
-      </note>
-    </measure>
-    <measure number="32">
-      <note>
-        <rest />
-        <duration>2</duration>
-        <voice>1</voice>
-        <type>quarter</type>
-      </note>
-      <note>
-        <pitch>
-          <step>A</step>
-          <alter>-1</alter>
-          <octave>4</octave>
-        </pitch>
-        <duration>2</duration>
-        <voice>1</voice>
-        <type>quarter</type>
-        <notations>
-          <slur type="start" number="9" />
-        </notations>
-      </note>
-      <note>
-        <pitch>
-          <step>A</step>
-          <octave>4</octave>
-        </pitch>
-        <duration>2</duration>
-        <voice>1</voice>
-        <type>quarter</type>
-      </note>
-      <note>
-        <pitch>
-          <step>B</step>
-          <alter>-1</alter>
-          <octave>4</octave>
-        </pitch>
-        <duration>2</duration>
-        <voice>1</voice>
-        <type>quarter</type>
-        <notations>
-          <slur type="stop" number="9" />
-        </notations>
-      </note>
-    </measure>
-    <measure number="33">
-      <note>
-        <pitch>
-          <step>B</step>
-          <octave>4</octave>
-        </pitch>
-        <duration>2</duration>
-        <voice>1</voice>
-        <type>quarter</type>
-        <notations>
-          <slur type="start" number="10" />
-        </notations>
-      </note>
-      <note>
-        <pitch>
-          <step>C</step>
-          <octave>5</octave>
-        </pitch>
-        <duration>2</duration>
-        <voice>1</voice>
-        <type>quarter</type>
-      </note>
-      <note>
-        <pitch>
-          <step>A</step>
-          <alter>-1</alter>
-          <octave>4</octave>
-        </pitch>
-        <duration>2</duration>
-        <voice>1</voice>
-        <type>quarter</type>
-      </note>
-      <note>
-        <pitch>
-          <step>C</step>
-          <octave>5</octave>
-        </pitch>
-        <duration>2</duration>
-        <voice>1</voice>
-        <type>quarter</type>
-        <notations>
-          <slur type="stop" number="10" />
-        </notations>
-      </note>
-    </measure>
-    <measure number="34">
-      <note>
-        <pitch>
-          <step>F</step>
-          <alter>-1</alter>
-          <octave>5</octave>
-        </pitch>
-        <duration>6</duration>
-        <voice>1</voice>
-        <type>half</type>
-        <dot />
-        <notations>
-          <slur type="start" number="11" />
-        </notations>
-      </note>
-      <note>
-        <pitch>
-          <step>E</step>
-          <alter>-1</alter>
-          <octave>5</octave>
-        </pitch>
-        <duration>2</duration>
-        <voice>1</voice>
-        <type>quarter</type>
-        <notations>
-          <slur type="stop" number="11" />
-        </notations>
-      </note>
-    </measure>
-    <measure number="35">
-      <note>
-        <rest />
-        <duration>4</duration>
-        <voice>1</voice>
-        <type>half</type>
-      </note>
-      <note>
-        <pitch>
-          <step>A</step>
-          <alter>-1</alter>
-          <octave>4</octave>
-        </pitch>
-        <duration>2</duration>
-        <voice>1</voice>
-        <type>quarter</type>
-        <notations>
-          <slur type="start" number="12" />
-          <technical>
-            <up-bow />
-          </technical>
-        </notations>
-      </note>
-      <note>
-        <pitch>
-          <step>C</step>
-          <alter>-1</alter>
-          <octave>5</octave>
-        </pitch>
-        <duration>2</duration>
-        <voice>1</voice>
-        <type>quarter</type>
-      </note>
-    </measure>
-    <measure number="36">
-      <note>
-        <pitch>
-          <step>E</step>
-          <alter>-1</alter>
-          <octave>5</octave>
-        </pitch>
-        <duration>6</duration>
-        <voice>1</voice>
-        <type>half</type>
-        <dot />
-      </note>
-      <note>
-        <pitch>
-          <step>D</step>
-          <octave>5</octave>
-        </pitch>
-        <duration>2</duration>
-        <voice>1</voice>
-        <type>quarter</type>
-        <notations>
-          <slur type="stop" number="12" />
-        </notations>
-      </note>
-    </measure>
-    <measure number="37">
-      <note>
-        <pitch>
-          <step>C</step>
-          <octave>5</octave>
-        </pitch>
-        <duration>2</duration>
-        <voice>1</voice>
-        <type>quarter</type>
-        <notations>
-          <slur type="start" number="13" />
-        </notations>
-      </note>
-      <note>
-        <pitch>
-          <step>B</step>
-          <alter>-1</alter>
-          <octave>4</octave>
-        </pitch>
-        <duration>2</duration>
-        <voice>1</voice>
-        <type>quarter</type>
-      </note>
-      <note>
-        <pitch>
-          <step>A</step>
-          <alter>-1</alter>
-          <octave>4</octave>
-        </pitch>
-        <duration>2</duration>
-        <voice>1</voice>
-        <type>quarter</type>
-      </note>
-      <note>
-        <pitch>
-          <step>G</step>
-          <octave>4</octave>
-        </pitch>
-        <duration>2</duration>
-        <voice>1</voice>
-        <type>quarter</type>
-        <notations>
-          <slur type="stop" number="13" />
-        </notations>
-      </note>
-    </measure>
-    <measure number="38">
-      <note>
-        <pitch>
-          <step>F</step>
-          <alter>1</alter>
-          <octave>4</octave>
-        </pitch>
-        <duration>2</duration>
-        <voice>1</voice>
-        <type>quarter</type>
-        <notations>
-          <slur type="start" number="14" />
-        </notations>
-      </note>
-      <note>
-        <pitch>
-          <step>G</step>
-          <octave>4</octave>
-        </pitch>
-        <duration>2</duration>
-        <voice>1</voice>
-        <type>quarter</type>
-      </note>
-      <note>
-        <pitch>
-          <step>D</step>
-          <alter>-1</alter>
-          <octave>4</octave>
-        </pitch>
-        <duration>2</duration>
-        <voice>1</voice>
-        <type>quarter</type>
-      </note>
-      <note>
-        <pitch>
-          <step>F</step>
-          <alter>-1</alter>
-          <octave>4</octave>
-        </pitch>
-        <duration>2</duration>
-        <voice>1</voice>
-        <type>quarter</type>
-        <notations>
-          <slur type="stop" number="14" />
-        </notations>
-      </note>
-    </measure>
-    <measure number="39">
-      <note>
-        <pitch>
-          <step>A</step>
-          <alter>-1</alter>
-          <octave>4</octave>
-        </pitch>
-        <duration>6</duration>
-        <voice>1</voice>
-        <type>half</type>
-        <dot />
-        <notations>
-          <slur type="start" number="15" />
-        </notations>
-      </note>
-      <note>
-        <pitch>
-          <step>G</step>
-          <octave>4</octave>
-        </pitch>
-        <duration>2</duration>
-        <voice>1</voice>
-        <type>quarter</type>
-        <notations>
-          <slur type="stop" number="15" />
-        </notations>
-      </note>
-    </measure>
-    <measure number="40">
-      <note>
-        <rest />
-        <duration>2</duration>
-        <voice>1</voice>
-        <type>quarter</type>
-      </note>
-      <note>
-        <pitch>
-          <step>B</step>
-          <alter>-1</alter>
-          <octave>4</octave>
-        </pitch>
-        <duration>2</duration>
-        <voice>1</voice>
-        <type>quarter</type>
-        <notations>
-          <slur type="start" number="16" />
-        </notations>
-      </note>
-      <note>
-        <pitch>
-          <step>A</step>
-          <alter>-1</alter>
-          <octave>4</octave>
-        </pitch>
-        <duration>2</duration>
-        <voice>1</voice>
-        <type>quarter</type>
-      </note>
-      <note>
-        <pitch>
-          <step>G</step>
-          <octave>4</octave>
-        </pitch>
-        <duration>2</duration>
-        <voice>1</voice>
-        <type>quarter</type>
-        <notations>
-          <slur type="stop" number="16" />
-        </notations>
-      </note>
-    </measure>
-    <measure number="41">
-      <note>
-        <rest />
-        <duration>2</duration>
-        <voice>1</voice>
-        <type>quarter</type>
-      </note>
-      <note>
-        <pitch>
-          <step>B</step>
-          <alter>-1</alter>
-          <octave>4</octave>
-        </pitch>
-        <duration>2</duration>
-        <voice>1</voice>
-        <type>quarter</type>
-        <notations>
-          <slur type="start" number="17" />
-        </notations>
-      </note>
-      <note>
-        <pitch>
-          <step>A</step>
-          <alter>-1</alter>
-          <octave>4</octave>
-        </pitch>
-        <duration>2</duration>
-        <voice>1</voice>
-        <type>quarter</type>
-      </note>
-      <note>
-        <pitch>
-          <step>G</step>
-          <octave>4</octave>
-        </pitch>
-        <duration>2</duration>
-        <voice>1</voice>
-        <type>quarter</type>
-        <notations>
-          <slur type="stop" number="17" />
-        </notations>
-      </note>
-    </measure>
-    <measure number="42">
-      <note>
-        <pitch>
-          <step>F</step>
-          <alter>1</alter>
-          <octave>4</octave>
-        </pitch>
-        <duration>2</duration>
-        <voice>1</voice>
-        <type>quarter</type>
-        <notations>
-          <slur type="start" number="18" />
-        </notations>
-      </note>
-      <note>
-        <pitch>
-          <step>G</step>
-          <octave>4</octave>
-        </pitch>
-        <duration>2</duration>
-        <voice>1</voice>
-        <type>quarter</type>
-      </note>
-      <note>
-        <pitch>
-          <step>B</step>
-          <alter>-1</alter>
-          <octave>3</octave>
-        </pitch>
-        <duration>2</duration>
-        <voice>1</voice>
-        <type>quarter</type>
-      </note>
-      <note>
-        <pitch>
-          <step>D</step>
-          <alter>-1</alter>
-          <octave>4</octave>
-        </pitch>
-        <duration>2</duration>
-        <voice>1</voice>
-        <type>quarter</type>
-        <notations>
-          <slur type="stop" number="18" />
-        </notations>
-      </note>
-    </measure>
-    <measure number="43">
-      <note>
-        <pitch>
-          <step>F</step>
-          <octave>4</octave>
-        </pitch>
-        <duration>6</duration>
-        <voice>1</voice>
-        <type>half</type>
-        <dot />
-        <notations>
-          <slur type="start" number="19" />
-        </notations>
-      </note>
-      <note>
-        <pitch>
-          <step>F</step>
-          <alter>-1</alter>
-          <octave>4</octave>
-        </pitch>
-        <duration>2</duration>
-        <voice>1</voice>
-        <type>quarter</type>
-        <notations>
-          <slur type="stop" number="19" />
-        </notations>
-      </note>
-    </measure>
-    <measure number="44">
-      <note>
-        <pitch>
-          <step>E</step>
-          <alter>-1</alter>
-          <octave>4</octave>
-        </pitch>
-        <duration>6</duration>
-        <voice>1</voice>
-        <type>half</type>
-        <dot />
-        <notations>
-          <slur type="start" number="20" />
-        </notations>
-      </note>
-      <note>
-        <pitch>
-          <step>C</step>
-          <octave>4</octave>
-        </pitch>
-        <duration>2</duration>
-        <voice>1</voice>
-        <type>quarter</type>
-        <notations>
-          <slur type="stop" number="20" />
-        </notations>
-      </note>
-    </measure>
-    <measure number="45">
-      <note>
-        <rest />
-        <duration>2</duration>
-        <voice>1</voice>
-        <type>quarter</type>
-      </note>
-      <note>
-        <pitch>
-          <step>C</step>
-          <octave>4</octave>
-        </pitch>
-        <duration>2</duration>
-        <voice>1</voice>
-        <type>quarter</type>
-        <notations>
-          <slur type="start" number="21" />
-        </notations>
-      </note>
-      <note>
-        <pitch>
-          <step>E</step>
-          <alter>-1</alter>
-          <octave>4</octave>
-        </pitch>
-        <duration>2</duration>
-        <voice>1</voice>
-        <type>quarter</type>
-      </note>
-      <note>
-        <pitch>
-          <step>C</step>
-          <octave>4</octave>
-        </pitch>
-        <duration>2</duration>
-        <voice>1</voice>
-        <type>quarter</type>
-        <notations>
-          <slur type="stop" number="21" />
+          <tied type="stop" />
+          <tied type="start" />
         </notations>
       </note>
     </measure>
     <measure number="46">
       <note>
         <pitch>
-          <step>D</step>
-          <alter>-1</alter>
-          <octave>4</octave>
+          <step>G</step>
+          <octave>3</octave>
         </pitch>
-        <duration>6</duration>
+        <duration>1</duration>
+        <tie type="stop" />
         <voice>1</voice>
-        <type>half</type>
-        <dot />
+        <type>eighth</type>
         <notations>
-          <slur type="start" number="22" />
+          <tied type="stop" />
         </notations>
       </note>
       <note>
-        <pitch>
-          <step>C</step>
-          <octave>4</octave>
-        </pitch>
+        <rest />
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+      </note>
+      <note>
+        <rest />
         <duration>2</duration>
         <voice>1</voice>
         <type>quarter</type>
-        <notations>
-          <slur type="stop" number="22" />
-        </notations>
+      </note>
+      <note>
+        <rest />
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>half</type>
       </note>
     </measure>
     <measure number="47">
-      <direction>
-        <direction-type>
-          <wedge type="crescendo" />
-        </direction-type>
-      </direction>
       <note>
-        <pitch>
-          <step>B</step>
-          <octave>3</octave>
-        </pitch>
+        <rest />
         <duration>8</duration>
         <voice>1</voice>
         <type>whole</type>
@@ -1415,121 +1071,26 @@
     </measure>
     <measure number="48">
       <note>
-        <pitch>
-          <step>C</step>
-          <octave>4</octave>
-        </pitch>
+        <rest />
         <duration>8</duration>
         <voice>1</voice>
         <type>whole</type>
       </note>
     </measure>
     <measure number="49">
-      <direction>
-        <direction-type>
-          <wedge type="stop" />
-        </direction-type>
-      </direction>
-      <direction>
-        <direction-type>
-          <dynamics>
-            <p />
-          </dynamics>
-        </direction-type>
-      </direction>
-      <direction>
-        <direction-type>
-          <wedge type="diminuendo" />
-        </direction-type>
-      </direction>
-      <direction placement="above">
-        <direction-type>
-          <words>poco rit.</words>
-        </direction-type>
-      </direction>
       <note>
-        <pitch>
-          <step>D</step>
-          <octave>4</octave>
-        </pitch>
-        <duration>4</duration>
+        <rest />
+        <duration>8</duration>
         <voice>1</voice>
-        <type>half</type>
-        <notations>
-          <slur type="start" number="23" />
-        </notations>
-      </note>
-      <note>
-        <pitch>
-          <step>E</step>
-          <alter>-1</alter>
-          <octave>4</octave>
-        </pitch>
-        <duration>2</duration>
-        <voice>1</voice>
-        <type>quarter</type>
-      </note>
-      <note>
-        <pitch>
-          <step>D</step>
-          <octave>4</octave>
-        </pitch>
-        <duration>2</duration>
-        <voice>1</voice>
-        <type>quarter</type>
-        <notations>
-          <slur type="stop" number="23" />
-        </notations>
+        <type>whole</type>
       </note>
     </measure>
     <measure number="50">
       <note>
-        <pitch>
-          <step>F</step>
-          <octave>4</octave>
-        </pitch>
-        <duration>2</duration>
+        <rest />
+        <duration>8</duration>
         <voice>1</voice>
-        <type>quarter</type>
-        <notations>
-          <slur type="start" number="24" />
-        </notations>
-      </note>
-      <note>
-        <pitch>
-          <step>E</step>
-          <alter>-1</alter>
-          <octave>4</octave>
-        </pitch>
-        <duration>2</duration>
-        <voice>1</voice>
-        <type>quarter</type>
-      </note>
-      <note>
-        <pitch>
-          <step>D</step>
-          <octave>4</octave>
-        </pitch>
-        <duration>2</duration>
-        <voice>1</voice>
-        <type>quarter</type>
-      </note>
-      <direction>
-        <direction-type>
-          <wedge type="stop" />
-        </direction-type>
-      </direction>
-      <note>
-        <pitch>
-          <step>C</step>
-          <octave>4</octave>
-        </pitch>
-        <duration>2</duration>
-        <voice>1</voice>
-        <type>quarter</type>
-        <notations>
-          <slur type="stop" number="24" />
-        </notations>
+        <type>whole</type>
       </note>
     </measure>
     <measure number="51">
@@ -1540,9 +1101,39 @@
           </dynamics>
         </direction-type>
       </direction>
-      <direction placement="above">
+      <note>
+        <pitch>
+          <step>G</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>8</duration>
+        <tie type="start" />
+        <voice>1</voice>
+        <type>whole</type>
+        <notations>
+          <tied type="start" />
+        </notations>
+      </note>
+    </measure>
+    <measure number="52">
+      <note>
+        <pitch>
+          <step>G</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>8</duration>
+        <tie type="stop" />
+        <voice>1</voice>
+        <type>whole</type>
+        <notations>
+          <tied type="stop" />
+        </notations>
+      </note>
+    </measure>
+    <measure number="53">
+      <direction placement="below">
         <direction-type>
-          <words>a tempo</words>
+          <words>poco espress.</words>
         </direction-type>
       </direction>
       <note>
@@ -1554,7 +1145,7 @@
         <voice>1</voice>
         <type>half</type>
         <notations>
-          <slur type="start" number="25" />
+          <slur type="start" number="5" />
         </notations>
       </note>
       <note>
@@ -1580,14 +1171,14 @@
         <voice>1</voice>
         <type>quarter</type>
         <notations>
-          <slur type="stop" number="25" />
+          <slur type="stop" number="5" />
           <articulations>
             <tenuto />
           </articulations>
         </notations>
       </note>
     </measure>
-    <measure number="52">
+    <measure number="54">
       <note>
         <pitch>
           <step>A</step>
@@ -1598,7 +1189,7 @@
         <voice>1</voice>
         <type>half</type>
         <notations>
-          <slur type="start" number="26" />
+          <slur type="start" number="6" />
         </notations>
       </note>
       <note>
@@ -1607,18 +1198,35 @@
           <octave>3</octave>
         </pitch>
         <duration>4</duration>
-        <tie type="start" />
         <voice>1</voice>
         <type>half</type>
         <notations>
-          <tied type="start" />
+          <slur type="stop" number="6" />
         </notations>
       </note>
     </measure>
-    <measure number="53">
+    <measure number="55">
       <direction>
         <direction-type>
           <wedge type="diminuendo" />
+        </direction-type>
+      </direction>
+      <note>
+        <pitch>
+          <step>A</step>
+          <alter>-1</alter>
+          <octave>3</octave>
+        </pitch>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>half</type>
+        <notations>
+          <slur type="start" number="7" />
+        </notations>
+      </note>
+      <direction>
+        <direction-type>
+          <wedge type="stop" />
         </direction-type>
       </direction>
       <note>
@@ -1627,56 +1235,11 @@
           <octave>3</octave>
         </pitch>
         <duration>4</duration>
-        <tie type="stop" />
-        <tie type="start" />
         <voice>1</voice>
         <type>half</type>
         <notations>
-          <tied type="stop" />
-          <tied type="start" />
+          <slur type="stop" number="7" />
         </notations>
-      </note>
-      <note>
-        <pitch>
-          <step>G</step>
-          <octave>3</octave>
-        </pitch>
-        <duration>1</duration>
-        <tie type="stop" />
-        <voice>1</voice>
-        <type>eighth</type>
-        <notations>
-          <tied type="stop" />
-          <slur type="stop" number="26" />
-        </notations>
-      </note>
-      <note>
-        <rest />
-        <duration>1</duration>
-        <voice>1</voice>
-        <type>eighth</type>
-      </note>
-      <note>
-        <rest />
-        <duration>2</duration>
-        <voice>1</voice>
-        <type>quarter</type>
-      </note>
-    </measure>
-    <measure number="54">
-      <note>
-        <rest />
-        <duration>8</duration>
-        <voice>1</voice>
-        <type>whole</type>
-      </note>
-    </measure>
-    <measure number="55">
-      <note>
-        <rest />
-        <duration>8</duration>
-        <voice>1</voice>
-        <type>whole</type>
       </note>
     </measure>
     <measure number="56">
@@ -1689,53 +1252,116 @@
       </direction>
       <note>
         <pitch>
-          <step>E</step>
-          <octave>5</octave>
+          <step>C</step>
+          <octave>4</octave>
         </pitch>
-        <duration>8</duration>
+        <duration>4</duration>
         <voice>1</voice>
-        <type>whole</type>
+        <type>half</type>
+        <notations>
+          <slur type="start" number="8" />
+        </notations>
+      </note>
+      <note>
+        <pitch>
+          <step>G</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>2</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+        <notations>
+          <articulations>
+            <tenuto />
+          </articulations>
+        </notations>
+      </note>
+      <note>
+        <pitch>
+          <step>G</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>2</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+        <notations>
+          <slur type="stop" number="8" />
+          <articulations>
+            <tenuto />
+          </articulations>
+        </notations>
       </note>
     </measure>
     <measure number="57">
       <note>
         <pitch>
-          <step>D</step>
-          <octave>5</octave>
+          <step>A</step>
+          <alter>-1</alter>
+          <octave>3</octave>
         </pitch>
         <duration>4</duration>
         <voice>1</voice>
         <type>half</type>
         <notations>
-          <slur type="start" number="27" />
+          <slur type="start" number="9" />
         </notations>
       </note>
       <note>
         <pitch>
-          <step>C</step>
-          <octave>5</octave>
+          <step>G</step>
+          <octave>3</octave>
         </pitch>
         <duration>4</duration>
         <voice>1</voice>
         <type>half</type>
         <notations>
-          <slur type="stop" number="27" />
+          <slur type="stop" number="9" />
         </notations>
       </note>
     </measure>
     <measure number="58">
       <note>
         <pitch>
-          <step>B</step>
+          <step>D</step>
           <alter>-1</alter>
           <octave>4</octave>
         </pitch>
-        <duration>8</duration>
-        <tie type="start" />
+        <duration>4</duration>
         <voice>1</voice>
-        <type>whole</type>
+        <type>half</type>
         <notations>
-          <tied type="start" />
+          <slur type="start" number="10" />
+        </notations>
+      </note>
+      <note>
+        <pitch>
+          <step>A</step>
+          <alter>-1</alter>
+          <octave>3</octave>
+        </pitch>
+        <duration>2</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+        <notations>
+          <articulations>
+            <tenuto />
+          </articulations>
+        </notations>
+      </note>
+      <note>
+        <pitch>
+          <step>A</step>
+          <alter>-1</alter>
+          <octave>3</octave>
+        </pitch>
+        <duration>2</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+        <notations>
+          <slur type="stop" number="10" />
+          <articulations>
+            <tenuto />
+          </articulations>
         </notations>
       </note>
     </measure>
@@ -1744,65 +1370,110 @@
         <pitch>
           <step>B</step>
           <alter>-1</alter>
-          <octave>4</octave>
+          <octave>3</octave>
         </pitch>
-        <duration>4</duration>
-        <tie type="stop" />
+        <duration>6</duration>
         <voice>1</voice>
         <type>half</type>
+        <dot />
         <notations>
-          <tied type="stop" />
+          <slur type="start" number="11" />
         </notations>
       </note>
       <note>
         <pitch>
-          <step>A</step>
-          <alter>-1</alter>
+          <step>C</step>
           <octave>4</octave>
         </pitch>
-        <duration>4</duration>
+        <duration>2</duration>
         <voice>1</voice>
-        <type>half</type>
+        <type>quarter</type>
         <notations>
-          <slur type="start" number="28" />
+          <slur type="stop" number="11" />
         </notations>
       </note>
     </measure>
     <measure number="60">
       <note>
         <pitch>
-          <step>G</step>
+          <step>D</step>
+          <alter>-1</alter>
           <octave>4</octave>
         </pitch>
-        <duration>8</duration>
-        <tie type="start" />
+        <duration>4</duration>
         <voice>1</voice>
-        <type>whole</type>
+        <type>half</type>
         <notations>
-          <tied type="start" />
+          <slur type="start" number="12" />
+        </notations>
+      </note>
+      <note>
+        <pitch>
+          <step>C</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>2</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+      </note>
+      <note>
+        <pitch>
+          <step>D</step>
+          <alter>-1</alter>
+          <octave>4</octave>
+        </pitch>
+        <duration>2</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+        <notations>
+          <slur type="stop" number="12" />
         </notations>
       </note>
     </measure>
     <measure number="61">
       <note>
         <pitch>
-          <step>G</step>
+          <step>E</step>
+          <alter>-1</alter>
           <octave>4</octave>
         </pitch>
-        <duration>6</duration>
-        <tie type="stop" />
+        <duration>4</duration>
         <voice>1</voice>
         <type>half</type>
-        <dot />
         <notations>
-          <tied type="stop" />
-          <slur type="stop" number="28" />
-          <slur type="start" number="29" />
+          <slur type="start" number="13" />
         </notations>
       </note>
       <note>
         <pitch>
-          <step>A</step>
+          <step>C</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>half</type>
+        <notations>
+          <slur type="stop" number="13" />
+        </notations>
+      </note>
+    </measure>
+    <measure number="62">
+      <note>
+        <pitch>
+          <step>E</step>
+          <alter>-1</alter>
+          <octave>4</octave>
+        </pitch>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>half</type>
+        <notations>
+          <slur type="start" number="14" />
+        </notations>
+      </note>
+      <note>
+        <pitch>
+          <step>D</step>
           <alter>-1</alter>
           <octave>4</octave>
         </pitch>
@@ -1810,157 +1481,234 @@
         <voice>1</voice>
         <type>quarter</type>
       </note>
-    </measure>
-    <measure number="62">
       <note>
         <pitch>
-          <step>G</step>
+          <step>E</step>
+          <alter>-1</alter>
           <octave>4</octave>
         </pitch>
-        <duration>8</duration>
-        <tie type="start" />
+        <duration>2</duration>
         <voice>1</voice>
-        <type>whole</type>
+        <type>quarter</type>
         <notations>
-          <tied type="start" />
+          <slur type="stop" number="14" />
         </notations>
       </note>
     </measure>
     <measure number="63">
       <note>
         <pitch>
-          <step>G</step>
+          <step>E</step>
           <octave>4</octave>
         </pitch>
-        <duration>8</duration>
-        <tie type="stop" />
+        <duration>4</duration>
         <voice>1</voice>
-        <type>whole</type>
+        <type>half</type>
         <notations>
-          <tied type="stop" />
-          <slur type="stop" number="29" />
+          <slur type="start" number="15" />
+        </notations>
+      </note>
+      <note>
+        <pitch>
+          <step>C</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>4</duration>
+        <tie type="start" />
+        <voice>1</voice>
+        <type>half</type>
+        <notations>
+          <tied type="start" />
         </notations>
       </note>
     </measure>
     <measure number="64">
       <note>
         <pitch>
-          <step>E</step>
-          <octave>5</octave>
+          <step>C</step>
+          <octave>4</octave>
         </pitch>
-        <duration>8</duration>
+        <duration>4</duration>
+        <tie type="stop" />
         <voice>1</voice>
-        <type>whole</type>
+        <type>half</type>
+        <notations>
+          <tied type="stop" />
+          <slur type="stop" number="15" />
+        </notations>
+      </note>
+      <note>
+        <pitch>
+          <step>G</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>2</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+        <notations>
+          <slur type="start" number="16" />
+          <articulations>
+            <tenuto />
+          </articulations>
+        </notations>
+      </note>
+      <note>
+        <pitch>
+          <step>G</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>2</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+        <notations>
+          <slur type="stop" number="16" />
+          <articulations>
+            <tenuto />
+          </articulations>
+        </notations>
       </note>
     </measure>
     <measure number="65">
       <note>
         <pitch>
-          <step>D</step>
-          <octave>5</octave>
+          <step>A</step>
+          <alter>-1</alter>
+          <octave>3</octave>
         </pitch>
         <duration>4</duration>
         <voice>1</voice>
         <type>half</type>
         <notations>
-          <slur type="start" number="30" />
+          <slur type="start" number="17" />
         </notations>
       </note>
       <note>
         <pitch>
-          <step>C</step>
-          <octave>5</octave>
+          <step>G</step>
+          <octave>3</octave>
         </pitch>
         <duration>4</duration>
         <voice>1</voice>
         <type>half</type>
         <notations>
-          <slur type="stop" number="30" />
+          <slur type="stop" number="17" />
         </notations>
       </note>
     </measure>
     <measure number="66">
       <note>
         <pitch>
-          <step>B</step>
+          <step>D</step>
           <alter>-1</alter>
           <octave>4</octave>
         </pitch>
-        <duration>8</duration>
+        <duration>4</duration>
         <voice>1</voice>
-        <type>whole</type>
+        <type>half</type>
+        <notations>
+          <slur type="start" number="18" />
+        </notations>
+      </note>
+      <note>
+        <pitch>
+          <step>A</step>
+          <alter>-1</alter>
+          <octave>3</octave>
+        </pitch>
+        <duration>2</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+        <notations>
+          <articulations>
+            <tenuto />
+          </articulations>
+        </notations>
+      </note>
+      <note>
+        <pitch>
+          <step>A</step>
+          <alter>-1</alter>
+          <octave>3</octave>
+        </pitch>
+        <duration>2</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+        <notations>
+          <slur type="stop" number="18" />
+          <articulations>
+            <tenuto />
+          </articulations>
+        </notations>
       </note>
     </measure>
     <measure number="67">
       <note>
         <pitch>
-          <step>A</step>
+          <step>B</step>
           <alter>-1</alter>
-          <octave>4</octave>
+          <octave>3</octave>
         </pitch>
         <duration>4</duration>
         <voice>1</voice>
         <type>half</type>
         <notations>
-          <slur type="start" number="31" />
+          <slur type="start" number="19" />
         </notations>
       </note>
       <note>
         <pitch>
-          <step>B</step>
+          <step>A</step>
           <alter>-1</alter>
-          <octave>4</octave>
+          <octave>3</octave>
         </pitch>
         <duration>4</duration>
         <voice>1</voice>
         <type>half</type>
         <notations>
-          <slur type="stop" number="31" />
+          <slur type="stop" number="19" />
         </notations>
       </note>
     </measure>
     <measure number="68">
       <note>
         <pitch>
-          <step>B</step>
-          <octave>4</octave>
+          <step>G</step>
+          <octave>3</octave>
         </pitch>
-        <duration>2</duration>
+        <duration>4</duration>
         <voice>1</voice>
-        <type>quarter</type>
+        <type>half</type>
         <notations>
-          <slur type="start" number="32" />
+          <slur type="start" number="20" />
         </notations>
       </note>
       <note>
         <pitch>
-          <step>C</step>
-          <octave>5</octave>
-        </pitch>
-        <duration>2</duration>
-        <voice>1</voice>
-        <type>quarter</type>
-      </note>
-      <note>
-        <pitch>
-          <step>D</step>
-          <octave>5</octave>
-        </pitch>
-        <duration>2</duration>
-        <voice>1</voice>
-        <type>quarter</type>
-      </note>
-      <note>
-        <pitch>
-          <step>E</step>
-          <alter>-1</alter>
-          <octave>5</octave>
+          <step>B</step>
+          <octave>3</octave>
         </pitch>
         <duration>2</duration>
         <voice>1</voice>
         <type>quarter</type>
         <notations>
-          <slur type="stop" number="32" />
+          <articulations>
+            <tenuto />
+          </articulations>
+        </notations>
+      </note>
+      <note>
+        <pitch>
+          <step>B</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>2</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+        <notations>
+          <slur type="stop" number="20" />
+          <articulations>
+            <tenuto />
+          </articulations>
         </notations>
       </note>
     </measure>
@@ -1972,31 +1720,62 @@
       </direction>
       <note>
         <pitch>
-          <step>D</step>
-          <octave>5</octave>
+          <step>C</step>
+          <octave>4</octave>
         </pitch>
-        <duration>8</duration>
+        <duration>4</duration>
         <voice>1</voice>
-        <type>whole</type>
+        <type>half</type>
+        <notations>
+          <slur type="start" number="21" />
+        </notations>
+      </note>
+      <note>
+        <pitch>
+          <step>B</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>half</type>
+        <notations>
+          <slur type="stop" number="21" />
+        </notations>
       </note>
     </measure>
     <measure number="70">
       <note>
         <pitch>
-          <step>C</step>
-          <octave>5</octave>
+          <step>E</step>
+          <alter>-1</alter>
+          <octave>4</octave>
         </pitch>
-        <duration>8</duration>
+        <duration>4</duration>
         <voice>1</voice>
-        <type>whole</type>
+        <type>half</type>
+        <notations>
+          <slur type="start" number="22" />
+        </notations>
       </note>
-    </measure>
-    <measure number="71">
       <direction>
         <direction-type>
           <wedge type="stop" />
         </direction-type>
       </direction>
+      <note>
+        <pitch>
+          <step>D</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>half</type>
+        <notations>
+          <slur type="stop" number="22" />
+        </notations>
+      </note>
+    </measure>
+    <measure number="71">
       <direction>
         <direction-type>
           <wedge type="diminuendo" />
@@ -2004,12 +1783,29 @@
       </direction>
       <note>
         <pitch>
-          <step>B</step>
+          <step>A</step>
+          <alter>-1</alter>
           <octave>4</octave>
         </pitch>
-        <duration>8</duration>
+        <duration>4</duration>
         <voice>1</voice>
-        <type>whole</type>
+        <type>half</type>
+        <notations>
+          <slur type="start" number="23" />
+        </notations>
+      </note>
+      <note>
+        <pitch>
+          <step>G</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>4</duration>
+        <tie type="start" />
+        <voice>1</voice>
+        <type>half</type>
+        <notations>
+          <tied type="start" />
+        </notations>
       </note>
     </measure>
     <measure number="72">
@@ -2027,171 +1823,169 @@
       </direction>
       <note>
         <pitch>
-          <step>E</step>
-          <octave>5</octave>
+          <step>G</step>
+          <octave>4</octave>
         </pitch>
-        <duration>8</duration>
+        <duration>4</duration>
+        <tie type="stop" />
         <voice>1</voice>
-        <type>whole</type>
+        <type>half</type>
+        <notations>
+          <tied type="stop" />
+          <slur type="stop" number="23" />
+        </notations>
+      </note>
+      <note>
+        <pitch>
+          <step>G</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>2</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+        <notations>
+          <slur type="start" number="24" />
+          <articulations>
+            <tenuto />
+          </articulations>
+        </notations>
+      </note>
+      <note>
+        <pitch>
+          <step>G</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>2</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+        <notations>
+          <slur type="stop" number="24" />
+          <articulations>
+            <tenuto />
+          </articulations>
+        </notations>
       </note>
     </measure>
     <measure number="73">
       <note>
         <pitch>
-          <step>D</step>
-          <octave>5</octave>
+          <step>A</step>
+          <alter>-1</alter>
+          <octave>3</octave>
         </pitch>
         <duration>4</duration>
         <voice>1</voice>
         <type>half</type>
         <notations>
-          <slur type="start" number="33" />
+          <slur type="start" number="25" />
         </notations>
       </note>
       <note>
         <pitch>
-          <step>C</step>
-          <octave>5</octave>
+          <step>G</step>
+          <octave>3</octave>
         </pitch>
         <duration>4</duration>
         <voice>1</voice>
         <type>half</type>
         <notations>
-          <slur type="stop" number="33" />
+          <slur type="stop" number="25" />
         </notations>
       </note>
     </measure>
     <measure number="74">
       <note>
         <pitch>
-          <step>B</step>
-          <alter>-1</alter>
+          <step>F</step>
           <octave>4</octave>
         </pitch>
-        <duration>8</duration>
-        <tie type="start" />
+        <duration>4</duration>
         <voice>1</voice>
-        <type>whole</type>
+        <type>half</type>
         <notations>
-          <tied type="start" />
+          <slur type="start" number="26" />
+        </notations>
+      </note>
+      <note>
+        <pitch>
+          <step>C</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>2</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+        <notations>
+          <articulations>
+            <tenuto />
+          </articulations>
+        </notations>
+      </note>
+      <note>
+        <pitch>
+          <step>C</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>2</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+        <notations>
+          <slur type="stop" number="26" />
+          <articulations>
+            <tenuto />
+          </articulations>
         </notations>
       </note>
     </measure>
     <measure number="75">
       <note>
         <pitch>
-          <step>B</step>
+          <step>D</step>
           <alter>-1</alter>
           <octave>4</octave>
         </pitch>
         <duration>4</duration>
-        <tie type="stop" />
         <voice>1</voice>
         <type>half</type>
         <notations>
-          <tied type="stop" />
+          <slur type="start" number="27" />
         </notations>
       </note>
       <note>
         <pitch>
-          <step>A</step>
-          <alter>-1</alter>
+          <step>C</step>
           <octave>4</octave>
         </pitch>
         <duration>4</duration>
         <voice>1</voice>
         <type>half</type>
         <notations>
-          <slur type="start" number="34" />
+          <slur type="stop" number="27" />
         </notations>
       </note>
     </measure>
     <measure number="76">
       <note>
         <pitch>
-          <step>G</step>
+          <step>E</step>
+          <alter>-1</alter>
           <octave>4</octave>
         </pitch>
-        <duration>8</duration>
-        <tie type="start" />
-        <voice>1</voice>
-        <type>whole</type>
-        <notations>
-          <tied type="start" />
-        </notations>
-      </note>
-    </measure>
-    <measure number="77">
-      <note>
-        <pitch>
-          <step>G</step>
-          <octave>4</octave>
-        </pitch>
-        <duration>6</duration>
-        <tie type="stop" />
+        <duration>4</duration>
         <voice>1</voice>
         <type>half</type>
-        <dot />
         <notations>
-          <tied type="stop" />
-          <slur type="stop" number="34" />
+          <slur type="start" number="28" />
         </notations>
       </note>
       <note>
         <pitch>
-          <step>A</step>
+          <step>D</step>
           <alter>-1</alter>
           <octave>4</octave>
         </pitch>
         <duration>2</duration>
         <voice>1</voice>
         <type>quarter</type>
-        <notations>
-          <slur type="start" number="35" />
-        </notations>
-      </note>
-    </measure>
-    <measure number="78">
-      <note>
-        <pitch>
-          <step>G</step>
-          <octave>4</octave>
-        </pitch>
-        <duration>8</duration>
-        <tie type="start" />
-        <voice>1</voice>
-        <type>whole</type>
-        <notations>
-          <tied type="start" />
-        </notations>
-      </note>
-    </measure>
-    <measure number="79">
-      <note>
-        <pitch>
-          <step>G</step>
-          <octave>4</octave>
-        </pitch>
-        <duration>4</duration>
-        <tie type="stop" />
-        <voice>1</voice>
-        <type>half</type>
-        <notations>
-          <tied type="stop" />
-          <slur type="stop" number="35" />
-        </notations>
-      </note>
-      <note>
-        <pitch>
-          <step>F</step>
-          <octave>4</octave>
-        </pitch>
-        <duration>2</duration>
-        <voice>1</voice>
-        <type>quarter</type>
-        <notations>
-          <slur type="start" number="36" />
-        </notations>
       </note>
       <note>
         <pitch>
@@ -2203,20 +1997,112 @@
         <voice>1</voice>
         <type>quarter</type>
         <notations>
-          <slur type="stop" number="36" />
+          <slur type="stop" number="28" />
+        </notations>
+      </note>
+    </measure>
+    <measure number="77">
+      <note>
+        <pitch>
+          <step>F</step>
+          <alter>-1</alter>
+          <octave>4</octave>
+        </pitch>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>half</type>
+        <notations>
+          <slur type="start" number="29" />
+        </notations>
+      </note>
+      <note>
+        <pitch>
+          <step>D</step>
+          <alter>-1</alter>
+          <octave>4</octave>
+        </pitch>
+        <duration>4</duration>
+        <tie type="start" />
+        <voice>1</voice>
+        <type>half</type>
+        <notations>
+          <tied type="start" />
+        </notations>
+      </note>
+    </measure>
+    <measure number="78">
+      <note>
+        <pitch>
+          <step>D</step>
+          <alter>-1</alter>
+          <octave>4</octave>
+        </pitch>
+        <duration>4</duration>
+        <tie type="stop" />
+        <voice>1</voice>
+        <type>half</type>
+        <notations>
+          <tied type="stop" />
+          <slur type="stop" number="29" />
+        </notations>
+      </note>
+      <note>
+        <pitch>
+          <step>C</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>2</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+        <notations>
+          <slur type="start" number="30" />
+        </notations>
+      </note>
+      <note>
+        <pitch>
+          <step>D</step>
+          <alter>-1</alter>
+          <octave>4</octave>
+        </pitch>
+        <duration>2</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+      </note>
+    </measure>
+    <measure number="79">
+      <note>
+        <pitch>
+          <step>E</step>
+          <alter>-1</alter>
+          <octave>4</octave>
+        </pitch>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>half</type>
+      </note>
+      <note>
+        <pitch>
+          <step>C</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>half</type>
+        <notations>
+          <slur type="stop" number="30" />
         </notations>
       </note>
     </measure>
     <measure number="80">
       <direction placement="below">
         <direction-type>
-          <words>cresc. ed espress.</words>
+          <words>cres. ed espress.</words>
         </direction-type>
       </direction>
       <note>
         <pitch>
-          <step>D</step>
-          <octave>4</octave>
+          <step>B</step>
+          <octave>3</octave>
         </pitch>
         <duration>8</duration>
         <voice>1</voice>
@@ -2231,9 +2117,9 @@
     <measure number="81">
       <note>
         <pitch>
-          <step>E</step>
+          <step>B</step>
           <alter>-1</alter>
-          <octave>4</octave>
+          <octave>3</octave>
         </pitch>
         <duration>8</duration>
         <voice>1</voice>
@@ -2243,8 +2129,8 @@
     <measure number="82">
       <note>
         <pitch>
-          <step>C</step>
-          <octave>4</octave>
+          <step>A</step>
+          <octave>3</octave>
         </pitch>
         <duration>8</duration>
         <voice>1</voice>
@@ -2266,16 +2152,15 @@
       </direction>
       <note>
         <pitch>
-          <step>B</step>
+          <step>A</step>
+          <alter>-1</alter>
           <octave>3</octave>
         </pitch>
         <duration>8</duration>
-        <tie type="start" />
         <voice>1</voice>
         <type>whole</type>
         <notations>
-          <tied type="start" />
-          <slur type="start" number="37" />
+          <slur type="start" number="31" />
         </notations>
       </note>
     </measure>
@@ -2287,28 +2172,14 @@
       </direction>
       <note>
         <pitch>
-          <step>B</step>
+          <step>G</step>
           <octave>3</octave>
         </pitch>
-        <duration>6</duration>
-        <tie type="stop" />
+        <duration>8</duration>
         <voice>1</voice>
-        <type>half</type>
-        <dot />
+        <type>whole</type>
         <notations>
-          <tied type="stop" />
-        </notations>
-      </note>
-      <note>
-        <pitch>
-          <step>C</step>
-          <octave>4</octave>
-        </pitch>
-        <duration>2</duration>
-        <voice>1</voice>
-        <type>quarter</type>
-        <notations>
-          <slur type="stop" number="37" />
+          <slur type="stop" number="31" />
         </notations>
       </note>
     </measure>
@@ -2327,8 +2198,8 @@
       </direction>
       <note>
         <pitch>
-          <step>C</step>
-          <octave>4</octave>
+          <step>G</step>
+          <octave>3</octave>
         </pitch>
         <duration>8</duration>
         <voice>1</voice>
@@ -2343,8 +2214,8 @@
       </direction>
       <note>
         <pitch>
-          <step>C</step>
-          <octave>4</octave>
+          <step>G</step>
+          <octave>3</octave>
         </pitch>
         <duration>4</duration>
         <voice>1</voice>
@@ -2352,8 +2223,8 @@
       </note>
       <note>
         <pitch>
-          <step>C</step>
-          <octave>4</octave>
+          <step>G</step>
+          <octave>3</octave>
         </pitch>
         <duration>4</duration>
         <voice>1</voice>
@@ -2370,8 +2241,8 @@
       </direction>
       <note>
         <pitch>
-          <step>C</step>
-          <octave>4</octave>
+          <step>A</step>
+          <octave>3</octave>
         </pitch>
         <duration>4</duration>
         <voice>1</voice>
@@ -2379,14 +2250,14 @@
       </note>
       <note>
         <pitch>
-          <step>C</step>
-          <octave>4</octave>
+          <step>A</step>
+          <octave>3</octave>
         </pitch>
         <duration>2</duration>
         <voice>1</voice>
         <type>quarter</type>
         <notations>
-          <slur type="start" number="38" />
+          <slur type="start" number="32" />
           <articulations>
             <tenuto />
           </articulations>
@@ -2394,14 +2265,14 @@
       </note>
       <note>
         <pitch>
-          <step>C</step>
-          <octave>4</octave>
+          <step>A</step>
+          <octave>3</octave>
         </pitch>
         <duration>2</duration>
         <voice>1</voice>
         <type>quarter</type>
         <notations>
-          <slur type="stop" number="38" />
+          <slur type="stop" number="32" />
           <articulations>
             <tenuto />
           </articulations>
@@ -2411,7 +2282,7 @@
     <measure number="88">
       <note>
         <pitch>
-          <step>E</step>
+          <step>C</step>
           <octave>4</octave>
         </pitch>
         <duration>8</duration>
@@ -2426,7 +2297,7 @@
     <measure number="89">
       <note>
         <pitch>
-          <step>E</step>
+          <step>C</step>
           <octave>4</octave>
         </pitch>
         <duration>8</duration>
@@ -2441,14 +2312,9 @@
       </note>
     </measure>
     <measure number="90">
-      <direction>
-        <direction-type>
-          <wedge type="crescendo" />
-        </direction-type>
-      </direction>
       <note>
         <pitch>
-          <step>E</step>
+          <step>C</step>
           <octave>4</octave>
         </pitch>
         <duration>2</duration>
@@ -2457,21 +2323,28 @@
         <type>quarter</type>
         <notations>
           <tied type="stop" />
-          <slur type="start" number="39" />
         </notations>
       </note>
+      <direction>
+        <direction-type>
+          <wedge type="crescendo" />
+        </direction-type>
+      </direction>
       <note>
         <pitch>
-          <step>D</step>
-          <octave>4</octave>
+          <step>B</step>
+          <octave>3</octave>
         </pitch>
         <duration>2</duration>
         <voice>1</voice>
         <type>quarter</type>
+        <notations>
+          <slur type="start" number="33" />
+        </notations>
       </note>
       <note>
         <pitch>
-          <step>E</step>
+          <step>C</step>
           <octave>4</octave>
         </pitch>
         <duration>2</duration>
@@ -2485,14 +2358,14 @@
       </direction>
       <note>
         <pitch>
-          <step>F</step>
+          <step>D</step>
           <octave>4</octave>
         </pitch>
         <duration>2</duration>
         <voice>1</voice>
         <type>quarter</type>
         <notations>
-          <slur type="stop" number="39" />
+          <slur type="stop" number="33" />
         </notations>
       </note>
     </measure>
@@ -2504,7 +2377,7 @@
       </direction>
       <note>
         <pitch>
-          <step>E</step>
+          <step>C</step>
           <octave>4</octave>
         </pitch>
         <duration>8</duration>
@@ -2524,7 +2397,7 @@
       </direction>
       <note>
         <pitch>
-          <step>E</step>
+          <step>C</step>
           <octave>4</octave>
         </pitch>
         <duration>4</duration>
@@ -2537,7 +2410,7 @@
       </note>
       <note>
         <pitch>
-          <step>F</step>
+          <step>C</step>
           <alter>1</alter>
           <octave>4</octave>
         </pitch>
@@ -2547,15 +2420,6 @@
       </note>
     </measure>
     <measure number="93">
-      <note>
-        <pitch>
-          <step>G</step>
-          <octave>4</octave>
-        </pitch>
-        <duration>4</duration>
-        <voice>1</voice>
-        <type>half</type>
-      </note>
       <direction>
         <direction-type>
           <wedge type="crescendo" />
@@ -2563,16 +2427,21 @@
       </direction>
       <note>
         <pitch>
-          <step>A</step>
+          <step>F</step>
+          <alter>1</alter>
           <octave>4</octave>
         </pitch>
-        <duration>2</duration>
+        <duration>8</duration>
+        <tie type="start" />
         <voice>1</voice>
-        <type>quarter</type>
+        <type>whole</type>
         <notations>
-          <slur type="start" number="40" />
+          <tied type="start" />
+          <slur type="start" number="34" />
         </notations>
       </note>
+    </measure>
+    <measure number="94">
       <direction>
         <direction-type>
           <wedge type="stop" />
@@ -2580,50 +2449,18 @@
       </direction>
       <note>
         <pitch>
-          <step>B</step>
+          <step>F</step>
+          <alter>1</alter>
           <octave>4</octave>
         </pitch>
-        <duration>2</duration>
-        <voice>1</voice>
-        <type>quarter</type>
-      </note>
-    </measure>
-    <measure number="94">
-      <note>
-        <pitch>
-          <step>C</step>
-          <alter>1</alter>
-          <octave>5</octave>
-        </pitch>
-        <duration>2</duration>
-        <voice>1</voice>
-        <type>quarter</type>
-      </note>
-      <note>
-        <pitch>
-          <step>D</step>
-          <octave>5</octave>
-        </pitch>
-        <duration>2</duration>
-        <voice>1</voice>
-        <type>quarter</type>
-        <notations>
-          <slur type="stop" number="40" />
-        </notations>
-      </note>
-      <note>
-        <pitch>
-          <step>C</step>
-          <alter>1</alter>
-          <octave>5</octave>
-        </pitch>
-        <duration>4</duration>
+        <duration>8</duration>
+        <tie type="stop" />
         <tie type="start" />
         <voice>1</voice>
-        <type>half</type>
+        <type>whole</type>
         <notations>
+          <tied type="stop" />
           <tied type="start" />
-          <slur type="start" number="41" />
         </notations>
       </note>
     </measure>
@@ -2633,21 +2470,17 @@
           <wedge type="diminuendo" />
         </direction-type>
       </direction>
-      <direction placement="above">
-        <direction-type>
-          <words>poco rit.</words>
-        </direction-type>
-      </direction>
       <note>
         <pitch>
-          <step>C</step>
+          <step>F</step>
           <alter>1</alter>
-          <octave>5</octave>
+          <octave>4</octave>
         </pitch>
-        <duration>2</duration>
+        <duration>6</duration>
         <tie type="stop" />
         <voice>1</voice>
-        <type>quarter</type>
+        <type>half</type>
+        <dot />
         <notations>
           <tied type="stop" />
         </notations>
@@ -2659,33 +2492,14 @@
       </direction>
       <note>
         <pitch>
-          <step>D</step>
-          <octave>5</octave>
-        </pitch>
-        <duration>2</duration>
-        <voice>1</voice>
-        <type>quarter</type>
-      </note>
-      <note>
-        <pitch>
-          <step>D</step>
-          <alter>1</alter>
-          <octave>5</octave>
-        </pitch>
-        <duration>2</duration>
-        <voice>1</voice>
-        <type>quarter</type>
-      </note>
-      <note>
-        <pitch>
-          <step>E</step>
-          <octave>5</octave>
+          <step>G</step>
+          <octave>4</octave>
         </pitch>
         <duration>2</duration>
         <voice>1</voice>
         <type>quarter</type>
         <notations>
-          <slur type="stop" number="41" />
+          <slur type="stop" number="34" />
           <articulations>
             <breath-mark />
           </articulations>
@@ -2700,58 +2514,41 @@
           </dynamics>
         </direction-type>
       </direction>
-      <direction placement="above">
-        <direction-type>
-          <words>a tempo</words>
-        </direction-type>
-      </direction>
       <note>
         <pitch>
-          <step>E</step>
-          <octave>5</octave>
+          <step>G</step>
+          <octave>4</octave>
         </pitch>
         <duration>4</duration>
         <voice>1</voice>
         <type>half</type>
         <notations>
-          <slur type="start" number="42" />
+          <slur type="start" number="35" />
         </notations>
       </note>
       <note>
         <pitch>
-          <step>F</step>
-          <octave>5</octave>
+          <step>A</step>
+          <octave>4</octave>
         </pitch>
         <duration>4</duration>
         <voice>1</voice>
         <type>half</type>
         <notations>
-          <slur type="stop" number="42" />
+          <slur type="stop" number="35" />
         </notations>
       </note>
     </measure>
     <measure number="97">
       <note>
         <pitch>
-          <step>E</step>
-          <octave>5</octave>
+          <step>G</step>
+          <octave>4</octave>
         </pitch>
-        <duration>4</duration>
-        <voice>1</voice>
-        <type>half</type>
-        <notations>
-          <slur type="start" number="43" />
-        </notations>
-      </note>
-      <note>
-        <pitch>
-          <step>D</step>
-          <octave>5</octave>
-        </pitch>
-        <duration>4</duration>
+        <duration>8</duration>
         <tie type="start" />
         <voice>1</voice>
-        <type>half</type>
+        <type>whole</type>
         <notations>
           <tied type="start" />
         </notations>
@@ -2760,8 +2557,8 @@
     <measure number="98">
       <note>
         <pitch>
-          <step>D</step>
-          <octave>5</octave>
+          <step>G</step>
+          <octave>4</octave>
         </pitch>
         <duration>4</duration>
         <tie type="stop" />
@@ -2769,13 +2566,12 @@
         <type>half</type>
         <notations>
           <tied type="stop" />
-          <slur type="stop" number="43" />
         </notations>
       </note>
       <note>
         <pitch>
-          <step>C</step>
-          <octave>5</octave>
+          <step>F</step>
+          <octave>4</octave>
         </pitch>
         <duration>4</duration>
         <tie type="start" />
@@ -2789,8 +2585,8 @@
     <measure number="99">
       <note>
         <pitch>
-          <step>C</step>
-          <octave>5</octave>
+          <step>F</step>
+          <octave>4</octave>
         </pitch>
         <duration>4</duration>
         <tie type="stop" />
@@ -2802,36 +2598,28 @@
       </note>
       <note>
         <pitch>
-          <step>B</step>
+          <step>E</step>
           <octave>4</octave>
         </pitch>
         <duration>4</duration>
-        <tie type="start" />
         <voice>1</voice>
         <type>half</type>
-        <notations>
-          <tied type="start" />
-        </notations>
       </note>
     </measure>
     <measure number="100">
       <note>
         <pitch>
-          <step>B</step>
+          <step>D</step>
           <octave>4</octave>
         </pitch>
         <duration>4</duration>
-        <tie type="stop" />
         <voice>1</voice>
         <type>half</type>
-        <notations>
-          <tied type="stop" />
-        </notations>
       </note>
       <note>
         <pitch>
           <step>C</step>
-          <octave>5</octave>
+          <octave>4</octave>
         </pitch>
         <duration>4</duration>
         <voice>1</voice>
@@ -2843,36 +2631,30 @@
         <pitch>
           <step>C</step>
           <alter>1</alter>
-          <octave>5</octave>
+          <octave>4</octave>
         </pitch>
         <duration>8</duration>
+        <tie type="start" />
         <voice>1</voice>
         <type>whole</type>
+        <notations>
+          <tied type="start" />
+        </notations>
       </note>
     </measure>
     <measure number="102">
       <note>
         <pitch>
-          <step>B</step>
+          <step>C</step>
+          <alter>1</alter>
           <octave>4</octave>
         </pitch>
-        <duration>4</duration>
+        <duration>8</duration>
+        <tie type="stop" />
         <voice>1</voice>
-        <type>half</type>
+        <type>whole</type>
         <notations>
-          <slur type="start" number="44" />
-        </notations>
-      </note>
-      <note>
-        <pitch>
-          <step>A</step>
-          <octave>4</octave>
-        </pitch>
-        <duration>4</duration>
-        <voice>1</voice>
-        <type>half</type>
-        <notations>
-          <slur type="stop" number="44" />
+          <tied type="stop" />
         </notations>
       </note>
     </measure>
@@ -2890,19 +2672,20 @@
       </direction>
       <note>
         <pitch>
-          <step>D</step>
-          <octave>4</octave>
+          <step>B</step>
+          <octave>3</octave>
         </pitch>
         <duration>2</duration>
         <voice>1</voice>
         <type>quarter</type>
         <notations>
-          <slur type="start" number="45" />
+          <slur type="start" number="36" />
         </notations>
       </note>
       <note>
         <pitch>
-          <step>E</step>
+          <step>C</step>
+          <alter>1</alter>
           <octave>4</octave>
         </pitch>
         <duration>2</duration>
@@ -2911,8 +2694,7 @@
       </note>
       <note>
         <pitch>
-          <step>F</step>
-          <alter>1</alter>
+          <step>D</step>
           <octave>4</octave>
         </pitch>
         <duration>2</duration>
@@ -2937,41 +2719,20 @@
       </direction>
       <note>
         <pitch>
-          <step>F</step>
-          <alter>1</alter>
+          <step>D</step>
           <octave>4</octave>
         </pitch>
-        <duration>2</duration>
+        <duration>8</duration>
         <tie type="stop" />
         <voice>1</voice>
-        <type>quarter</type>
+        <type>whole</type>
         <notations>
           <tied type="stop" />
-          <slur type="stop" number="45" />
+          <slur type="stop" number="36" />
         </notations>
       </note>
-      <note>
-        <pitch>
-          <step>F</step>
-          <octave>4</octave>
-        </pitch>
-        <duration>2</duration>
-        <voice>1</voice>
-        <type>quarter</type>
-        <notations>
-          <slur type="start" number="46" />
-        </notations>
-      </note>
-      <note>
-        <pitch>
-          <step>F</step>
-          <alter>1</alter>
-          <octave>4</octave>
-        </pitch>
-        <duration>2</duration>
-        <voice>1</voice>
-        <type>quarter</type>
-      </note>
+    </measure>
+    <measure number="105">
       <direction>
         <direction-type>
           <wedge type="stop" />
@@ -2979,42 +2740,42 @@
       </direction>
       <note>
         <pitch>
-          <step>G</step>
+          <step>C</step>
+          <alter>1</alter>
           <octave>4</octave>
         </pitch>
         <duration>2</duration>
-        <tie type="start" />
         <voice>1</voice>
         <type>quarter</type>
         <notations>
-          <tied type="start" />
+          <slur type="start" number="37" />
         </notations>
       </note>
-    </measure>
-    <measure number="105">
-      <note>
-        <pitch>
-          <step>G</step>
-          <octave>4</octave>
-        </pitch>
-        <duration>2</duration>
-        <tie type="stop" />
-        <voice>1</voice>
-        <type>quarter</type>
-        <notations>
-          <tied type="stop" />
-          <slur type="stop" number="46" />
-        </notations>
-      </note>
+      <direction>
+        <direction-type>
+          <wedge type="diminuendo" />
+        </direction-type>
+      </direction>
       <note>
         <pitch>
           <step>D</step>
           <octave>4</octave>
         </pitch>
-        <duration>2</duration>
+        <duration>6</duration>
         <voice>1</voice>
-        <type>quarter</type>
+        <type>half</type>
+        <dot />
+        <notations>
+          <slur type="stop" number="37" />
+        </notations>
       </note>
+    </measure>
+    <measure number="106">
+      <direction>
+        <direction-type>
+          <wedge type="stop" />
+        </direction-type>
+      </direction>
       <direction>
         <direction-type>
           <dynamics>
@@ -3024,20 +2785,9 @@
       </direction>
       <note>
         <pitch>
-          <step>D</step>
-          <octave>5</octave>
-        </pitch>
-        <duration>4</duration>
-        <voice>1</voice>
-        <type>half</type>
-      </note>
-    </measure>
-    <measure number="106">
-      <note>
-        <pitch>
           <step>E</step>
           <alter>-1</alter>
-          <octave>5</octave>
+          <octave>4</octave>
         </pitch>
         <duration>4</duration>
         <voice>1</voice>
@@ -3046,7 +2796,7 @@
       <note>
         <pitch>
           <step>C</step>
-          <octave>5</octave>
+          <octave>4</octave>
         </pitch>
         <duration>4</duration>
         <voice>1</voice>
@@ -3054,38 +2804,60 @@
       </note>
     </measure>
     <measure number="107">
-      <direction placement="below">
+      <direction>
         <direction-type>
-          <words>sf p</words>
+          <wedge type="crescendo" />
         </direction-type>
       </direction>
       <note>
         <pitch>
           <step>B</step>
-          <octave>4</octave>
+          <octave>3</octave>
         </pitch>
         <duration>8</duration>
-        <tie type="start" />
         <voice>1</voice>
         <type>whole</type>
-        <notations>
-          <tied type="start" />
-        </notations>
       </note>
     </measure>
     <measure number="108">
+      <direction>
+        <direction-type>
+          <wedge type="stop" />
+        </direction-type>
+      </direction>
+      <direction>
+        <direction-type>
+          <wedge type="diminuendo" />
+        </direction-type>
+      </direction>
       <note>
         <pitch>
-          <step>B</step>
+          <step>E</step>
           <octave>4</octave>
         </pitch>
-        <duration>8</duration>
-        <tie type="stop" />
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>half</type>
+        <notations>
+          <slur type="start" number="38" />
+        </notations>
+      </note>
+      <direction>
+        <direction-type>
+          <wedge type="stop" />
+        </direction-type>
+      </direction>
+      <note>
+        <pitch>
+          <step>E</step>
+          <alter>-1</alter>
+          <octave>4</octave>
+        </pitch>
+        <duration>4</duration>
         <tie type="start" />
         <voice>1</voice>
-        <type>whole</type>
+        <type>half</type>
         <notations>
-          <tied type="stop" />
           <tied type="start" />
         </notations>
       </note>
@@ -3093,18 +2865,32 @@
     <measure number="109">
       <note>
         <pitch>
-          <step>B</step>
+          <step>E</step>
+          <alter>-1</alter>
           <octave>4</octave>
         </pitch>
-        <duration>8</duration>
+        <duration>4</duration>
         <tie type="stop" />
-        <tie type="start" />
         <voice>1</voice>
-        <type>whole</type>
+        <type>half</type>
         <notations>
           <tied type="stop" />
-          <tied type="start" />
+          <slur type="stop" number="38" />
         </notations>
+      </note>
+      <direction placement="below">
+        <direction-type>
+          <words>poco espress.</words>
+        </direction-type>
+      </direction>
+      <note>
+        <pitch>
+          <step>D</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>half</type>
       </note>
     </measure>
     <measure number="110">
@@ -3115,54 +2901,34 @@
       </direction>
       <note>
         <pitch>
-          <step>B</step>
+          <step>E</step>
+          <alter>-1</alter>
           <octave>4</octave>
         </pitch>
         <duration>4</duration>
-        <tie type="stop" />
         <voice>1</voice>
         <type>half</type>
-        <notations>
-          <tied type="stop" />
-        </notations>
       </note>
       <note>
         <pitch>
           <step>C</step>
-          <octave>5</octave>
+          <octave>4</octave>
         </pitch>
-        <duration>2</duration>
+        <duration>4</duration>
+        <tie type="start" />
         <voice>1</voice>
-        <type>quarter</type>
+        <type>half</type>
         <notations>
-          <articulations>
-            <accent />
-            <staccato />
-          </articulations>
+          <tied type="start" />
         </notations>
       </note>
+    </measure>
+    <measure number="111">
       <direction>
         <direction-type>
           <wedge type="stop" />
         </direction-type>
       </direction>
-      <note>
-        <pitch>
-          <step>G</step>
-          <octave>4</octave>
-        </pitch>
-        <duration>2</duration>
-        <voice>1</voice>
-        <type>quarter</type>
-        <notations>
-          <articulations>
-            <accent />
-            <staccato />
-          </articulations>
-        </notations>
-      </note>
-    </measure>
-    <measure number="111">
       <direction>
         <direction-type>
           <dynamics>
@@ -3172,221 +2938,189 @@
       </direction>
       <note>
         <pitch>
-          <step>E</step>
-          <alter>-1</alter>
+          <step>C</step>
           <octave>4</octave>
         </pitch>
-        <duration>8</duration>
-        <tie type="start" />
+        <duration>3</duration>
+        <tie type="stop" />
         <voice>1</voice>
-        <type>whole</type>
+        <type>quarter</type>
+        <dot />
         <notations>
-          <tied type="start" />
+          <tied type="stop" />
+        </notations>
+      </note>
+      <note>
+        <pitch>
+          <step>D</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+        <notations>
+          <slur type="start" number="39" />
+        </notations>
+      </note>
+      <note>
+        <pitch>
+          <step>B</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>3</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+        <dot />
+        <notations>
+          <slur type="stop" number="39" />
+        </notations>
+      </note>
+      <note>
+        <pitch>
+          <step>C</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+        <notations>
+          <slur type="start" number="40" />
         </notations>
       </note>
     </measure>
     <measure number="112">
       <note>
         <pitch>
-          <step>E</step>
-          <alter>-1</alter>
+          <step>A</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>3</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+        <dot />
+        <notations>
+          <slur type="stop" number="40" />
+        </notations>
+      </note>
+      <note>
+        <pitch>
+          <step>A</step>
+          <alter>1</alter>
+          <octave>3</octave>
+        </pitch>
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+        <notations>
+          <slur type="start" number="41" />
+        </notations>
+      </note>
+      <note>
+        <pitch>
+          <step>B</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>3</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+        <dot />
+        <notations>
+          <slur type="stop" number="41" />
+        </notations>
+      </note>
+      <note>
+        <pitch>
+          <step>C</step>
           <octave>4</octave>
         </pitch>
-        <duration>8</duration>
-        <tie type="stop" />
-        <tie type="start" />
+        <duration>1</duration>
         <voice>1</voice>
-        <type>whole</type>
+        <type>eighth</type>
         <notations>
-          <tied type="stop" />
-          <tied type="start" />
+          <slur type="start" number="42" />
         </notations>
       </note>
     </measure>
     <measure number="113">
       <note>
         <pitch>
-          <step>E</step>
-          <alter>-1</alter>
-          <octave>4</octave>
-        </pitch>
-        <duration>4</duration>
-        <tie type="stop" />
-        <voice>1</voice>
-        <type>half</type>
-        <notations>
-          <tied type="stop" />
-        </notations>
-      </note>
-      <note>
-        <pitch>
-          <step>E</step>
-          <octave>4</octave>
-        </pitch>
-        <duration>3</duration>
-        <voice>1</voice>
-        <type>quarter</type>
-        <dot />
-        <notations>
-          <slur type="start" number="47" />
-        </notations>
-      </note>
-      <note>
-        <pitch>
-          <step>F</step>
-          <octave>4</octave>
-        </pitch>
-        <duration>1</duration>
-        <voice>1</voice>
-        <type>eighth</type>
-        <notations>
-          <slur type="stop" number="47" />
-        </notations>
-      </note>
-    </measure>
-    <measure number="114">
-      <note>
-        <pitch>
-          <step>D</step>
-          <octave>4</octave>
-        </pitch>
-        <duration>8</duration>
-        <tie type="start" />
-        <voice>1</voice>
-        <type>whole</type>
-        <notations>
-          <tied type="start" />
-        </notations>
-      </note>
-    </measure>
-    <measure number="115">
-      <note>
-        <pitch>
-          <step>D</step>
-          <octave>4</octave>
-        </pitch>
-        <duration>4</duration>
-        <tie type="stop" />
-        <voice>1</voice>
-        <type>half</type>
-        <notations>
-          <tied type="stop" />
-        </notations>
-      </note>
-      <note>
-        <pitch>
           <step>C</step>
           <alter>1</alter>
           <octave>4</octave>
         </pitch>
-        <duration>3</duration>
-        <voice>1</voice>
-        <type>quarter</type>
-        <dot />
-        <notations>
-          <slur type="start" number="48" />
-        </notations>
-      </note>
-      <note>
-        <pitch>
-          <step>D</step>
-          <octave>4</octave>
-        </pitch>
         <duration>1</duration>
         <voice>1</voice>
         <type>eighth</type>
         <notations>
-          <slur type="stop" number="48" />
-          <articulations>
-            <staccato />
-          </articulations>
+          <slur type="stop" number="42" />
         </notations>
+      </note>
+      <note>
+        <rest />
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>eighth</type>
+      </note>
+      <note>
+        <rest />
+        <duration>2</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+      </note>
+      <note>
+        <rest />
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>half</type>
+      </note>
+    </measure>
+    <measure number="114">
+      <note>
+        <rest />
+        <duration>8</duration>
+        <voice>1</voice>
+        <type>whole</type>
+      </note>
+    </measure>
+    <measure number="115">
+      <note>
+        <rest />
+        <duration>8</duration>
+        <voice>1</voice>
+        <type>whole</type>
       </note>
     </measure>
     <measure number="116">
       <note>
-        <pitch>
-          <step>B</step>
-          <octave>3</octave>
-        </pitch>
+        <rest />
         <duration>8</duration>
-        <tie type="start" />
         <voice>1</voice>
         <type>whole</type>
-        <notations>
-          <tied type="start" />
-        </notations>
       </note>
     </measure>
     <measure number="117">
-      <direction>
-        <direction-type>
-          <wedge type="diminuendo" />
-        </direction-type>
-      </direction>
       <note>
-        <pitch>
-          <step>B</step>
-          <octave>3</octave>
-        </pitch>
-        <duration>4</duration>
-        <tie type="stop" />
+        <rest />
+        <duration>8</duration>
         <voice>1</voice>
-        <type>half</type>
-        <notations>
-          <tied type="stop" />
-        </notations>
-      </note>
-      <direction>
-        <direction-type>
-          <wedge type="stop" />
-        </direction-type>
-      </direction>
-      <note>
-        <pitch>
-          <step>C</step>
-          <octave>4</octave>
-        </pitch>
-        <duration>3</duration>
-        <voice>1</voice>
-        <type>quarter</type>
-        <dot />
-        <notations>
-          <slur type="start" number="49" />
-        </notations>
-      </note>
-      <note>
-        <pitch>
-          <step>D</step>
-          <octave>4</octave>
-        </pitch>
-        <duration>1</duration>
-        <voice>1</voice>
-        <type>eighth</type>
-        <notations>
-          <slur type="stop" number="49" />
-          <articulations>
-            <staccato />
-          </articulations>
-        </notations>
+        <type>whole</type>
       </note>
     </measure>
     <measure number="118">
       <note>
-        <pitch>
-          <step>B</step>
-          <octave>3</octave>
-        </pitch>
+        <rest />
         <duration>8</duration>
-        <tie type="start" />
         <voice>1</voice>
         <type>whole</type>
-        <notations>
-          <tied type="start" />
-        </notations>
       </note>
     </measure>
     <measure number="119">
+      <note>
+        <rest />
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>half</type>
+      </note>
       <direction>
         <direction-type>
           <dynamics>
@@ -3396,16 +3130,12 @@
       </direction>
       <note>
         <pitch>
-          <step>B</step>
-          <octave>3</octave>
+          <step>D</step>
+          <octave>4</octave>
         </pitch>
-        <duration>8</duration>
-        <tie type="stop" />
+        <duration>4</duration>
         <voice>1</voice>
-        <type>whole</type>
-        <notations>
-          <tied type="stop" />
-        </notations>
+        <type>half</type>
       </note>
     </measure>
     <measure number="120">
@@ -3416,9 +3146,9 @@
       </direction>
       <note>
         <pitch>
-          <step>B</step>
+          <step>E</step>
           <alter>-1</alter>
-          <octave>3</octave>
+          <octave>4</octave>
         </pitch>
         <duration>4</duration>
         <voice>1</voice>
@@ -3431,8 +3161,8 @@
       </direction>
       <note>
         <pitch>
-          <step>A</step>
-          <octave>3</octave>
+          <step>C</step>
+          <octave>4</octave>
         </pitch>
         <duration>4</duration>
         <voice>1</voice>
@@ -3454,13 +3184,17 @@
       </direction>
       <note>
         <pitch>
-          <step>A</step>
-          <alter>-1</alter>
+          <step>B</step>
           <octave>3</octave>
         </pitch>
         <duration>8</duration>
+        <tie type="start" />
         <voice>1</voice>
         <type>whole</type>
+        <notations>
+          <tied type="start" />
+          <slur type="start" number="43" />
+        </notations>
       </note>
     </measure>
     <measure number="122">
@@ -3471,24 +3205,32 @@
       </direction>
       <note>
         <pitch>
-          <step>G</step>
+          <step>B</step>
           <octave>3</octave>
         </pitch>
-        <duration>8</duration>
-        <tie type="start" />
+        <duration>6</duration>
+        <tie type="stop" />
         <voice>1</voice>
-        <type>whole</type>
+        <type>half</type>
+        <dot />
         <notations>
-          <tied type="start" />
+          <tied type="stop" />
+        </notations>
+      </note>
+      <note>
+        <pitch>
+          <step>C</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>2</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+        <notations>
+          <slur type="stop" number="43" />
         </notations>
       </note>
     </measure>
     <measure number="123">
-      <direction>
-        <direction-type>
-          <wedge type="diminuendo" />
-        </direction-type>
-      </direction>
       <direction>
         <direction-type>
           <dynamics>
@@ -3496,38 +3238,67 @@
           </dynamics>
         </direction-type>
       </direction>
+      <direction>
+        <direction-type>
+          <wedge type="diminuendo" />
+        </direction-type>
+      </direction>
+      <note>
+        <pitch>
+          <step>C</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>half</type>
+        <notations>
+          <slur type="start" number="44" />
+        </notations>
+      </note>
       <note>
         <pitch>
           <step>G</step>
           <octave>3</octave>
         </pitch>
-        <duration>8</duration>
-        <tie type="stop" />
-        <tie type="start" />
+        <duration>2</duration>
         <voice>1</voice>
-        <type>whole</type>
+        <type>quarter</type>
         <notations>
-          <tied type="stop" />
-          <tied type="start" />
+          <articulations>
+            <tenuto />
+          </articulations>
+        </notations>
+      </note>
+      <note>
+        <pitch>
+          <step>G</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>2</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+        <notations>
+          <slur type="stop" number="44" />
+          <articulations>
+            <tenuto />
+          </articulations>
         </notations>
       </note>
     </measure>
     <measure number="124">
       <note>
         <pitch>
-          <step>G</step>
+          <step>A</step>
+          <alter>-1</alter>
           <octave>3</octave>
         </pitch>
-        <duration>8</duration>
-        <tie type="stop" />
+        <duration>4</duration>
         <voice>1</voice>
-        <type>whole</type>
+        <type>half</type>
         <notations>
-          <tied type="stop" />
+          <slur type="start" number="45" />
         </notations>
       </note>
-    </measure>
-    <measure number="125">
       <direction>
         <direction-type>
           <wedge type="stop" />
@@ -3538,43 +3309,111 @@
           <step>G</step>
           <octave>3</octave>
         </pitch>
-        <duration>1</duration>
-        <voice>1</voice>
-        <type>eighth</type>
-      </note>
-      <note>
-        <rest />
-        <duration>1</duration>
-        <voice>1</voice>
-        <type>eighth</type>
-      </note>
-      <note>
-        <rest />
-        <duration>2</duration>
-        <voice>1</voice>
-        <type>quarter</type>
-      </note>
-      <note>
-        <rest />
         <duration>4</duration>
         <voice>1</voice>
         <type>half</type>
+        <notations>
+          <slur type="stop" number="45" />
+        </notations>
+      </note>
+    </measure>
+    <measure number="125">
+      <direction>
+        <direction-type>
+          <dynamics>
+            <pp />
+          </dynamics>
+        </direction-type>
+      </direction>
+      <note>
+        <pitch>
+          <step>C</step>
+          <octave>4</octave>
+        </pitch>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>half</type>
+        <notations>
+          <slur type="start" number="46" />
+        </notations>
+      </note>
+      <note>
+        <pitch>
+          <step>G</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>2</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+        <notations>
+          <articulations>
+            <tenuto />
+          </articulations>
+        </notations>
+      </note>
+      <note>
+        <pitch>
+          <step>G</step>
+          <octave>3</octave>
+        </pitch>
+        <duration>2</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+        <notations>
+          <slur type="stop" number="46" />
+          <articulations>
+            <tenuto />
+          </articulations>
+        </notations>
       </note>
     </measure>
     <measure number="126">
+      <direction>
+        <direction-type>
+          <dynamics>
+            <pp />
+          </dynamics>
+        </direction-type>
+      </direction>
+      <direction>
+        <direction-type>
+          <wedge type="crescendo" />
+        </direction-type>
+      </direction>
       <note>
-        <rest />
+        <pitch>
+          <step>G</step>
+          <alter>1</alter>
+          <octave>3</octave>
+        </pitch>
         <duration>8</duration>
+        <tie type="start" />
         <voice>1</voice>
         <type>whole</type>
+        <notations>
+          <tied type="start" />
+        </notations>
       </note>
     </measure>
     <measure number="127">
+      <direction>
+        <direction-type>
+          <wedge type="stop" />
+        </direction-type>
+      </direction>
       <note>
-        <rest />
+        <pitch>
+          <step>G</step>
+          <alter>1</alter>
+          <octave>3</octave>
+        </pitch>
         <duration>8</duration>
+        <tie type="stop" />
         <voice>1</voice>
         <type>whole</type>
+        <notations>
+          <tied type="stop" />
+        </notations>
       </note>
     </measure>
     <measure number="128">

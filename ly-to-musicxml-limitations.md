@@ -51,6 +51,8 @@ Runs LilyPond in a wrapper-driven extraction mode that resolves includes and Sch
 
 Parses the compiler-resolved Lily XML into a measure-oriented intermediate representation. The current implementation is intentionally narrow around the runtime shapes observed in the provided scores.
 
+Pitch accidentals are converted from LilyPond's internal alteration units to MusicXML semitone alter values before serialization.
+
 Known limits:
 
 - Simultaneous voice branches inside a single staff are warned and only the first time-advancing branch is kept.

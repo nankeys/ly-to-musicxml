@@ -93,6 +93,9 @@ class PartState:
     active_slurs: list[int] = field(default_factory=list)
     next_slur_number: int = 1
     last_note_group: NoteGroupItem | None = None
+    pending_clef_glyph: str | None = None
+    pending_clef_position: int | None = None
+    pending_clef_transposition: int | None = None
 
     def warn(self, message: str) -> None:
         self.warnings.append(message)
@@ -137,6 +140,23 @@ class PartState:
             measures=measures,
         )
 
+    def take_pending_clef(self) -> tuple[str, int, int | None] | None:
+        if not self.pending_clef_glyph:
+            return None
+
+        sign = _clef_sign_from_glyph(self.pending_clef_glyph)
+        if sign is None:
+            return None
+
+        line = _clef_line_from_position(sign, self.pending_clef_position)
+        octave_change = _clef_octave_change_from_transposition(self.pending_clef_transposition)
+
+        self.pending_clef_glyph = None
+        self.pending_clef_position = None
+        self.pending_clef_transposition = None
+
+        return sign, line, octave_change
+
 
 class SourceLookup:
     def __init__(self) -> None:
@@ -162,7 +182,7 @@ class SourceLookup:
                 return None
             self._line_cache[path] = lines
 
-        index = int(line_number)
+        index = int(line_number) - 1
         if 0 <= index < len(lines):
             return lines[index]
         return None
@@ -358,7 +378,7 @@ class LilyXmlParser:
             return
 
         if name == "ApplyContext":
-            clef = _parse_clef_from_origin(self.source_lookup.line_for_music(music))
+            clef = state.take_pending_clef() or _parse_clef_from_origin(self.source_lookup.line_for_music(music))
             if clef is not None:
                 sign, line, octave_change = clef
                 state.add_item(
@@ -435,6 +455,14 @@ class LilyXmlParser:
             value = _property_text(music, "value")
             if value:
                 state.name = value
+        elif symbol == "clefGlyph":
+            state.pending_clef_glyph = _property_text(music, "value")
+        elif symbol == "clefPosition":
+            value = _property_text(music, "value")
+            state.pending_clef_position = int(Fraction(value)) if value is not None else None
+        elif symbol == "clefTransposition":
+            value = _property_text(music, "value")
+            state.pending_clef_transposition = int(Fraction(value)) if value is not None else None
         elif symbol == "tempoWholesPerMinute":
             return
         else:
@@ -535,8 +563,8 @@ class LilyXmlParser:
         note = Note(
             pitch=Pitch(
                 step=NOTE_STEPS[int(pitch_elem.attrib["notename"])],
-                octave=int(pitch_elem.attrib["octave"]) + 3,
-                alter=_fraction_from_text(pitch_elem.attrib.get("alteration", "0")),
+                octave=int(pitch_elem.attrib["octave"]) + 4,
+                alter=_musicxml_alter_from_lily(pitch_elem.attrib.get("alteration", "0")),
             ),
             is_rest=False,
             duration=_duration_length(music),
@@ -841,6 +869,10 @@ def _fraction_from_text(text: str) -> Fraction:
     return Fraction(text)
 
 
+def _musicxml_alter_from_lily(text: str) -> Fraction:
+    return _fraction_from_text(text) * 2
+
+
 def _apply_articulation(note: Note, articulation_type: str | None) -> None:
     if articulation_type is None:
         return
@@ -902,6 +934,28 @@ def _parse_clef_from_origin(line: str | None) -> tuple[str, int, int | None] | N
     if not match:
         return None
     return CLEF_MAP.get(match.group(1).lower())
+
+
+def _clef_sign_from_glyph(glyph: str | None) -> str | None:
+    mapping = {
+        "clefs.G": "G",
+        "clefs.F": "F",
+        "clefs.C": "C",
+    }
+    return mapping.get(glyph)
+
+
+def _clef_line_from_position(sign: str, position: int | None) -> int:
+    default_lines = {"G": 2, "F": 4, "C": 3}
+    if position is None:
+        return default_lines[sign]
+    return 3 + (position // 2)
+
+
+def _clef_octave_change_from_transposition(transposition: int | None) -> int | None:
+    if transposition in (None, 0):
+        return None
+    return -(transposition // 7)
 
 
 def _parse_key_mode_from_origin(line: str | None) -> str | None:
