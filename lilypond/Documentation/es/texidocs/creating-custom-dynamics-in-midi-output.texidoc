@@ -1,0 +1,10 @@
+%% Translation of GIT committish: 4f16fa98fd258f08e64203c793028ea3e363b1c0
+  texidoces = "
+El ejemplo siguiente muestra cómo crear una marda de matiz
+dinámico, no incluida en la lista predeterminada, y asignarle un
+valor específico de forma que afecte a la salida MIDI.
+
+El matiz @code{\\rfz} conlleva el valor @code{0.9}.
+"
+
+  doctitlees = "Creacaión de matices dinámicos personalizados en el MIDI"

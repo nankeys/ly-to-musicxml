@@ -1,0 +1,16 @@
+%% Translation of GIT committish: 2f3474d9af596d677ed5b7ce720ae4d0954a6b51
+  texidocit = "
+Usando le etichette (tag), è possibile usare la stessa musica per produrre sia
+la musica mensurale che quella moderna.  In questo frammento, viene introdotta
+la funzione @code{menrest}, che permette alle pause mensurali di essere
+posizionate precisamente sul rigo come nell'originale, ma con le pause moderne
+nella posizione standard.  Le etichette vengono usate per produrre diversi
+tipi di stanghetta alla fine della musica, ma possono essere usate anche
+quando sono necessarie altre differenze: per esempio se si vogliono usare
+@qq{pause d'intero} (R1, R\\breve, etc.) nella musica moderna, ma pause
+normali (r1, r\\breve, etc.) nella versione mensurale.  La conversione di
+musica mensurale nel suo equivalente moderno viene solitamente chiamata
+@code{trascrizione}.
+
+"
+  doctitleit = "Usare le etichette per produrre musica mensurale e moderna dallo stesso sorgente"

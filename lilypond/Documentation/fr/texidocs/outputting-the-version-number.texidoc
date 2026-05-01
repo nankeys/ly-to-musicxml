@@ -1,0 +1,7 @@
+%% Translation of GIT committish: de1e42ce512f3690387cdd065109bddff1b7bd6d
+  texidocfr = "
+Il est possible déjouter le numéro de la version de LilyPond utilisée
+dans un @emph{markup}.
+"
+
+  doctitlefr = "Impression du numéro de version"

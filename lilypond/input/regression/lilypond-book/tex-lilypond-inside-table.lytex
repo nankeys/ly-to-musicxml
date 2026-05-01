@@ -1,0 +1,20 @@
+\documentclass[a4paper, 12pt]{article}
+
+\begin{document}
+
+\section{LilyPond snippets inside tables}
+
+Tables:
+
+\begin{tabular}{|l|l|r|}
+\hline
+\em Notes & \em Name \\
+\hline
+\lilypond[staffsize=11,fragment,filename="cdur"]{\context Voice <<c' e' g'>>} & major \\
+\lilypond[staffsize=11,fragment]{\context Voice <<c' es' g'>>} & minor \\
+\lilypond[staffsize=11,fragment]{\context Voice <<c' es' ges'>>} & diminished \\
+\lilypond[staffsize=11,fragment]{\context Voice <<c' e' gis'>>} & augmented \\
+\hline
+\end{tabular}
+
+\end{document}

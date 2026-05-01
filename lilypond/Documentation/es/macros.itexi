@@ -1,0 +1,724 @@
+@c -*- coding: utf-8; mode: texinfo; -*-
+@ignore
+    Translation of GIT committish: f7dfdb90b6d7f9ffd3d1c990dfc26ff65e5825d1
+
+    When revising a translation, copy the HEAD committish of the
+    version that you are working on.  For details, see the Contributors'
+    Guide, node Updating translation committishes..
+@end ignore
+
+
+@include version.itexi
+@include en/common-macros.itexi
+
+
+@hyphenation{Post-Script}
+
+
+@ignore
+******************************************************
+See MACRO DEFINITION GUIDELINES in common-macros.itexi
+******************************************************
+@end ignore
+
+
+@c   ***** Displaying text *****
+
+@c To get decent quotes in `foo' and ``foo''.
+
+@macro q{TEXT}
+@quoteleft{}\TEXT\@quoteright{}
+@end macro
+
+@macro qq{TEXT}
+@quotedblleft{}\TEXT\@quotedblright{}
+@end macro
+
+
+@ifhtml
+
+@macro warning{TEXT}
+@html
+<div class="warning">
+@end html
+@strong{Nota:} \TEXT\
+@c keep the space for proper nesting of </p>
+
+@html
+</div>
+@end html
+@end macro
+
+@end ifhtml
+
+@ifnothtml
+
+@macro warning{TEXT}
+@quotation
+@quotation
+@cartouche
+@b{Nota:} \TEXT\
+@end cartouche
+@end quotation
+@end quotation
+@end macro
+
+@end ifnothtml
+
+
+@macro docMain
+@cartouche
+Para mayor información sobre la forma en que este manual se relaciona
+con el resto de la documentación, o para leer este manual en otros
+formatos, consulte @rwebnamed{Manuals,Manuales}.
+
+Si le falta algún manual, encontrará toda la documentación en
+@w{@uref{https://@/lilypond@/.org/}}.
+@end cartouche
+@end macro
+
+
+@c Suppress the word 'Appendix' for `@appendix` entries in the
+@c table of contents.
+@tex
+\gdef\appentry#1#2#3#4{%
+  \retrievesecnowidth\secnowidthchap{#2}%
+  \dochapentry{#1}{#2}{#3}{#4}}
+@end tex
+
+
+@macro lilyTitlePage{TITLE}
+@c  This produces the unified index
+@syncodeindex fn cp
+
+
+@c   ***** Copyright stuff *****
+@ifset FDL
+@copying
+@copyrightDeclare
+
+@emph{La traducción de la siguiente nota de copyright se ofrece como
+cortesía para las personas de habla no inglesa, pero únicamente la
+nota en inglés tiene validez legal.}
+
+@emph{The translation of the following copyright notice is provided
+for courtesy to non-English speakers, but only the notice in English
+legally counts.}
+
+@quotation
+Se otorga permiso para copiar, distribuir y/o modificar este documento
+bajo los términos de la Licencia de Documentación Libre de GNU, versión 1.1
+o cualquier versión posterior publicada por la Free Software Foundation;
+sin ninguna de las secciones invariantes.
+Se incluye una copia de esta licencia dentro de la sección titulada ``Licencia
+de Documentación Libre de GNU''.
+@end quotation
+
+@quotation
+Permission is granted to copy, distribute and/or modify this document
+under the terms of the GNU Free Documentation License, Version 1.1
+or any later version published by the Free Software Foundation;
+with no Invariant Sections.
+A copy of the license is included in the section entitled ``GNU
+Free Documentation License''.
+@end quotation
+@end copying
+@end ifset
+
+@ifclear FDL
+@copying
+Este documento se ha puesto en el dominio público.
+@end copying
+@end ifclear
+
+
+
+@c   ***** Title page *****
+@ifnottex
+@node Top
+@top LilyPond --- \TITLE\
+
+@cartouche
+@manualIntro{}
+@end cartouche
+@end ifnottex
+
+@finalout
+
+@titlepage
+@title LilyPond
+@subtitle El tipografiador de música
+@titlefont{\TITLE\}
+@author El equipo de desarrolladores de LilyPond
+
+@vskip 60pt
+
+@cartouche
+@manualIntro{}
+@end cartouche
+
+@vskip 40pt
+
+@docMain{}
+
+@vskip 0pt plus 1filll
+
+@insertcopying
+
+Para la versión de LilyPond @version{}
+@end titlepage
+
+@end macro
+
+
+@c   ***** Headings in a doc subsection *****
+
+@macro predefined
+@subheading Instrucciones predefinidas
+@raggedright
+@end macro
+
+@macro endpredefined
+@end raggedright
+@end macro
+
+
+@macro snippets
+@need 1500
+@subheading Fragmentos de código seleccionados
+@end macro
+
+
+@c Don't insert an empty line after @morerefs!  Otherwise we get
+@c unwanted extra vertical space in the PDF output.
+
+@macro morerefs
+@subheading Véase también
+@c @ raggedright @c temporarily do not open an environment here, breaks doc build of Spanish docs until every file includes endmorerefs
+@end macro
+
+@macro endmorerefs
+@c @ end raggedright @c temporarily do nothing
+@end macro
+
+
+@macro knownissues
+@subheading Advertencias y problemas conocidos
+@end macro
+
+
+
+@c   ***** Links and references *****
+
+@c  Definitions for references:
+@c
+@c     @rweb
+@c     @ressay
+@c     @rglos
+@c     @rinternals
+@c     @rlearning
+@c     @rlsr
+@c     @rlsrsnippet
+@c     @rprogram
+@c     @rnotation
+@c     @rchanges
+@c     @rextend
+@c     @rcontrib
+@c
+@c  All these also have a @...named version which allows to specify the
+@c  displayed text for the reference as second argument.
+@c
+@c ***** HTML + bigpage is a special case (other manual names); all other
+@c formats are treated similarly.
+
+
+@c *** not TeX ***
+
+@ifnottex
+
+@c ** bigpage **
+
+
+@ifset bigpage
+
+@macro rglos{TEXT}
+@ref{\TEXT\,,,music-glossary-big-page,Glosario Musical}
+@end macro
+
+@macro rglosnamed{TEXT,DISPLAY}
+@ref{\TEXT\,,\DISPLAY\,music-glossary-big-page,Glosario Musical}
+@end macro
+
+@macro rlearning{TEXT}
+@ref{\TEXT\,,,learning-big-page,Manual de Aprendizaje}
+@end macro
+
+@macro rlearningnamed{TEXT,DISPLAY}
+@ref{\TEXT\,,\DISPLAY\,learning-big-page,Manual de Aprendizaje}
+@end macro
+
+@macro rnotation{TEXT}
+@ref{\TEXT\,,,notation-big-page,Referencia de la Notación}
+@end macro
+
+@macro rnotationnamed{TEXT,DISPLAY}
+@ref{\TEXT\,,\DISPLAY\,notation-big-page,Referencia de la Notación}
+@end macro
+
+@macro rextend{TEXT}
+@ref{\TEXT\,,,extending-big-page,Extender}
+@end macro
+
+@macro rextendnamed{TEXT,DISPLAY}
+@ref{\TEXT\,,\DISPLAY\,extending-big-page,Extender}
+@end macro
+
+@macro rchanges{TEXT}
+@ref{\TEXT\,,,changes-big-page,Cambios}
+@end macro
+
+@macro rchangesnamed{TEXT,DISPLAY}
+@ref{\TEXT\,,\DISPLAY\,changes-big-page,Cambios}
+@end macro
+
+@macro rcontrib{TEXT}
+@ref{\TEXT\,,,contributor-big-page,Guía del colaborador}
+@end macro
+
+@macro rcontribnamed{TEXT,DISPLAY}
+@ref{\TEXT\,,\DISPLAY\,contributor-big-page,Guía del colaborador}
+@end macro
+
+@macro rweb{TEXT}
+@ref{\TEXT\,,,web-big-page,Información general}
+@end macro
+
+@macro rwebnamed{TEXT,DISPLAY}
+@ref{\TEXT\,,\DISPLAY\,web-big-page,Información general}
+@end macro
+
+@macro ressay{TEXT}
+@ref{\TEXT\,,,essay-big-page,Ensayo}
+@end macro
+
+@macro ressaynamed{TEXT,DISPLAY}
+@ref{\TEXT\,,\DISPLAY\,essay-big-page,Ensayo}
+@end macro
+
+@macro rprogram{TEXT}
+@ref{\TEXT\,,,usage-big-page,Utilización del Programa}
+@end macro
+
+@macro rprogramnamed{TEXT,DISPLAY}
+@ref{\TEXT\,,\DISPLAY\,usage-big-page,Utilización del Programa}
+@end macro
+
+@macro rlsr{TEXT}
+@ref{\TEXT\,,,snippets-big-page,Fragmentos de código}
+@end macro
+
+@macro rlsrnamed{TEXT,DISPLAY}
+@ref{\TEXT\,,\DISPLAY\,snippets-big-page,Fragmentos de código}
+@end macro
+
+@macro rlsrsnippet{PREFIX,TEXT}
+@ref{\PREFIX\ - \TEXT\,,\TEXT\,snippets-big-page,Fragmentos de código}
+@end macro
+
+@macro rinternals{TEXT}
+@ref{\TEXT\,,,internals-big-page,Referencia de Funcionamiento Interno}
+@end macro
+
+@macro rinternalsnamed{TEXT,DISPLAY}
+@ref{\TEXT\,,\DISPLAY\,internals-big-page,Referencia de Funcionamiento Interno}
+@end macro
+
+@end ifset
+
+
+@c ** not bigpage **
+
+@ifclear bigpage
+
+@ifnotinfo
+
+@macro rglos{TEXT}
+@ref{\TEXT\,,,music-glossary,Glosario Musical}
+@end macro
+
+@macro rglosnamed{TEXT,DISPLAY}
+@ref{\TEXT\,,\DISPLAY\,music-glossary,Glosario Musical}
+@end macro
+
+@macro rlearning{TEXT}
+@ref{\TEXT\,,,learning,Manual de Aprendizaje}
+@end macro
+
+@macro rlearningnamed{TEXT,DISPLAY}
+@ref{\TEXT\,,\DISPLAY\,learning,Manual de Aprendizaje}
+@end macro
+
+@macro rnotation{TEXT}
+@ref{\TEXT\,,,notation,Referencia de la Notación}
+@end macro
+
+@macro rnotationnamed{TEXT,DISPLAY}
+@ref{\TEXT\,,\DISPLAY\,notation,Referencia de la Notación}
+@end macro
+
+@macro rchanges{TEXT}
+@ref{\TEXT\,,,changes,Cambios}
+@end macro
+
+@macro rchangesnamed{TEXT,DISPLAY}
+@ref{\TEXT\,,\DISPLAY\,changes,Cambios}
+@end macro
+
+@macro rextend{TEXT}
+@ref{\TEXT\,,,extending,Extender}
+@end macro
+
+@macro rextendnamed{TEXT,DISPLAY}
+@ref{\TEXT\,,\DISPLAY\,extending,Extender}
+@end macro
+
+@macro rcontrib{TEXT}
+@ref{\TEXT\,,,contributor,Guía del colaborador}
+@end macro
+
+@macro rcontribnamed{TEXT,DISPLAY}
+@ref{\TEXT\,,\DISPLAY\,contributor,Guía del colaborador}
+@end macro
+
+@macro rweb{TEXT}
+@ref{\TEXT\,,,web,Información general}
+@end macro
+
+@macro rwebnamed{TEXT,DISPLAY}
+@ref{\TEXT\,,\DISPLAY\,web,Información general}
+@end macro
+
+@macro ressay{TEXT}
+@ref{\TEXT\,,,essay,Ensayo}
+@end macro
+
+@macro ressaynamed{TEXT,DISPLAY}
+@ref{\TEXT\,,\DISPLAY\,essay,Ensayo}
+@end macro
+
+@macro rprogram{TEXT}
+@ref{\TEXT\,,,usage,Utilización del Programa}
+@end macro
+
+@macro rprogramnamed{TEXT,DISPLAY}
+@ref{\TEXT\,,\DISPLAY\,usage,Utilización del Programa}
+@end macro
+
+@macro rlsr{TEXT}
+@ref{\TEXT\,,,snippets,Fragmentos de código}
+@end macro
+
+@macro rlsrnamed{TEXT,DISPLAY}
+@ref{\TEXT\,,\DISPLAY\,snippets,Fragmentos de código}
+@end macro
+
+@macro rlsrsnippet{PREFIX,TEXT}
+@ref{\PREFIX\ - \TEXT\,,\TEXT\,snippets,Fragmentos de código}
+@end macro
+
+@macro rinternals{TEXT}
+@ref{\TEXT\,,,internals,Referencia de Funcionamiento Interno}
+@end macro
+
+@macro rinternalsnamed{TEXT,DISPLAY}
+@ref{\TEXT\,,\DISPLAY\,internals,Referencia de Funcionamiento Interno}
+@end macro
+
+@end ifnotinfo
+
+@ifinfo
+
+@macro rglos{TEXT}
+@ref{\TEXT\,,,music-glossary,Glosario musical}
+@end macro
+
+@macro rglosnamed{TEXT,DISPLAY}
+@ref{\TEXT\,,\DISPLAY\,music-glossary,Glosario musical}
+@end macro
+
+@macro rlearning{TEXT}
+@ref{\TEXT\,,,lilypond-learning,Manual de aprendizaje}
+@end macro
+
+@macro rlearningnamed{TEXT,DISPLAY}
+@ref{\TEXT\,,,lilypond-learning,Manual de aprendizaje}
+@end macro
+
+@macro rnotation{TEXT}
+@ref{\TEXT\,,,lilypond-notation,Referencia de la notación}
+@end macro
+
+@macro rnotationnamed{TEXT,DISPLAY}
+@ref{\TEXT\,,\DISPLAY\,lilypond-notation,Referencia de la notación}
+@end macro
+
+@macro rchanges{TEXT}
+@ref{\TEXT\,,,lilypond-changes,Cambios}
+@end macro
+
+@macro rchangesnamed{TEXT,DISPLAY}
+@ref{\TEXT\,,\DISPLAY\,lilypond-changes,Cambios}
+@end macro
+
+@macro rextend{TEXT}
+@ref{\TEXT\,,,lilypond-extending,Extender}
+@end macro
+
+@macro rextendnamed{TEXT,DISPLAY}
+@ref{\TEXT\,,\DISPLAY\,lilypond-extending,Extender}
+@end macro
+
+@macro rcontrib{TEXT}
+@ref{\TEXT\,,,lilypond-contributor,Guía del colaborador}
+@end macro
+
+@macro rcontribnamed{TEXT,DISPLAY}
+@ref{\TEXT\,,\DISPLAY\,lilypond-contributor,Guía del colaborador}
+@end macro
+
+@macro rweb{TEXT}
+@ref{\TEXT\,,,lilypond-web,Información general}
+@end macro
+
+@macro rwebnamed{TEXT,DISPLAY}
+@ref{\TEXT\,,\DISPLAY\,lilypond-web,Información general}
+@end macro
+
+@macro ressay{TEXT}
+@ref{\TEXT\,,,lilypond-essay,Ensayo}
+@end macro
+
+@macro ressaynamed{TEXT,DISPLAY}
+@ref{\TEXT\,,\DISPLAY\,lilypond-essay,Ensayo}
+@end macro
+
+@macro rprogram{TEXT}
+@ref{\TEXT\,,,lilypond-usage,Utilización del programa}
+@end macro
+
+@macro rprogramnamed{TEXT,DISPLAY}
+@ref{\TEXT\,,\DISPLAY\,lilypond-usage,Utilización del programa}
+@end macro
+
+@macro rlsr{TEXT}
+@ref{\TEXT\,,,lilypond-snippets,Fragmentos de código}
+@end macro
+
+@macro rlsrnamed{TEXT,DISPLAY}
+@ref{\TEXT\,,\DISPLAY\,lilypond-snippets,Fragmentos de código}
+@end macro
+
+@macro rlsrsnippet{PREFIX,TEXT}
+@ref{\PREFIX\ - \TEXT\,,\TEXT\,lilypond-snippets,Fragmentos de código}
+@end macro
+
+@macro rinternals{TEXT}
+@ref{\TEXT\,,,lilypond-internals,Referencia de funcionamiento interno}
+@end macro
+
+@macro rinternalsnamed{TEXT,DISPLAY}
+@ref{\TEXT\,,\DISPLAY\,lilypond-internals,Referencia de funcionamiento interno}
+@end macro
+
+@end ifinfo
+
+@end ifclear
+
+@end ifnottex
+
+
+@c *** TeX ***
+
+@iftex
+
+@macro rglos{TEXT}
+@ref{\TEXT\,,,music-glossary,Glosario Musical}
+@end macro
+
+@macro rglosnamed{TEXT,DISPLAY}
+@ref{\TEXT\,,\DISPLAY\,music-glossary,Glosario Musical}
+@end macro
+
+@macro rlearning{TEXT}
+@ref{\TEXT\,,,learning.es,Manual de Aprendizaje}
+@end macro
+
+@macro rlearningnamed{TEXT,DISPLAY}
+@ref{\TEXT\,,\DISPLAY\,learning.es,Manual de Aprendizaje}
+@end macro
+
+@macro rnotation{TEXT}
+@ref{\TEXT\,,,notation.es,Referencia de la Notación}
+@end macro
+
+@macro rnotationnamed{TEXT,DISPLAY}
+@ref{\TEXT\,,\DISPLAY\,notation.es,Referencia de la Notación}
+@end macro
+
+@macro rchanges{TEXT}
+@ref{\TEXT\,,,changes,Cambios}
+@end macro
+
+@macro rchangesnamed{TEXT,DISPLAY}
+@ref{\TEXT\,,\DISPLAY\,changes,Cambios}
+@end macro
+
+@macro rextend{TEXT}
+@ref{\TEXT\,,,extending,Extender}
+@end macro
+
+@macro rextendnamed{TEXT,DISPLAY}
+@ref{\TEXT\,,\DISPLAY\,extending,Extender}
+@end macro
+
+@macro rcontrib{TEXT}
+@ref{\TEXT\,,,contributor,Guía del colaborador}
+@end macro
+
+@macro rcontribnamed{TEXT,DISPLAY}
+@ref{\TEXT\,,\DISPLAY\,contributor,Guía del colaborador}
+@end macro
+
+@macro rweb{TEXT}
+@ref{\TEXT\,,,web,Información general}
+@end macro
+
+@macro rwebnamed{TEXT,DISPLAY}
+@ref{\TEXT\,,\DISPLAY\,web,Información general}
+@end macro
+
+@macro ressay{TEXT}
+@ref{\TEXT\,,,essay,Ensayo}
+@end macro
+
+@macro ressaynamed{TEXT,DISPLAY}
+@ref{\TEXT\,,\DISPLAY\,essay,Ensayo}
+@end macro
+
+@macro rprogram{TEXT}
+@ref{\TEXT\,,,usage.es,Utilización del Programa}
+@end macro
+
+@macro rprogramnamed{TEXT,DISPLAY}
+@ref{\TEXT\,,\DISPLAY\,usage.es,Utilización del Programa}
+@end macro
+
+@macro rlsr{TEXT}
+@ref{\TEXT\,,,snippets,Fragmentos de código}
+@end macro
+
+@macro rlsrnamed{TEXT,DISPLAY}
+@ref{\TEXT\,,\DISPLAY\,snippets,Fragmentos de código}
+@end macro
+
+@macro rlsrsnippet{PREFIX,TEXT}
+@ref{\PREFIX\ - \TEXT\,,\TEXT\,snippets,Fragmentos de código}
+@end macro
+
+@macro rinternals{TEXT}
+@ref{\TEXT\,,,internals,Referencia de Funcionamiento Interno}
+@end macro
+
+@macro rinternalsnamed{TEXT,DISPLAY}
+@ref{\TEXT\,,\DISPLAY\,internals,Referencia de Funcionamiento Interno}
+@end macro
+
+@end iftex
+
+@c  ***** Macros specific to the web site *****
+
+@ifset web
+
+@macro exampleImage{IMAGE-FILE}
+@html
+<div class="float-center example-image-wrapper">
+  <a class="clickable" href="ly-examples/\IMAGE-FILE\.png">
+    <img src="ly-examples/\IMAGE-FILE\-small.png" alt="\IMAGE-FILE\">
+  </a>
+  <p style="text-align: left">
+    (pulse en la imagen para ampliar)
+    <span style="float: right">
+      <a href="ly-examples/\IMAGE-FILE\.ly">código fuente</a>
+    </span>
+  </p>
+</div>
+@end html
+@iftex
+@image{ly-examples/\IMAGE-FILE\,6in,,\IMAGE-FILE\,png}
+@end iftex
+@ifinfo
+@image{lilypond/ly-examples/\IMAGE-FILE\,,,\IMAGE-FILE\,png}
+@end ifinfo
+@end macro
+
+@macro help{TEXT}
+@html
+<div class="help">
+<strong>
+  <span style="text-decoration:blink">Necesitamos ayuda:</span>
+</strong> \TEXT\
+</div>
+@end html
+@end macro
+
+
+@c LEGALESE
+
+@macro logoLegalLinux
+Tux, el pingüino de Linux, es obra de
+@uref{mailto:lewing@@isc.tamu.edu, lewing@@isc.tamu.edu} hecha con
+@uref{http://www.isc.tamu.edu/~lewing/gimp/, el Programa de
+Manipulación de Imágenes de GNU}.
+
+@end macro
+
+@macro logoLegalFreeBSD
+El logotipo de FreeBSD es una marca registrada de
+@uref{https://www.freebsd.org/, The FreeBSD Foundation}.
+
+@end macro
+
+@macro logoLegalMacOSX
+La @qq{imagen de la X} no es una marca registrada.  Es obra de
+@uref{https://en.wikipedia.org/wiki/User:Nihonjoe, Nihonjoe} y
+@uref{https://en.wikipedia.org/wiki/User:CyberSkull, CyberSkull}, y se
+puso bajo la Licencia de Documentación Libre de GNU versión 1.2 o
+posterior.  Encontramos esta imagen en
+@uref{https://commons.wikimedia.org/wiki/File:Mac_OS_X_Userbox_X.png,
+esta página de Wikimedia Commons}.
+
+@end macro
+
+@macro logoLegalWindows
+La @qq{imagen de los cuatro rectángulos de colores} no es una marca
+registrada.  Es obra de
+@uref{https://en.wikipedia.org/wiki/User:Rohitbd, Rohitbd} y está
+puesta bajo la Licencia de Documentación Libre de GNU, versión 1.2.
+Encontramos esta imagen en
+@uref{https://commons.wikimedia.org/wiki/Category:Microsoft_Windows_logos,
+esta página de Wikimedia Commons}.
+
+@end macro
+
+@end ifset
+
+
+@c   ***** Macros specific to translated docs *****
+
+
+@macro englishref
+Esta sección aún no está traducida; consulte el manual en inglés.
+@end macro
+
+
+

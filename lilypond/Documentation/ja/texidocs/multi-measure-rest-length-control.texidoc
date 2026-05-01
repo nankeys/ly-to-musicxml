@@ -1,0 +1,7 @@
+%% Translation of GIT committish: f11513f36c131dab18338d6a3a729e24a927150d
+  texidocja = "
+複数小節にまたがる休符の長さは、休符の長さに依存しますが、@c
+@code{MultiMeasureRest.space-increment} によってコントロールされます。@c
+デフォルト値は @code{2.0} です。
+"
+  doctitleja = "複数小節にまたがる休符の長さをコントロールする"

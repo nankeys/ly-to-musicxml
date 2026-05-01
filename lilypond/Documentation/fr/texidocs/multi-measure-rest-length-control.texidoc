@@ -1,0 +1,8 @@
+%% Translation of GIT committish: de1e42ce512f3690387cdd065109bddff1b7bd6d
+  texidocfr = "
+Les silences multimesure ont une largeur relative à leur durée totale,
+contrôlée par la propriété @code{space-increment} de l'objet graphique
+@code{MultiMeasureRest}. Sa valeur par défaut est fixée à 2.
+"
+
+  doctitlefr = "Contrôle de la taille d'un silence multimesure"

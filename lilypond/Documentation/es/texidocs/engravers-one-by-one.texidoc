@@ -1,0 +1,30 @@
+%% Translation of GIT committish: 70abecb938c2bb752967bd56b7402dd8129838a5
+  texidoces = "
+LilyPond trata los distintos elementos necesarios para el
+tipografiado de una partitura utilizando «plugins» o complementos
+añadidos.  Cada uno de los complementos se conoce como un
+@emph{grabador}. En este ejemplo, algunos grabadores se van
+activando uno por uno, en el orden siguiente:
+
+@itemize
+@item
+cabeza de las notas,
+@item
+el símbolo del pentagrama,
+@item
+clave,
+@item
+plicas,
+@item
+barras, ligaduras de expresión, acentos,
+@item
+alteraciones, líneas divisorias, indicación del compás, y armadura.
+@end itemize
+
+Los grabadores se encuentran agrupados. Por ejemplo, las cabezas
+de nota, ligaduras de expresión, barras de corchea, etc. forman un
+contexto de voz, @code{Voice}. Los grabadores de la armadura,
+alteraciones, líneas de compás, etc. forman un contexto de
+pentagrama, @code{Staff}.
+"
+  doctitlees = "Los grabadores, uno por uno"

@@ -1,0 +1,78 @@
+\input texinfo @c -*- coding: utf-8; mode: texinfo; documentlanguage: de -*-
+@ignore
+    Translation of GIT committish: ebe492ca408fb0d9abf80b94c56197eef8dc2f09
+
+    When revising a translation, copy the HEAD committish of the
+    version that you are working on.  For details, see the Contributors'
+    Guide, node Updating translation committishes.
+@end ignore
+@documentencoding UTF-8
+@documentlanguage de
+@settitle GNU LilyPond Programmbenutzung
+@afourpaper
+
+
+
+@macro manualIntro
+Diese Datei erklärt, wie man die Programme, die mit LilyPond
+Version @version{} verteilt werden, benutzt werden.  Zusätzlich
+werden einige Hinweise zur effizienten Benutzung der Programme
+vorgestellt.
+@end macro
+
+@c `Usage' was born 1999-10-10 with git commit c82c30c...
+@macro copyrightDeclare
+Copyright @copyright{} 1999--2026 bei den Autoren.
+@end macro
+
+@set FDL
+@include de/macros.itexi
+
+
+@c Translators: Till Paala
+
+@lilyTitlePage{Usage}
+
+
+@c TOC -- non-tex
+@ifnottex
+
+@c  maybe add a "Tasks" or "Specific tasks" or something like
+@c  that, after Suggestions  -gp
+@menu
+* Running lilypond::               Benutzung.
+* Updating files with convert-ly:: Eingabedateien aktualisieren.
+* lilypond-book::                  Text und Noten integrieren.
+* External programs::              LilyPond mit anderen Programmen verbinden.
+* Suggestions for writing files::  Hinweise zur effizienten Benutzung und effektiven Fehlerbeseitigung.
+
+Anhänge
+
+* GNU Free Documentation License:: Lizenz dieses Dokuments.
+* Index of commands and concepts::
+@end menu
+
+@docMain
+@end ifnottex
+
+
+@contents
+
+@iftex
+@allowcodebreaks false
+@end iftex
+
+@include de/usage/running.itely
+@include de/usage/updating.itely
+@include de/usage/lilypond-book.itely
+@include de/usage/external.itely
+@include de/usage/suggestions.itely
+
+@include en/fdl.itexi
+
+@node Index of commands and concepts
+@appendix Register
+
+@printindex cp
+
+@bye

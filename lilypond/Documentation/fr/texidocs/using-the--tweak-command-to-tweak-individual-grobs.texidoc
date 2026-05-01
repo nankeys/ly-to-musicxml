@@ -1,0 +1,7 @@
+%% Translation of GIT committish: de1e42ce512f3690387cdd065109bddff1b7bd6d
+  texidocfr = "
+La commande @code{\\tweak} permet de retoucher directement n'importe
+quel objet graphique. En voici quelques exemples :
+"
+
+  doctitlefr = "Utilisation de @code{\\tweak} pour retoucher des objets particuliers"

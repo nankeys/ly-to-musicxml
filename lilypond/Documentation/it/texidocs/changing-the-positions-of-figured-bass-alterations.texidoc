@@ -1,0 +1,8 @@
+%% Translation of GIT committish: 2f3474d9af596d677ed5b7ce720ae4d0954a6b51
+  texidocit = "
+Le alterazioni e i segni più possono apparire prima o dopo i numeri, a
+seconda delle proprietà @code{figuredBassAlterationDirection} e
+@code{figuredBassPlusDirection}.
+
+"
+  doctitleit = "Cambiare la posizione delle alterazioni del basso continuo"

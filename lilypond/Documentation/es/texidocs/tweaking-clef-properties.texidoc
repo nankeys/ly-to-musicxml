@@ -1,0 +1,25 @@
+%% Translation of GIT committish: 1bf2403e1cd7038a1e7ea62da560af601e3694fc
+  doctitlees = "Trucaje de las propiedades de clave"
+  texidoces = "
+La modificación del glifo de la clave, su posición o su
+octavación, no cambian 'per se' la posición de las siguientes
+notas del pentagrama.  Para conseguir armaduras de tonalidad sobre
+las líneas del pentagrama adecuadas, también debe especificarse
+@code{middleCClefPosition}, con valores positivos o negativos que
+mueven el @qq{Do@tie{}central} hacia arriba o hacia abajo,
+respectivamente, en relación con la línea central del pentagrama
+(usualmente la tercera).
+
+Por ejemplo, la instrucción @code{\\clef \"treble_8\"} equivale a
+un ajuste de las propiedades de contexto @code{clefGlyph},
+@code{clefPosition} (que controla la posición vertical de la clave
+sobre el pentagrama), @code{middleCPosition} y
+@code{clefTransposition}.  Se imprime una clave cada vez que se
+modifica cualquiera de las propiedades excepto
+@code{middleCPosition}.
+
+Los siguientes ejemplos muestran las posibilidades cuando se
+ajustan estas propiedades manualmente.  En la primera línea, los
+cambios manuales preservan el posicionamiento relativo estándar de
+las claves y las notas, pero no lo hacen en la segunda línea.
+"

@@ -1,0 +1,37 @@
+%% Translation of GIT committish: b29e4a7ec4796951eb92b596fd04b9f7f719ab02
+  texidoces = "
+De forma predeterminada, las alteraciones accidentales que se usan
+para las cancelaciones en las armaduras se colocan adyacentes a
+las que se usan para los cambios de tonalidad.  Este
+comportamiento se puede cambiar sobreescribiendo la propiedad
+@code{break-align-orders} del objeto gráfico
+@code{BreakAlignment}.
+
+Si busca la definición de @code{break-alignment-interface} en la
+@uref{https://lilypond.org/doc/v2.24/Documentation/internals/break_002dalignment_002dinterface,Referencia
+de funcionamiento interno} de LilyPond, obtendrá la siguiente
+lista de los símbolos de break-align disponibles:
+
+@example
+ambitus
+breathing-sign
+clef
+cue-clef
+cue-end-clef
+custos
+key-cancellation
+key-signature
+left-edge
+signum-repetitionis
+staff-bar
+staff-ellipsis
+time-signature
+@end example
+
+A partir de esta lista, vemos que lo que queremos hacer es
+trasladar la @code{key-cancellation} de forma que esté antes del
+@code{staff-bar}. Esto se hace con la función
+@code{\\breakAlignInsert}.
+
+"
+  doctitlees = "Separar las cancelaciones de tonalidad de los cambios de armadura"

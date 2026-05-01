@@ -1,0 +1,22 @@
+%% Translation of GIT committish: aa4f229bc77265d2deaa36055c5845cd682823fe
+  doctitlees = "Grabado manual de las ligaduras"
+  texidoces = "
+Se puede grabar a mano una ligadura modificando la propiedad
+@code{staff-position} (un desplazamiento) del objeto gráfico
+@code{Tie}; si hay más de una ligadura en el mismo momento
+musical, se pueden ajustar manualmente cambiando la propiedad
+@code{tie-configuration} del objeto @code{TieColumn}.
+
+El desplazamiento indica la distancia a partir de la tercera línea
+del pentagrama en espacios de pentagrama, y la dirección puede ser
+1 (hacia arriba) o -1 (hacia abajo).
+
+Observe que LilyPond distingue entre valores exactos e inexactos
+para el primer número. Si se está usando un valor exacto (p.ej.,
+un entero o una fracción como @code{(/ 4 5)}), el valor sirve como
+una posición vertical aproximada que después se ajusta por parte
+de LilyPond para que la ligadura evite las líneas del
+pentagrama. Si se usa un valor inexacto, como un número de coma
+flotante, se toma como la posición vertical precisa sin más
+ajustes posteriores.
+"

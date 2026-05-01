@@ -1,0 +1,75 @@
+---
+Language:        Cpp
+BasedOnStyle:    GNU
+
+# Put a function on a single line if possible, but only in a class (typically
+# for accessors and mutators).
+AllowShortFunctionsOnASingleLine: InlineOnly
+
+# Newline after the return type of a function, but only for definitions (not
+# declarations), and not for member function definitions.
+AlwaysBreakAfterReturnType: TopLevelDefinitions
+
+# Newline after `template` line.
+AlwaysBreakTemplateDeclarations: Yes
+
+# TODO: Using just BreakBeforeBraces=GNU would be preferred, but the Emacs
+# settings in .dir-locals.el don't agree well with how it indents lambdas.
+# https://gcc.gnu.org/codingconventions.html#Lambda_Form suggests an Emacs
+# configuration, but I'm not sure how to effect it in .dir-locals.el.
+#
+# This workaround to keep LilyPond's legacy formatting is verbose, but the idea
+# is simple: match the effect of BreakBeforeBraces=GNU except for
+# BeforeLambdaBody=false.
+BreakBeforeBraces: Custom
+BraceWrapping:
+  AfterCaseLabel:  true
+  AfterClass:      true
+  AfterControlStatement: Always
+  AfterEnum:       true
+  AfterExternBlock: true
+  AfterFunction:   true
+  AfterNamespace:  true
+  AfterObjCDeclaration: true
+  AfterStruct:     true
+  AfterUnion:      true
+  BeforeCatch:     true
+  BeforeElse:      true
+  BeforeLambdaBody: false
+  BeforeWhile:     true
+  IndentBraces:    true
+  SplitEmptyFunction: true
+  SplitEmptyRecord: true
+  SplitEmptyNamespace: true
+
+# Indentation width in initializers.
+ConstructorInitializerIndentWidth: 2
+
+# Indentation width in expression continued on next line.
+ContinuationIndentWidth: 2
+
+# No spaces inside braced list.
+Cpp11BracedListStyle: true
+
+# Add missing end comments for namespaces and fix invalid existing ones.
+FixNamespaceComments: true
+
+# Always put each constructor initializer on its own line.
+PackConstructorInitializers: Never
+
+# Never rewrap comments.  Some of them contain ASCII art.
+ReflowComments: false
+
+# Never sort includes.  The order sometimes matters.
+SortIncludes: Never
+
+# Space after `(void)` in `(void) ...;`.  (We don't use C-style casts for
+# anything but void.)
+SpaceAfterCStyleCast: true
+
+# Space in C++11 braced-list initialization:
+# Foo foo {bar};
+#        ^
+SpaceBeforeCpp11BracedList: true
+
+Standard: Latest

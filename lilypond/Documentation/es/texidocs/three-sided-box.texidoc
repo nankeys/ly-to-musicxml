@@ -1,0 +1,8 @@
+%% Translation of GIT committish: aa4f229bc77265d2deaa36055c5845cd682823fe
+  texidoces = "
+Este ejemplo muestra cómo añadir ina instrucción de marcado para
+obtener un rectángulo de tres segmentos visibles rodeando un elemento
+de texto (u otro elemento de marcado).
+
+"
+  doctitlees = "Rectángulo de tres segmentos visibles"

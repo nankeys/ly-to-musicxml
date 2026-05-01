@@ -1,0 +1,30 @@
+@c -*- coding: utf-8; mode: texinfo; documentlanguage: ca -*-
+@ignore
+    Translation of GIT committish: 26a079ca2393d053315ef8dbef626c897dc9645a
+
+    When revising a translation, copy the HEAD committish of the
+    version that you are working on.  For details, see the Contributors'
+    Guide, node Updating translation committishes..
+@end ignore
+
+@c \version "2.16.0"
+
+@c Translators: Walter Garcia-Fontes
+@c Translation checkers:
+
+@node Specialist notation
+@chapter Notació especialitzada
+
+Aquest capítol explica com crear notació musical per a instruments
+d'un tipus específic o dins d'estils específics.
+
+@include ca/notation/vocal.itely
+@include ca/notation/keyboards.itely
+@include ca/notation/unfretted-strings.itely
+@include ca/notation/fretted-strings.itely
+@include ca/notation/percussion.itely
+@include ca/notation/wind.itely
+@include ca/notation/chords.itely
+@include ca/notation/contemporary.itely
+@include ca/notation/ancient.itely
+@include ca/notation/world.itely

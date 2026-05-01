@@ -1,0 +1,7 @@
+%% Translation of GIT committish: de1e42ce512f3690387cdd065109bddff1b7bd6d
+  texidocfr = "
+L'exemple suivant indique comment forcer l'impression d'un bécarre avant
+un changement d'altération.
+"
+
+  doctitlefr = "Impression forcée d'un bécarre avant une accidentelle"

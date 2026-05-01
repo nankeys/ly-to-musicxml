@@ -1,0 +1,10 @@
+%% Translation of GIT committish: 2f3474d9af596d677ed5b7ce720ae4d0954a6b51
+  texidocit = "
+Questo modello aggiunge una riduzione automatica per pianoforte alla tipica
+partitura vocale SATB illustrata in @qq{Modello per complesso vocale}. Si
+dimostra così uno dei punti di forza di LilyPond – è possibile usare una
+definizione musicale più di una volta. Qualsiasi modifica venga fatta alle note
+delle voci (ad esempio, @code{tenorMusic}) verrà applicata anche alla riduzione
+per pianoforte.
+"
+  doctitleit = "Modello per gruppo vocale con riduzione per pianoforte automatica"

@@ -1,0 +1,24 @@
+%% Translation of GIT committish: c043783aac6c35926d633aa2daf60ed4f2e7ca7a
+  texidocfr = "
+
+LilyPond gère les différents éléments nécessaires à la réalisaon d'un
+partision grâce à des modules. Chaque module est appelé « graveur ».
+Dans cet exemple, quelques graveurs sont appelés chacun à son tour, dans
+l'ordre suivant :
+
+@itemize
+@item têtes de note,
+@item symboles de la portée,
+@item clef,
+@item hampes,
+@item ligatures, liaisons, accents,
+@item altérations, barres de mesure, métrique et armure.
+@end itemize
+
+Les graveurs se regroupent. Par exemple, têtes de note, liaisons,
+ligature, etc. forment un contexte de voix (@code{Voice}). Les graveurs
+chargés de la métrique, des altérations, des barres de mesure, etc.
+forment un contexte de portée (@code{Staff}).
+"
+
+  doctitlefr = "Les graveurs un par un"

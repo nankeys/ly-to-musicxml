@@ -1,0 +1,10 @@
+%% Translation of GIT committish: fbf390d05408c5b842a22c122da734c54f92ca12
+  texidoces = "
+De forma predeterminada se suprime el número del primer compás de
+una partitura si es menor o igual a to@tie{}1.  Esto se puede
+cambiar fijando la propiedad de contexto
+@code{barNumberVisibility} con el valor
+@code{all-bar-numbers-visible}
+
+"
+  doctitlees = "Imprimir el número de compás en el primer compás"

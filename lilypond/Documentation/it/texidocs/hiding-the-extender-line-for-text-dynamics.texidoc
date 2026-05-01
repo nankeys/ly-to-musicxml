@@ -1,0 +1,8 @@
+%% Translation of GIT committish: 2f3474d9af596d677ed5b7ce720ae4d0954a6b51
+  texidocit = "
+I cambi di dinamica in stile testuale (come @emph{cresc.} e @emph{dim.}) appaiono con
+una linea tratteggiata che mostra la loro estensione.  Questa linea
+può essere soppressa nel modo seguente:
+
+"
+  doctitleit = "Nascondere la linea di estensione per le dinamiche testuali"

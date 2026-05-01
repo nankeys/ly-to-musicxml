@@ -1,0 +1,11 @@
+%% Translation of GIT committish: 4f16fa98fd258f08e64203c793028ea3e363b1c0
+  texidoces = "
+Si tiene más de una voz en el mismo pentagrama, el cambio de
+octavación de una voz transportará la posición de las notas en
+todas las voces mientras dure el corchete de octava.  Si la
+octavación se quiere aplicar a una voz solamente, hay que
+trasladar el grabador @code{Ottava_spanner_engraver} al contexto
+@code{Voice}.
+
+"
+  doctitlees = "Añadir una indicación de octava alta a una sola voz"

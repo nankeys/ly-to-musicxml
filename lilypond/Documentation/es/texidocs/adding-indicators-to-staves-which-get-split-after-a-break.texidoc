@@ -1,0 +1,18 @@
+%% Translation of GIT committish: beda50f64452870aee2823454a6cbd75b93f4825
+  texidoces = "
+Este fragmento de código define las instrucciones
+@code{\\splitStaffBarLine}, @code{\\convUpStaffBarLine} y
+@code{\\convDownStaffBarLine}, que añaden flechas en las sobre una
+línea divisoria para denotar que cada una de las voces que
+comparten un pentagrama continúan en su propio pentagrama en el
+siguiente sistema, o que las voces así divididas se recombinan.
+
+Observe que la implementación de este fragmento de código traza
+unas flechas sin dimensiones en el margen derecho.  Para la
+impresión formal, esto no produce ningún problema.  Sin embargo,
+es necesario aumentar las dimensiones de la caja circundante en el
+sentido horizontal si se procesa el código como imagen para evitar
+el recorte, como se muestra abajo.
+
+"
+  doctitlees = "Añadir indicadores a los pentagramas que se dividen después de un salto de línea"

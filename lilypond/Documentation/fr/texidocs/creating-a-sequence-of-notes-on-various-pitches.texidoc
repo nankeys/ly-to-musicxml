@@ -1,0 +1,12 @@
+%% Translation of GIT committish: de1e42ce512f3690387cdd065109bddff1b7bd6d
+  texidocfr = "
+Lorsque la musique comporte à de nombreuses reprises une même séquence
+sur des hauteurs différentes, la fonction musicale ci-dessous peut
+s'avérer fort utile. Elle considère une note dont seule la hauteur est
+utilisée.
+
+Cet exemple reproduit le rythme utilisé tout au long de « Mars », l'une
+des pièces de l'œuvre de Gustav Holst « Les planètes ».
+"
+
+  doctitlefr = "Création d'une séquence de notes de même hauteur"

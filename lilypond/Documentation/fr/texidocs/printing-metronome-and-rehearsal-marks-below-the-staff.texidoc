@@ -1,0 +1,9 @@
+%% Translation of GIT committish: de1e42ce512f3690387cdd065109bddff1b7bd6d
+  texidocfr = "
+Les indications de tempo et les marques de repère s'impriment par défaut
+au-dessus de la portée. Le fait de régler en conséquence la propriété
+@code{direction} des objets @code{MetronomeMark} et @code{RehearsalMark}
+les placera au-dessous de la portée.
+"
+
+  doctitlefr = "Impression du métronome et des repères sous la portée"

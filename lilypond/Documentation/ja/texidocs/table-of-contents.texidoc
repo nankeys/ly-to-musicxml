@@ -1,0 +1,6 @@
+%% Translation of GIT committish: 0cc270b871321ae5aa8622cea8d8262aafd16641
+  texidocja = "
+目次は @code{\\markuplines \\table-of-contents} によって挿入することが@c
+できます。目次のアイテムは @code{\\tocItem} で追加します。
+"
+  doctitleja = "目次"

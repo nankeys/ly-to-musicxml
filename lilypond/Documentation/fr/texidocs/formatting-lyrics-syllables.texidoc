@@ -1,0 +1,7 @@
+%% Translation of GIT committish: de1e42ce512f3690387cdd065109bddff1b7bd6d
+  texidocfr = "
+La commande @code{\\markup} permet d'individualiser la mise en forme de
+certaines syllabes d'un bloc @code{\\lyricmode}.
+"
+
+  doctitlefr = "Mise en forme individuelle de syllabes"

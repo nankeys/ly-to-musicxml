@@ -1,0 +1,139 @@
+\input texinfo @c -*- coding: utf-8; mode: texinfo; documentlanguage: it -*-
+
+@ignore
+    Translation of GIT committish: 92a58d2671df840ae608c6f33306b1dde461992a
+
+    When revising a translation, copy the HEAD committish of the
+    version that you are working on.  For details, see the Contributors'
+    Guide, node Updating translation committishes..
+@end ignore
+
+@c Translators: Federico Bruni
+
+@settitle Frammenti LilyPond
+@documentencoding UTF-8
+@documentlanguage it
+@afourpaper
+
+@macro manualIntro
+
+Questo documento contiene una selezione di frammenti LilyPond tratti dal
+@uref{https://lsr@/.di@/.unimi@/.it,LilyPond Snippet Repository}
+(LSR).  I frammenti sono nel pubblico dominio.
+
+Desideriamo ringraziare Sebastiano Vigna per la gestione del sito web e
+del database dell'LSR, e l'università  di Milano per l'hosting.
+
+Questo documento non è un sottoinsieme esatto dell'LSR: alcuni frammenti
+vengono dalla directory @file{input/new} dei sorgenti di LilyPond; i
+frammenti tratti dall'LSR vengono convertiti con @command{convert-ly},
+perché l'LSR usa una versione stabile di LilyPond, mentre questo manuale
+è valido per la versione @version{}.
+
+I frammenti sono raggruppati per categorie; le categorie elencate nell'indice
+corrispondono a una sezione del manuale di notazione di LilyPond.  Un frammento
+potrebbe avere più di una categoria, e non tutte le categorie dell'LSR saranno
+presenti in questo documento.
+
+Nella versione HTML di questo manuale, si può fare clic sul nome del file o
+sull'immagine di ciascun esempio per vedere il corrispondente file di input.
+
+@end macro
+
+@macro copyrightDeclare
+Copyright @copyright{} 1999--2026 degli autori.
+@end macro
+
+@include it/macros.itexi
+
+@c `@lyprefix` must be redefined for every included snippet section
+@c to provide a proper node name and menu prefix.
+@c
+@set lyprefix
+
+@macro lynode{TEXT}
+@node @value{lyprefix} - \TEXT\
+@end macro
+
+@unmacro lydoctitle
+@macro lydoctitle{TEXT}
+@unnumberedsec \TEXT\
+@end macro
+
+
+@lilyTitlePage{Frammenti}
+
+
+@c maybe generate/update @menu and @includes automatically? --jm
+@ifnottex
+@menu
+Notazione musicale
+* Pitches::                      Altezze
+* Rhythms::                      Ritmi
+* Expressive marks::             Segni di espressione
+* Repeats::                      Ripetizioni
+* Simultaneous notes::           Note simultanee
+* Staff notation::               Notazione del rigo
+* Editorial annotations::        Note editoriali
+* Text::                         Testo
+
+Notazione specialistica
+* Vocal music::                  Musica vocale
+* Chord notation::               Accordi
+* Keyboard and other multi-staff instruments::
+                                 Tastiere
+* Percussion::                   Percussioni
+* Fretted string instruments::   Strumenti a corde con tasti
+* Unfretted string instruments:: Strumenti a corde senza tasti
+* Wind instruments::             Strumenti aerofoni
+* Ancient notation::             Notazione antica
+* World music::                  World music
+
+Altre raccolte
+* Contexts and engravers::       Contesti e incisori
+* Tweaks and overrides::         Modifiche e sovrascritture
+* Paper and layout::             Foglio e formattazione
+* Titles::                       Titoli
+* Spacing::                      Spaziatura
+* MIDI::                         MIDI
+* Templates::                    Modelli
+@end menu
+
+@docMain
+@end ifnottex
+
+@contents
+
+@allowcodebreaks false
+
+@c Please take care of naming every .itely
+@c with an existing tag name.
+
+@include snippets/pitches.itely
+@include snippets/rhythms.itely
+@include snippets/expressive-marks.itely
+@include snippets/repeats.itely
+@include snippets/simultaneous-notes.itely
+@include snippets/staff-notation.itely
+@include snippets/editorial-annotations.itely
+@include snippets/text.itely
+
+@include snippets/vocal-music.itely
+@include snippets/chords.itely
+@include snippets/keyboards.itely
+@include snippets/percussion.itely
+@include snippets/fretted-strings.itely
+@include snippets/unfretted-strings.itely
+@include snippets/winds.itely
+@include snippets/ancient-notation.itely
+@include snippets/world-music.itely
+
+@include snippets/contexts-and-engravers.itely
+@include snippets/tweaks-and-overrides.itely
+@include snippets/paper-and-layout.itely
+@include snippets/titles.itely
+@include snippets/spacing.itely
+@include snippets/midi.itely
+@include snippets/template.itely
+
+@bye

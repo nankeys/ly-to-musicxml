@@ -1,0 +1,7 @@
+%% Translation of GIT committish: f11513f36c131dab18338d6a3a729e24a927150d
+  texidocja = "
+デフォルトでは、メトロノーム記号は水平方向のスペーシングに影響を@c
+与えません。これは 2 つ目の例のように、@c
+単純なオーバライドで解決することができます。
+"
+  doctitleja = "強制的に小節の幅を MetronomeMark の幅に合わせる"

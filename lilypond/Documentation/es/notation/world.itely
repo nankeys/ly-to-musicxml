@@ -1,0 +1,909 @@
+@c -*- coding: utf-8; mode: texinfo; documentlanguage: es -*-
+
+@ignore
+    Translation of GIT committish: 0aa9f13afda15bb5a28e08484ffe62417ed603cc
+
+    When revising a translation, copy the HEAD committish of the
+    version that you are working on.  For details, see the Contributors'
+    Guide, node Updating translation committishes..
+@end ignore
+
+@c \version "2.19.21"
+
+@node World music
+@chapter Músicas del mundo
+
+El propósito de esta sección es remarcar los problemas de notación que
+son de relevancia a las tradiciones musicales distintas a la
+occidental.
+
+
+@node Common notation for non-Western music
+@section Notación común para músicas no occidentales
+
+Esta sección estudia la forma de introducir e imprimir partituras
+musicales que no pertenecen a la tradición clásica occidental, también
+conocida como @notation{Período de la práctica común}.
+
+
+@node Extending notation and tuning systems
+@subsection Extensión de la notación y los sistemas de afinación
+
+La notación clásica estándar (también conocida como la notación del
+@notation{Período de la práctica común}) se usa normalmente en todo
+tipo de música, sin limitación a la música occidental @q{clásica}.
+Esta notación se estudia en @ref{Writing pitches}, y los distintos
+nombres de las notas que se pueden utilizar están explicados en
+@ref{Note names in other languages}.
+
+Ciertos tipos de música no occidental, folk y tradicional con
+frecuencia emplean sistemas de afiniación altenativos o extendidos
+que no encajan fácilmente dentro de la notación clásica estándar.
+
+Muchas veces se usa la notación estándar, pero con algunas
+diferencias de afinación implícitas.  Por ejemplo, la notación de
+la @notation{música árabe} se realiza con alteraciones
+accidentales de semitono y de cuarto de tono, estando determinadas
+por el contexto las exactas variaciones en la entonación. En el
+caso de la @notation{música árabe}, el archivo de inicio
+@file{arabic.ly} proporciona un conjunto adecuado de macros y
+definiciones que extienden la notación estándar que emplea los
+nombres de nota italianos.  Para ver más detalles, consulte
+@ref{Arabic music}.
+
+@cindex afinación, no occidental
+@cindex makam
+@cindex makamlar
+@cindex maqam
+@cindex Turquía, música clásica
+@cindex otomana, música clásica
+@cindex @'arabe, maqam
+@cindex persa, makam
+@cindex turco, makam
+
+Otros tipos de música requieren notaciones extendidas o
+singulares; por ejemplo, la @notation{música clásica turca} o
+música clásica otomana, por ejemplo, emplea formas melódicas
+conocidas como @notation{makamlar} cuyos intervalos están basados
+en divisiones de 1/9 de tono.  Se siguen usando las notas del
+pentagrama occidental, pero con alteraciones accidentales que
+están definidas de forma inequívoca en el archivo
+@file{turkish-makam.ly}.  Para ver más información sobre la música
+clásica turca y los @emph{makamlar}, consulte @ref{Turkish
+classical music}.
+
+También están disponibles otros archivos de inicio relacionados,
+@file{hel-arabic.ly} and @file{makam.ly}.
+
+Para localizar estos archivos de inicio en su sistema, consulte
+@rlearningnamed{Other sources of information, Otras fuentes de información}.
+
+
+@morerefs
+Glosario musical:
+@rglos{Common Practice Period},
+@rglos{makamlar}.
+
+Manual de aprendizaje:
+@rlearningnamed{Other sources of information, Otras fuentes de información}.
+
+Referencia de la notación:
+@ref{Writing pitches},
+@ref{Note names in other languages},
+@ref{Arabic music},
+@ref{Turkish classical music},
+@ref{Persian classical music}.
+@endmorerefs
+
+
+@node Arabic music
+@section Música árabe
+
+Esta sección destaca asuntos relativos a la música árabe.
+
+
+@node References for Arabic music
+@subsection Referencias para música árabe
+
+@cindex @'arabe, música
+@cindex medio, intervalo
+@cindex maqam
+
+La música árabe ha sido principalmente una tradición oral hasta el
+momento.  Cuando se transcribe la música, se suele hacer en la forma
+de un esbozo sobre el que los intérpretes deben improvisar
+ampliamente.  En una medida creciente, se está adoptando la notación
+occidental con ciertas variantes para preservar y transmitir la música
+árabe.
+
+Algunos elementos de la notación musical occidental como la
+transcripción de acordes o las particellas independientes, no se
+necesitan para tipografiar las piezas árabes, más tradicionales.  Sin
+embargo hay ciertos problemas, como la necesidad de indicar intervalos
+que tienen una medida intermedia entre el semitono y el tono, además
+de los intervalos mayores y menores de la música occidental.  También
+existe la necesidad de agrupar e indicar los numerosos maqams (modos)
+que forman parte de la música árabe.
+
+Por lo general la notación musical árabe no trata de indicar con
+precisión los elementos microtonales que se encuentran presentes en la
+práctica musical.
+
+Son de relevancia para la música árabe ciertos asuntos que se
+encuentran cubiertos en otras partes del manual:
+
+@itemize
+@item Los nombres de las notas y sus alteraciones (entre ellos, cuartos de
+tono) se pueden realizar como se estudia en @ref{Common notation for non-Western music}.
+
+@item Las armaduras adicionales también pueden realizarse como se describe
+en @ref{Key signature}.
+
+@item Los compases complejos pueden requerir agrupaciones manuales de las
+notas tal y como se describe en @ref{Manual beams}.
+
+@item Los @notation{takasim} o improvisaciones libres desde el punto de
+vista rítmico se pueden escribir omitiendo las barras de compás como
+aparece en @ref{Unmetered music}.
+
+@end itemize
+
+
+@morerefs
+Referencia de la notación:
+@ref{Common notation for non-Western music},
+@ref{Key signature},
+@ref{Manual beams}.
+
+Fragmentos de código:
+@rlsrnamed{World music,Músicas del mundo}.
+@endmorerefs
+
+
+@node Arabic note names
+@subsection Nombres de nota árabes
+
+@cindex @'arabe, notas, nombres
+@cindex nota, nombres, Hel-arabic
+@cindex nota, nombres, árabes
+
+Los nombres tradicionales de las notas en árabe (como @q{rast},
+@q{dukah}, @q{sikah}, etc.@:) pueden ser bastante largos y por
+ello no siempre son adecuados para el propósito de escribir
+música.
+
+Incluya el archivo @file{arabic.ly} para escribir partituras de
+música árabe.  El ejemplo siguiente muestra cómo escribir una
+escala @q{rast}:
+
+@lilypond[quote,verbatim]
+\include "arabic.ly"
+\relative {
+  \key do \rast
+  do' re misb fa | sol la sisb do | sib la sol fa | misb re do
+}
+@end lilypond
+
+El archivo @file{arabic.ly} establece el idioma de las notas a
+italiano (o Solfege), ya que este es el estándar moderno en la
+música árabe y se encuentra ampliamente adoptado entre los músicos
+árabes.  Si prefiere escribir las notas en otro idioma, cambie el
+idioma a su idioma preferido directamente después de la
+instrucción de inclusión del archivo @file{arabic.ly}.  Esto es
+una escaoa @q{rast} con nombres de notas en inglés:
+
+@lilypond[quote,verbatim]
+\include "arabic.ly"
+\language "english"
+\relative {
+  \key c \rast
+  c' d eqf f | g a bqf c | bf a g f | eqf d c
+}
+@end lilypond
+
+@noindent
+@qq{Rast} es una escala heptatónica que usa intervalos en cuartos
+de tono y se considera la escala central y más importante del
+@qq{Maqamat árabe}.  Para ver la lista completa de las escalas
+árabes contempladas, @pxref{Arabic key signatures}.
+
+El uso de notación occidental estándar para música no occidental
+se discute en @ref{Common notation for non-Western music}.
+Véase también @ref{Note names in other languages}.
+
+@cindex @'arabe, semi-bemol
+@cindex semi-bemol, apariencia
+
+@funindex \dwn
+
+El símbolo del semi-bemol no coincide con el símbolo que se utiliza en
+la notación árabe.  Se puede usar el símbolo @code{\dwn} definido en
+@file{arabic.ly} precediendo a un bemol como vía alternativa si es
+importante usar el símbolo árabe específico del semi-bemol.  El
+aspecto del símbolo del semi-bemol dentro de la armadura no se puede
+alterar mediante este método.
+
+
+@lilypond[quote,verbatim]
+\include "arabic.ly"
+\relative {
+  \set Staff.extraNatural = ##f
+  dod' dob dosd \dwn dob dobsb dodsd do do
+}
+@end lilypond
+
+@morerefs
+Referencia de la notación:
+@ref{Note names in other languages},
+@ref{Common notation for non-Western music},
+@ref{Including LilyPond files}.
+
+Archivos instalados:
+@file{ly/arabic.ly}
+
+Fragmentos de código:
+@rlsrnamed{World music,Músicas del mundo}.
+@endmorerefs
+
+
+@node Arabic key signatures
+@subsection Armaduras de tonalidad árabes
+
+@cindex @'arabe, armadura de tonalidad
+
+
+Además de las armaduras de tonalidad mayores y menores, LilyPond
+proporciona las armaduras de tonalidad árabes más comunes en el
+archivo @file{arabic.ly}. Dicho esto, LilyPond no pretende dar
+soporte al conjunto completo de todos los maqams posibles.  Más
+bien, define los más comunes que se usan con frecuencia y ofrece
+armaduras de tonalidad para formar grupos de maqams similares.  En
+general, un maqam usa la armadura de su familia, o una familia
+vecina, y las alteraciones accidentales que varían se marcan a lo
+largo de la música.  Cuando se forman armaduras de tonalidad, las
+familias de los maqam vecinos se agrupan.  Por ejemplo, el maqam
+@notation{saba} aparece rara vez fuera del contexto del maqam
+@notation{bayati} y añade solo una alteración.  Aunque los dos
+maqams provienen de distintas @emph{familias de maqam} están
+dentro del mismo @emph{grupo} de armaduras.  Los maqams árabes
+admiten sólo modulaciones limitadas, a causa de la naturaleza de
+los instrumentos musicales árabes.
+
+He aquí un ejemplo de armadura de tonalidad para una pieza del
+tipo @qq{maqam muhayer}:
+
+@example
+\key re \bayati
+@end example
+
+@noindent
+Aquí, @var{re} es la altura predeterminada del maqam muhayer, y
+@notation{bayati} es el nombre del maqam básico dentro del grupo.
+
+Al tiempo que la armadura indica el grupo, el título suele indicar
+el maqam específico, y así en este ejemplo el nombre del @qq{maqam
+muhayer} debe aparecer también en el título.
+
+Se pueden indicar de la misma forma otros maqams dentro del mismo
+grupo @notation{bayati}, como aparece en la tabla a continuación,
+(p. ej. @notation{bayati}, @notation{hussaini}, @notation{saba} y
+@notation{ushaq}).  Todos ellos son variantes del maqam básico y
+más común dentro del grupo, que es @notation{bayati}.  Normalmente
+se diferencian del maqam básico en su tetracordo superior, o en
+ciertos detalles de discurso que no cambian su naturaleza
+fundamental como parientes.
+
+El otro maqam del grupo (@notation{nawa}) se relaciona con el
+@notation{bayati} a través de una modulación y se indica en la
+tabla entre paréntesis para aquellos que son modulaciones de su
+maqam básico.  El @notation{Nawa}, por ejemplo, se puede indicar
+de la siguiente forma:
+
+@example
+\key sol \bayati
+@end example
+
+En la música árabe, el mismo término (p.ej. @notation{bayati}) que
+se utiliza para indicar una familia de maqam, es también un maqam que
+normalmente es el más importante de la familia, y podemos verlo como
+el @emph{maqam básico}.
+
+A continuación presentamos un agrupamiento que asigna los maqams
+más comunes a armaduras de tonalidad según se define en el archivo
+@file{arabic.ly}:
+
+@multitable @columnfractions 0.15 0.1 0.1 0.6
+@headitem grupo de maqam
+  @tab tono
+  @tab final
+  @tab otros maqams del grupo (final)
+@item ajam
+  @tab @code{major}
+  @tab sib
+  @tab jaharka (fa)
+@item bayati
+  @tab @code{bayati}
+  @tab re
+  @tab hussaini, muhayer, saba, ushaq, nawa (sol)
+@item hijaz
+  @tab @code{hijaz}
+  @tab re
+  @tab zanjaran (do)
+@item hijaz kar
+  @tab @code{hijaz_kar}
+  @tab do
+  @tab shahnaz, shad arban (sol)
+@item huzam
+  @tab @code{huzam}
+  @tab misb
+  @tab -
+@item iraq
+  @tab @code{iraq}
+  @tab sisb
+  @tab -
+@item kurd
+  @tab @code{kurd}
+  @tab re
+  @tab hijazkar kurd (do)
+@item nahawand
+  @tab @code{minor}
+  @tab do
+  @tab busalik (re), farah faza (sol)
+@item nakriz
+  @tab @code{nakriz}
+  @tab do
+  @tab nawa athar, hisar (re)
+@item rast
+  @tab @code{rast}
+  @tab do
+  @tab mahur, yakah (sol)
+@item sikah
+  @tab @code{sikah}
+  @tab misb
+  @tab -
+@end multitable
+
+En el caso de que echemos en falta un maqam específico, lo podemos
+definir por nosotros mismos en la partitura antes de usarlo.  El
+ejemplo siguiente define, y luego utiliza, el maqam
+@notation{zanjaran}.
+
+@lilypond[quote,verbatim]
+\include "arabic.ly"
+
+% For example on do: do reb mi fa sol la sib do
+% reb and sib are FLAT
+% You can also use SHARP, SEMI-FLAT, SEMI-SHARP
+zanjaran = #`(
+  (0 . ,NATURAL)
+  (1 . ,FLAT)
+  (2 . ,NATURAL)
+  (3 . ,NATURAL)
+  (4 . ,NATURAL)
+  (5 . ,NATURAL)
+  (6 . ,FLAT)
+)
+
+\relative {
+  \key do \zanjaran
+  do' reb mi fa sol la sib do
+}
+@end lilypond
+
+Para casos especiales, los maqam poco frecuentes están definidos
+en el archivo @file{hel-arabic.ly}.  Diríjase al archivo incluido
+con LilyPond para ver una lista completa de los maqams que se
+proveen.
+
+@snippets
+
+@c XXX also included in `pitches.itely`
+@lilypondfile[verbatim,quote,texidoc,doctitle]
+{snippets/non-traditional-key-signatures.ly}
+
+
+@morerefs
+Glosario musical:
+@rglos{maqam},
+@rglos{bayati},
+@rglos{rast},
+@rglos{sikah},
+@rglos{iraq},
+@rglos{kurd}.
+
+Manual de aprendizaje:
+@rlearningnamed{Pitches and key signatures, Alturas y armaduras}.
+
+Referencia de la notación:
+@ref{Key signature}.
+
+Archivos instalados:
+@file{ly/arabic.ly}
+@file{ly/hel-arabic.ly}
+
+Fragmentos de código:
+@rlsrnamed{World music,Músicas del mundo},
+@rlsrnamed{Pitches,Alturas}.
+
+Referencia de funcionamiento interno:
+@rinternals{KeySignature}.
+@endmorerefs
+
+
+@node Arabic time signatures
+@subsection Indicaciones de compás árabes
+
+@cindex @'arabes, armaduras
+@cindex Semai, forma
+@cindex taqasim
+
+Ciertas formas clásicas de música árabe y turca como el
+@notation{Semai} utilizan compases poco comunes como el 10/8.  Ello
+puede derivar en una agrupación automática de las notas muy distinta a
+la de las partituras impresas existentes, donde las notas pueden no
+estar agrupadas sobre el pulso, sino de una forma difícil de emular
+ajustando el barrado automático.  La alternativa sería desactivar el
+barrado automático y realizar un barrado manual de las notas.  Incluso
+si no es necesaria una correspondencia con música escrita ya
+existente, puede seguir siendo deseable ajustar el comportamiento del
+barrado automático y/o utilizar indicaciones de compás complejas o de amalgama.
+
+@snippets
+
+@cindex improvisación, árabe
+@cindex @'arabe, improvisación
+@lilypondfile[verbatim,quote,texidoc,doctitle]
+{snippets/arabic-improvisation.ly}
+
+
+@morerefs
+Glosario musical:
+@rglos{semai},
+@rglos{taqasim}.
+
+Referencia de la notación:
+@ref{Manual beams},
+@ref{Automatic beams},
+@ref{Unmetered music},
+@ref{Automatic accidentals},
+@ref{Setting automatic beam behavior},
+@ref{Time signature}.
+
+Archivos instalados:
+@file{ly/arabic.ly}
+
+Fragmentos de código:
+@rlsrnamed{World music,Músicas del mundo}.
+@endmorerefs
+
+
+@node Arabic music example
+@subsection Ejemplo de música árabe
+
+@cindex @'arabe, ejemplo de música
+@cindex @'arabe, plantilla de música
+@cindex plantilla, música árabe
+
+A continuación aparece una plantilla que emplea también el comienzo de
+un @notation{Semai} turco muy común en la educación musical árabe con
+el objeto de ilustrar algunas de las peculiaridades de la notación
+árabe, como los intervalos intermedios y los modos poco usuales que
+tratamos en esta sección.
+
+@lilypond[quote,verbatim]
+\include "arabic.ly"
+\score {
+  \header {
+    title = "Semai Muhayer"
+    composer = "Jamil Bek"
+  }
+  \relative {
+    \set Staff.extraNatural = ##f
+    \set Staff.autoBeaming = ##f
+    \key re \bayati
+    \time 10/8
+
+    re'4 re'8 re16 [misb re do] sisb [la sisb do] re4 r8
+    re16 [misb do re] sisb [do] la [sisb sol8] la [sisb] do [re] misb
+    fa4 fa16 [misb] misb8. [re16] re8 [misb] re  [do] sisb
+    do4 sisb8 misb16 [re do sisb] la [do sisb la] la4 r8
+  }
+}
+@end lilypond
+
+@morerefs
+Archivos instalados:
+@file{ly/arabic.ly}
+
+Fragmentos de código:
+@rlsrnamed{World music,Músicas del mundo}.
+@endmorerefs
+
+
+@node Further reading for Arabic music
+@subsection Lecturas adicionales sobre música árabe
+
+
+Existen ciertas variantes en los detalles sobre la forma en que se
+agrupan los maqams, a pesar del relativo acuerdo existente acerca
+de los criterios de agrupación de maqams en función de los
+tetracordos inferiores comunes, o por medio de la modulación.  No
+es completamente consistente, incluso a veces dentro del mismo
+texto, la forma en que se deben especificar las armaduras para los
+maqams concretos.  Sin embargo, es usual utilizar una armadura por
+@q{grupo} de maqams, más que una armadura distinta para cada maqam
+concreto.
+
+
+@itemize
+
+@item
+@emph{The music of the Arabs}, de Habib Hassan Touma [Amadeus
+Press, 1996], contiene un tratado de los maqams y sus formas de
+agrupación.
+
+También existen algunos sitios web que explican los maqams e
+incluso ofrecen ejemplos de audio:
+
+@itemize
+@item
+@uref{https://www.maqamworld.com/}
+
+@item
+@uref{https://www.turath.org/}
+@end itemize
+
+@item
+Varios métodos de los siguientes autores para el @dfn{ud}, el laúd
+árabe, contienen ejemplos de composiciones turcas y árabes,
+principalmente.
+
+@itemize
+@item
+Charbel Rouhana
+
+@item
+George Farah
+
+@item
+Ibrahim Ali Darwish Al-masri
+@end itemize
+
+@end itemize
+
+
+@node Turkish classical music
+@section Música clásica de Turquía
+
+Esta sección destaca los problemas de relevancia para la notación de
+la música clásica de Turquía.
+
+
+@node References for Turkish classical music
+@subsection Referencias para música clásica de Turquía
+
+@cindex Turquía, música de
+@cindex otomana, música
+@cindex coma, intervalos de
+@cindex makam
+@cindex maqam
+@cindex makamlar
+
+La música clásica de Turquía se desarrolló en el imperio Otomano
+durante un período aproximadamente contemporáneo con la música
+clásica de Europa, y se ha prolongado hasta los ss.XX y XXI como
+una viva y característica tradición con sus propias formas
+composicionales, teorías y estilos de interpretación.  Entre sus
+características más sobresalientes está el uso de intervalos
+microtonales basados en @q{comas} de 1/9 de tono, a partir de los
+que se construyen las formas melódicas conocidas como
+@notation{makam} (en plural @notation{makamlar}).
+
+Ciertos asuntos de relevancia respecto a la música clásica de
+Turquía se tratan en otras partes. Los nombres especiales de las
+notas y las alteraciones se dan en
+@ref{Common notation for non-Western music}.
+
+
+@node Turkish note names
+@subsection Nombres de las notas en turco
+
+@cindex Turquía, nombres de notas en
+@cindex makam
+@cindex makamlar
+
+Las notas en la música clásica de Turquía tienen tradicionalmente
+nombres únicos, y la base de las alturas sobre divisiones de 1/9
+de tono significan que los @emph{makamlar} utilizan un conjunto de
+intervalos completamente diferente de las escalas y modos
+occidentales.
+
+Desde el punto de vista de la notación moderna, es conveniente
+utilizar las notas occidentales (do, re, mi, o c, d, e, etc.@:)
+con alteraciones especiales que elevan o bajan las notas en
+intervalos de 1/9, 4/9, 5/9 y 8/9 de tono.
+
+Estas alteraciones personalizadas están definidas en el archivo
+@file{makam.ly}.
+
+Para ver una explicación más general sobre la notación musical no
+occidental, consulte
+@ref{Common notation for non-Western music}.
+
+@morerefs
+Glosario musical:
+@rglos{makam},
+@rglos{makamlar}.
+
+Referencia de la notación:
+@ref{Common notation for non-Western music}.
+@endmorerefs
+
+
+@node Turkish key signatures
+@subsection Armaduras de tonalidad de la música turca
+
+LilyPond da soporte a más de 200 definiciones de armaduras de
+@emph{makam} (mucho más de las que se utilizan en la música
+clásica turca), teniendo cada @emph{makam} su propia tónica o
+finalis (conocida en turco como @q{karar}).
+
+Es importante tener en cuenta la nota finalis de cada maqam.  He
+aquí un ejemplo en el que @var{g} es la tónica predeterminada y
+@var{rast} es el nombre del maqam.
+
+@example
+\key g \rast
+@end example
+
+@noindent
+Las alteraciones correctas, bemol de coma (@var{b1}) y sostenido
+de coma (@code{f4}), (ambos en relación a la tónica @var{g}), se
+imprimen automáticamente.
+
+
+@snippets
+
+@cindex makam, ejemplo
+@cindex makam, turco, ejemplo
+@lilypondfile[verbatim,quote,texidoc,doctitle]
+{snippets/turkish-makam-example.ly}
+
+
+@node Further reading for Turkish music
+@subsection Lecturas adicionales sobre música turca
+
+@itemize
+
+@item
+@emph{Turk Musikisi Nazariyati ve Usulleri: Kudum Velveleleri} de Ismail
+Hakki Ozkan [(Kultur serisi, 41) (Turkish) Paperback – 1986]
+
+@noindent
+contiene información acerca de la teoría de los maqams y los usul.
+
+@item
+@emph{Music of the Ottoman Court} de Walter Feldman
+[VWB Hardback – 1996]
+
+@noindent
+contiene información sobre la historia de la música cortesana
+otomana.
+
+@item
+@emph{Turkish Music Makam Guide} de Murat Aydemir [Pan Paperback – 2010]
+
+@noindent
+contiene información en inglés concerniente al maqam turco,
+incluyendo dos CDs.
+
+@end itemize
+
+
+@node Persian classical music
+@section Música clásica persa
+
+@cindex persa, música clásica
+
+Esta sección destaca asuntos relevantes para la notación de la
+música clásica de persa.
+
+
+@node Persian music notation
+@subsection Notación de la música persa
+
+@cindex sori
+@cindex koron
+@cindex semi-bemol, símbolo, persa (koron)
+@cindex semi-sostenido, símbolo, persa (sori)
+@cindex persa, alteraciones accidentales (sori, koron)
+
+La notación de la música clásica persa usa normalmente dos
+alteraciones para los microtonos, @dfn{sori} y @dfn{koron}.
+Inventados por Ali-Naqi Vaziri alrededor de 1935, indican que la
+altura respectiva se eleva o desciende aproximadamente un cuarto
+de tono.
+
+@lilypond[quote]
+\markup {
+  \center-column {
+    "sori"
+    \musicglyph "accidentals.sharp.sori"
+  }
+  \hspace #10
+  \center-column {
+    "koron"
+    \musicglyph "accidentals.flat.koron"
+  }
+}
+@end lilypond
+
+El archivo @file{persian.ly}@footnote{Existe otro archivo más
+antiguo que da soporte a la música clásica persa, que también se
+llama @file{persian.ly} (escrito por Kees van den Doel) que ya no
+funciona con la versión actual de LilyPond; aunque los nombres de
+nota son compatibles, la selección de armaduras de tonalidad no lo
+es.}  ofrece soporte para koron y sori; se pueden obtener
+añadiendo @q{k} (koron) y @q{o} (sori) después de los nombres de
+las notas en inglés.
+
+LilyPond contempla afinaciones para todos los principales modos
+persas en todas las tonalidades, suficientes para llevar a cabo la
+notación de los @dfn{gusheh}s (melodías centrales) de todos los
+@dfn{dastgah}s (sistemas musicales modales).
+
+La nota que sigue inmediatamente a un koron es a veces@footnote{Si
+el intervalo definido por la nota antes del koron y después del
+koron es una tercera menor.  Lo mismo vale para la nota que está
+debajo de la finalis en el dastgah @q{Esfahan} de acuerdo con
+algunos, aunque no todos, los músicos persas.} bajada en unos
+20@tie{}cents.  Esto no se refleja en la notación pero se
+considera parte de la afinación.  Sin embargo, para obtener un
+mejor soporte para el MIDI, podemos hacer un bemol añadiendo @q{v}
+después del nombre de la nota (@q{@emph{v}lat}).  Esta nota debe
+tener también un intenso vibrato, y el vibrato y la afinación baja
+están integrados perceptualmente (@emph{serialism}).  Esto es
+solamente para el MIDI y no tiene ningún efecto en la notación en
+sí.
+
+No hay más asuntos relacionados con la afinación en la música
+persa.  Como la música es monofónica, la diferencia entre la
+entonación justa (por ejemplo) y el temperamento igual es
+meramente académica: no hay acordes en los que se pueda percibir
+algún intervalo desafinado.
+
+Se proveen los siguientes sufijos para los nombres ingleses de las notas.
+
+@indentedblock
+@multitable @columnfractions .03 .77
+@item @code{ff} @tab doble bemol
+@item @code{f}  @tab bemol
+@item @code{k}  @tab koron (alrededor de un cuarto de bemol, -3/10 de tono, 60@tie{}cents)
+@item @code{o}  @tab sori (alrededor de un cuarto de sostenido, 2/10 de tono, 40@tie{}cents)
+@item @code{s}  @tab sostenido
+@item @code{x}  @tab doble sostenido
+@item @code{v}  @tab nota baja en 20@tie{}cents (@qq{vlat}, sin notación visible)
+@item @code{fv} @tab bemol, afinado 20@tie{}cents hacia abajo (como un bemol normal en la notación)
+@item @code{sv} @tab sostenido, afinado 20@tie{}cents hacia abajo (como un sostenido normal en la notación; nunca se encuentra en la música persa tradicional)
+@end multitable
+@end indentedblock
+
+
+@node Persian tunings
+@subsection Afinaciones persas
+
+Los dastgahs pueden tener muchas afinaciones; se ha convertido en
+algo común nombrar las afinaciones según dastgahs representativos
+que las usan.  Se proveen las siguientes afinaciones persas para
+su uso como el segundo argumento de la instrucción @code{\key}.
+Observe que en la práctica no todas las afinaciones se usan en
+todas las tonalidades.
+
+@indentedblock
+@multitable @columnfractions .2 .6
+@item @code{\shur}          @tab @q{Shur} gushehs con 5º
+                                 grado natural
+@item @code{\shurk}         @tab @q{Shur} gushehs con 5º
+                                 grado koron
+@item @code{\esfahan}       @tab
+@item @code{\mokhalefsegah} @tab
+@item @code{\chahargah}     @tab
+@item @code{\mahur}         @tab igual que @code{\major} pero
+                                 se usa en un contexto
+                                 totalmente diferente
+@item @code{\delkashMahur}  @tab
+@end multitable
+@end indentedblock
+
+En el dastgah @q{Shur}, el 5º grado puede ser natural o koron, así
+que se ofrecen dos afinaciones (@code{\shur} y @code{\shurk}).
+Los dastgahs secundarios @q{Dashti}, @q{Abuata} y @q{Bayat-e-tork}
+usan @code{\shur}, el dastgah derivado @q{Afshari} usa
+@code{\shurk}.  @q{Nava} sobre@tie{}G es como @q{Shur}
+sobre@tie{}D (a una 4ª de distancia).  La afinación de @q{Segah}
+es @code{\shurk}.  Otras afinaciones son @code{\esfahan}
+(@q{Homayoun} sobre@tie{}C es como @q{Esfahan} sobre@tie{}G, a una
+5ª de distacnia), @code{\chahargah} y @code{\mokhalefsegah}.  Para
+los dastgahs @q{Mahur} y @q{Rast-panjgah} se puede usar la misma
+afinación @code{\mahur}.
+
+Todos las diversos gushehs modulatorios en todos los dastgahs se
+pueden tipografiar con estas afinaciones, con la excepción de
+@q{Delkash} en @q{Mahur}, pero tradicionalmente las alteraciones
+peculiares se tipografían explícitamente (sin embargo,
+@file{persian.ly} también define una afinación
+@code{\delkashMahur}).
+
+Como ejemplo, Chahargah en@tie{}D se puede introducir de la
+siguiente forma.
+
+@lilypond[verbatim,quote]
+\include "persian.ly"
+
+\relative c' {
+  \key d \chahargah
+  bk'8 a gs fo r g ak g |
+  fs ek d c d ef16 d c4 |
+}
+@end lilypond
+
+
+@node Persian key signatures
+@subsection Armaduras de tonalidad persas
+
+De forma predeterminada, el orden de las alteraciones en las
+armaduras de tonalidad persas es tal que los bemoles van seguidos
+de los korons, y después los sostenidos seguidos por los soris
+(después vendrían los dobles bemoles, y luego los dobles
+sostenidos).
+
+Se puede seleccionar un orden alternativo, similar al que se usa
+en @file{turkish-makam.ly}.  Aquí, el orden es bemoles o korons (o
+dobles bemoles), después sostenidos o soris (o dobles
+sostenidos). En otras palabras, los korons y los soris se tratan
+de igual manera que los bemoles y los sostenidos, respectivamente.
+
+@lilypond[verbatim,quote]
+\include "persian.ly"
+
+{
+  \key b \chahargah b'1 |
+  \set Staff.keyAlterationOrder = \persianAltKeyAlterationOrder
+  \key b \chahargah b'1 |
+}
+@end lilypond
+
+
+@node Further reading on Persian music
+@subsection Lecturas adicionales sobre música persa
+
+@itemize
+
+@item
+@emph{Traditional Persian Art Music} de Dariush Tala'i
+[Bibliotheca Persica, Costa Mesa CA, 2000]
+
+@noindent
+Las afinaciones persas de LilyPond siguen estrechamente este libro.
+
+@item
+@emph{The Dastgah Concept in Persian Music} de Hormoz Farhat
+[Cambridge University Press, Cambridge, 1990]
+
+@item
+@emph{Le répertoire-modèle de la musique iranienne} de Jean During
+(en francés) [Sourush, Teherán, 1995]
+
+@noindent
+Este libro contiene medidas de los intervalos en la práctica real,
+que es consistente con las afinaciones de @file{persian.ly}.
+
+@item
+@emph{Armoni-e Musiqi-e Iran} de Ali-Naqi Vaziri (en persa)
+[1935]
+
+@item
+@emph{Scales and Modes Around the World} de Herman Rechberger
+[Fennica Gehrman, 2018, ISBN 978-952-5489-07-1]
+
+@end itemize

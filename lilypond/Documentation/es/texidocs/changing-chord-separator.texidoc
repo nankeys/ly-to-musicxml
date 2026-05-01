@@ -1,0 +1,7 @@
+%% Translation of GIT committish: beda50f64452870aee2823454a6cbd75b93f4825
+  texidoces = "
+Se puede establecer el separador entre las distintas partes del
+nombre de un acorde para que sea cualquier elemento de marcado.
+
+"
+  doctitlees = "Modificación del separador de acordes"

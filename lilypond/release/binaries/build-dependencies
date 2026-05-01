@@ -1,0 +1,72 @@
+#!/usr/bin/env python3
+
+# This file is part of LilyPond, the GNU music typesetter.
+#
+# Copyright (C) 2021--2026 Jonas Hahnfeld <hahnjo@hahnjo.de>
+#
+# LilyPond is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# LilyPond is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with LilyPond.  If not, see <http://www.gnu.org/licenses/>.
+
+import argparse
+import logging
+import os
+import sys
+
+from lib import Config, MingwConfig, all_dependencies, all_fonts
+
+cpus = os.cpu_count() or 1
+
+parser = argparse.ArgumentParser(description="Build dependencies")
+parser.add_argument("--debug", help="show debugging messages", action="store_true")
+parser.add_argument("--mingw", help="cross-compile for mingw", action="store_true")
+parser.add_argument("--jobs", help="number of simultaneous jobs", default=cpus)
+args = parser.parse_args()
+
+# Show only INFO messages by default
+if not args.debug:
+    logging.basicConfig(format="%(message)s", level=logging.INFO)
+else:
+    logging.basicConfig(format="%(levelname)s:%(message)s", level=logging.DEBUG)
+
+c = Config(".", jobs=args.jobs)
+if args.mingw:
+    c = MingwConfig("mingw", native_config=c)
+c.create_directories()
+
+logging.info("Downloading files...")
+for package in all_dependencies + all_fonts:
+    if not package.enabled(c):
+        continue
+    package.download(c)
+
+if not args.debug:
+    # Print an empty line, so the output looks more natural.
+    logging.info("")
+
+for package in all_dependencies:
+    if not package.enabled(c):
+        continue
+    logging.info("Building %s", package)
+    if not package.prepare_sources(c):
+        sys.exit(1)
+    if not package.build(c):
+        log_path = package.log_path(c)
+        logging.info("See %s for more information", log_path)
+        sys.exit(1)
+
+for font in all_fonts:
+    logging.info("Extracting font %s", font)
+    if not font.prepare_sources(c):
+        sys.exit(1)
+    # Can never fail
+    font.build(c)

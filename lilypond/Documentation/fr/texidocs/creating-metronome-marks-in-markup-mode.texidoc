@@ -1,0 +1,8 @@
+%% Translation of GIT committish: de1e42ce512f3690387cdd065109bddff1b7bd6d
+  texidocfr = "
+Vous pouvez créer des indications de tempo sous la forme d'étiquettes
+textuelles -- des objets @emph{markup} --, notamment des équivalences.
+Cependant, elles n'apparaîtront pas dans le fichier MIDI.
+"
+
+  doctitlefr = "Création d'une indication métronomique sous forme d'étiquette"

@@ -1,0 +1,9 @@
+%% Translation of GIT committish: f11513f36c131dab18338d6a3a729e24a927150d
+  texidocja = "
+この例は、音域のエングラーバをユーザが Scheme で再定義する方法を示しています。
+
+これのほとんどは
+@code{lily/ambitus-engraver.cc} を Scheme に書き直したものです。
+
+"
+  doctitleja = "Scheme でエングラーバを定義する: 音域"

@@ -1,0 +1,159 @@
+@c -*- coding: utf-8; mode: texinfo;; documentlanguage: fr -*-
+
+@ignore
+    Translation of GIT committish: 606ac3c3b22c41d84aa5fa938d42da5125ac572a
+
+    When revising a translation, copy the HEAD committish of the
+    version that you are working on.  For details, see the Contributors'
+    Guide, node Updating translation committishes..
+@end ignore
+
+@c Translators: Jean-Charles Malahieude
+@c Translation checkers:
+
+@c \version "2.23.10"
+
+@node Installing
+@chapter Installation
+
+Ce tutoriel vous guidera pas à pas dans l'installation et la création
+d'une première partition musicale.
+
+Les fichiers LilyPond ne contiennent que du simple texte. Vous pouvez
+utiliser un éditeur de texte brut pour modifier un fichier LilyPond --
+@strong{non pas} un logiciel de traitement de texte tel que Microsoft
+Word -- ou l'un des éditeurs spécialement taillés pour LilyPond pour
+plus de confort dans votre travail d'édition. Nous avons opté, dans les
+paragraphes qui suivent, pour
+@uref{https://frescobaldi.org,Frescobaldi}, l'un des éditeurs les plus
+en vogue à ce jour. D'autres possibilités sont indiquées à la rubrique
+@rwebnamed{Easier editing, Facilités d'édition}.
+
+Plusieurs options s'offrent à vous ; choisissez celle qui convient le
+mieux à vos besoins. Si vous ne savez pas ce qu'est la « ligne de
+commande », il vous faut une installation graphique.
+
+
+@node Graphical setup
+@section Installation en mode graphique
+
+Les instructions qui suivent sont basées sur une installation sur un
+système Gnu/Linux. Dans la mesure où Frescobaldi est écrit à partir
+d'outils multiplateforme, son apparence est très ressemblante d'un
+système à l'autre, qu'il s'agisse de GNU/Linux, Windows ou macOS. Les
+étapes nécessaires à l'installation d'un système LilyPond fonctionnel
+sont similaires quel que soit le système de l'ordinateur.
+
+Récupérez la dernière version de Frescobaldi à partir de la
+@uref{https://github.com/frescobaldi/frescobaldi/releases, page de
+téléchargement du projet}. Si toutefois vous l'obtenez d'une autre
+source, veillez à ce que le numéro de version soit au moins la 4.0.0,
+qui dispose d'une installation automatisée de LilyPond.
+
+Choisissez le paquetage correspondant à votre système opératoire : pour
+Windows il s'agira d'un fichier @file{.msi}, pour macOS le fichier
+@file{.dmg} approprié. Quant aux utilisateurs de GNU/Linux, les dépôts
+de leur distribution devraient mettre à disposition la dernière version,
+à moins de passer par le
+@uref{https://flathub.org/apps/org.frescobaldi.Frescobaldi, hub
+Flatpak}. Des informations supplémentaires pour toutes les plateformes
+sont disponibles sur la
+@uref{https://github.com/frescobaldi/frescobaldi/blob/master/INSTALL.md,
+page d'installation de Frescobaldi.}
+
+
+@center @sourceimage{Frescobaldi_download,10cm,}
+
+Installez Frescobaldi à partir du fichier téléchargé. Il est sans danger
+d'accepter toutes les valeurs par défaut présentées lors du processus
+d'installation.
+
+Au lancement de Frescobaldi s'ouvre un nouveau fichier avec du texte
+prérempli ; nous en parlerons plus tard.
+
+@center @sourceimage{Frescobaldi_first_launch,10cm,}
+
+Vérifiez maintenant que Frescobaldi a bien installé une version de
+LilyPond et notez son numéro de version. Accédez aux préférences de
+Frescobaldi et sélectionnez « Préférences de LilyPond » sur la gauche.
+
+@center @sourceimage{Frescobaldi_preferences,10cm,}
+
+Devrait être mentionnée au moins une version de LilyPond installée et
+fonctionnelle. Notez en le numéro de version pour l'étape suivante.
+Lorsqu'une nouvelle version de LilyPond est livrée, retournez simplement
+à cet écran et cliquez sur « Ajouter » puis sélectionnez la nouvelle
+version qui apparaît dans la liste déroulante. Frescobaldi se chargera
+alors de la télécharger et de l'installer pour vous.
+
+Pour vérifier l'installation, saisissez simplement ces deux lignes dans
+la fenêtre de gauche, telles qu'elles se présentent dans l'exemple
+suivant :
+
+@example
+
+\version "@versionStable{}"
+@{ c' @}
+
+@end example
+
+@center @sourceimage{Frescobaldi_test_install,10cm,}
+
+Félicitations, vous venez de créer votre première partition avec
+LilyPond. Passez maintenant au @ref{Tutorial} pour en apprendre plus sur
+la syntaxe de LilyPond.
+
+Cliquez sur le bouton portant l'icône de LilyPond pour compiler le
+fichier, ou bien utilisez le raccourci clavier @kbd{Control-M}.
+La compilation aboutira et apparaîtra une partition dans la fenêtre de
+droite.
+
+@center @sourceimage{Frescobaldi_test_result,10cm,}
+
+Félicitations, vous venez de créer votre première partition avec
+LilyPond. Si vous êtes satisfait, vous pouvez passer le reste de cette
+section.
+
+Passez maintenant au @ref{Tutorial} pour en apprendre plus sur la
+syntaxe de LilyPond.
+
+
+@node Command line setup
+@section Installation en ligne de commande
+
+Sur de nombreuses distributions GNU/Linux, on peut installer LilyPond à
+partir du gestionnaire de paquetages. C'est aussi le cas avec macOS à
+partir de @uref{https://www.macports.org,MacPorts} ou
+@uref{https://brew.sh,Homebrew}.
+
+Dans tous les cas, on peut installer LilyPond en dépliant l'archive
+récupérée à partir de la @rwebnamed{Download, page de téléchargement}.
+Les binaires sont utilisables dès leur expansion. Vous pouvez lancer
+
+@example
+/@var{...}/lilypond-@var{x}.@var{y}.@var{z}/bin/lilypond fichier.ly
+@end example
+
+@noindent
+(sur Windows, remplacez les « slashes » @samp{/} par des
+« antislashes » @samp{\}).
+
+Ceci compilera @code{fichier.ly} et produira @code{fichier.pdf}. Pour
+tester votre installation, vous pouvez utiliser ce fichier minimaliste :
+
+@example
+\version "@version{}"
+
+@{ c' @}
+@end example
+
+Ceci produira un résultat dans @file{fichier.pdf} :
+
+@lilypond[quote]
+{ c' }
+@end lilypond
+
+Passez maintenant au @ref{Tutorial} pour en apprendre plus sur la
+syntaxe de LilyPond, ou consultez @rprogramnamed{Command-line usage,
+Utilisation en ligne de commande} pour de plus amples informations sur
+l'utilisation de LilyPond en ligne de commande.

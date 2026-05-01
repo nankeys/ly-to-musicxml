@@ -1,0 +1,14 @@
+%% Translation of GIT committish: 35d4cc1b78c4105643ca5fdcb44cb717578d6d4a
+  texidoces = "
+A diferencia de los silencios normales, no existe una instrucción
+predefinida para modificar la posición predeterminada de un
+símbolo de silencio multicompás sobre el pentagrama, adjuntándolo
+a una nota, independientemente de cuál sea su forma.  Sin embargo,
+en la música polifónica los silencios multicompás de las voces de
+numeración par e impar están separados verticalmente.
+
+Este fragmento de código muestra la forma de controlar la
+colocación de los silencios multicompás.
+
+"
+  doctitlees = "Posicionar los silencios multicompás"

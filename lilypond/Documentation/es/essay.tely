@@ -1,0 +1,70 @@
+\input texinfo @c -*- coding: utf-8; mode: texinfo; documentlanguage: es -*-
+@ignore
+    Translation of GIT committish: d304582e9b791c7e9d54a5bbda3e37dc49a87fd1
+
+    When revising a translation, copy the HEAD committish of the
+    version that you are working on.  For details, see the Contributors'
+    Guide, node Updating translation committishes..
+@end ignore
+
+@settitle Ensayo sobre grabado musical automatizado
+@documentencoding UTF-8
+@documentlanguage es
+@afourpaper
+
+@c translator: Francisco Vila
+
+@macro manualIntro
+Este ensayo trata de las funciones de grabado musical automatizado
+dentro de LilyPond version @version{}.
+@end macro
+
+@c 'Essay' was born 2002-06-03 with this commit:
+@c tremolo segfault
+@c author: Han-Wen Nienhuys
+@c commit: 29262ca70c3d5209126150752fd3d804bef8e9a3
+@c   file: Documentation/user/introduction.itely
+
+@macro copyrightDeclare
+Copyright @copyright{} 2002--2026 por los autores.
+@end macro
+
+@c no dircategory nor direntry in Spanish
+
+@set FDL
+@include es/macros.itexi
+
+
+@lilyTitlePage{Ensayo sobre grabado musical automatizado}
+
+
+@ifnottex
+
+@menu
+* Music engraving::
+* Literature list::
+* GNU Free Documentation License:: Licencia de este documento.
+* Index of commands and concepts::
+@end menu
+
+@docMain
+@end ifnottex
+
+
+@contents
+
+@iftex
+@allowcodebreaks false
+@end iftex
+
+@include es/essay/engraving.itely
+@include es/essay/literature.itely
+
+@include en/fdl.itexi
+
+@node Index of commands and concepts
+@appendix Índice
+
+@printindex cp
+
+@bye

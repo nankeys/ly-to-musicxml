@@ -1,0 +1,1492 @@
+@c -*- coding: utf-8; mode: texinfo; documentlanguage: ja -*-
+
+@ignore
+    Translation of GIT committish: f11513f36c131dab18338d6a3a729e24a927150d
+
+    When revising a translation, copy the HEAD committish of the
+    version that you are working on.  For details, see the Contributors'
+    Guide, node Updating translation committishes..
+@end ignore
+
+@c \version "2.19.21"
+
+@c Translators: Masamichi Hosoda, Tomohiro Tatejima, Yoshiki Sawada, Hiroshi Fukuhara
+@c Translation status: post-GDP
+
+@node Running lilypond
+@chapter @command{lilypond} を実行する
+
+この章では LilyPond を実行するための細かな規定について詳述します。
+
+
+@node Normal usage
+@section 通常の使用方法
+
+たいていのユーザは GUI から LilyPond を実行します。@c
+まだ実行したことがないのであれば @rlearningnamed{Tutorial, チュートリアル} を読んでください。
+Lilypond ファイルを書くのに代替のエディタを使用するのであれば、@c
+そのエディタのドキュメントを読んでください。
+
+
+@node Command-line usage
+@section コマンド ラインの使用方法
+
+この節にはコマンド ラインで LilyPond を使用するための追加情報が含まれます。@c
+これにはプログラムに追加オプションを渡す必要があるかもしれません。@c
+さらに、いくつかの特別なプログラム (@code{midi2ly} など) は@c
+コマンド ラインからしか利用できません。
+
+ここで @q{コマンド ライン} とは、OS の中にあるコマンド ラインを意味します。@c
+Windows ユーザは @q{DOS シェル} や @q{コマンド シェル} @q{コマンド プロンプト}
+という言葉の方が馴染みがあるかもしれません。@c
+MaxOS@tie{}X ユーザは @q{ターミナル} や @q{コンソール} という言葉の方が@c
+馴染みがあるかもしれません。
+
+OS のコマンド ラインの使用方法についての説明は@c
+このマニュアルが扱う範囲ではありません。@c
+コマンド ラインに馴染みがない場合は、@c
+その内容を扱っている他のドキュメントをあたってください。
+
+
+@node Invoking LilyPond
+@unnumberedsubsec @command{lilypond} を呼び出す
+
+@command{lilypond} 実行可能形式ファイルは@c
+コマンド ラインから以下のように呼び出されます。
+
+@example
+lilypond [@var{option}]@dots{} @var{file}@dots{}
+@end example
+
+拡張子を持たないファイル名で呼び出された場合、@c
+@file{.ly} が最初に試されます。@c
+stdin から入力を読み込む場合には、@c
+@var{file} に対してダッシュ (@code{-}) を使用します。
+
+@file{filename.ly} が処理されると、@c
+lilypond は出力として @file{filename.pdf} を作り出します。@c
+いくつかのファイルを指定することもできます。@c
+その場合、それらのファイルは個々に処理されます。@c
+@footnote{Guile のステータスは @file{.ly} 処理後にリセットされません。@c
+そのため、Scheme 内部からいかなるシステム デフォルトも変更しないよう@c
+注意してください。}
+
+@file{filename.ly} が複数の @code{\book} ブロックを含んでいる場合、@c
+残りの score は
+@file{filename-1.pdf} から始まる番号付きのファイルに出力されます。@c
+さらに、@code{output-suffix} がベース名と番号の間に挿入されます。@c
+例えば、 @file{filename.ly} が以下の内容を含んでいる場合、
+
+@example
+#(define output-suffix "violin")
+\score @{ @dots{} @}
+#(define output-suffix "cello")
+\score @{ @dots{} @}
+@end example
+
+@noindent
+LilyPond は
+@file{filename-violin.pdf} と @file{filename-cello-1.pdf} を出力します。
+
+
+@subsubheading 標準シェルで LilyPond を使う
+
+LilyPond はコマンドラインアプリケーションなので、@c
+LilyPond を呼び出すために @q{シェル} の機能をうまく利用することができます。
+
+例えば,
+
+@example
+lilypond *.ly
+@end example
+
+@noindent
+は、カレントディレクトリのすべての LilyPond ファイルを処理します。
+
+コンソール出力をリダイレクトする（例えばファイルへ）のも@c
+有用でしょう。
+
+@example
+lilypond file.ly 1> stdout.txt
+lilypond file.ly 2> stderr.txt
+lilypond file.ly &> all.txt
+@end example
+
+@noindent
+上記コマンドはそれぞれ @q{普通の} 出力、@q{エラー} のみ、@q{すべて} 、
+をテキストファイルにリダイレクトします。@c
+あなたの使用しているシェル、コマンドプロンプト (Windows)、@c
+ターミナルやコンソール (MacOS X) がリダイレクトをサポートしているか、@c
+あるいは構文が異なるかどうかは、そのシェルのドキュメントを調べてください。@c
+
+以下は、カレントディレクトリ以下のすべての入力ファイルを再帰的に探し、@c
+処理する例です。@c
+出力ファイルは元の入力ファイルのあるディレクトリではなく、@c
+コマンドを実行したディレクトリに置かれます。
+
+@example
+find . -name '*.ly' -exec lilypond '@{@}' \;
+@end example
+
+@noindent
+これは MacOS@tie{}X ユーザでも使えるでしょう。
+
+Windows ユーザは
+
+@example
+forfiles /s /M *.ly /c "cmd /c lilypond @@file"
+@end example
+
+@noindent
+スタートメニューから
+@code{スタート > アクセサリ > コマンドプロンプト}
+とたどるか、@c
+検索ウィンドウで @q{コマンドプロンプト} と入力して、
+@code{コマンド プロンプト} を起動し、@c
+これらのコマンドを入力します。
+
+または、入力ファイルを含むすべてのサブフォルダを含む、@c
+最上位のフォルダを明示的に指定できる @code{/p} オプションもあります;
+
+@example
+forfiles /s /p C:\Documents\MyScores /M *.ly /c "cmd /c lilypond @@file"
+@end example
+
+最上位フォルダ名がスペース文字を含む場合は、@c
+パス全体をダブルクオーテーションで囲む必要があります。;
+
+@example
+forfiles /s /p "C:\Documents\My Scores" /M *.ly /c "cmd /c lilypond @@file"
+@end example
+
+
+@node Basic command-line options for LilyPond
+@unnumberedsubsec LilyPond の基本的なコマンド ライン オプション
+
+@cindex Invoking @command{lilypond} (@command{lilypond} を呼び出す)
+@cindex command-line options for @command{lilypond} (@command{lilypond} のためのコマンド ライン オプション)
+@cindex options, command line (コマンド ライン オプション)
+@cindex switches (切り換え)
+
+以下のオプションがサポートされます。
+
+@table @asis
+
+@item @code{-d}, @code{--define-default=}@var{var}[@code{=}@var{val}]
+@ref{Advanced command-line options for LilyPond} を参照してください。
+
+@cindex Scheme, expression evaluation (Scheme 表記の評価)
+@cindex expression evaluation, Scheme (Scheme 表記の評価)
+
+@item @code{-e}, @code{--evaluate=}@var{expr}
+@file{.ly} ファイルを解析する前に Scheme @var{expr} を評価します。@c
+複数の @code{-e} オプションが与えられた場合、それらは順番に評価されます。
+
+Scheme 表記は @code{guile-user} モジュールの中で評価されます。@c
+そのため、@var{expr} の中で
+@code{(define-public a 42)} のような定義を使いたいのならば、@c
+コマンド ラインで以下を使用して、
+
+@example
+lilypond -e '(define-public a 42)'
+@end example
+
+@noindent
+@file{.ly} ファイルの先頭に以下を含めます.
+
+@example
+#(use-modules (guile-user))
+@end example
+
+@warning{Windows ユーザはシングル クォートではなく、@c
+ダブル クォートを使う必要があります。}
+
+@item @code{-E}, @code{--eps}
+EPS ファイルを生成します。
+
+このオプションは LilyPond のコマンドラインオプションに
+@code{--ps}, と @code{-dlilypond-book-output},
+を指定するのと同じです。
+
+@cindex output, format (出力のフォーマット)
+@cindex format, output (出力のフォーマット)
+
+@item @code{-f}, @code{--format=}@var{format}
+（主な）出力ファイルのフォーマットを指定します。@c
+@code{format} の選択肢は @code{ps}, @code{pdf}, または @code{png} です。
+
+例: @code{lilypond -fpng foo.ly}
+
+@code{svg} フォーマットや @code{eps} フォーマットを出力するには
+@code{-dbackend} オプションを用います。
+@ref{Advanced command-line options for LilyPond} を参照してください。
+
+@item @code{-h}, @code{--help}
+使用方法の要約を表示します。
+
+@item @code{-H}, @code{--header=}@var{field}
+ヘッダ フィールドをファイル @file{BASENAME.@var{field}} に吐き出します。
+
+例えば、 @file{foo.ly} という入力ファイルが以下の内容を含んでいる場合、
+
+@example
+\header @{ title = "bar" @}
+\score @{ c1 @}
+@end example
+
+@noindent
+コマンド
+
+@example
+lilypond -H title foo.ly
+@end example
+
+@noindent
+を実行すると、文字列 @code{bar} を含んだ@c
+プレーンテキストファイル @file{foo.title} が作られます。
+
+@item @code{-i}, @code{--init=}@var{file}
+init ファイルとして @var{file} をセットします (デフォルト: @file{init.ly})。
+
+@cindex file searching (ファイル サーチ)
+@cindex search path (サーチ パス)
+
+@item @code{-I}, @code{--include=}@var{directory}
+@var{directory} を入力ファイルのサーチ パスに相対パスとして追加します。@c
+デフォルトではカレントディレクトリのみが検索されます。
+
+複数の @option{-I} オプションを与えることができます。@c
+検索はカレントディレクトリから開始され、@c
+入力ファイルが見つからない場合は、@c
+最初の @option{-I} で指定されたディレクトリ、@c
+そして二番目の @option{-I} で指定されたディレクトリ、@c
+というように検索します。
+
+@warning{チルド記号 (@code{~}) を @option{-I} と共に使用すると、@c
+シェルによっては予期しない結果をもたらす場合があります。
+
+Windows ユーザは、ディレクトリのパスの最後にスラッシュを含める必要があります。}
+
+@cindex chroot jail, running inside (chroot jail 内部で実行する)
+
+@item @code{-j}, @code{--jail=}@var{user}@code{,}@var{group}@code{,}@var{jail}@code{,}@var{dir}
+[このオプションは OS が @code{chroot} 機能をサポートする場合のみ有効です。@c
+特に、 Windows はサポートしていません。]
+
+@command{lilypond} を chroot jail 環境で実行します。@c
+(訳者: chroot jail 環境とはセキュリティのために@c
+カレント プロセスに対してルート ディレクトリの位置を変更すること。)
+
+@option{--jail} オプションは、@c
+Web サーバ経由で LilyPond 譜刻を提供する時や
+LilyPond が外部ソースから送られてきたコマンドを実行する時に、@c
+@code{--dsafe} よりも自由度の高い代替手段を提供します。
+（@ref{Advanced command-line options for LilyPond} を参照してください。）
+
+@code{--jail} オプションはコンパイル プロセスの開始直前に
+@command{lilypond} のルート ディレクトリを @var{jail} に変更します。@c
+それから、ユーザとグループを @var{user} と @var{group} に変更して、@c
+カレント ディレクトリを @var{dir} に変更します。@c
+これにより、jail (牢獄) から抜け出せないことを (少なくとも理論上は)
+保証します。@c
+@code{--jail} を指定した @command{lilypond} の実行は root (ユーザ名)
+として行う必要があります。@c
+通常、これは @command{sudo} を用いた安全な方法で行います。
+
+jail のセットアップは比較的複雑な問題です。@c
+LilyPond がソースをコンパイルするのに必要とされるものすべてを
+@emph{jail の内部} で見つけられるということを保証しなければならないからです。@c
+一般的なセットアップには以下の項目が含まれます:
+
+@table @asis
+
+@item 専用のファイルシステムをセットアップする
+@code{noexec}, @code{nodev}, @code{nosuid} などのセーフ オプションで@c
+マウントするための専用ファイルシステムを作成すべきです。@c
+こうすることで、LilyPond から実行可能形式ファイルを実行したり、@c
+デバイスに直接書き込むことは不可能になります。@c
+専用のパーティションを作成することを望まないのなら、@c
+適当なサイズのファイルを作成し、@c
+それを使用してループ デバイス (ループバック デバイス) をマウントしてください。@c
+専用ファイルシステムはさらに、@c
+LilyPond が許可されたディスク容量以上には書き込めないということを保証します。
+
+@item 専用のユーザをセットアップする
+jail 内部で LilyPond を実行する際、@c
+低い権限を持つ専用のユーザとグループ
+(仮に @code{lily}/@code{lily} とします)
+で行うべきです。@c
+このユーザが書き込み可能なディレクトリが 1 つだけ存在すべきであり、@c
+それを @var{dir} に渡します。
+
+@item jail の準備をする
+LilyPond は実行中にいくつかのファイルを読み込む必要があります。@c
+それらのファイルをすべて jail にコピーしておきます。@c
+それらのファイルが本当のルート ファイル システムで存在しているパスと@c
+同じパスにコピーします。@c
+LilyPond インストールの内容すべて (例えば、@file{/usr/share/lilypond}) を@c
+コピーすべきです。
+
+問題が発生した場合、その原因を突き止める最も簡単な方法は
+@command{strace} を使って LilyPond を実行することです。@c
+これによりどのファイルが見当たらないのかがわかります。
+
+@item LilyPond を実行する
+@code{noexec} でマウントされた jail の中では、@c
+外部プログラムを実行することは一切できません。@c
+そのため、外部プログラムを必要としないバックエンドで
+LilyPond を実行しなければなりません。@c
+すでに述べたように、@c
+jail モードでの LilyPond の実行はスーパーユーザ権限で行われなければならず
+(もちろん、その権限はすぐに外されます)、@c
+たぶん @command{sudo} を使います。@c
+LilyPond が使用可能な CPU 時間を数秒に制限する
+(例えば、@command{ulimit -t} を使って) というのも良い方法です。@c
+さらに、OS がサポートしているのなら、@c
+割り当て可能なメモリ容量を制限するというのも良い方法です。@c
+@ref{LilyPond in chroot jail} も参照してください。
+@end table
+
+@cindex loglevel (ログレベル)
+@cindex output, verbosity (出力の饒舌さ)
+
+@item @code{-l}, @code{--loglevel=}@var{level}
+コンソール出力の饒舌さを @var{level} にセットします。@c
+取り得る値は以下の通りです:
+
+@table @code
+
+@item NONE
+何も出力しません。エラー メッセージさえも出力しません。
+
+@item ERROR
+エラー メッセージだけを出力します。警告や進捗メッセージは出力しません。
+
+@item WARN
+警告とエラー メッセージを出力し、進捗メッセージは出力しません。
+
+@item BASIC
+基本的な進捗メッセージ (成功メッセージ)、警告、それにエラー メッセージを@c
+出力します。
+
+@item PROGRESS
+すべての進捗メッセージ、警告とエラー メッセージを出力します。
+
+@item INFO
+進捗メッセージ、警告、エラーそれに追加の実行情報を出力します。
+これがデフォルトです。
+
+@item DEBUG
+饒舌なデバッグ出力を含む、出力可能なメッセージをすべて出力します。
+
+@end table
+
+@cindex directory, redirect output (出力をディレクトリにリダイレクトする)
+@cindex output, setting filename (出力のファイル名を設定する)
+@cindex output, directory (出力ディレクトリ)
+
+@item @code{-o}, @code{--output=}@var{file}
+@itemx @code{-o}, @code{--output=}@var{folder}
+デフォルトの出力ファイルとして @var{file} をセットします。@c
+セットした名前のフォルダが存在する場合、
+@var{folder} に入力ファイルから取ったファイル名で出力されます。@c
+どちらの場合にも適切な接尾辞が追加されます
+(つまり、PDF ならば拡張子 @file{.pdf} が追加されます)。
+
+@item @code{-O}, @code{--pspdfopt=}@var{key}
+@cindex pspdfopt
+
+@var{key} へ PS/PDF 最適化を設定します。@c
+選択肢は:
+
+@table @code
+
+@item size
+非常に小さい PS/EPS/PDF ドキュメントを生成します。
+これがデフォルトです。
+
+LilyPond の Scheme コマンドラインオプション
+@code{-dmusic-@/font-@/encodings=@/'#f'} と
+@code{-dgs-@/never-@/embed-@/fonts=@/'#f'}
+を指定した場合と同じです。
+
+@item TeX
+pdf@TeX{}, Lua@TeX{}, Xe@TeX{}
+ドキュメントにインクルードされるのに最適化されたファイルを生成します。
+
+LilyPond の Scheme コマンドラインオプション
+@code{-dmusic-@/font-@/encodings=@/'#t'} と
+@code{-dgs-@/never-@/embed-@/fonts=@/'#f'}
+を指定した場合と同じです。
+
+@item TeX-GS
+LilyPond によって生成された PDF を TeX ドキュメントに複数インクルードしたい@c
+場合は、このオプションを使い、TeX によって生成された PDF を
+Ghostscript で後処理してください。
+
+LilyPond の Scheme コマンドラインオプション
+@code{-dmusic-@/font-@/encodings=@/'#t'} と
+@code{-dgs-@/never-@/embed-@/fonts=@/'#t'}
+を指定した場合と同じです。
+
+@end table
+
+@cindex PS (Postscript), output (PS (PostScript) 出力)
+@cindex Postscript (PS), output (PostScript (PS) 出力)
+@cindex output, PS (Postscript) (PS (PostScript) 出力)
+
+@item @code{--ps}
+PostScript を生成します。@c
+このオプションは @code{-fps} と同じです。
+
+@cindex PNG (Portable Network Graphics), output (PNG 出力)
+@cindex output, PNG (Portable Network Graphics) (PNG 出力)
+
+@item @code{--png}
+各ページの図を PNG フォーマットで生成します。@c
+このオプションは @code{-fpng} と同じです。
+
+画像の解像度を @var{N}@tie{}DPI に設定するには以下のようにします。
+@example
+-dresolution=@var{N}
+@end example
+
+@cindex PDF (Portable Document Format), output (PDF 出力)
+@cindex output, PDF (Portable Document Format) (PDF 出力)
+
+@item @code{--pdf}
+PDF を生成します。@c
+これがデフォルトで、@code{-fpdf} と同じです。
+
+@item @code{-s}, @code{--silent}
+進行状況を表示せず、エラーメッセージのみ表示します。@c
+これは @code{-lERROR} と同じです。
+
+@item @code{-v}, @code{--version}
+バージョン情報を表示します。
+
+@item @code{-V}, @code{--verbose}
+冗長表示モードにします:
+読み込むすべてのファイルのフル パスを表示して、時間情報などを表示します。@c
+これは @code{-lDEBUG} と同じです。
+
+@item @code{-w}, @code{--warranty}
+GNU LilyPond の保証責任を表示します。@c
+(GNU LilyPond には@strong{保証責任はありません}！)
+
+@end table
+
+
+@node Advanced command-line options for LilyPond
+@unnumberedsubsec LilyPond の高度なコマンド ライン オプション
+
+オプション @option{-d} は LilyPond の Scheme 関数 @code{ly:set-option}
+のコマンドラインインタフェースです。@c
+つまり、ここで示しているすべてのオプションは @file{.ly} ファイルの中で@c
+設定することが可能です。
+
+@table @asis
+
+@item @code{-d}, @code{--define-default=}@var{option-name}[@code{=}@var{value}]
+@itemx @code{-d}, @code{--define-default=no-}@var{option-name}
+内部 Scheme シンボル @var{option-name} に @var{value}
+を設定するのと同じです。@c
+例えば、コマンドラインオプション
+
+@example
+-dbackend=svg
+@end example
+
+@noindent
+は LilyPond 入力ファイルに
+
+@example
+#(ly:set-option 'backend 'svg)
+@end example
+
+@noindent
+を書くことと同じです。
+
+@var{value} が指定されない場合、 @code{#t}
+（真偽値以外を取る場合は、おかしな結果になるかもしれません）が使われます。@c
+@var{option-name} に接頭辞 @code{no-} を付けると、そのオプションは
+@q{off} つまり @code{#f} が使われます。例えば、
+
+@cindex point and click, command line (コマンド ラインでポイント＆クリックを指定する)
+
+@example
+-dpoint-and-click='#f'
+@end example
+
+@noindent
+は
+@example
+-dno-point-and-click
+@end example
+と同じです。
+@end table
+
+[@samp{#}
+文字は多くのシェルでコメントの開始を意味することに注意してください。@c
+そのため、それを含む式は常にクォートすることをお勧めします。]
+
+次の表に、サポートされているすべてのオプション名と値を示します。@c
+Scheme コード内では、オプション値は関数 @code{ly:get-option} で@c
+読み取ることができます。
+
+@table @asis
+
+@item @code{anti-alias-factor} @var{num}
+(与えられた因数 @var{num} を用いて) 高解像度で描画して、その結果をスケール@c
+ダウンすることにより、@code{PNG} 画像の輪郭がギザギザになることを防ぎます。@c
+デフォルト: @code{1.0}。
+
+@item @code{aux-files} @var{bool}
+@var{bool} が @code{#t} ならば、
+@code{eps} バックエンドオプションを使っているときに
+@file{.tex}, @file{.texi}, と @file{.count} ファイルを生成します。@c
+デフォルト: @code{#t}。
+
+@item @code{backend} @var{symbol}
+@var{symbol} を LilyPond 出力のバックエンドとして使用します。
+選択肢は：
+
+@table @code
+
+@item ps
+こればデフォルトです。
+Postscript ファイルは@c
+@code{TTF}, @code{Type1}, それに @code{OTF} フォントを埋め込みます。@c
+フォントのサブセットは作成されません。@c
+日本語のような @q{東洋} の文字セットを用いると@c
+ファイルが非常に大きくなる可能性があることに注意してください。
+
+PDF 出力には @code{ps} バックエンドが使われます。@c
+出力された PS データは Ghostscript の @code{ps2pdf} で後処理され、@c
+デフォルトでフォントのサブセットが作成されます。
+
+@item eps
+@command{lilypond-book} コマンドのデフォルトです。@c
+これは、1 つのファイルにすべてのページとフォントを埋め込んだものと、@c
+ページ毎に分離しフォントを埋め込まない eps ファイルの、両方を吐き出します。
+
+@item svg
+ページ毎の SVG (Scalable Vector Graphics) ファイルが全ページ分作られます。@c
+音楽グリフはベクタ画像に変換されますが、文字フォントは SVG ファイルには@c
+@emph{埋め込まれません}。
+そのため、テキストや歌詞の最適な描画を得るためには、@c
+SVG ビュアーに関連するテキストフォントが必要となります。@c
+SVG ビュアーが対応していないことがあるので、@c
+@q{フォントリスト} や @q{フォントエイリアス} を使用しないことをお勧めします。@c
+@emph{Web Open Font Format} (WOFF) ファイルを使うときには、@c
+追加の @code{-dsvg-woff} スイッチが必要となります。
+
+@end table
+
+@item @code{clip-systems} @var{bool}
+@var{bool} が @code{#t} なら、@c
+楽譜から断片を取り出します。これを使用するには、
+@code{\layout} ブロックに @code{clip-regions} 関数が定義されている必要が@c
+あります。@rnotationnamed{Extracting fragments of music, 音楽の断片を抽出する}を参照してください。
+@option{-dno-print-pages} と一緒に用いられた場合、断片は全く出力されません。@c
+デフォルト: @code{#f}。
+
+@item @code{crop} @var{bool}
+@var{bool} が @code{#t} なら、@c
+すべての楽譜とヘッダをマージンなしの @q{単一ページ} 出力に合わせます。@c
+デフォルト: @code{#f}。
+
+@item @code{datadir}
+データファイル パスの接頭辞です。読み取り専用で、設定しても効果がありません。
+
+@item @code{debug-skylines} @var{bool}
+@var{bool} が @code{#t} なら、@c
+スカイライン (訳注: 行ごとのオブジェクトの最高位置と最低位置を線で@c
+表示するもの) を表示します。@c
+デフォルト: @code{#f}。
+
+@item @code{delete-intermediate-files} @var{bool}
+@var{bool} が @code{#t} なら、@c
+コンパイルの途中で作成される使用しない中間ファイル @file{.ps} を@c
+削除します。@c
+デフォルト: @code{#t}。
+
+@item @code{embed-source-code} @var{bool}
+@var{bool} が @code{#t} なら、@c
+出力される PDF ドキュメントに LilyPond ソースファイルを埋め込みます。@c
+デフォルト: @code{#f}。
+
+@item @code{eps-box-padding} @var{num}
+出力される EPS の左端に @var{num} mm の余白を追加します。@c
+デフォルト: @code{#f} （余白追加しないことを意味します）。
+
+@item @code{font-export-dir} @var{string}
+PostScript ファイルとしてフォントをエクスポートするディレクトリを
+@var{string} に指定します。@c
+デフォルト: @code{#f} （カレントディレクトリを意味します）。
+これは、次に示すように、フォントを埋め込まずに PDF を作成し、@c
+後でフォントを Ghostscript で埋め込む場合に便利です。
+
+@example
+$ lilypond -dfont-export-dir=fontdir -dgs-never-embed-fonts foo.ly
+$ gs -q -dBATCH -dNOPAUSE -sDEVICE=pdfwrite \
+     -sOutputFile=foo.embedded.pdf foo.pdf fontdir/*.font.ps
+@end example
+
+@noindent
+注: @code{font-ps-resdir} とは異なり、@c
+このメソッドは Ghostscript 9.26 以降で CID フォントを埋め込むことはできません。
+
+@noindent
+注: @code{font-ps-resdir} と同様に、
+TrueType フォントを埋め込むと文字化けが発生するため、@c
+このオプションは TrueType フォントをスキップします。@c
+文字化けしないようにするには、@code{gs-never-embed-fonts} を使用します。@c
+これは、TrueType フォントをその名前に関係なく埋め込みます。
+
+@noindent
+デフォルト: @code{#f} (エクスポートしないことを意味します)。
+
+@item @code{font-ps-resdir} @var{string}
+(@var{string} として) ディレクトリを設定して、後でフォントを埋め込むために使用する
+PostScript リソース ディレクトリのサブセットをビルドします。@c
+これは、次に示すように、フォントを埋め込まずに PDF を作成し、@c
+後でフォントを Ghostscript で埋め込む場合に便利です。
+
+@example
+$ lilypond -dfont-ps-resdir=resdir -dgs-never-embed-fonts foo.ly
+$ gs -q -dBATCH -dNOPAUSE -sDEVICE=pdfwrite \
+     -I resdir -I resdir/Font \
+     -sOutputFile=foo.embedded.pdf foo.pdf
+@end example
+
+@noindent
+注: Ghostscript の @code{-I} オプションで指定した場合、特別な意味があるため、
+@file{Resource} という名前を含むディレクトリは指定しない方がよいでしょう。
+
+@noindent
+注: @code{font-export-dir} とは異なり、@c
+このメソッドは Ghostscript 9.26 以降で CID フォントを埋め込むことができます。
+
+@noindent
+注: @code{font-export-dir} と同様に、
+TrueType フォントを埋め込むと文字化けが発生するため、@c
+このオプションは TrueType フォントをスキップします。@c
+文字化けしないようにするには、@code{gs-never-embed-fonts} を使用します。@c
+これは、TrueType フォントをその名前に関係なく埋め込みます。
+
+@noindent
+デフォルト: @code{#f} (ビルドしないことを意味します)。
+
+@item @code{gs-load-fonts} @var{bool}
+@var{bool} が @code{#t} なら、@c
+Ghostscript 経由でフォントを読み込みます。@c
+LilyPond 出力ファイルのフォントはすべて参照のみが含まれるようになり、
+Ghostscript による後処理で実際のフォントに解決する必要があります。@c
+デフォルト: @code{#f}。
+
+@item @code{gs-load-lily-fonts} @var{bool}
+@var{bool} が @code{#t} なら、@c
+LilyPond のフォントを Ghostscript 経由で読み込みます。@c
+LilyPond 出力ファイルの音楽フォントはすべて参照のみが含まれるようになり、
+Ghostscript による後処理で実際のフォントに解決する必要があります。@c
+他のすべてのフォントは通常通り出力されます。@c
+デフォルト: @code{#f}。
+
+@item @code{gs-never-embed-fonts} @var{bool}
+@var{bool} が @code{#t} なら、@c
+Ghostscript が TrueType フォントのみを埋め込むようになり、@c
+他のフォーマットのフォントは埋め込まれません。@c
+デフォルト: @code{#f}。
+
+@item @code{help} @var{bool}
+@var{bool} が @code{#t} なら、@c
+このヘルプを表示します。@c
+デフォルト: @code{#f}。
+
+@item @code{include-book-title-preview} @var{bool}
+@var{bool} が @code{#t} なら、@c
+プレビュー画像にブック タイトルを含めます。@c
+デフォルト: @code{#t}。
+
+@item @code{include-eps-fonts} @var{bool}
+@var{bool} が @code{#t} なら、@c
+システム毎の EPS ファイルにフォントを含めます。@c
+デフォルト: @code{#t}。
+
+@item @code{include-settings} @var{string}
+グローバル設定のファイルとして @var{string}
+をインクルードします。このファイルは楽譜の@c
+処理が開始する前にインクルードされます。@c
+デフォルト: @code{#f} （グローバル設定ファイル無しを意味します）。
+
+@item @code{job-count} @var{num}
+@var{num} ジョブで、並列処理します。@c
+デフォルト: @code{#f} （並列処理無しを意味します）。
+
+@item @code{log-file} @var{string}
+出力をログファイル @file{@var{string}.log} にリダイレクトします。@c
+デフォルト: @code{#f} （ログファイル無しを意味します）。
+
+@item @code{max-markup-depth} @var{num}
+マークアップ ツリーの階層の最大値を @var{num} に設定します。@c
+それよりも深い階層を持つ@c
+マークアップがある場合、そのマークアップは終了していないと見なされて、@c
+警告が表示され、null マークアップが返されます。@c
+デフォルト: @code{1024}。
+
+@item @code{midi-extension} @var{string}
+MIDI 出力ファイルのデフォルトのファイル拡張子を @file{.@var{string}} に@c
+設定します。@c
+デフォルト: @code{"midi"}。
+
+@item @code{music-strings-to-paths} @var{bool}
+@var{bool} が @code{#t} なら、@c
+記譜フォントを用いるテキストをパスに変換します。@c
+デフォルト: @code{#f}。
+
+@item @code{paper-size} @var{extra-quoted-string}
+デフォルトの紙面サイズを @var{extra-quoted-string} に設定します。@c
+文字列をエスケープ記号付の 2 重@c
+引用符で囲む必要があることに注意してください。@c
+デフォルト: @code{"\"a4\""}。
+
+@item @code{pixmap-format} @var{symbol}
+画像出力のための GhostScript の出力フォーマットを @var{symbol}
+に設定します。@c
+デフォルト: @code{png16m}。
+
+@item @code{point-and-click} @var{bool}
+@var{bool} が @code{#t} なら、@c
+PDF と SVG 出力に @q{ポイント＆クリック} リンクを付け加えます。@c
+@ref{Point and click} を参照してください。@c
+デフォルト: @code{#f}。
+
+@item @code{preview} @var{bool}
+@var{bool} が @code{#t} なら、@c
+通常の出力に加えてプレビュー画像を作成します。@c
+デフォルト: @code{#f}。
+
+このオプションはすべてのバックエンド
+(@code{pdf}, @code{png}, @code{ps}, @code{eps}, それに @code{svg})
+でサポートされますが、@code{scm} ではサポートされません。@c
+入力ファイル名 @var{file} でバックエンド @var{format} を使った場合、@c
+出力ファイル名は @file{@var{file}@code{.preview.}@var{format}} で、@c
+タイトルと楽譜の最初の段を含みます。
+@code{\book} ブロックや @code{\bookpart} ブロックが使われている場合、@c
+@code{\book}, @code{\bookpart}, それに @code{\score} のタイトルが出力@c
+に譜刻され、@code{\paper} 変数 @code{print-all-headers} が @code{#t} に@c
+セットされている場合は各 @code{\score} ブロックの最初の段も譜刻されます。
+
+通常の出力を抑制するには、必要に応じて @option{-dprint-pages} オプション@c
+または @option{-dno-print-pages} オプションを使ってください。
+
+@item @code{print-pages} @var{bool}
+@var{bool} が @code{#t} なら、@c
+すべてのページを生成します。@c
+デフォルト: @code{#t}。
+
+@option{-dpreview} や @option{-dcrop}
+を使う場合は @option{-dno-print-pages} を組み合わせると有用です。
+
+@item @code{protected-scheme-parsing} @var{bool}
+@var{bool} が @code{#t} なら、@c
+パーサでインライン Scheme のエラーが発生しても処理を続けます。@c
+@code{#f} に設定されている場合、エラー終了して、スタック トレースを表示@c
+します。@c
+デフォルト: @code{#t}。
+
+@item @code{relative-includes} @var{bool}
+@var{bool} が @code{#t} なら、@c
+@code{\include} コマンドを処理するとき、インクルードするファイルを@c
+カレント ファイルからの相対位置で検索します。@c
+@code{#f} なら、@c
+ルート ファイルからからの相対位置で検索します。@c
+デフォルト: @code{#f}。
+
+@item @code{resolution} @var{num}
+生成する @code{PNG} 画像の解像度を @var{num} dpi に設定します。@c
+デフォルト: @code{101}。
+
+@item @code{safe} @var{bool}
+@var{bool} が @code{#t} なら、@c
+@file{.ly} 入力ファイルを信用しません。@c
+デフォルト: @code{#f}。
+
+@noindent
+Web サーバ経由で LilyPond 譜刻が利用可能な場合、@option{--dsafe}
+オプションか @option{--jail} オプションのどちらかを
+@b{指定する必要があります}。@c
+@option{--dsafe} オプションはインライン Scheme コードが無茶をする
+-- 例えば、以下のような -- ことを防ぎます。
+
+@example
+% 正しく書くのはあまりにも危険
+#(s ystem "rm -rf /")
+% 破壊的ではないが悪意がある
+@{ c4^$(ly:gulp-file "/etc/passwd") @}
+@end example
+
+@option{-dsafe} オプションはインライン Scheme 表記を特別なセーフ
+モジュールの中で評価します。@c
+これは Guile の @file{safe-r5rs} モジュールに由来しますが、@c
+@file{scm/safe-lily.scm} でリスト アップされている LilyPond API 関数の@c
+いくつかも追加されています。
+
+さらに、セーフ モードでは @code{\include} は許可されず、@TeX{} 文字列の@c
+中でバックスラッシュを使うこともできません。@c
+また、セーフ モードでは LilyPond 変数を Scheme にインポートすることも@c
+できません。
+
+@option{-dsafe} はリソースの過使用を検出 @emph{しません} ので、@c
+このオプションを指定してもプログラムをハングさせられる可能性があります
+-- 例えば、サイクリック (巡回) データ構造をバックエンドに埋め込むことに@c
+よってです。
+そのため、LilyPond を一般公開する Web サーバで使用する場合、プロセスの@c
+CPU とメモリ使用を制限すべきです。
+
+セーフ モードは多くの有用な LilyPond 楽譜断片がコンパイルされることを@c
+妨げます。
+
+@option{--jail} はさらに安全な代替手段ですが、セットアップにかかる手間も@c
+増えます。@ref{Basic command-line options for LilyPond} を参照してください。
+
+@item @code{separate-log-files} @var{bool}
+@var{bool} が @code{#t} なら、@c
+入力ファイル @file{file1.ly}, @file{file2.ly}, @dots{} に対するログを@c
+ファイル @file{file1.log}, @file{file2.log}, @dots{} に出力します。@c
+デフォルト: @code{#f}。
+
+@item @code{show-available-fonts} @var{bool}
+@var{bool} が @code{#t} なら、@c
+使用可能なフォント名をリスト アップします。@c
+加えて LilyPond は fontconfig の設定そのものを表示します。@c
+デフォルト: @code{#f}。
+
+@item @code{strip-output-dir} @var{bool}
+@var{bool} が @code{#t} なら、@c
+出力ファイル名を構築する時に入力ファイルのディレクトリを使用@c
+しません。@c
+デフォルト: @code{#f}。
+
+@item @code{strokeadjust} @var{bool}
+@var{bool} が @code{#t} なら、@c
+PostScript に線幅補正 (stroke adjustment) を強制します。このオプションは@c
+普通、PDF ファイルが PostScript 出力から生成されている場合に意味があります
+(線幅補正は、低解像度のビットマップ デバイスに対して自動的に有効になります)。@c
+このオプションを指定しない場合、PDF ビューアは典型的な解像度の@c
+スクリーンにおいて、一貫性の無い符幹の幅を出力しようとします。@c
+このオプションは印刷結果の品質には目立って影響せず、PDF のファイル サイズを@c
+大きく増加させます。@c
+デフォルト: @code{#f}。
+
+@item @code{svg-woff} @var{bool}
+このオプションは @code{svg} バックエンドで Web Open Format (WOFF)
+フォントを使うために必要となります。@c
+@var{bool} が @code{#t} なら、@c
+ページ毎の SVG ファイルが全ページ分作られます。@c
+LilyPond 自身の音楽グリフを除き、フォントは埋め込まれません。@c
+そのため、テキストや歌詞の最適な描画を得るためには、@c
+SVG ビュアーにフォントが必要となります。@c
+SVG ビュアーが対応していないことがあるので、@c
+@q{フォントエイリアス} や @q{フォントリスト} を使用しないことをお勧めします。@c
+デフォルト: @code{#f}。
+
+@item @code{verbose}
+饒舌レベル。@c
+これは読み込み専用のオプションで、設定しても効果はありません。
+
+@item @code{warning-as-error} @var{bool}
+@var{bool} が @code{#t} なら、@c
+すべての警告と @q{プログラミング エラー} をエラーに変更します。@c
+デフォルト: @code{#f}。
+
+@end table
+
+
+@node Environment variables
+@unnumberedsubsec 環境変数
+
+@cindex LANG
+@cindex LILYPOND_DATADIR
+@cindex LILYPOND_LOCALEDIR
+@cindex LILYPOND_RELOCDIR
+@cindex LILYPOND_LOGLEVEL
+
+@command{lilypond} は以下の環境変数を認識します:
+@table @code
+@item LILYPOND_DATADIR
+これはデフォルトで参照する@c
+ロケール メッセージとデータ ファイルがあるディレクトリを指定し、@c
+コンパイル時に定義されるか、実行時に動的に計算される場所を上書きします
+(@ref{Relocation} を参照してください) 。@c
+このディレクトリは @file{ly}, @file{ps}, @file{tex} などの@c
+サブディレクトリを保持しているべきです。
+
+@item LILYPOND_LOCALEDIR
+ロケール固有のファイルが配置されているディレクトリを指定します。@c
+これは @code{LILYPOND_DATADIR} から派生した値を上書きします。
+
+@item LILYPOND_RELOCDIR
+再配置ファイルが配置されているディレクトリを指定します。@c
+これは @command{lilypond} バイナリの場所から派生した値を上書きします。
+
+@item LANG
+@code{stdout} および @code{stderr} に送信される LilyPond データ、@c
+たとえば、進捗レポート、警告メッセージ、デバッグ出力などの言語を@c
+選択します。例: @code{LANG=de}
+
+@item LILYPOND_LOGLEVEL
+デフォルトのログレベル。@c
+明示的にログレベルが指定されずに LilyPond が呼び出された場合
+(すなわち @option{--loglevel} コマンド ライン オプションが@c
+指定されなかった場合)、@c
+この値が使用されます。
+
+@item LILYPOND_GC_YIELD
+メモリ管理を調節する変数 (単位はパーセント) です。@c
+大きな値は LilyPond に多くのメモリ使用を許し、@c
+小さな値だと CPU 使用時間が長くなります。@c
+デフォルト値は @code{70} です。
+この変数を使ってメモリ使用量とパフォーマンスを調節することができます。@c
+これはメモリ管理の振る舞いを調整するパーセント値です。@c
+高い値にするとプログラムはより多くのメモリを使用し、@c
+低い値にするとより多くの CPU 時間を使用します。@c
+デフォルト値は @code{70} です。
+
+@end table
+
+
+@node Relocation
+@unnumberedsubsec 再配置
+
+@cindex relocation (再配置)
+
+Unix の世界のほとんどのプログラムは、@c
+コンパイル前の構成時に決定されるデフォルト ディレクトリを使用します。
+LilyPond も例外ではありません。@c
+たとえば、標準的なインストールでは、@file{lilypond} バイナリが
+@file{/usr/@/bin} に配置され、LilyPond に固有のすべてのファイルが
+@file{/usr/@/share/@/lilypond/@/@version{}/} のサブディレクトリに配置されます
+(現在のバージョンが @version{} であると仮定すると) 。
+
+このアプローチは、手動コンパイルや標準のパッケージ マネージャーが付属する@c
+プラットフォームでは正常に機能しますが、@c
+そのようなマネージャーが一般的でないか、@c
+デフォルトで使用されないプラットフォームでは@c
+問題を引き起こす可能性があります。@c
+このようなプラットフォームの典型的な例は、@c
+ユーザーがアプリケーション バンドルをどこにでもインストールできると@c
+期待している Windows と MacOS です。
+
+この問題の一般的な解決策は再配置サポートです。@c
+データファイルへのハードコーディングされたパスを使用する代わりに、@c
+必要なサポートファイルの場所が実行時に@c
+@emph{実行されたバイナリに対して相対的に}計算されます。
+
+
+@node Relocation files
+@unnumberedsubsubsec 再配置ファイル
+
+実行時の構成には、実際には別のメカニズムがあります。
+LilyPond は、外部プログラムとライブラリ、@c
+特にシステムフォントを見つけるための @q{FontConfig} 、
+Scheme ファイルを処理するための @q{Guile} ライブラリ、
+PS データを PDF ファイルに変換するための @command{gs} プログラムに@c
+それぞれ大きく依存しています。@c
+それらのすべては、関連するデータファイルを見つけるためにも構成する必要があります。@c
+これを行うために、@command{lilypond} プログラムは@c
+外部ライブラリとプログラムを制御する環境変数を操作するために、
+@file{relocate} というディレクトリ(存在する場合。@c
+下のこのディレクトリが検索される場所を参照してください)
+内のすべてのファイルを解析します。@c
+このような再配置ファイルのフォーマットは単純です。各行には構文があります
+
+@example
+@var{command} @var{key}=@var{value}
+@end example
+
+@noindent
+空の行は無視されます。
+
+@var{command} ディレクティブは次のいずれかです。
+
+@table @code
+
+@item set
+環境変数 @var{key} を無条件に @var{value} にセットします。
+これは以前に設定された値を上書きします。
+
+@item set?
+@var{key} がまだ定義されていない場合にのみ、@c
+環境変数 @var{key} を @var{value} にセットします。@c
+つまり、以前に設定された値を上書きしません。
+
+@item setdir
+@var{value} がディレクトリの場合、@c
+無条件に環境変数 @var{key} を @var{value} にセットします。@c
+それ以外の場合は、警告を発します。
+
+@item setfile
+@var{value} がファイルの場合、@c
+無条件に環境変数 @var{key} を @var{value} にセットします。@c
+それ以外の場合は、警告を発します。
+
+@item prependdir
+環境変数 @var{key} 内のディレクトリのリストにディレクトリ @var{value} を追加します。
+@var{key} が存在しない場合は作成されます。
+
+@end table
+
+(先頭のドル記号でマークされた) 環境変数は @var{value} で許可され、@c
+ディレクティブが実行される前に展開されます。
+
+以下は、GUB から取得した再配置ファイル エントリの 2 つの例です
+を参照してください) 。
+
+@example
+set? FONTCONFIG_FILE=$INSTALLER_PREFIX/etc/fonts/fonts.conf
+prependdir GUILE_LOAD_PATH=$INSTALLER_PREFIX/share/guile/1.8
+@end example
+
+@file{relocate} ディレクトリ内のファイルの解析順序は任意であるため、@c
+再配置ファイルでは、複数の行で同じ環境変数を設定することを避ける必要があります。
+
+
+@node Relocation algorithm
+@unnumberedsubsubsec 再配置アルゴリズム
+
+LilyPond は、次のアルゴリズムを使用してデータファイルを検索します。
+
+@enumerate
+
+@item
+現在実行されている @command{lilypond} バイナリが配置されているディレクトリを@c
+計算します。これを @code{bindir} としましょう。
+(内部) 環境変数 @code{INSTALLER_PREFIX} を @file{@var{bindir}/..}
+(つまり、@code{bindir} の親ディレクトリ) にセットします。
+
+@item
+環境変数 @code{LILYPOND_DATADIR} を確認します。@c
+セットされている場合は、その値を LilyPond のデータ ディレクトリ @code{datadir}
+に使用します。@c
+それ以外の場合は、@file{$INSTALLER_PREFIX/@/share/@/lilypond/@/@var{version}}
+(@var{version} は現在の LilyPond バージョンです) または
+@file{$INSTALLER_PREFIX/@/share/@/lilypond/@/current} を使用します。
+
+@item
+環境変数 @code{LILYPOND_LOCALEDIR} を確認します。@c
+セットされている場合は、その値を LilyPond のロケール データ ディレクトリ
+@code{localedir} に使用します。@c
+それ以外の場合は、@file{$INSTALLER_PREFIX/@/share/@/locale} を使用します。
+
+@item
+環境変数 @code{LILYPOND_RELOCDIR} を確認します。@c
+セットされている場合は、その値を LilyPond の再配置ファイルのディレクトリ
+@code{relocdir} に使用します。@c
+それ以外の場合は、@file{$INSTALLER_PREFIX/@/etc/@/relocate} を使用します。
+
+@item
+@code{datadir} が存在しない場合は、代わりにコンパイル時の値を使用します。
+@code{localedir} についても同様です
+(ただし、@code{relocdir} に関しては無意味なので、同様ではありません) 。
+
+@item
+@code{relocdir} が存在する場合は、@ref{Relocation files} の説明に従って、@c
+このディレクトリ内のすべてのファイルを処理します。
+
+@end enumerate
+
+
+@node LilyPond in chroot jail
+@unnumberedsubsec chroot jail 環境で LilyPond を実行する
+
+LilyPond を chroot jail 環境で実行させるようサーバをセットアップすることは@c
+複雑な作業です。@c
+以下にステップをリスト アップします。@c
+各ステップの中にある例は Ubuntu GNU/Linux 用であり、@c
+@code{sudo} の使用が必要となるかもしれません。
+
+@itemize
+
+@item 必要なパッケージをインストールします:
+LilyPond, Ghostscript, それに ImageMagick。
+
+@item @code{lily} という名前のユーザを作成します:
+
+@example
+adduser lily
+@end example
+
+@noindent
+このコマンドはユーザ @code{lily} のためにホーム フォルダ (@code{/home/lily})
+と新しいグループも作成します。
+
+@item ユーザ @code{lily} のホーム フォルダで、@c
+独立したファイルシステムとして使用するファイルを作成します:
+
+@example
+dd if=/dev/zero of=/home/lily/loopfile bs=1k count= 200000
+@end example
+
+@noindent
+このコマンドは jail ファイルシステムとして使用する
+200MB のファイルを作成します。
+
+@item ループ デバイスを作成し、ファイルシステムを作ってそれをマウントし、@c
+それからユーザ @code{lily} が書き込めるフォルダを作成します:
+
+@example
+mkdir /mnt/lilyloop
+losetup /dev/loop0 /home/lily/loopfile
+mkfs -t ext3 /dev/loop0 200000
+mount -t ext3 /dev/loop0 /mnt/lilyloop
+mkdir /mnt/lilyloop/lilyhome
+chown lily /mnt/lilyloop/lilyhome
+@end example
+
+@item サーバのコンフィグレーションで、JAIL は @code{/mnt/lilyloop} となり、@c
+DIR は @code{/lilyhome} となります。
+
+@item 以下に示すサンプル スクリプトのように必要なファイルをコピーして
+jail の中に大きなディレクトリ ツリーを作成します。
+
+@code{sed} を使うことで必要な実行形式ファイルをコピーすることができます:
+
+@example
+for i in "/usr/local/lilypond/usr/bin/lilypond" "/bin/sh" "/usr/bin/;  \
+  do ldd $i | sed 's/.*=> \/\(.*\/\)\([^(]*\).*/mkdir -p \1 \&\&  \
+    cp -L \/\1\2 \1\2/' | sed 's/\t\/\(.*\/\)\(.*\) (.*)$/mkdir -p  \
+      \1 \&\& cp -L \/\1\2 \1\2/' | sed '/.*=>.*/d'; done
+@end example
+
+@end itemize
+
+@subheading 32-bit Ubuntu 8.04 用のスクリプト例
+
+@example
+#!/bin/sh
+## defaults set here
+
+username=lily
+home=/home
+loopdevice=/dev/loop0
+jaildir=/mnt/lilyloop
+# the prefix (without the leading slash!)
+lilyprefix=usr/local
+# the directory where lilypond is installed on the system
+lilydir=/$lilyprefix/lilypond/
+
+userhome=$home/$username
+loopfile=$userhome/loopfile
+adduser $username
+dd if=/dev/zero of=$loopfile bs=1k count=200000
+mkdir $jaildir
+losetup $loopdevice $loopfile
+mkfs -t ext3 $loopdevice 200000
+mount -t ext3 $loopdevice $jaildir
+mkdir $jaildir/lilyhome
+chown $username $jaildir/lilyhome
+cd $jaildir
+
+mkdir -p bin usr/bin usr/share usr/lib usr/share/fonts $lilyprefix tmp
+chmod a+w tmp
+
+cp -r -L $lilydir $lilyprefix
+cp -L /bin/sh /bin/rm bin
+cp -L /usr/bin/convert /usr/bin/gs usr/bin
+cp -L /usr/share/fonts/truetype usr/share/fonts
+
+# Now the library copying magic
+for i in "$lilydir/usr/bin/lilypond" "$lilydir/usr/bin/guile" "/bin/sh"  \
+  "/bin/rm" "/usr/bin/gs" "/usr/bin/convert"; do ldd $i | sed 's/.*=>  \
+    \/\(.*\/\)\([^(]*\).*/mkdir -p \1 \&\& cp -L \/\1\2 \1\2/' | sed  \
+      's/\t\/\(.*\/\)\(.*\) (.*)$/mkdir -p \1 \&\& cp -L \/\1\2 \1\2/'  \
+        | sed '/.*=>.*/d'; done | sh -s
+
+# The shared files for Ghostscript...
+      cp -L -r /usr/share/ghostscript usr/share
+# The shared files for ImageMagick
+      cp -L -r /usr/lib/ImageMagick* usr/lib
+
+### Now, assuming that you have test.ly in /mnt/lilyloop/lilyhome,
+### you should be able to run:
+### Note that /$lilyprefix/bin/lilypond is a script, which sets the
+### LD_LIBRARY_PATH - this is crucial
+      /$lilyprefix/bin/lilypond -jlily,lily,/mnt/lilyloop,/lilyhome test.ly
+@end example
+
+@c " keep quote signs balanced for context-sensitive editors
+
+
+@node Error messages
+@section エラー メッセージ
+
+@cindex error messages (エラー メッセージ)
+ファイルのコンパイルの最中にはさまざまなエラー メッセージが@c
+表示される可能性があります。
+
+@table @emph
+
+@item Warning
+@cindex warning (警告)
+何か疑わしいことがあります。@c
+あなたが何か普通でないことをリクエストしている場合は、@c
+そのメッセージを理解して、それを無視することができます。@c
+しかしながら、@c
+Warning は通常、入力ファイルに何か問題があることを示しています。
+
+@item Error
+何か明らかに問題があります。@c
+カレントの処理ステップ (構文解析、構文解釈、フォーマット) は終了され、@c
+次のステップは飛ばされます。
+
+@item Fatal error
+@cindex error (エラー)
+@cindex fatal error (致命的なエラー)
+何か明らかに問題があり、LilyPond はコンパイルを続けられません。@c
+これが起きることは稀です。@c
+これが起こるのはたいてい、フォントのインストールに問題があるためです。
+
+@item Scheme error
+@cindex trace, Scheme (Scheme トレース)
+@cindex call trace (トレースを呼び出す)
+@cindex Scheme error (Scheme エラー)
+Scheme コードの実行中に発生するこのエラーは
+Scheme インタプリタによって引き起こされます。@c
+冗長オプション
+(@option{-V} または @option{--verbose})
+付きで実行している場合、@c
+問題となっている関数呼び出しの呼び出し追跡が表示されます。
+
+@item Programming error
+@cindex Programming error (プログラミング エラー)
+内部的な矛盾があります。@c
+このエラー メッセージはプログラマとデバッガを助けることを意図したものです。@c
+通常、それらは無視できます。@c
+時々、それらは非常に大きなメッセージとなり、他の出力を見えにくくします。
+
+@item Aborted (core dumped)
+これは、プログラムをクラッシュさせる深刻なプログラミング エラーを@c
+示しています。@c
+そのようなエラーは決定的なものだと考えられます。@c
+あなたがそのようなエラーでつまずいた場合、バグ レポートを送ってください。
+@end table
+
+@cindex errors, message format (エラー メッセージの形式)
+警告とエラーを入力ファイルのある部分にリンクさせることが可能な場合、@c
+エラー メッセージは以下のような形式になります:
+
+@example
+@var{filename}:@var{lineno}:@var{columnno}: @var{message}
+@var{offending input line}
+@end example
+
+エラーが見つかった場所を示すために問題のある行に改行が挿入されます。@c
+例えば:
+
+@example
+test.ly:2:19: error: not a duration: 5
+  @{ c'4 e'
+           5 g' @}
+@end example
+
+これらの位置は LilyPond が警告やエラーが発生した位置を@c
+最善を尽くして推測したものですが、@c
+(ごく当たり前のことですが) 警告とエラーは@c
+何か予期しないことが起こったときに発生するものです。@c
+入力ファイルの示された行にエラーを見つけることができない場合は、@c
+示された位置の 1 行か 2 行上をチェックしてみてください。
+
+診断は多くの処理段階のあらゆる時点で発生し得ることに注意してください。@c
+例えば、入力が複数回処理される（つまり、MIDI とレイアウト出力）@c
+または同じ音楽変数がコンテキストで使われると、@c
+同じメッセージが何回か現れることがあります。
+
+エラーについての更なる情報が @ref{Common errors} で提供されています。
+
+
+@node Common errors
+@section 一般的なエラー
+
+以下で説明するエラーがしばしば発生しますが、@c
+その原因は明白でなかったり、見つけにくかったりします。@c
+目を通しておくと、それらのエラーに対処しやすくなります。
+
+
+@node Music runs off the page
+@unnumberedsubsec 楽譜がページからはみ出る
+
+楽譜がページの右マージンを越えてはみ出る、あるいは過度に密集するのは、@c
+ほぼ間違いなく音符の演奏時間に誤りがあり、@c
+小節の最後の音符が小節線を越えてしまうためです。@c
+ある小節の最後の音符が自動的に挿入される小節線の所で終わらなくても@c
+無効ではありません。@c
+なぜなら、その音符は次の小節に持ち越されるためです。@c
+しかしながら、そのような持ち越しが発生する小節が長く続くと、@c
+楽譜は密集して表示されたり、ページからはみ出たりします。@c
+ページからはみ出るのは、@c
+自動改行を挿入できるのは正しく終了する小節
+(その小節のすべての音符が小節の中で終了しています)
+の後ろだけだからです。@c
+
+@warning{誤った演奏時間は改行を抑制し、結果として楽譜が過度に密集したり、c@
+ページからはみ出たりする可能性が生じます。}
+
+小節チェックを使用していれば、誤った演奏時間を簡単に見つけることができます。@c
+@rnotationnamed{Bar and bar number checks, 小節と小節番号のチェック} を参照してください。
+
+あなたがそのような音符が持ち越される小節を続けることを意図しているのであれば、@c
+改行させたい場所に不可視の小節線を挿入する必要があります。@c
+詳細は
+@rnotationnamed{Bar lines, 小節線} を参照してください。
+
+
+@node An extra staff appears
+@unnumberedsubsec 余計な譜が表示される
+
+コンテキストが @code{\new} や @code{\context} で明示的に作成されていない場合、@c
+既存のコンテキストには適用できないコマンドに遭遇した時点で@c
+暗黙的に作成されます。@c
+単純な楽譜では、コンテキストの自動作成は有用であり、@c
+LilyPond マニュアルのほとんどの例はこの手法を用いています。@c
+しかしながら、コンテキストの暗黙的な作成はしばしば予期しない譜や楽譜を@c
+発生させてしまいます。@c
+例えば、以下のコードは後に続く譜の中にあるすべての符頭を赤にすることを@c
+意図していますが、@c
+結果は 2 つの譜が表示され、下の譜の符頭の色はデフォルトの黒のままとなります。
+
+@lilypond[quote,verbatim,fragment]
+\override Staff.NoteHead.color = #red
+\new Staff { a' }
+@end lilypond
+
+これは、(符頭色の) オーバライドが処理される時に
+@code{Staff} コンテキストが存在していないため、@c
+@code{Staff} コンテキストが暗黙的に作成され、@c
+そのコンテキストにオーバライドが適用されるからです。@c
+その後に @code{\new Staff} コマンドにより@c
+もう 1 つ別の @code{Staff} コンテキストが作成され、@c
+そこに音符が配置されます。@c
+すべての符頭を赤にする正しいコードは以下のようになります:
+
+@lilypond[quote,verbatim]
+\new Staff {
+  \override Staff.NoteHead.color = #red
+  a'
+}
+@end lilypond
+
+@node Error message Unbound variable %
+@unnumberedsubsec エラー メッセージ Unbound variable %
+
+このエラー メッセージは、@emph{Scheme} 形式ではなく @emph{LilyPond} 形式の@c
+コメントを含む Scheme ルーチンが呼び出されるたびに、@c
+コンソール出力またはログ ファイルの最後に表示されます。
+
+LilyPond 形式のコメントはパーセント記号 (@code{%}) で始まり、@c
+Scheme ルーチンの中で使うことはできません。@c
+Scheme 形式のコメントはセミコロン (@code{;}) で始まります。
+
+@node Error message FT_Get_Glyph_Name
+@unnumberedsubsec エラー メッセージ FT_Get_Glyph_Name
+
+入力ファイルが非 ASCII キャラクタを保持していて、@c
+UTF-8 エンコードで保存されていない場合、@c
+このエラー メッセージがコンソール出力やログ ファイルに表示されます。@c
+詳細は、
+@rnotationnamed{Text encoding, テキスト エンコーディング} を参照してください。
+
+
+@node Warning staff affinities should only decrease
+@unnumberedsubsec 警告 staff affinities should only decrease
+
+この警告は、譜刻された出力の中に譜が無い場合に表示されます。@c
+例えば、リード譜に @code{ChordName} コンテキストと @code{Lyrics} コンテキスト@c
+しか無い場合です。@c
+この警告は、入力の始めに以下を挿入することで@c
+譜として振舞うコンテキストを作ることで回避できます:
+
+@example
+\override VerticalAxisGroup.staff-affinity = ##f
+@end example
+
+@noindent
+詳細は @rnotationnamed{Flexible vertical spacing within systems, システム内部の可変な垂直方向のスペース} の
+@qq{譜ではない行のスペース} を参照してください。
+
+
+@node Error message unexpected new
+@unnumberedsubsec エラー メッセージ unexpected @code{\new}
+
+@code{\score} ブロックは @emph{1 つの} 音楽表記を含む必要があります。
+@code{\new Staff} や @code{\new StaffGroup}、その他 @code{\new} で生成される@c
+同様のコンテキストが波括弧 @code{@{ @dots{} @}} や@c
+二重の山括弧 @code{<< @dots{} >>} で囲まれずに複数存在する場合に、@c
+エラー メッセージが出力されます。以下のようにです:
+
+@example
+\score @{
+  % Invalid! Generates error: syntax error, unexpected \new
+  \new Staff @{ @dots{} @}
+  \new Staff @{ @dots{} @}
+@}
+@end example
+
+エラーを避けるためには、全ての @code{\new} 文を波括弧あるいは二重の山括弧で@c
+囲んでください。
+
+波括弧は連続的に @code{\new} 文を導入します:
+
+@lilypond[quote,verbatim]
+\score {
+  {
+    \new Staff { a' a' a' a' }
+    \new Staff { g' g' g' g' }
+  }
+}
+@end lilypond
+
+@noindent
+しかし、二重の山括弧を用いるべき場面の方が多いでしょう。@c
+譜は並行に (つまり、同時に) 導入されます:
+
+@lilypond[quote,verbatim]
+\score {
+  <<
+    \new Staff { a' a' a' a' }
+    \new Staff { g' g' g' g' }
+  >>
+}
+@end lilypond
+
+@node Warning this voice needs a voiceXx or shiftXx setting
+@unnumberedsubsec 警告 this voice needs a @code{\voiceXx} or @code{\shiftXx} setting
+
+2 つの異なるボイスが同じ向きの符幹を持ち、それらが同じタイミングで出現する@c
+時、ボイスにシフトが指定されていない場合に
+@samp{warning: this voice needs a \voiceXx or \shiftXx setting}
+という警告メッセージが LilyPond ファイルをコンパイルする際に出力されます。@c
+この警告は符幹が見えない場合 (例えば、全音符) にも、@c
+同じピッチにある短い方の音符の符幹が同じ向きにある場合、出力されます。
+
+符幹の向きは、@code{\voiceOne} などによって指定されない限り、@c
+譜の中での音符の位置に依存します。このとき、警告は@c
+符幹が同じ向きになってしまった場合 -- つまり、複数のボイスが譜の上半分または@c
+下半分に固まってしまった場合 -- にのみ出力されます。
+
+@code{\voiceOne} などを用いることによって、符幹の向きとシフトを@c
+指定したボイスで音符を配置した場合、これらの警告を回避することができます。
+
+より大きいボイス番号を持つ音符 (例えば @code{\voiceThree} など) は、@c
+音符列の衝突を避けるために自動的に移動します。符幹のある音符に対しては@c
+移動が目に見えますが、全音符は実際に符頭が衝突しない限り、あるいは@c
+ボイスが自然な順番に配置されていない場合 (例えば @code{\voiceThree} が
+@code{\voiceOne} よりも高い位置にある場合) ではない限り、@c
+移動しているように見えません。
+
+@morerefs
+@rlearningnamed{Explicitly instantiating voices, ボイスを明示的にインスタンス化する},
+@rlearningnamed{Real music example, 実際の音楽からの例},
+@rnotationnamed{Single-staff polyphony, 単一譜の多声},
+@rnotationnamed{Collision resolution, 衝突の解決}

@@ -1,0 +1,61 @@
+\input texinfo @c -*- coding: utf-8; mode: texinfo; documentlanguage: de -*-
+@ignore
+    Translation of GIT committish: ebe492ca408fb0d9abf80b94c56197eef8dc2f09
+
+    When revising a translation, copy the HEAD committish of the
+    version that you are working on.  For details, see the Contributors'
+    Guide, node Updating translation committishes.
+@end ignore
+@settitle Aufsatz über den automatischen Musiksatz
+@documentencoding UTF-8
+@documentlanguage de
+@afourpaper
+
+@c Translators: Till Paala
+
+@macro manualIntro
+Dieser Aufsatz diskutiert den automatischen Musiksatz von
+LilyPond Version @version{}.
+@end macro
+
+@c `Essay' was born 2002-06-03 with git commit e38f5fc...
+@macro copyrightDeclare
+Copyright @copyright{} 2002--2026 bei den Autoren.
+@end macro
+
+@set FDL
+@include de/macros.itexi
+
+
+@lilyTitlePage{Aufsatz über den automatischen Musiksatz}
+
+
+@ifnottex
+
+@menu
+* Music engraving::
+* Literature list::
+* GNU Free Documentation License:: Die Lizenz dieses Dokuments.
+* Index of commands and concepts::
+@end menu
+
+@docMain
+@end ifnottex
+
+@contents
+
+@iftex
+@allowcodebreaks false
+@end iftex
+
+@include de/essay/engraving.itely
+@include de/essay/literature.itely
+
+@include en/fdl.itexi
+
+@node Index of commands and concepts
+@appendix Register
+
+@printindex cp
+
+@bye

@@ -1,0 +1,12 @@
+%% Translation of GIT committish: 70abecb938c2bb752967bd56b7402dd8129838a5
+  texidoces = "
+Este fragmento muestra cómo conseguir @code{StaffGroups} alineados
+verticalmente con un @code{SystemStartBar} por cada
+@code{StaffGroup}, pero sin conectarlos entre sí.
+
+Observe que esto solo funciona correctamente para música que quepa
+completamente dentro de un único sistema.
+
+"
+
+  doctitlees = "Grupos de pentagramas alineados verticalmente sin barra inicial de conexión"

@@ -1,0 +1,14 @@
+%% Translation of GIT committish: d7e42f37c3c945ebff36b1c4bcb6c5da5051caa5
+  texidoces = "
+Al transcribir música mensural, es útil poner un incipit al
+comienzo de la pieza para indicar la tonalidad y el compás
+originales.  Aunque en la actualidad los músicos están
+acostumbrados a las líneas divisorias para reconocer más
+rápidamente los patrones rítmicos, en el período de la música
+mensural aún no se habían inventado las barras de compás; de
+hecho, el metro cambiaba con frecuencia cada pocas notas.  Como
+compromiso, las barras de compás se imprimían muchas veces entre
+las pautas en lugar de dibujarse atravesando las líneas del
+pentagrama.
+"
+  doctitlees = "@emph{Incipits}"

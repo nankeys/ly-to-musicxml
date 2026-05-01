@@ -1,0 +1,33 @@
+%% Translation of GIT committish: c95d569e9013276fd0595366c79eebdf772bea77
+  texidocfr = "
+Les altérations supprimées lors d'un changement de tonalité sont par
+défaut accolées à la nouvelle armure. Ce comportement peut s'adapter
+grâce à la propriété @code{break-align-orders} de l'objet
+@code{BreakAlignment}.
+
+Si l'on se réfère à la référence des propriétés internes à propos de
+l'objet @rinternals{break-alignment-interface}, l'ordre du deuxième
+élément est :
+
+@example
+ambitus
+breathing-sign
+clef
+cue-clef
+cue-end-clef
+custos
+key-cancellation
+key-signature
+left-edge
+signum-repetitionis
+staff-bar
+staff-ellipsis
+time-signature
+@end example
+
+La consultation de cette liste nous apprend qu'il faut déplacer
+@code{key-cancellation} pour le mettre avant @code{staff-bar}. Ceci se
+réalise à l'aide de la fonction @code{\\breakAlignInsert}.
+"
+
+  doctitlefr = "Séparation entre altérations annulées et nouvelle armure"

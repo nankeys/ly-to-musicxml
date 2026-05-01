@@ -1,0 +1,16 @@
+%% Translation of GIT committish: c043783aac6c35926d633aa2daf60ed4f2e7ca7a
+  texidocfr = "
+
+La fonction @code{\\partCombine} prend deux expressions musicales
+contenant chacune une partie et les distribue dans quatre contextes
+@code{Voice} nommés « two », « one », « solo » et « chords » selon le
+moment et la manière dont ces parties fusionnent en une voix commune.
+
+Des variantes de @code{\\partCombine} -- @code{\\partCombineUp} et
+@code{\\partCombineDown} -- permettent de fusionner des voix aux hampes
+ascendantes et descendantes. Les combiner alors pour présenter quatre
+parties sur une seule portée requiert cependant des réglages
+spécifiques, comme indiqué ci-dessous.
+"
+
+  doctitlefr = "Deux @code{\\partCombine} sur une même portée"

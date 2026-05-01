@@ -1,0 +1,731 @@
+@c -*- coding: utf-8; mode: texinfo; documentlanguage: de -*-
+
+@ignore
+    Translation of GIT committish: 5f4537747fe9ac096e0a085470a8eedf5916b7d2
+
+    When revising a translation, copy the HEAD committish of the
+    version that you are working on.  For details, see the Contributors'
+    Guide, node Updating translation committishes..
+@end ignore
+
+@c \version "2.19.21"
+@c Translators: Till Paala, Reinhold Kainhofer, Michael Gerdau
+@c Translation checkers: Hajo Bäß
+
+@node Tutorial
+@chapter Tutorium
+
+Dieses Kapitel stellt dem Leser das grundlegende Arbeiten mit LilyPond
+vor.
+
+
+@node Compiling a file
+@section Eine Quelldatei übersetzen
+
+@cindex Kompilation
+@cindex Kompilieren
+@cindex erstes Beispiel
+@cindex Beispiel, erstes
+@cindex @"Ubersetzen von Quelltext
+@cindex Groß- und Kleinschreibung
+@cindex Quelltext, übersetzen
+@cindex Großbuchstaben
+@cindex Kleinbuchstaben
+
+@qq{Kompilation} ist der Begriff, der benutzt wird, um eine
+LilyPond-Eingabedatei mit dem Programm LilyPond in eine
+Notenausgabe umzuwandeln.  Ausgabedateien sind in erster Linie
+PDF-Dateien (zum Anschauen und Drucken), MIDI (zum Abspielen)
+und PNG (für die Benutzung auf Internetseiten).  Die Eingabedateien
+von LilyPond sind einfache Textdateien.
+
+Das erste Beispiel zeigt, wie
+solch eine einfache Eingabedatei ausschauen kann.
+
+@example
+@{
+  c' e' g' e'
+@}
+@end example
+
+@noindent
+Die graphische Ausgabe ist:
+
+@c No 'verbatim' option here.
+@lilypond[quote]
+{
+  c' e' g' e'
+}
+@end lilypond
+
+@warning{In jeder LilyPond-Datei müssen
+@strong{@{ geschweifte Klammern @}} um die Noten
+oder Gesangstext
+gesetzt werden. Vor und hinter den Klammern sollten
+Leerzeichen eingegeben werden, damit keine Unklarheiten
+in Verbindung mit den eigentlichen Notensymbolen entstehen.
+An Anfang und Ende der Zeile können diese Leerzeichen auch
+weggelassen werden. Es kann sein, dass in diesem Handbuch
+die Klammern in manchen Beispielen fehlen, aber man sollte
+immer daran denken, sie in den eigenen Dateien zu benutzen!
+Mehr Informationen zu der Darstellung der Beispiele in diesem
+Handbuch gibt der Abschnitt @ref{How to read the manuals}.}
+
+Zusätzlich unterscheidet LilyPond @strong{Groß- und Kleinschreibung}.
+@w{@samp{ @{ c d e @}}} ist zulässiger Code,
+@w{@samp{ @{ C D E @}}} dagegen resultiert in einer Fehlermeldung.
+
+
+@node How to write input files
+@section Wie werden Eingabe-Dateien geschrieben
+
+Dieser Abschnitt erklärt die grundlegende LilyPond-Syntax und hilft
+bei den ersten Anfängen, eine LilyPond-Eingabedatei zu schreiben.
+
+
+@node Simple notation
+@subsection Einfache Notation
+
+@cindex einfache Notation
+@cindex Notation, einfach
+
+LilyPond fügt einige Bestandteile des Notenbildes automatisch hinzu. Im
+nächsten Beispiel sind nur vier Tonhöhen angegeben, aber LilyPond setzt
+trotzdem einen Schlüssel, eine Taktangabe und Notendauern.
+
+@lilypond[verbatim,quote]
+{
+  c' e' g' e'
+}
+@end lilypond
+
+@noindent
+Diese Einstellungen können verändert werden, aber in den meisten Fällen
+sind die automatischen Werte durchaus brauchbar.
+
+
+@node Pitches
+@unnumberedsubsubsec Tonhöhen
+
+@cindex Tonhöhen
+@cindex relativer Modus
+@cindex Apostroph
+@cindex Komma
+@cindex Versetzungszeichen und relativer Modus
+@cindex relativer Modus und Versetzungszeichen
+
+@funindex \relative
+@funindex '
+@funindex ,
+
+
+Glossar: @rglos{pitch}, @rglos{interval},
+@rglos{scale}, @rglos{middle C}, @rglos{octave},
+@rglos{accidental}.
+
+In LilyPond werden Tonhöhen generell mit Kleinbuchstaben eingegeben.
+Notennamen in allen Beispielen in diesem Abschnitt nutzen das
+niederländische Namenssystem (weiße Klaviertasten sind c, d, e, f,
+g, a,@tie{}b).  LilyPond unterstützt auch viele weitere Namenssysteme
+wie @q{English} oder @q{Fixed-Do} (do, re, mi, @dots{}).  Siehe
+@notation{Notenbezeichnungen in anderen Sprachen};
+@c Addition for German users about pitch naming conventions
+dort wird auch beschrieben, wie sich deutsche Notennamen benutzen
+lassen (@samp{h} statt @samp{b} und @samp{b} statt @samp{bes}).
+@c end addition
+Die Buchstaben @samp{c} bis @samp{b} bezeichnen Tonhöhen in der
+@q{Oktave} unterhalb des @notation{mittleren C}.  Das Anhängen von
+@samp{'} oder @samp{,} an die Noten markiert eine höhere oder
+niedrigere Oktave.
+Hier ist eine Tonleiter, beginnend auf dem @notation{mittleren C},
+gefolgt von einem Arpeggio:
+
+@lilypond[verbatim,quote]
+{ c' d' e' f' g' a' b' c'' g c' e' g' c'' e'' g'' c''' }
+@end lilypond
+
+Am einfachsten können Noten im @code{\relative}-Modus
+eingegeben werden. In diesem Modus wird die Oktave der Note automatisch
+gewählt, indem angenommen wird, dass die folgende Note immer so nah
+wie möglich in Bezug auf die vorhergehende gesetzt wird, d. h. sie
+wird höchstens drei Notenzeilen höher oder tiefer als die vorhergehende
+Note gesetzt. Fangen
+wir unser erstes Notationsbeispiel mit einer @notation{Tonleiter} an, wo also
+die nächste Note immer nur eine Notenlinie über der vorherigen steht.
+
+@lilypond[verbatim,quote]
+\relative {
+  c' d e f
+  g a b c
+}
+@end lilypond
+
+@noindent
+Die erste Note ist ein @notation{eingestrichenes C}, notiert als
+@code{c'}.  Jede folgende Note befindet sich so nah wie möglich bei
+der vorherigen -- das erste @samp{C} ist also das nächste@tie{}C vom
+eingestrichenen@tie{}C aus gerechnet. Darauf folgt das
+nächstmögliche@tie{}D in Bezug auf die vorhergehende Note. Mit diesen
+Regeln können auch Melodien mit größeren Intervallen im relativen Modus
+gebildet werden:
+
+@lilypond[verbatim,quote]
+\relative {
+  d' f a g
+  c b f d
+}
+@end lilypond
+
+@noindent
+Die erste Note des vorherigen Beispiels -- das @code{d'} mit einem
+angehängten @code{'} -- ist das D in der Oktave beginnend beim
+mittleren@tie{}C bis hin zum darüber liegenden@tie{}H.
+
+Indem man Apostrophe @code{'} (Taste Shift+#) oder Kommata @code{,}
+zur ersten Note hinzufügt (oder entfernt), kann die Oktave der ersten
+Note verändert werden:
+
+@lilypond[verbatim,quote]
+\relative {
+  e'' c a c
+}
+@end lilypond
+
+Der relative Modus kann zunächst verwirrend erscheinen, aber es ist die
+einfachste Art, die meisten Melodien zu notieren. Schauen wir uns an,
+wie diese relative Berechnung in der Praxis funktioniert. Wenn wir mit
+einem@tie{}H beginnen (@code{b} in der LilyPond-Syntax), welches sich
+auf der mittleren Linie im Violinschlüssel befindet, können wir C, D
+und@tie{}E innerhalb von drei Notenzeilen aufwärts notieren, und A, G
+und@tie{}F innerhalb von drei Notenzeilen unter dem H. Wenn also die
+Note, die auf das@tie{}H folgt, ein C, D oder@tie{}E ist, setzt
+LilyPond es oberhalb des@tie{}Hs, wenn es ein A, G oder@tie{}F ist,
+wird es darunter gesetzt.
+
+@c KEEP LY
+@lilypond[verbatim,quote]
+\relative {
+  b' c  % c ist 1 Zeile aufwärts, also c über dem b
+  b d  % d ist 2 Zeilen aufwärts, oder 5 runter, also d über dem b
+  b e  % e ist 3 aufwärts oder 4 runter, also e über dem b
+  b a  % a ist 6 aufwärts oder 1 runter, also a unter dem b
+  b g  % g ist 5 aufwärts oder 2 runter, also g unter dem b
+  b f  % f ist 4 aufwärts oder 3 runter, also f unter dem b
+}
+@end lilypond
+
+Die gleiche Berechnung findet auch statt, wenn eine der Noten erhöht
+oder erniedrigt ist. @notation{Versetzungszeichen} werden
+@strong{vollständig ignoriert} bei der Berechnung. Genau die
+gleiche Berechnung wird analog von jeder folgenden Tonhöhe aus
+für die nächste Tonhöhe neu ausgeführt.
+
+Um Intervalle zu notieren, die größer als drei Notenzeilen sind,
+kann man die Oktave verändern. Mit einem Apostroph @samp{'}
+(Taste Shift+#) direkt hinter dem Notennamen wird die Oktave um
+eins erhöht, mit einem Komma @samp{,} um eins erniedrigt.
+
+@lilypond[verbatim,quote]
+\relative {
+  a' a, c' f,
+  g g'' a,, f'
+}
+@end lilypond
+
+@noindent
+Um eine Tonhöhe um zwei (oder mehr!) Oktaven zu verändern,
+werden mehrfache @code{''} oder @code{,,} benutzt -- es muss
+sich dabei wirklich um zwei einzelne Apostrophen und nicht um das
+Anführungszeichen @samp{"}@tie{} (Taste Shift+2) handeln!
+
+@node Durations (rhythms)
+@unnumberedsubsubsec Tondauern (Rhythmen)
+
+@cindex Tondauer
+@cindex Notendauer
+@cindex Dauern
+@cindex Rhythmus
+@cindex Ganze Noten
+@cindex Halbe Noten
+@cindex Viertelnoten
+@cindex punktierte Noten
+
+Glossar: @rglos{beam}, @rglos{duration},
+@rglos{whole note}, @rglos{half note}, @rglos{quarter note},
+@rglos{dotted note}.
+
+Die @notation{Dauer} einer Note wird durch eine Zahl bezeichnet,
+die direkt auf den Notennamen folgend eingegeben wird.
+@samp{1} für eine @notation{ganze Note}, @samp{2} für eine
+@notation{halbe Note}, @samp{4} für eine @notation{Viertelnote}
+und so weiter. @notation{Notenhälse} und @notation{Balken} werden
+automatisch hinzugefügt.
+
+Wenn keine Dauer bezeichnet wird, wird die der vorhergehenden Note
+verwendet. Für die erste Note ist eine Viertel als Standard definiert.
+
+@lilypond[verbatim,quote]
+\relative {
+  a'1
+  a2 a4 a8 a
+  a16 a a a a32 a a a a64 a a a a a a a a2
+}
+@end lilypond
+
+Um @notation{punktierte Noten} zu erzeugen, wird einfach ein Punkt
+@samp{.} hinter die Notendauer geschrieben. Die Dauer einer
+punktierten Note muss explizit, also inklusive der Nummer,
+angegeben werden.
+
+@lilypond[verbatim,quote]
+\relative {
+  a'4 a a4. a8
+  a8. a16 a a8. a8 a4.
+}
+@end lilypond
+
+@node Rests
+@unnumberedsubsubsec Pausen
+
+@cindex Pausen
+@cindex schreiben von Pausen
+@cindex notieren von Pausen
+
+Eine @notation{Pause} wird genauso wie eine Noten eingegeben; ihre
+Bezeichnung ist @samp{r}.
+
+@lilypond[verbatim,quote]
+\relative {
+  a'4 r r2
+  r8 a r4 r4. r8
+}
+@end lilypond
+
+
+@node Time signature
+@unnumberedsubsubsec Taktartangabe
+
+@cindex Taktart
+
+@funindex \time
+
+Glossar: @rglos{time signature}.
+
+Die @notation{Taktart} wird mit dem
+@code{\time}-Befehl gesetzt:
+
+@lilypond[verbatim,quote]
+\relative {
+  \time 3/4
+  a'4 a a
+  \time 6/8
+  a4. a
+  \time 4/4
+  a4 a a a
+}
+@end lilypond
+
+@node Tempo marks
+@unnumberedsubsubsec Tempobezeichnung
+
+@cindex Tempobezeichnung
+@cindex Metronom-Angabe
+
+@funindex \tempo
+
+Glossar: @rglos{tempo indication}, @rglos{metronome}.
+
+Die @notation{Tempobezeichnung} und die @notation{Metronom-Angabe} werden
+mit dem @code{\tempo}-Befehl gesetzt:
+
+@lilypond[verbatim,quote]
+\relative {
+  \time 3/4
+  \tempo "Andante"
+  a'4 a a
+  \time 6/8
+  \tempo 4. = 96
+  a4. a
+  \time 4/4
+  \tempo  "Presto" 4 = 120
+  a4 a a a
+}
+@end lilypond
+
+
+@node Clef
+@unnumberedsubsubsec Notenschlüssel
+
+@cindex Schlüssel
+@cindex Alt
+@cindex Sopran
+@cindex Tenor
+@cindex Bass
+
+@funindex \clef
+
+Glossar: @rglos{clef}.
+
+Der @notation{Notenschlüssel} wird mit dem @code{\clef}-Befehl
+gesetzt:
+
+@lilypond[verbatim,quote]
+\relative {
+  \clef treble
+  c'1
+  \clef alto
+  c1
+  \clef tenor
+  c1
+  \clef bass
+  c1
+}
+@end lilypond
+
+
+@node All together
+@unnumberedsubsubsec Alles zusammen
+
+Hier ist ein kleines Beispiel, dass all diese Definitionen beinhaltet:
+
+@lilypond[verbatim,quote]
+\relative {
+  \clef bass
+  \time 3/4
+  \tempo "Andante" 4 = 120
+  c,2 e8 c'
+  g'2.
+  f4 e d
+  c4 c, r4
+}
+@end lilypond
+
+
+@morerefs
+Notationsreferenz: @rnotationnamed{Writing pitches, Tonhöhen setzen},
+@rnotationnamed{Writing rhythms, Rhythmen eingeben}, @rnotationnamed{Writing rests, Pausen eingeben},
+@rnotationnamed{Time signature, Taktangabe}, @rnotationnamed{Clef, Notenschlüssel}.
+
+
+@node Working on input files
+@subsection Arbeiten an Eingabe-Dateien
+
+@cindex geschweifte Klammern
+@cindex Klammern, geschweift
+@cindex Kommentare
+@cindex Zeilenkommentare
+@cindex Block-Kommentare
+@cindex Groß- und Kleinschreibung
+@cindex Ausdrücke
+@cindex Großbuchstaben
+@cindex Kleinbuchstaben
+@cindex Versionierung
+@cindex Version
+@cindex Versionsnummer
+
+@funindex \version
+@funindex @{ ... @}
+@funindexpre %
+@funindex %@{ ... %@}
+
+
+LilyPonds Quelldateien ähneln Dateien in den meisten
+Programmiersprachen:  Sie enthalten eine Versionsbezeichnung,
+es ist auf Groß- und Kleinschreibung
+zu achten und Leerzeichen werden ignoriert.  Ausdrücke werden
+mit geschweiften Klammern @w{@code{@{ @}}} eingeklammert und
+mit dem Prozentzeichen @samp{%} auskommentiert
+oder mit @w{@samp{%@{ @dots{} %@}}} umgeben.
+
+Wenn das jetzt unverständlich erscheint, sind hier die Erklärungen:
+
+@itemize
+@item
+@strong{Versionsbezeichnung}:
+Jede LilyPond-Datei soll eine Versionsbezeichnung enthalten. Eine
+Versionsbezeichnung ist eine Zeile, die die Version von LilyPond
+deklariert, für die die Datei geschrieben wurde, wie in dem
+Beispiel:
+
+@example
+\version "@version{}"
+@end example
+
+Üblicherweise wird die Versionsbezeichnung ganz oben in die Datei
+geschrieben.
+
+Die Versionsbezeichnung ist aus zwei Gründen wichtig:  1. kann
+man mit ihrer Hilfe automatische Aktualisierungen der Eingabedateien
+vornehmen, wenn sich die LilyPond-Syntax ändern sollte.  2. wird
+hier die Version von LilyPond beschrieben, die nötig ist, um die
+Datei zu kompilieren.
+
+Wenn die Versionsbezeichnung in einer Datei fehlt, gibt LilyPond
+eine Warnung während der Kompilation der Datei aus.
+
+@item
+@strong{Groß- und Kleinschreibung:}
+Die Bedeutung eines Zeichens verändert sich, je
+nachdem, ob es groß (@samp{A}, @samp{B}, @samp{S}, @samp{T}) oder
+klein (@samp{a}, @samp{b}, @samp{s}, @samp{t}) geschrieben wird.
+Noten müssen immer klein geschrieben werden,
+@w{@samp{@{@tie{}c d e@tie{}@}}} funktioniert, während
+@w{@samp{@{@tie{}C D E@tie{}@}}} einen Fehler produziert.
+
+@item @strong{Leerzeichen:}
+Es spielt keine Rolle, wie viele Leerzeichen oder Tabulatoren oder
+leere Zeilen sich zwischen den Zeichen der Quelldatei befinden.
+
+@example
+@{ c d e @}
+@end example
+
+@noindent
+bedeutet das Gleiche wie
+
+@example
+@{ c @ @ @ @ @  d e @}
+@end example
+
+@noindent
+oder
+
+@example
+@{ c4                        d
+                     e @}
+@end example
+
+@noindent
+Natürlich ist das letzte Beispiel etwas schwer zu lesen. Eine gute Daumenregel
+ist es, Code-Blöcke mit zwei Leerzeichen einzurücken:
+@example
+@{
+  c4 d e
+@}
+@end example
+
+Leerzeichen @emph{sind} jedoch nötig, um viele syntaktische Elemente
+voneinander zu trennen.  Leerzeichen können also immer @emph{hinzugefügt}
+werden, aber sie dürfen nicht @emph{entfernt} werden.  Da fehlende
+Leerzeichen sehr seltsame Fehlermeldungen hervorrufen können, wird
+es nahe gelegt, immer ein Leerzeichen vor und nach jedem syntaktischen
+Element, etwa vor und nach geschweiften Klammern, einzufügen.
+
+@item @strong{Ausdrücke:}
+Auch der kleinste Abschnitt an LilyPond-Code muss in
+@strong{@{@tie{}geschweifte Klammern@tie{}@}} eingeschlossen werden. Diese
+Klammern zeigen LilyPond an, dass es sich um einen zusammengehörenden
+musikalischen Ausdruck handelt, genauso wie Klammern @q{()} in der Mathematik.
+Die Klammern sollten von jeweils einem Leerzeichen umgeben sein, um
+Zweideutigkeiten auszuschließen, es sei denn, sie
+befinden sich am Anfang oder Ende einer Zeile.
+
+Ein LilyPond-Befehl gefolgt von einem einfachen Ausdruck
+in Klammern (wie etwa @q{@w{@code{\relative c' @{ @dots{} @}}}})
+wird auch als ein einzelner Musikausdruck gewertet.
+
+@cindex Kommentare
+@cindex Zeilenkommentare
+@cindex Blockkommentare
+
+@item
+@strong{Kommentare:}
+Ein Kommentar ist eine Bemerkung für den menschlichen Leser
+einer Quelldatei, es wird bei der Dateianalyse durch das Programm
+ignoriert, so dass es also keine Auswirkung auf die Druckausgabe der
+Noten hat. Es gibt zwei verschiedene Typen von Kommentaren. Das
+Prozentzeichen @samp{%} geht einem Zeilen-Kommentar voraus: Alles
+nach diesem Zeichen wird in dieser Zeile ignoriert.
+Üblicherweise wird ein Kommentar @emph{über} dem Code gesetzt,
+auf den es sich bezieht.
+
+@example
+a4 a a a
+% Dieser Kommentar bezieht sich auf die nächste Zeile mit den zwei Hs
+b2 b
+@end example
+
+
+Ein Block-Kommentar ist ein ganzer Abschnitt mit einem
+Kommentar. Alles, was von @code{%@{}
+und @code{%@}} umgeben ist, wird ignoriert. Das heißt,
+dass sich ein Block-Kommentar nicht ein einem anderen
+Blockkommentar befinden kann. Wenn Sie das versuchen sollten,
+beendet schon das erste @code{%@}} @emph{beide}
+Block-Kommentare. Das folgende Beispiel zeigt eine
+mögliche Anwendung von Kommentaren.
+
+@example
+% Noten für twinkle twinkle hier
+  c4 c g' g a a g2
+
+%@{
+    Diese Zeilen, und die Noten unten werden
+    ignoriert, weil sie sich in einem Block-Kommentar
+    befinden.
+
+    f4 f e e d d c2
+%@}
+@end example
+
+@end itemize
+
+
+@node Dealing with errors
+@section Fehlerbehandlung
+
+@cindex Fehlerbehandlung
+
+Manchmal erstellt LilyPond nicht das Notenbild, das Sie erwarten.  Dieser
+Abschnitt stellt einige Links zur Verfügung, um Ihnen bei der Problemlösung
+möglicher Schwierigkeiten zu helfen.
+
+
+@node General troubleshooting tips
+@subsection Allgemeine Fehlerbehandlungstipps
+
+Fehlerbehandlung für LilyPond-Probleme kann eine große Herausforderung für Menschen
+darstellen, die an eine graphische Benutzeroberfläche gewohnt sind, weil
+ungültige Eingabedateien erstellt werden können.  Wenn das geschieht, ist
+eine logische Herangehensweise der beste Weg, das Problem zu identifizieren
+und zu Lösen.  Einige Richtlinien, wie Sie diese Problemlösung erlernen
+können, finden sich in @rprogramnamed{Troubleshooting, Fehlersuche}.
+
+
+@node Some common errors
+@subsection Einige häufige Fehler
+
+@cindex häufige Fehler
+@cindex Fehler, häufige
+
+Es gibt einige übliche Fehler, die schwierig zu lösen sind, wenn man nur die
+Fehlermeldungen der Log-Datei hat.  Sie werden näher erklärt in
+@rprogramnamed{Common errors, Häufige Fehlermeldungen}.
+
+
+
+@node How to read the manuals
+@section Wie die Handbücher gelesen werden sollten
+
+Dieser Abschnitt erklärt, wie die Dokumentation effizient gelesen
+werden kann und behandelt auch einige nützliche Interaktionseigenschaften
+der Online-Version.
+
+
+@node Omitted material
+@subsection Ausgelassenes Material
+
+
+@cindex Handbuch, Lesen
+@cindex Wie soll das Handbuch gelesen werden
+@cindex Lesen des Handbuchs
+@cindex Beispiele, klickbar
+@cindex klickbare Beispiele
+@cindex Vorlagen
+@cindex Templates
+@cindex Dateien konstruieren, Hinweise
+@cindex Konstruieren von Dateien, Hinweise
+@cindex Hinweise zur Konstruktion von Dateien
+
+LilyPond-Code muss immer von @code{@{@tie{}@}} Zeichen oder einem
+@q{@code{\relative @{ @dots{}@tie{}@}}} umgeben sein, wie
+in @ref{Working on input files} gezeigt.
+Im Rest dieses Handbuchs werden die meisten Beispiel allerdings darauf
+verzichten. Um sie zu reproduzieren, können Sie den entsprechenden
+Quellcode kopieren und in eine Textdatei zwischen @samp{@{}
+und @samp{@}} einfügen.
+
+@example
+@{
+  @dots{}hier das Beispiel@dots{}
+@}
+@end example
+
+Denken Sie auch daran, dass jede LilyPond-Datei eine Versionsbezeichnung
+mit dem @code{\version}-Befehl haben sollte.  Weil die Beispiele in den
+Handbüchern Schnipsel und keine vollständigen Dateien sind, fehlt hier
+die Versionsbezeichnung.  Sie sollten sie aber immer in Ihre eigenen
+Dateien einfügen.
+
+
+@node Clickable examples
+@subsection Anklickbare Beispiele
+
+@warning{Diese Eigenschaft gibt es nur in der HTML-Dokumentation.}
+
+Viele Leute lernen Programme, indem sie einfach herumprobieren. Das
+geht auch mit LilyPond. Wenn Sie in der HTML-Version dieses Handbuchs
+eine Abbildung in der HTML-Version dieses Handbuches anklicken,
+erhalten sie exakt den LilyPond-Code, der
+zum Satz der Abbildung benutzt wurde. Versuchen Sie es mit dieser
+Abbildung:
+
+@c no verbatim here
+@c KEEP LY
+@lilypond[quote]
+\relative {
+  c''4-\markup { \bold \huge { Hier klicken! } }
+}
+@end lilypond
+
+@noindent
+Wenn Sie einfach alles kopieren, was im  @qq{ly snippet}-Abschnitt
+steht, und in eine Text-Datei einfügen, haben Sie schon eine fertige
+Vorlage für weitere Experimente. Damit Sie genau das gleiche
+Erscheinungsbild wie bei dem Beispiel selber erreichen, müssen Sie
+alles kopieren ab der Zeile @qq{Start cut-&-pastable section} bis
+ganz zum Ende der Datei.
+
+
+@ignore
+This is item 825
+
+@n ode Navigation mit der Tastatur
+@s ubsection Navigation mit der Tastatur
+@t ranslationof Keyboard navigation
+
+@warning{Diese Funktion gibt es nur für die HTML-Version der Handbücher.}
+
+@c TODO: once this is figured out, insert it here.
+
+Es wird gegenwärtig an dieser Funktion gearbeitet.
+@end ignore
+
+
+@node Overview of manuals
+@subsection Überblick über die Handbücher
+
+
+Es gibt sehr viele Dokumentation für LilyPond. Neue Benutzer sind
+oft verwirrt, welche Teile davon sie lesen sollen, und so kommt
+es vor, dass manchmal wichtige Abschnitte nicht gelesen werden.
+
+@warning{Bitte überspringen Sie keine wichtigen Teile der
+Dokumentation.  Sonst wird es Ihnen später sehr viel schwerer
+fallen, spätere Abschnitte zu verstehen.}
+
+@itemize
+
+@item
+@strong{Bevor Sie @emph{irgendetwas} ausprobieren}: Lesen Sie die
+Abschnitte @ref{Tutorial} und @ref{Common notation} in diesem
+Handbuch.  Wenn Sie auf musikalische Fachbegriffen stoßen, die
+Sie nicht kennen, schauen Sie diese im @rglos{Top} nach.
+
+@item
+@strong{Bevor Sie ein vollständiges Stück notieren}:  Lesen
+Sie den Abschnitt @ref{Fundamental concepts} in diesem Handbuch. Danach
+können Sie sich die für Ihr Projekt wichtigen Abschnitte in der
+@rnotationnamed{Top, Notationsreferenz} anschauen.
+
+@item
+@strong{Bevor Sie versuchen, die Standardnotation zu verändern}:
+Lesen Sie @ref{Tweaking output} in diesem Handbuch.
+
+@item
+@strong{Bevor Sie sich an ein größeres Projekt machen}: Lesen
+Sie den Abschnitt
+@rprogramnamed{Suggestions for writing files,Vorschläge zum Schreiben von LilyPond-Eingabe-Dateien}
+in der Programmbenutzung.
+
+@end itemize

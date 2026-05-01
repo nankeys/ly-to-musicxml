@@ -1,0 +1,5 @@
+%% Translation of GIT committish: 0cc270b871321ae5aa8622cea8d8262aafd16641
+  texidocja = "
+@code{\\markup} ブロックに直接 PostScript コードを挿入することができます。
+"
+  doctitleja = "\\markup ブロックにネイティブ PostScript を埋め込む"

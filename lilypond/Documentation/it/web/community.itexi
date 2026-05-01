@@ -1,0 +1,1001 @@
+@c -*- coding: utf-8; mode: texinfo; documentlanguage: it -*-
+@ignore
+    Translation of GIT committish: 77be8d3a4a3af2c429fe9ee7958f52218b17b671
+
+    When revising a translation, copy the HEAD committish of the
+    version that you are working on.  For details, see the Contributors'
+    Guide, node Updating translation committishes..
+@end ignore
+
+@include en/included/authors.itexi
+@include en/included/gsoc.itexi
+@include it/included/helpus.itexi
+
+@node Community
+@unnumbered Comunità
+
+@divClass{link-headings}
+
+@divClass{column-center-top}
+@subheading Interagire con la comunità
+
+@itemize
+
+@item
+@ref{Contact}: chiedi aiuto, discuti e resta in contatto!
+
+@item
+@ref{Tiny examples}: questi esempi sono @emph{altamente} raccomandati
+quando si discute di LilyPond.
+
+@item
+@ref{Bug reports}: qualcosa non ha funzionato.
+
+@end itemize
+@divEnd
+
+@divClass{column-left-bottom}
+@subheading Migliorare LilyPond
+
+@itemize
+
+@item
+@ref{Help us}: è richiesto il tuo aiuto.
+
+@item
+@ref{Sponsoring}: contributi finanziari.
+
+@item
+@ref{Development}: per i collaboratori e i tester.
+
+@item
+@ref{Google Summer of Code}: idee per il Google Summer of Code (GSoC).
+
+@item
+@ref{Authors}: le persone che hanno reso LilyPond quello che è oggi.
+
+@end itemize
+@divEnd
+
+@divClass{column-right-bottom}
+@subheading Varie
+
+@itemize
+
+@item
+@ref{Publications}: cosa abbiamo scritto, e cosa è stato scritto su di noi.
+
+@item
+@ref{News}: notizie sul progetto LilyPond.
+
+@item
+@ref{Attic}: annunci e changelog delle versioni precedenti.
+
+@end itemize
+@divEnd
+
+@divEnd
+
+@menu
+* Contact::
+* Tiny examples::
+* Bug reports::
+* Help us::
+* Sponsoring::
+* Development::
+* Google Summer of Code::
+* Authors::
+* Publications::
+* News::
+* Attic::
+@end menu
+
+
+@node Contact
+@unnumberedsec Contatti
+
+
+@divClass{column-left-top}
+@subheading Discussioni e aiuto per gli utenti
+
+@subsubheading Mailing list degli utenti: @code{lilypond-user@@gnu.org}
+
+Questa mailing list è il principale luogo dove gli utenti possono discutere
+e aiutarsi.
+
+@quotation
+@uref{https://lists.gnu.org/mailman/listinfo/lilypond-user/,
+iscrizione e informazioni su lilypond-user}
+
+@uref{https://lists.gnu.org/archive/html/lilypond-user/,
+archivio@tie{}1 della lista degli utenti}
+@uref{http://www.mail-archive.com/lilypond-user@@gnu.org/,
+archivio@tie{}2}
+@end quotation
+
+@warning{Quando poni domande, usa gli @ref{Tiny examples}!}
+
+@subsubheading Altre lingue
+
+@quotation
+
+@uref{https://lists.gnu.org/mailman/listinfo/lilypond-user-fr,
+Mailing list francese}
+
+@uref{https://lilypondforum.de/,
+Forum tedesco}
+
+@uref{https://lists.gnu.org/mailman/listinfo/lilypond-it,
+Mailing list italiana}
+
+@uref{https://groups.google.com/group/lilypond-brasil,
+Gruppo portoghese}
+
+@uref{https://lists.gnu.org/mailman/listinfo/lilypond-es,
+Mailing list spagnola}
+@end quotation
+@divEnd
+
+
+@divClass{column-right-top}
+@subheading LilyPond Snippet Repository
+
+Il LilyPond Snippet Repository è una grande raccolta di esempi
+proposti dagli utenti, che possono essere liberamente copiati e
+usati nei tuoi lavori.  Guarda quello che hanno scritto altre persone,
+e aggiungi i tuoi esempi!
+
+@example
+@uref{https://lsr.di.unimi.it}
+@end example
+
+Esempi particolarmente istruttivi provenienti dal LSR sono inclusi nella
+nostra documentazione ufficiale, in @ref{Snippets}.
+@divEnd
+
+
+@divClass{column-right-bottom}
+@subheading Luoghi di discussione per sviluppatori e traduttori
+
+@subsubheading Mailing list degli sviluppatori: @code{lilypond-devel@@gnu.org}
+
+Le discussioni tra sviluppatori hanno luogo in questa lista.  Le
+@q{patch} possono essere inviate anche qui.
+
+@quotation
+@uref{https://lists.gnu.org/mailman/listinfo/lilypond-devel,
+iscrizione e informazioni su lilypond-devel}
+
+@uref{https://lists.gnu.org/archive/html/lilypond-devel/,
+archivio 1 della lista devel}
+@uref{https://www.mail-archive.com/lilypond-devel@@gnu.org/,
+archivio 2}
+@end quotation
+
+
+@subsubheading Mailing list dei bug: @code{bug-lilypond@@gnu.org}
+
+Questa lista è dedicata alla segnalazione di bug e alle discussioni sui
+problemi di LilyPond. Non inviare @q{patch} qui.
+
+@quotation
+@uref{https://lists.gnu.org/mailman/listinfo/bug-lilypond,
+iscrizione e informazioni su bug-lilypond}
+
+@uref{https://lists.gnu.org/archive/html/bug-lilypond/,
+archivio 1 della lista bug}
+@uref{https://www.mail-archive.com/bug-lilypond@@gnu.org/,
+archivio 2}
+@end quotation
+
+@warning{Prima di inviare un messaggio alla lista bug, leggi le nostre
+linee guida per la @ref{Bug reports}.}
+@divEnd
+
+
+@divClass{column-left-top}
+@subheading Annunci dei rilasci
+
+@subsubheading Mailing list dei rilasci: @code{info-lilypond@@gnu.org}
+
+Questa mailing list è una lista a basso volume e in sola lettura che riceve
+notifiche dei nuovi rilasci.
+
+@quotation
+@uref{https://lists.gnu.org/mailman/listinfo/info-lilypond,
+iscrizione e informazioni su info-lilypond}
+
+@uref{https://lists.gnu.org/archive/html/info-lilypond/,
+archivio@tie{}1 della lista info}
+@uref{https://www.mail-archive.com/info-lilypond@@gnu.org/,
+archivio@tie{}2}
+@end quotation
+@divEnd
+
+@divClass{column-left-top}
+@subheading IRC
+
+Un certo livello di supporto è fornito nel nostro canale IRC,
+
+@example
+@uref{irc://irc.libera.chat/lilypond, #lilypond@@irc.libera.chat}
+@end example
+
+Questo canale non ha un archivio pubblico, dunque qualsiasi domanda che
+potrebbe essere utile per altri dovrebbe essere inviata a una delle mailing list.
+
+@html
+<form action="https://web.libera.chat"
+      method="get"
+      name="f_lily_irc"
+  <label>irc name:
+    <input name="nick" type="text" size="15" value="">
+  </label>
+  <input name="channels" type="hidden" value="lilypond">
+  <input type="submit" value="Entra nella chat IRC #lilypond">
+</form>
+
+<script language="JavaScript" type="text/javascript">
+  var username = "web";
+  var lang = window.navigator.userLanguage ? window.navigator.userLanguage
+  : window.navigator.language;
+  username += '-' + lang.substr(0, 2);
+  username += '-' + navigator.appName.substr(0, 2);
+  username += navigator.appCodeName.replace (" ", "").substr(0, 2);
+  username += navigator.platform.replace (" ", "").replace("nux", "").replace("n32", "");
+  document.forms["f_lily_irc"].nick.value = username;
+</script>
+@end html
+@divEnd
+
+@c Attualmente inattivo e non più accessibile.
+
+@ignore
+
+@divClass{column-right-top}
+@subheading LilyPond Blog
+
+Leggi il blog gestito dalla comunità, @q{Scores of Beauty}:
+
+@example
+@uref{https://lilypondblog.org}
+@end example
+
+@divEnd
+
+@end ignore
+
+
+@node Tiny examples
+@unnumberedsec Esempi minimi
+
+@divClass{column-center-top}
+@subheading Cosa sono gli @qq{Esempi minimi}?
+
+Un esempio minimo è un esempio dal quale @strong{niente} può essere tolto.
+@divEnd
+
+@divClass{column-left-bottom}
+@subheading Perché crearli?
+
+@divClass{keep-bullets}
+@itemize
+
+@item
+Più l'esempio è semplice, più rapidamente potenziali solutori
+possono comprenderlo e aiutarti.
+
+@item
+Un esempio minimo dimostra che hai tentato di risolvere il problema
+da solo.  Quando le persone inviano grandi porzioni di codice, sembra
+che non si preoccupino che li possiamo aiutare o no.
+
+@item
+Creare un esempio minimo ti aiuta a capire cosa sta
+succedendo.  Molte segnalazioni di un falso problema possono essere
+evitate se si prova a creare un esempio minimo; se non riesci a ricreare
+un @qq{bug} in un esempio minimo, allora probabilmente il problema è
+una conoscenza di LilyPond insufficiente, non un vero bug!
+
+@end itemize
+@divEnd
+
+@divEnd
+
+
+@divClass{column-right-bottom}
+@subheading Come crearli?
+
+@divClass{keep-bullets}
+@itemize
+
+@item
+Includi il numero di versione nel comando @code{\version}.
+
+@item
+Crea un esempio piccolo!  Gli esempi che riguardano la spaziatura o la
+formattazione di pagina potrebbero richiedere molte battute, ma la maggior
+parte dei problemi può essere riprodotta con meno di una battuta.
+
+@item
+Durante la preparazione di un esempio, cerca di commentare @w{(@code{%}
+o @code{%@{ @dots{} %@}})} le sezioni del tuo file.  Se riesci a
+commentare una porzione di codice riuscendo a mantenere chiara l'idea principale,
+allora elimina il materiale commentato!
+
+@item
+Evita di usare note, tonalità o segni di tempo complessi a meno che
+il malfunzionamento non riguardi proprio il comportamento di questi elementi.
+
+@item
+Non usare i comandi @code{\override} o @code{\set}, a meno che il malfunzionamento
+non riguardi questi comandi in particolare.
+
+@item
+Eventualmente, allega un'immagine che mostri il risultato grafico desiderato.
+
+@end itemize
+@divEnd
+
+@divEnd
+
+@divClass{column-center-bottom}
+@subheading Quanto piccoli devono essere?
+
+Il codice seguente è un esempio minimo?
+
+@example
+\version "2.14.1"
+\include "english.ly"
+
+\score @{
+  \new Staff @{
+    \key d \major
+    \numericTimeSignature
+    \time 2/4
+    <cs' d'' b''>16 <cs' d'' b''>8.
+    %% Here: the tie on the D's looks funny
+    %% Too tall? Left-hand endpoint is not aligned with the B tie?
+    ~
+    <cs' d'' b''>8 [ <b d'' a''> ]
+  @}
+@}
+@end example
+
+Non è poi così grande, ma un vero esempio minimo è il seguente:
+
+@example
+\version "2.14.1"
+@{
+  % middle tie looks funny here:
+  <c' d'' b''>8. ~ <c' d'' b''>8
+@}
+@end example
+
+Sono pochi gli esempi minimi che superano 10 righe di codice -
+spesso 4 righe sono sufficienti per illustrare il problema!
+
+@divEnd
+
+
+@node Bug reports
+@unnumberedsec Segnalazione bug
+
+@divClass{heading-center}
+Se hai un codice di input che produce un crash o un output sbagliato,
+allora si tratta di un bug.
+@divEnd
+
+@divClass{column-center-top}
+@subheading Passo 1: Bug noti
+
+Potremmo già essere a conoscenza di questo bug.  Controlla qui:
+
+@example
+@uref{https://gitlab.com/lilypond/lilypond/-/issues}
+@end example
+
+@warning{Per favore @strong{NON} aggiungere segnalazioni di bug direttamente
+nel bug tracker.  Una volta che il problema è stato aggiunto al tracker, aggiungi
+pure maggiori informazioni nella segnalazione.}
+
+@divEnd
+
+
+@divClass{column-left-bottom}
+@subheading Passo 2: Creare una segnalazione bug
+
+Se hai scoperto un bug che non è ancora stato riportato, puoi aiutarci creando
+una segnalazione bug.
+
+@warning{Accettiamo segnalazioni bug esclusivamente nella forma di @ref{Tiny examples}.  Abbiamo risorse molto limitate, quindi qualsiasi esempio non minimo
+sarà scartato.  Quasi ogni bug può essere dimostrato con quattro note o meno!}
+
+Ecco un esempio di una valida segnalazione bug:
+
+@example
+% Le alterazioni dovrebbero comparire solo nella
+% prima nota di una legatura di valore, ma questa
+% versione mostra il bemolle accanto a entrambe le note.
+\version "2.10.1"
+
+\relative c'' @{
+ bes1 ~
+ bes1
+@}
+@end example
+
+@divEnd
+
+@divClass{column-right-bottom}
+@subheading Passo 3: Inviare una segnalazione bug
+
+Dopo aver verificato che il problema non sia già noto e aver
+creato una segnalazione bug, inviacela!
+
+Purtroppo non esiste più un'interfaccia per pubblicare messaggi sulla lista
+bug-lilypond senza essere iscritti; vedi
+
+@example
+@uref{https://lists.gnu.org/mailman/listinfo/bug-lilypond}
+@end example
+
+per maggiori informazioni.
+@divEnd
+
+@divClass{column-center-bottom}
+@subheading Passo 4: Attendi una risposta
+
+Una volta che la segnalazione bug è stata inviata alla lista, la nostra Squadra
+Bug la esaminerà e forse ti chiederà maggiori informazioni.  Verrai avvisato
+quando la segnalazione viene aggiunta al bug tracker.  Una risposta può richiedere
+fino a 4 giorni, perché abbiamo un numero limitato di volontari per questo compito.
+
+Una volta che un bug è stato aggiunto al tracker, puoi commentarlo per aggiungere
+informazioni a riguardo.  Per ricevere automaticamente delle notifiche su
+qualsiasi attività relativa al bug, puoi iscriverti cliccando sul simbolo
+della busta vicino al titolo del bug.
+@divEnd
+
+@divClass{column-center-bottom}
+@subheading Aiuto facoltativo: mostra il comportamento desiderato
+
+Dopo che il problema è stato aggiunto al tracker, può essere molto
+utile poter vedere l'output desiderato.  Aggiungi pure del codice di
+input e/o delle immagini (se possibile, create con altri strumenti) che
+mostrino come dovrebbe apparire secondo te!
+
+@divEnd
+
+
+
+@node Help us
+@unnumberedsec Aiutaci
+
+@divClass{column-center-top}
+@helpusNeed
+
+@divEnd
+
+@divClass{column-left-top}
+@divClass{keep-bullets}
+@helpusSimple
+
+@divEnd
+@divEnd
+
+@divClass{column-right-top}
+@helpusAdvanced
+
+@divEnd
+
+
+@node Sponsoring
+@unnumberedsec Sponsor
+
+@divClass{keep-bullets}
+@divClass{column-left-top}
+@subheading Remunerazioni (bounty)
+
+In passato,
+
+@itemize
+@item alcuni utenti hanno pagato per avere nuove funzionalità
+@item alcuni sviluppatori hanno aggiunto nuove funzionalità a pagamento
+@end itemize
+
+Il progetto LilyPond non coordina queste iniziative; non appoggiamo
+né scoraggiamo tali accordi.  Qualsiasi contratto tra individui
+privati è affar loro, non nostro.
+
+@divEnd
+
+@divClass{column-right-top}
+@subheading Linee guida
+
+Gli utenti che desiderano offrire del denaro in cambio di lavoro devono
+tenere a mente i seguenti punti:
+
+@itemize
+@item
+Gli sviluppatori di LilyPond talvolta pubblicizzano i propri servizi sulle
+liste email di lilypond.
+
+@item
+Qualsiasi accordo tra singoli individui deve includere le normali
+precauzioni da prendere quando si conduce un affare: chi paga, quanto
+paga, con quale metodo di pagamento e in base a quali
+condizioni.  Suggeriamo di risolvere qualsiasi ambiguità o incertezza
+su tali questioni prima che il lavoro inizi.
+
+@end itemize
+
+@divEnd
+@divEnd
+
+
+@node Development
+@unnumberedsec Sviluppo
+
+@divClass{heading-center}
+@heading Sviluppo di LilyPond @versionDevel
+
+@c we normally don't allow named references, but in this case
+@c it's good to emphasize the "stable" part.  -gp
+@warning{Queste sono le versioni @emph{instabili e di sviluppo}.  Se hai
+un minimo dubbio su come usare o installare LilyPond, ti raccomandiamo
+di usare il @ref{Download, download per la versione stabile}, e leggere i
+@ref{Manuals, manuali stabili}.}
+
+@divEnd
+
+@divClass{column-center-top}
+@subheading Numeri di versione
+
+LilyPond viene distribuito in due versioni: la versione stabile e quella
+di sviluppo o instabile.  Le versioni stabili hanno un numero di versione
+@q{minore} pari (per esempio 2.14, 2.16, 2.18).  Le versioni di sviluppo
+hanno un numero di versione @q{minore} dispari (per esempio 2.15, 2.17, 2.19).
+
+@divEnd
+
+
+@divClass{column-left-top}
+@subheading Download
+
+Le istruzioni su git e la compilazione sono nella Guida del Collaboratore.
+
+@quotation
+@uref{https://git.sv.gnu.org/gitweb/?p=lilypond.git, repository git di lilypond}
+@end quotation
+
+Gli editor della Documentazione e i tester generalmente vorranno scaricare
+l'ultimo binario:
+
+@quotation
+
+@downloadDevelLinux
+
+@downloadDevelDarwinArm
+
+@downloadDevelDarwin
+
+@uref{https://ports.macports.org/port/lilypond-devel/summary,
+MacPorts package}
+
+@downloadDevelMingw
+
+@downloadDevelSource-it
+
+@end quotation
+
+@c Can't use @ifWebLinks because it inserts an extra colon.
+Se non sei sicuro su come installare questi binari, leggi
+l'inizio del manuale di
+@ifclear web_version
+@c I don't understand why this use of @rlearning produces "Learning Manual"
+@c and not just "Learning". --JeanAS
+@rlearningnamed{Top,Apprendimento}.
+@end ifclear
+@ifset web_version
+manuale di @manualDevelLearningSplitNoName-it{}.
+@end ifset
+
+
+@divEnd
+
+
+@divClass{column-right-top}
+@subheading Guida del Collaboratore
+
+Lo sviluppo di LilyPond è piuttosto complesso.  Per aiutare i
+nuovi collaboratori e mantenere l'intero sistema (tendenzialmente)
+stabile, abbiamo scritto un manuale per i compiti di sviluppo.
+
+@docLinksBare{Contributor's Guide, contributor,
+  @rcontribnamed{Top,Contributor's Guide},
+  @manualStubDevelContributorSplit-it,
+  @manualStubDevelContributorBig-it,
+  @manualStubDevelContributorPdf-it}
+
+@divEnd
+
+
+@divClass{column-center-top}
+@subheading Collaudi di regressione
+
+@divClass{keep-bullets}
+
+@ifclear web_version
+
+@itemize
+@item
+@uref{../../input/regression/collated-files.html, Regression tests}:
+I collaudi per questa versione.
+(@uref{../../input/regression/collated-files.pdf, pdf version})
+
+@item
+@uref{../../input/regression/musicxml/collated-files.html, MusicXML tests}:
+I collaudi musicXML per questa versione.
+(@uref{../../input/regression/musicxml/collated-files.pdf, pdf version})
+
+@item
+@uref{../../input/regression/abc2ly/collated-files.html, abc2ly tests}:
+I collaudi abc2ly per questa versione.
+(@uref{../../input/regression/abc2ly/collated-files.pdf, pdf version})
+@end itemize
+@end ifclear
+
+@ifset web_version
+@subsubheading Versione di sviluppo
+
+@itemize
+@item @regtestDevel-it (@regtestDevelPdf-it{})
+
+@item @regtestDevelXml-it (@regtestDevelXmlPdf-it{})
+
+@item @regtestDevelAbc-it (@regtestDevelAbcPdf-it{})
+@end itemize
+
+@subsubheading Versione stabile
+
+@itemize
+@item @regtestStable-it (@regtestStablePdf-it{})
+
+@item @regtestStableXml-it (@regtestStableXmlPdf-it{})
+
+@item @regtestStableAbc-it (@regtestStableAbcPdf-it{})
+@end itemize
+@end ifset
+
+@divEnd
+@divEnd
+
+
+
+@divClass{column-center-bottom}
+@subheading Manuali
+
+@ifclear web_version
+@warning{Questi manuali sono per LilyPond @version{}; gli ultimi
+manuali sono reperibili su @url{https://lilypond.org}}
+@end ifclear
+
+@divClass{normal-table}
+@multitable @columnfractions .3 .3 .3
+@headitem Introduzione
+
+@item
+@docLinkSplit{Apprendimento,learning,@manualDevelLearningSplit-it}
+@tab
+@docLinkBig{Apprendimento,learning,@manualDevelLearningBig-it}
+@tab
+@docLinkPdf{Apprendimento,learning,@manualDevelLearningPdf-it}
+
+@item
+@docLinkSplit{Glossario,music-glossary,@manualStubDevelGlossarySplit-it}
+@tab
+@docLinkBig{Glossario,music-glossary,@manualStubDevelGlossaryBig-it}
+@tab
+@docLinkPdf{Glossario,music-glossary,@manualStubDevelGlossaryPdf-it}
+
+@item
+@docLinkSplit{Saggio,essay,@manualDevelEssaySplit-it}
+@tab
+@docLinkBig{Saggio,essay,@manualDevelEssayBig-it}
+@tab
+@docLinkPdf{Saggio,essay,@manualDevelEssayPdf-it}
+@end multitable
+
+@multitable @columnfractions .3 .3 .3
+@headitem Regolare
+
+@item
+@docLinkSplit{Notazione,notation,@manualDevelNotationSplit-it}
+@tab
+@docLinkBig{Notazione,notation,@manualDevelNotationBig-it}
+@tab
+@docLinkPdf{Notazione,notation,@manualDevelNotationPdf-it}
+
+@item
+@docLinkSplit{Utilizzo,usage,@manualDevelUsageSplit-it}
+@tab
+@docLinkBig{Utilizzo,usage,@manualDevelUsageBig-it}
+@tab
+@docLinkPdf{Utilizzo,usage,@manualDevelUsagePdf-it}
+
+@item
+@docLinkSplit{Snippets,snippets,@manualDevelSnippetsSplit-it}
+@tab
+@docLinkBig{Snippets,snippets,@manualDevelSnippetsBig-it}
+@tab
+@docLinkPdf{Snippets,snippets,@manualDevelSnippetsPdf-it}
+@end multitable
+
+@multitable @columnfractions .3 .3 .3
+@headitem Saltuario
+
+@item
+@docLinkSplit{Web,web,@manualDevelWebSplit-it}
+@tab
+@docLinkBig{Web,web,@manualDevelWebBig-it}
+@tab
+@docLinkPdf{Web,web,@manualDevelWebPdf-it}
+
+@item
+@docLinkSplit{Cambiamenti,changes,@manualStubDevelChangesSplit-it}
+@tab
+@docLinkBig{Cambiamenti,changes,@manualStubDevelChangesBig-it}
+@tab
+@docLinkPdf{Cambiamenti,changes,@manualStubDevelChangesPdf-it}
+
+@item
+@docLinkSplit{Extending,extending,@manualStubDevelExtendingSplit-it}
+@tab
+@docLinkBig{Extending,extending,@manualStubDevelExtendingBig-it}
+@tab
+@docLinkPdf{Extending,extending,@manualStubDevelExtendingPdf-it}
+
+@item
+@docLinkSplit{Internals,internals,@manualStubDevelInternalsSplit-it}
+@tab
+@docLinkBig{Internals,internals,@manualStubDevelInternalsBig-it}
+@tab
+@docLinkPdf{Internals,internals,@manualStubDevelInternalsPdf-it}
+@end multitable
+
+@ifset web_version
+@multitable @columnfractions .3
+@headitem Per scaricare
+
+@item
+@doctarballDevel-it
+@end multitable
+@end ifset
+
+
+@divEnd
+@divEnd
+
+
+@node Google Summer of Code
+@unnumberedsec Google Summer of Code
+
+@gsocCurrent
+
+
+
+@node Authors
+@unnumberedsec Autori
+
+@divClass{column-left-top}
+@subheading Team di Sviluppo attuale
+
+@divClass{keep-bullets}
+@developersCurrent
+@divEnd
+@divEnd
+
+@divClass{column-right-top}
+@subheading Team di Sviluppo precedente
+
+@divClass{keep-bullets}
+@developersPrevious
+@divEnd
+@divEnd
+
+
+@divClass{column-center-top}
+@subheading Collaboratori attuali
+
+@divClass{keep-bullets}
+@subsubheading Programmazione
+
+@coreCurrent
+
+@subsubheading Font tipografico
+
+@fontCurrent
+
+@subsubheading Documentazione
+
+@docCurrent
+
+@subsubheading Traduzione
+
+@translationsCurrent
+
+@divEnd
+@divEnd
+
+
+@divClass{column-center-bottom}
+@subheading Collaboratori precedenti
+
+@divClass{keep-bullets}
+@subsubheading Programmazione
+
+@corePrevious
+
+@subsubheading Font tipografico
+
+@fontPrevious
+
+@subsubheading Documentazione
+
+@docPrevious
+
+@subsubheading Bug squad
+
+@bugsquadPrevious
+
+@subsubheading Supporto
+
+@supportPrevious
+
+@subsubheading Traduzione
+
+@translationsPrevious
+
+@divEnd
+@divEnd
+
+
+@node Publications
+@unnumberedsec Pubblicazioni
+
+@divClass{column-center-top}
+@subheading Cosa abbiamo scritto su LilyPond
+
+@divClass{keep-bullets}
+
+@include we-wrote.itexi
+
+@divEnd
+@divEnd
+
+
+@divClass{column-center-bottom}
+@subheading Cosa altri hanno fatto con LilyPond
+
+@divClass{keep-bullets}
+
+@include others-did.itexi
+
+@divEnd
+@divEnd
+
+@contactUsAbout{articoli accademici}
+
+@node News
+@unnumberedsec Notizie
+
+@divClass{heading-center}
+@warning{Molti dei vecchi annunci e changelog si possono trovare
+in @ref{Attic}}
+@divEnd
+
+@include en/web/news-new.itexi
+
+@divClass{column-center-bottom}
+@subheading Vecchie notizie
+Le vecchie notizie si trovano in @ref{Attic}, insieme a vecchi annunci
+e registri di modifiche (changelog).
+@divEnd
+
+
+@node Attic
+@unnumberedsec Soffitta
+
+@divClass{column-center-top}
+@subheading Annunci
+
+Annunci e notizie ordinati per versione:
+@uref{https://lilypond.org/doc/v2.22/Documentation/web/news,v2.22},
+@uref{https://lilypond.org/doc/v2.20/Documentation/web/news,v2.20},
+@uref{https://lilypond.org/doc/v2.18/Documentation/web/index#Lilypond-2_002e18_002e0-released_0021-December-29_002c-2013-1,v2.18},
+@uref{https://lilypond.org/doc/v2.16/Documentation/web/index#Lilypond-2_002e16_002e0-released_0021-August-24_002c-2012-1,v2.16},
+@uref{https://lilypond.org/doc/v2.14/Documentation/web/index#LilyPond-2_002e14_002e0-released_0021-June-6_002c-2011,v2.14},
+@miscLink{announce-v2.12,v2.12},
+@miscLink{announce-v2.10,v2.10},
+@miscLink{announce-v2.8,v2.8},
+@miscLink{announce-v2.6,v2.6},
+@miscLink{announce-v2.4,v2.4},
+@miscLink{announce-v2.2,v2.2},
+@miscLink{announce-v2.0,v2.0},
+@miscLink{ANNOUNCE-1.2,v1.2},
+@miscLink{ANNOUNCE-1.0,v1.0},
+@miscLink{ANNOUNCE-0.1,v0.1}
+
+Elenco descrittivo dei cambiamenti per ogni versione:
+@uref{https://lilypond.org/doc/v2.22/Documentation/changes/,v2.22},
+@uref{https://lilypond.org/doc/v2.20/Documentation/changes/,v2.20},
+@uref{https://lilypond.org/doc/v2.18/Documentation/changes/index.it.html,v2.18},
+@uref{https://lilypond.org/doc/v2.16/Documentation/changes/index.html,v2.16},
+@uref{https://lilypond.org/doc/v2.14/Documentation/changes/index.html,v2.14},
+@uref{https://lilypond.org/doc/v2.12/Documentation/topdocs/NEWS,v2.12},
+@uref{https://lilypond.org/doc/v2.10/Documentation/topdocs/NEWS,v2.10},
+@uref{https://lilypond.org/doc/v2.8/Documentation/topdocs/NEWS,v2.8},
+@uref{https://lilypond.org/doc/v2.6/Documentation/topdocs/NEWS,v2.6},
+@uref{https://lilypond.org/doc/v2.4/Documentation/topdocs/out-www/NEWS,v2.4},
+@uref{https://lilypond.org/doc/v2.2/Documentation/topdocs/out-www/NEWS,v2.2},
+@uref{https://lilypond.org/doc/v2.0/Documentation/topdocs/out-www/NEWS,v2.0},
+@uref{https://lilypond.org/doc/v1.8/Documentation/topdocs/out-www/NEWS,v1.8},
+@uref{https://lilypond.org/doc/v1.6/Documentation/out-www/NEWS,v1.6},
+@miscLink{NEWS-1.4,v1.4},
+@miscLink{NEWS-1.2,v1.2}
+
+@divEnd
+
+@divClass{column-center-middle-color3}
+@subheading Grazie
+
+Grazie a sviluppatori, collaboratori, cacciatori di bug e a chi ci ha dato
+preziosi suggerimenti
+@uref{https://lilypond.org/doc/v2.20/Documentation/web/authors,v2.22},
+@uref{https://lilypond.org/doc/v2.20/Documentation/web/authors,v2.20},
+@miscLink{THANKS-2.18,v2.18},
+@miscLink{THANKS-2.16,v2.16},
+@miscLink{THANKS-2.14,v2.14},
+@miscLink{THANKS-2.12,v2.12},
+@miscLink{THANKS-2.10,v2.10},
+@miscLink{THANKS-2.8,v2.8},
+@miscLink{THANKS-2.6,v2.6},
+@miscLink{THANKS-2.4,v2.4},
+@miscLink{THANKS-2.2,v2.2},
+@miscLink{THANKS-2.0,v2.0},
+@miscLink{THANKS-1.8,v1.8}
+
+@divEnd
+
+@divClass{column-center-middle-color3}
+@subheading Lista dei cambiamenti
+
+Lista dei cambiamenti apportati da ciascun sviluppatore in ogni versione:
+@miscLink{ChangeLog-2.10,v2.10},
+@miscLink{ChangeLog-2.3,v2.3},
+@miscLink{ChangeLog-2.1,v2.1},
+@miscLink{ChangeLog-1.5,v1.5 (1)},
+@miscLink{CHANGES-1.5,v1.5 (2)},
+@miscLink{CHANGES-1.4,v1.4},
+@miscLink{CHANGES-1.3,v1.3},
+@miscLink{CHANGES-1.2,v1.2},
+@miscLink{CHANGES-1.1,v1.1},
+@miscLink{CHANGES-1.0,v1.0},
+@miscLink{CHANGES-0.1,v0.1},
+@miscLink{CHANGES-0.0,v0.0}
+
+@divEnd
+
+@divClass{column-center-middle-color2 bigger-subsubheadings}
+@gsocInactive
+@divEnd
+
+@divClass{column-center-middle-color2}
+@subheading Vecchie notizie
+
+Le vecchie notizie che risalgono fino al luglio 2003.  Le notizie più recenti
+si trovano alla pagina @ref{News}.
+@divEnd
+
+@include en/web/news-old.itexi

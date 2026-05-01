@@ -1,0 +1,9 @@
+%% Translation of GIT committish: de1e42ce512f3690387cdd065109bddff1b7bd6d
+  texidocfr = "
+Dans le cadre de notes en accord, les @emph{hammer-on} et
+@emph{pull-off} sont indiqués par un arc simple. Vous obtiendrez
+néanmoins un arc double en réglant la propriété @code{doubleSlurs} sur
+@code{#t}.
+"
+
+  doctitlefr = "Hammer on et pull off avec accords"

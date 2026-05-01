@@ -1,0 +1,8 @@
+%% Translation of GIT committish: 2f3474d9af596d677ed5b7ce720ae4d0954a6b51
+  texidocit = "
+Si può usare @code{arpeggioBracket} per indicare la divisione delle
+voci quando non ci sono gambi che forniscano questa informazione. Questo
+caso è frequente nella musica corale.
+
+"
+  doctitleit = "Usare arpeggioBracket per rendere i divisi più  visibili"

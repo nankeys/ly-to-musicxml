@@ -1,0 +1,617 @@
+@c -*- coding: utf-8; mode: texinfo; documentlanguage: es -*-
+@ignore
+    Translation of GIT committish: ac9193c5fd282502dc699a13e88c6e62301e65cc
+
+    When revising a translation, copy the HEAD committish of the
+    version that you are working on.  For details, see the Contributors'
+    Guide, node Updating translation committishes..
+@end ignore
+
+@node Manuals
+@unnumbered Manuales
+
+@macro details{node, label}
+@spanClass{detail}
+(@ref{\node\, detalles de \label\})
+@spanEnd
+@end macro
+
+@divClass{heading-center}
+@ifclear web_version
+@heading Manuales de LilyPond @version
+@end ifclear
+@ifset web_version
+@heading Manuales de LilyPond @versionStable
+@end ifset
+
+@divEnd
+
+En general, los manuales de LilyPond manuals están en tres
+formatos: HTML seccionado, HTML monolítico y PDF.  El HTML
+seccionado es adecuado para la lectura en línea.  El HTML
+monolítico (que puede ser @emph{enorme}) contiene todo el
+manual en una sola página.  El PDF está disponible para su
+descarga y para usarlo fuera de línea.  Para obtener cada uno de
+los tres formatos, siga los enlaces con el texto @code{detalles
+de} y a continuación el nombre del manual.
+
+Aunque seguramente la versión de los manuales en PDF es idónea
+para su lectura e impresión (sobre todo si queremos ampliar un
+detalle), existe una limitación: a diferencia de la versión en
+HTML, la copia y pegado de fragmentos de código de LilyPond no
+conserva los distintos márgenes de cada línea.  Esto es una
+deficiencia del propio formato PDF (no del sistema de
+documentación que LilyPond utiliza) que no tiene ninguna solución.
+
+@divClass{link-headings}
+
+@divClass{column-center-top}
+@subheading Introducción
+
+@itemize
+
+@item
+@ref{Text input}:
+LilyPond es un sistema de grabado musical @strong{basado en texto}.
+¡Lea esto primero!
+
+@item
+@ifWebLinks{@manualStableLearningSplitNoName-es,@rlearningnamed{Top,Aprendizaje}}
+una introducción a LilyPond amable e @qq{imprescindible}.
+@details{Learning, Aprendizaje}
+
+@item
+@ifWebLinks{@manualStubStableGlossarySplitNoName-es,@rglosnamed{Top,Glosario}}
+@emph{(lectura opcional)} términos musicales y traducciones.
+@details{Glossary, Glosario}
+
+@item
+@ifWebLinks{@manualStableEssaySplitNoName-es,@ressaynamed{Top,Ensayo}}
+@emph{(lectura opcional)} la información de trasfondo sobre grabado musical.
+@details{Essay, Ensayo}
+
+
+@end itemize
+
+@divEnd
+
+@divClass{column-left-top}
+@subheading Uso frecuente
+
+@itemize
+
+@item
+@ifWebLinks{@manualStableNotationSplitNoName-es,@rnotationnamed{Top,Notación}}
+referencia de la sintaxis.
+@details{Notation, Notación}
+
+@item
+@ifWebLinks{@manualStableUsageSplitNoName-es,@rprogramnamed{Top,Utilización}}
+cómo ejecutar los programas.
+@details{Usage, Utilización}
+
+@item
+@ifWebLinks{@manualStableSnippetsSplitNoName-es,@rlsrnamed{Top,Fragmentos}}
+trucos y consejos cortos.
+@details{Snippets, Fragmentos}
+
+@end itemize
+
+@divEnd
+
+
+@divClass{column-right-top}
+@subheading Uso infrecuente
+
+@itemize
+
+@item
+@ref{FAQ}:
+Preguntas más frecuentes (Frequently Asked Questions).
+
+@item
+@ref{Top,Web}:
+este documento.
+@details{Web, Web}
+
+@item
+@ifWebLinks{@manualStubStableChangesSplitNoName-es,@rchangesnamed{Top,Cambios}}
+¿qué hay de nuevo?
+@details{Changes, Cambios}
+
+@item
+@ifWebLinks{@manualStableExtendingSplitNoName-es,@rextendnamed{Top,Extender}}
+trucos interesantes.
+@details{Extending, Extender}
+
+@item
+@ifWebLinks{@manualStubStableInternalsSplitNoName-es,@rinternalsnamed{Top,Funcionamiento interno}}
+referencia sobre el trucaje.
+@details{Internals, Funcionamiento interno}
+
+@end itemize
+
+@divEnd
+
+
+@divClass{column-center-bottom}
+@subheading Otros materiales
+
+@itemize
+
+@item
+@ref{All}:
+Versiones estables anteriores y versión actual como un archivo comprimido.
+
+@item
+@uref{https://wiki.lilypond.community, el Wiki de LilyPond}:
+ejemplos, consejos y trucos creados por los usuarios.
+
+@item
+@uref{https://bit.ly/LearnLilyPond,Tutoriales de vídeo}:
+Ben Lemon, usuario de LilyPond, ha creado y publicado cierto
+número de tutoriales de vídeo en su blog que están indicados para
+nuevos usuarios.
+
+@item
+@uref{https://scheme-book.readthedocs.io, El lenguaje Scheme de
+LilyPond}: un tutorial externo para aprender Scheme, el lenguaje
+utilizado para programar LilyPond.  Se recomienda en caso de que
+sea un principiante absoluto en temas de programación.
+
+@item
+@uref{https://extending-lilypond.gitlab.io,Extender LilyPond}: un
+recurso de documentación externo sobre cómo extender el programa
+LilyPond con el lenguaje Scheme.  También contiene un tutorial de
+Scheme, recomendado si tiene cierta experiencia con la
+programación en algún otro lenguaje.
+
+@item
+@ref{Development}:
+manuales para la versión de desarrollo.
+
+@item
+@ref{FDL}:
+estos manuales están publicados bajo la Licencia de Documentación
+Libre de GNU.
+
+@end itemize
+
+@divEnd
+
+@divEnd
+
+
+@menu
+* Learning::            Aprendizaje.
+* Glossary::               Glosario.
+* Essay::                 Ensayo.
+* Notation::               Referencia.
+* Usage::            Utilización.
+* Snippets::             Fragmentos de código.
+* FAQ::                    Preguntas frecuentes.
+* Web::                    Web.
+* Changes::                Noticias.
+* Extending::               Programación.
+* Internals:: Interioridades.
+* All::                  Todos los manuales.
+* FDL::                    Licencia.
+@end menu
+
+
+@c TRANSLATORS, most of the text in this file came from
+@c LM 1.1 About the documentation  (before this section was
+@c removed in July 2009).
+
+@node Learning
+@unnumberedsec Aprendizaje
+
+@divClass{column-left-top}
+@subheading Manual de aprendizaje
+
+Este libro explica cómo comenzar a aprender LilyPond, así como algunos
+conceptos clave en términos sencillos.  Debería leer estos capítulos
+en secuencia lineal.
+
+Al final de todas las secciones hay un párrafo @strong{Véase también}
+que contiene referencias cruzadas a otras secciones: no debiera seguir
+las referencias cruzadas la primera vez que lea este manual.  Cuando
+haya leído todo el manual, le vendrá bien leer de nuevo algunas
+secciones y seguir esas referencias cruzadas para obtener más
+información.
+@divEnd
+
+@divClass{column-right-bottom}
+
+@docLinks{Aprendizaje, learning,
+  @rlearningnamed{Top,Aprendizaje},
+  @manualStableLearningSplit-es,
+  @manualStableLearningBig-es,
+  @manualStableLearningPdf-es}
+
+@divEnd
+
+
+@node Glossary
+@unnumberedsec Glosario
+
+@divClass{column-left-top}
+@subheading Glosario
+
+El glosario explica términos musicales e incluye traducciones a varios
+idiomas.  Si no está familiarizado como la notación o la terminología
+musicales (en especial si no es un hablante nativo de inglés), se
+recomienda fervientemente que consulte el glosario.
+
+@divEnd
+
+@divClass{column-right-bottom}
+
+@docLinks{Glosario musical, music-glossary,
+  @rglosnamed{Top,Glosario musical},
+  @manualStubStableGlossarySplit-es,
+  @manualStubStableGlossaryBig-es,
+  @manualStubStableGlossaryPdf-es}
+
+@divEnd
+
+
+@node Essay
+@unnumberedsec Ensayo
+
+@divClass{column-left-top}
+@subheading Ensayo
+
+Este libro ofrece una breve historia de la tipografía musical, seguida
+de un examen de las técnicas de grabado musical de LilyPond.  Se hace
+una comparación entre LilyPond y ogros sistemas de tipografía musical.
+
+@warning{Los ejemplos tipográficos detallados se analizan mejor en la
+versión en formato PDF a causa de su mayor resolución.}
+
+@divEnd
+
+@divClass{column-right-bottom}
+
+@docLinks{Ensayo, essay,
+  @ressaynamed{Top,Ensayo},
+  @manualStableEssaySplit-es,
+  @manualStableEssayBig-es,
+  @manualStableEssayPdf-es}
+
+@divEnd
+
+
+@node Notation
+@unnumberedsec Notación
+
+@divClass{column-left-top}
+@subheading Referencia de la notación
+
+Este libro explica todas las instrucciones de LilyPond que producen
+notación musical.
+
+@warning{La Referencia de la Notación supone que el lector está al
+tanto del material básico que aparece en el Manual de Aprendizaje y
+está familiarizado con los términos musicales ingleses que se
+presentan en el Glosario Musical.}
+
+@divEnd
+
+@divClass{column-right-bottom}
+
+@docLinks{Notación, notation,
+  @rnotationnamed{Top,Notación},
+  @manualStableNotationSplit-es,
+  @manualStableNotationBig-es,
+  @manualStableNotationPdf-es}
+
+@divEnd
+
+
+@node Usage
+@unnumberedsec Utilización
+
+@divClass{column-left-top}
+@subheading Manual de utilización del programa
+
+Este libro explica cómo ejecutar los programas, cómo integrar la
+notación de LilyPond con otros programas, y sugiere @qq{buenas
+prácticas} para un uso eficiente de estas herramientas.  Se recomienda
+su lectura antes de afrontar proyectos grandes.
+
+@divEnd
+
+@divClass{column-right-bottom}
+
+@docLinks{Utilización, usage,
+  @rprogramnamed{Top,Utilización},
+  @manualStableUsageSplit-es,
+  @manualStableUsageBig-es,
+  @manualStableUsagePdf-es}
+
+@divEnd
+
+
+@node Snippets
+@unnumberedsec Fragmentos
+
+@divClass{column-left-top}
+@subheading Fragmentos
+
+Este manual presenta un conjunto seleccionado de fragmentos de
+código de LilyPond extraídos del
+@uref{https://wiki.lilypond.community, Wiki de LilyPond}, sucesor
+del Repositorio de fragmentos de código de LilyPond (LSR).  Todos
+los fragmentos se encuentran en el dominio público.
+
+Observe que este documento no es un subconjunto estricto del Wiki,
+que contiene (principalmente) fragmentos de código válidos para la
+versión estable actual de LilyPond.  Cualquier fragmento de código
+que muestre funcionalidades nuevas de una versión de desarrollo se
+debe añadir por separado; Estos se almacenan dentro del directorio
+@file{Documentation/@/snippets/@/new/} en el árbol de código
+fuente de LilyPond.
+
+La lista de fragmentos de código para cada subsección del manual
+de Referencia de la Notación están enlazados también a partir de
+la sección @strong{Véase también}.
+@divEnd
+
+@divClass{column-right-bottom}
+
+@docLinks{Fragmentos, snippets,
+  @rlsrnamed{Top,Fragmentos},
+  @manualStableSnippetsSplit-es,
+  @manualStableSnippetsBig-es,
+  @manualStableSnippetsPdf-es}
+
+@divEnd
+
+
+@node FAQ
+@unnumberedsec FAQ
+
+@divClass{column-center-top}
+@subheading Preguntas preliminares
+
+@subsubheading ¿Dónde están el lienzo gráfico, los menús y las barras de herramientas?
+
+LilyPond requiere que escribamos la música como texto. Infórmese de
+ello leyendo nuestra @ref{Text input}.
+
+
+@subsubheading ¡Hay un montón de documentación!  ¿Tengo que leerla?
+
+Debe leer el manual de @ref{Learning}.  Respecto al resto
+de la documentación, sólo tiene que leer las secciones que tratan de
+la notación que quiera crear.
+
+
+@subsubheading ¡Eso es aún mucho leer! ¿Merece la pena?
+
+Decida por sí mismo; las razones por las que querría utilizar LilyPond
+se dan en la @ref{Introduction}.
+
+@divEnd
+
+@divClass{column-center-bottom}
+@subheading Cuestiones sobre la utilización
+
+@subsubheading ¡Algo no funciona!  ¿Cómo lo arreglo?
+
+Se explica en @rprogramnamed{Troubleshooting, Solución de problemas}.
+
+
+@subsubheading ¿Por qué cambian la sintaxis del lenguaje?
+
+Se explica en @rprogramnamed{Why does the syntax change?,@questiondown{}Por qué cambia la sintaxis?}.
+
+@divEnd
+
+
+@node Web
+@unnumberedsec Web
+
+@divClass{column-left-top}
+@subheading Web
+
+Este manual da una información general sobre LilyPond.  También
+contiene información sobre varios foros de la comunidad, maneras de
+informar de los fallos, y desarrollo.
+
+@divEnd
+
+@divClass{column-right-bottom}
+@subheading Léalo
+
+@subsubheading Últimos manuales
+
+@divClass{keep-bullets}
+@itemize
+@item @ref{Top,Web}
+@end itemize
+@divEnd
+
+@subsubheading Manual web en @versionDevel
+
+@docLinksBare{Web, web,
+  @ref{Top,Web},
+  @manualDevelWebSplit-es,
+  @manualDevelWebBig-es,
+  @manualDevelWebPdf-es}
+
+@divEnd
+
+
+@node Changes
+@unnumberedsec Cambios
+
+@divClass{column-left-top}
+@subheading Cambios
+
+Esto es un resumen de los cambios importantes y nuevas funcionalidades
+producidas en LilyPond a partir de la version estable anterior.
+
+@divEnd
+
+@divClass{column-right-bottom}
+
+@docLinks{Cambios, changes,
+  @rchangesnamed{Top,Cambios},
+  @manualStubStableChangesSplit-es,
+  @manualStubStableChangesBig-es,
+  @manualStubStableChangesPdf-es}
+
+@divEnd
+
+
+@node Extending
+@unnumberedsec Extender
+
+@divClass{column-left-top}
+@subheading Expansión de LilyPond
+
+Este manual explica cómo escribir extensiones de LilyPond.
+
+@divEnd
+
+@divClass{column-right-bottom}
+
+@docLinks{Extender, extending,
+  @rextendnamed{Top,Extender},
+  @manualStableExtendingSplit-es,
+  @manualStableExtendingBig-es,
+  @manualStableExtendingPdf-es}
+
+@divEnd
+
+@node Internals
+@unnumberedsec Funcionamiento interno
+
+@divClass{column-left-top}
+@subheading Referencia de funcionamiento interno
+
+Éste es un conjunto de páginas repleta de referencias cruzadas
+que constituyen la documentación de todos los detalles de cada una de
+las clases, objetos y funciones de LilyPond.  Se produce directamente
+a partir de las definiciones de formateo del código fuente.
+
+Casi toda la funcionalidad de formateo que se utiliza internamente
+está disponible para el usuario directamente.  Por ejemplo, casi todas
+las variables que controlan los valores de grosor, las distancias,
+etc., se pueden modificar en los archivos de entrada.  Existe un
+inmenso número de opciones de formateo, y todas ellas se encuentran
+descritas en este documento.  Cada una de las secciones de la
+Referencia de la Notación tiene una subsección @b{Véase también}, que
+se refiere a la documentación generada.
+
+@divEnd
+
+@divClass{column-right-bottom}
+
+@docLinks{Funcionamiento interno, internals,
+  @rinternalsnamed{Top,Funcionamiento interno},
+  @manualStubStableInternalsSplit-es,
+  @manualStubStableInternalsBig-es,
+  @manualStubStableInternalsPdf-es}
+
+@divEnd
+
+
+@node All
+@unnumberedsec Todos
+
+@divClass{column-left-top}
+@subheading Versiones para descargar
+
+@ifclear web_version
+Los @emph{tarballs} para descargar
+sólo están disponibles en @uref{https://lilypond.org}
+@end ifclear
+@ifset web_version
+
+@divClass{keep-bullets}
+@itemize
+
+@item @doctarballStable-es
+
+@end itemize
+
+@divEnd
+@end ifset
+
+@divEnd
+
+@divClass{column-right-bottom}
+@subheading Versiones estables anteriores
+
+@divClass{keep-bullets}
+@itemize
+
+@item @uref{https://lilypond.org/doc/v2.22/Documentation/web/manuals.es.html,
+Documentación de LilyPond 2.22}
+
+@item @uref{https://lilypond.org/doc/v2.20/Documentation/web/manuals.es.html,
+Documentación de LilyPond 2.20}
+
+@item @uref{https://lilypond.org/doc/v2.18/Documentation/web/manuals.es.html,
+Documentación de LilyPond 2.18}
+
+@item @uref{https://lilypond.org/doc/v2.16/Documentation/web/manuals.es.html,
+Documentación de LilyPond 2.16}
+
+@item @uref{https://lilypond.org/doc/v2.14/Documentation/web/manuals.es.html,
+Documentación de LilyPond 2.14}
+
+@item @uref{https://lilypond.org/doc/v2.12/Documentation/index.es.html,
+Documentación de LilyPond 2.12}
+
+@item @uref{https://lilypond.org/doc/v2.10/Documentation/,
+Documentación de LilyPond 2.10}
+
+@item @uref{https://lilypond.org/doc/v2.8/Documentation/,
+Documentación de LilyPond 2.8}
+
+@item @uref{https://lilypond.org/doc/v2.6/Documentation/,
+Documentación de LilyPond 2.6}
+
+@item @uref{https://lilypond.org/doc/v2.4/Documentation/out-www/,
+Documentación de LilyPond 2.4}
+
+@item @uref{https://lilypond.org/doc/v2.2/Documentation/out-www/,
+Documentación de LilyPond 2.2}
+
+@item @uref{https://lilypond.org/doc/v2.0/Documentation/out-www/,
+Documentación de LilyPond 2.0}
+
+@item @uref{https://lilypond.org/doc/v1.8/Documentation/out-www/,
+Documentación de LilyPond 1.8}
+
+@item @uref{https://lilypond.org/doc/v1.6/Documentation/out-www/,
+Documentación de LilyPond 1.6}
+
+@end itemize
+
+@divEnd
+@divEnd
+
+
+@node FDL
+@unnumberedsec FDL
+
+@divClass{column-center-top}
+@subheading Licencia de la documentación
+
+La documentación de GNU LilyPond está publicada bajo la Licencia de
+Documentación Libre de GNU.  Hay una introducción a esta licencia y a
+nuestros motivos para haberla elegido, en @ref{Freedom}.
+
+@divEnd
+
+@divClass{column-center-bottom}
+@subheading GNU Free Documentation License 1.3
+
+@include en/fdl.itexi
+
+@divEnd

@@ -1,0 +1,510 @@
+@c -*- coding: utf-8; mode: texinfo; documentlanguage: fr -*-
+
+@ignore
+   Translation of GIT committish: c2ea1fa2792532a1a123f08504fc8677defb7a96
+
+   When revising a translation, copy the HEAD committish of the
+   version that you are working on.  For details, see the Contributors'
+   Guide, node Updating translation committishes..
+@end ignore
+
+@c \version "2.27.0"
+
+@c Translators: Jean-Charles Malahieude
+
+@node Templates
+@appendix Modèles
+
+Cette annexe du manuel d'initiation propose des patrons de partition
+LilyPond, prets à l'emploi. Il vous suffira d'y ajouter quelques notes,
+de lancer LilyPond, et d'aprécier le résultat.
+
+
+@node Built-in templates
+@appendixsec Gabarits préprogrammés
+
+LilyPond est livré avec plusieurs gabarits convenant à différentes
+configurations chorales. Ils permettent de gérer de la musique chorale
+simple, avec ou sans accompagnement de piano, présentée sur deux, quatre
+ou huit portées. Contrairement aux autre gabarits, celui-ci est
+« préprogrammé », ce qui signifie qu'il ne nécessite pas d'être recopié
+et édité ; il suffit en fait d'ajouter une instruction @code{\include}
+au fichier source.
+
+@warning{Contrairement à la plupart des inclusions, la commande
+@code{@bs{}include} traitant ces gabarits préprogrammés doit se placer
+@strong{à la fin} du fichier source.}
+
+Les expressions musicales nécessaires sont affectées à des variables
+spécifiques. Ces définitions doivent intervenir avant la commande
+@code{\include}.
+
+La musique peut se présenter en une ou deux voix par portée à l'aide du
+commutateur @code{TwoVoicesPerStaff} (@emph{DeuxVoixParPortée}) --
+valorisé à @code{##f} ou @code{##t} selon le cas.
+
+
+@node SATB template
+@appendixsubsec Gabarit pour chœur à quatre voix mixtes
+
+@cindex Choeur SATB
+
+Voici l'intégralité d'un fichier permettant d'obtenir une partition pour
+chœur à quatre voix avec paroles individuelles et accompagnement de
+piano :
+
+@lilypond[verbatim, quote]
+SopranoMusic = \relative { a'4\f a8 a a4 a }
+SopranoLyrics = \lyricmode { Sop -- ra -- no ly -- rics }
+AltoMusic = \relative { d'4\f d d d }
+AltoLyrics = \lyricmode { Al -- to ly -- rics }
+TenorMusic = \relative { a4\p a a a }
+TenorLyrics = \lyricmode { Te -- nor ly -- rics }
+BassMusic = \relative { c2\p c4 c }
+BassLyrics = \lyricmode { Bass ly -- rics }
+PianoRHMusic = \relative { c' e g c }
+PianoDynamics = { s2\mp s4 s4 }
+PianoLHMusic = \relative { c e g c }
+\include "satb.ly"
+@end lilypond
+
+Ce même fichier peut servir à générer une partition dans laquelle deux
+voix partagent une même portée, après avoir simplement commuté
+@code{TwoVoicesPerStaff} à @code{##t}. Chaque voix dispose à nouveau de
+ses propres paroles.
+
+@lilypond[verbatim, quote]
+SopranoMusic = \relative { a'4\f a8 a a4 a }
+SopranoLyrics = \lyricmode { Sop -- ra -- no ly -- rics }
+AltoMusic = \relative { d'4\f d d d }
+AltoLyrics = \lyricmode { Al -- to ly -- rics }
+TenorMusic = \relative { a4\p a a a }
+TenorLyrics = \lyricmode { Te -- nor ly -- rics }
+BassMusic = \relative { c2\p c4 c }
+BassLyrics = \lyricmode { Bass ly -- rics }
+PianoRHMusic = \relative { c' e g c }
+PianoDynamics = { s2\mp s4 s4 }
+PianoLHMusic = \relative { c e g c }
+TwoVoicesPerStaff = ##t
+\include "satb.ly"
+@end lilypond
+
+Désactiver @code{TwoVoicesPerStaff}, ou le laisser à sa valeur par
+défaut, et se limiter à certaines variables seulement permet d'obtenir
+un agencement pour moins de voix. Voici, par exemple, comment saisir un
+duo soprano basse :
+
+@lilypond[verbatim,quote]
+SopranoMusic = \relative { c'' c c c }
+SopranoLyrics = \lyricmode { High voice ly -- rics }
+BassMusic = \relative { a a a a }
+BassLyrics = \lyricmode { Low voice ly -- rics }
+\include "satb.ly"
+@end lilypond
+
+Chacune des parties peut se voir adjoindre un deuxième couplet ou des
+paroles alternatives :
+
+@lilypond[verbatim, quote]
+SopranoMusic = \relative { a'4 a a a }
+SopranoLyricsOne = \lyricmode {
+  \stanza "1."
+  Words to verse one
+}
+SopranoLyricsTwo = \lyricmode {
+  \stanza "2."
+  Words to verse two
+}
+\include "satb.ly"
+@end lilypond
+
+Lorsque paroles et rythme sont identiques à toutes les voix, la
+partition peut s'agencer sur deux portées, chacune comportant deux voix.
+Le gabarit préprogrammé autorise jusqu'à neuf couplets. L'exemple
+suivant, dépourvu d'accompagnement, se contente de trois couplets.
+
+@lilypond[verbatim, quote]
+SopranoMusic = \relative { a' a a a }
+AltoMusic = \relative { f' f f f }
+VerseOne = \lyricmode {
+  \stanza "1."
+  Words to verse one
+}
+VerseTwo = \lyricmode {
+  \stanza "2."
+  Words to verse two
+}
+VerseThree = \lyricmode {
+  \stanza "3."
+  Words to verse three
+}
+TenorMusic = \relative { a a a a }
+BassMusic = \relative { f f f f }
+TwoVoicesPerStaff = ##t
+\include "satb.ly"
+@end lilypond
+
+Dautres variables peuvent se voir attribuer une valeur. C'est notamment
+le cas de la tonalité et de la métrique :
+
+@lilypond[verbatim, quote]
+Key = \key a \major
+Time = {
+  \time 5/4
+  \tempo "Allegro" 4 = 144
+}
+SopranoMusic = \relative { gis' gis gis gis gis }
+AltoMusic = \relative { cis' cis cis cis cis }
+VerseOne = \lyricmode { Words to this du -- et }
+TwoVoicesPerStaff = ##t
+\include "satb.ly"
+@end lilypond
+
+Les intitulés d'instrument, ainsi que leur version abrégée, sont
+modifiables :
+
+@lilypond[verbatim,quote]
+SopranoMusic = \relative { c'' c c c }
+SopranoLyrics = \lyricmode { High voice ly -- rics }
+SopranoInstrumentName = "Soprano 1"
+SopranoShortInstrumentName = "S1"
+AltoMusic = \relative { a' a a a }
+AltoLyrics = \lyricmode { Low voice ly -- rics }
+AltoInstrumentName = "Soprano 2"
+AltoShortInstrumentName = "S2"
+\include "satb.ly"
+@end lilypond
+
+@noindent
+bien que, dans ce cas particulier, il est plus simple d'utiliser le
+gabarit @code{ssaattbb.ly} -- @pxref{SSAATTBB template}.
+
+Une partie de soliste s'ajoute à l'aide de la variable
+@code{DescantMusic}, à laquelle s'appliqueront les paroles contenues
+dans la variable @code{DescantLyrics}. De la même manière, une partie de
+solo peut s'ajouter au-dessus du chœur en alimentant les variables
+@code{SoloMusic} et @code{SoloLyrics}.
+
+Comme pour n'importe quelle partition, vous pouvez y ajouter des blocs
+@code{\header} et @code{\paper} en tête de fichier ; leur contenu sera
+combiné (sans les remplacer) aux réglages du gabarit préprogrammé. Tous
+les réglages par défaut du gabarit seront annulés dès lors que
+@b{toutes} ses valeurs auront été redéfinies dans une variable
+@code{Layout} :
+
+@example
+Layout = \layout @{ ... @}
+@end example
+
+Le jeu complet des variables modifiables disponibles est contenu dans le
+fichier @file{ly/satb.ly} -- @pxref{Other sources of information}.
+
+@morerefs
+Manuel d'initiation :
+@ref{Other sources of information},
+@ref{Extending the templates},
+@ref{Vocal ensembles templates},
+@ref{Organizing pieces with variables}.
+@endmorerefs
+
+@knownissues
+Les réglages de la variable @code{TwoVoicesPerStaff} (deux voix par
+portée) s'étendent à l'intégralité de la partition ; ils ne sauraient
+varier en cours de partition.
+
+Des arrangements plus complexes de partition pour chœur mixte à quatre
+voix ne sont pas réalisables avec ce gabarit préprogrammé.
+
+
+@node SSAATTBB template
+@appendixsubsec Gabarit pour double chœur à quatre voix mixtes
+
+@cindex chœur SSAATTBB
+
+Ce gabarit préprogrammé dispose, à l'exception des variables
+@code{VerseXxx}, des mêmes variable que le gabarit SATB -- @pxref{SATB
+template}. Pour chacune des quatre parties, paroles et musique peuvent
+être dédoublées en alimentant les variables @code{SopranoOneMusic} et
+@code{SopranoTwoMusic}, etc. ainsi que leurs paroles associées dans
+@code{SopranoOneLyrics} et @code{SopranoTwoLyrics}, etc. Jusqu'à quatre
+couplets supplémentaires peuvent venir s'ajouter aux paroles, à l'aide
+de variables de la forme @code{SopranoOneLyricsOne}.
+
+Le commutateur @code{TwoVoicesPerStaff}, basculé sur @code{##t},
+regroupera @strong{toutes} les parties sur une même portée. Lui laisser
+sa valeur par défaut ou lui affecter @code{##f} laisse la possibilité
+de répartir les voix sur une ou deux portées selon le réglage de
+@code{SopranoTwoVoicesPerStaff}, @code{MenTwoVoicesPerStaff}, etc.
+
+Prenons par exemple un pièce pour soprano et alto qui commence à
+l'unisson, puis passe à deux voix (soprano et alto), lesquelles
+finissent par se diviser. Cette partition pourrait se coder ainsi :
+
+@lilypond[verbatim,quote]
+Time = { s1 \break s1 \break }
+WomenMusic = \relative { a'4 a a a }
+WomenLyrics = \lyricmode { Wo -- men ly -- rics }
+SopranoMusic = \relative { s1 | c''4 c c c8 c }
+SopranoLyrics = \lyricmode{ So -- pra -- no ly -- rics }
+AltoMusic = \relative { s1 | g'4 g g g }
+AltoLyrics = \lyricmode { Al -- to ly -- rics }
+SopranoOneMusic = \relative { s1 | s1 |e''4 e e e }
+SopranoOneLyrics = \lyricmode { Sop One ly -- rics }
+SopranoTwoMusic = \relative { s1 | s1 | c''4 c c c }
+SopranoTwoLyrics = \lyricmode { Sop Two ly -- rics }
+AltoOneMusic = \relative { s1 | s1 | g'4 g g g8 g }
+AltoOneLyrics = \lyricmode { Al -- to One ly -- rics }
+AltoTwoMusic = \relative { s1 | s1 | e'4 e e e8 e }
+AltoTwoLyrics = \lyricmode { Al -- to Two ly -- rics }
+\layout { ragged-right = ##t }
+\include "ssaattbb.ly"
+@end lilypond
+
+Les voix d'homme s'ajouteront de la même manière.
+
+Les sopranos, une fois divisées, peuvent partager la même portée en
+basculant @code{SopranoTwoVoicesPerStaff} sur @code{##t} tout en
+laissant les autres parties inchangées, comme ici :
+
+@lilypond[verbatim,quote]
+SopranoTwoVoicesPerStaff = ##t
+Time = { s1 \break s1 \break }
+WomenMusic = \relative { a'4 a a a }
+WomenLyrics = \lyricmode { Wo -- men ly -- rics }
+SopranoMusic = \relative { s1 | c''4 c c c8 c }
+SopranoLyrics = \lyricmode{ So -- pra -- no ly -- rics }
+AltoMusic = \relative { s1 | g'4 g g g }
+AltoLyrics = \lyricmode { Al -- to ly -- rics }
+SopranoOneMusic = \relative { s1 | s1 |e''4 e e e }
+SopranoOneLyrics = \lyricmode { Sop One ly -- rics }
+SopranoTwoMusic = \relative { s1 | s1 | c''4 c c c }
+SopranoTwoLyrics = \lyricmode { Sop Two ly -- rics }
+AltoOneMusic = \relative { s1 | s1 | g'4 g g g8 g }
+AltoOneLyrics = \lyricmode { Al -- to One ly -- rics }
+AltoTwoMusic = \relative { s1 | s1 | e'4 e e e8 e }
+AltoTwoLyrics = \lyricmode { Al -- to Two ly -- rics }
+\layout { ragged-right = ##t }
+\include "ssaattbb.ly"
+@end lilypond
+
+Le regroupement de chaque pupitre divisé sur une même portée demande
+simplement d'activer @code{TwoVoicesPerStaff} :
+
+@lilypond[verbatim,quote]
+TwoVoicesPerStaff = ##t
+Time = { s1 \break s1 \break }
+WomenMusic = \relative { a'4 a a a }
+WomenLyrics = \lyricmode { Wo -- men ly -- rics }
+SopranoMusic = \relative { s1 | c''4 c c c8 c }
+SopranoLyrics = \lyricmode{ So -- pra -- no ly -- rics }
+AltoMusic = \relative { s1 | g'4 g g g }
+AltoLyrics = \lyricmode { Al -- to ly -- rics }
+SopranoOneMusic = \relative { s1 | s1 |e''4 e e e }
+SopranoOneLyrics = \lyricmode { Sop One ly -- rics }
+SopranoTwoMusic = \relative { s1 | s1 | c''4 c c c }
+SopranoTwoLyrics = \lyricmode { Sop Two ly -- rics }
+AltoOneMusic = \relative { s1 | s1 | g'4 g g g8 g }
+AltoOneLyrics = \lyricmode { Al -- to One ly -- rics }
+AltoTwoMusic = \relative { s1 | s1 | e'4 e e e8 e }
+AltoTwoLyrics = \lyricmode { Al -- to Two ly -- rics }
+\layout { ragged-right = ##t }
+\include "ssaattbb.ly"
+@end lilypond
+
+Le jeu complet des variables modifiables disponibles est contenu dans le
+fichier @file{ly/ssaattbb.ly} -- @pxref{Other sources of information}.
+
+@morerefs
+Manuel d'initiation :
+@ref{Other sources of information},
+@ref{Extending the templates},
+@ref{Vocal ensembles templates},
+@ref{Organizing pieces with variables}.
+@endmorerefs
+
+@knownissues
+Les réglages des variables @code{...TwoVoicesPerStaff} (deux voix par
+portée) s'étendent à l'intégralité de la partition ; ils ne sauraient
+varier en cours de partition.
+
+Des arrangements plus complexes de partition pour chœur à huit voix ne
+sont pas réalisables avec ce gabarit préprogrammé.
+
+
+@need 800
+@node Single staff templates
+@appendixsec Modèles pour portée unique
+
+
+@node Notes only
+@appendixsubsec Notes seules
+
+@lilypondfile[verbatim,quote,ragged-right,texidoc]
+{snippets/single-staff-template-with-only-notes.ly}
+
+
+@node Notes and lyrics
+@appendixsubsec Notes et paroles
+
+@lilypondfile[verbatim,quote,ragged-right,texidoc]
+{snippets/single-staff-template-with-notes-and-lyrics.ly}
+
+
+@node Notes and chords
+@appendixsubsec Notes et accords
+
+@lilypondfile[verbatim,quote,ragged-right,texidoc]
+{snippets/single-staff-template-with-notes-and-chords.ly}
+
+
+@node Notes lyrics and chords
+@appendixsubsec Notes, paroles et accords
+
+@lilypondfile[verbatim,quote,ragged-right,texidoc]
+{snippets/single-staff-template-with-notes,-lyrics,-and-chords.ly}
+
+
+@need 800
+@node Piano templates
+@appendixsec Modèles pour piano
+
+
+@node Solo piano
+@appendixsubsec Piano seul
+
+@lilypondfile[verbatim,quote,ragged-right,texidoc]
+{snippets/piano-template-simple.ly}
+
+
+@node Piano and melody with lyrics
+@appendixsubsec Chant et accompagnement
+
+@lilypondfile[verbatim,quote,ragged-right,texidoc]
+{snippets/piano-template-with-melody-and-lyrics.ly}
+
+
+@node Piano-centered lyrics
+@appendixsubsec Piano et paroles entre les portées
+
+@lilypondfile[verbatim,quote,ragged-right,texidoc]
+{snippets/piano-template-with-centered-lyrics.ly}
+
+
+@need 800
+@node String quartet templates
+@appendixsec Modèles pour quatuor à cordes
+
+
+@node String quartet
+@appendixsubsec Quatuor à cordes simple
+
+@lilypondfile[verbatim,quote,ragged-right,texidoc]
+{snippets/string-quartet-template-simple.ly}
+
+
+@node String quartet parts
+@appendixsubsec Parties pour quatuor à cordes
+
+@lilypondfile[verbatim,quote,ragged-right,texidoc]
+{snippets/string-quartet-template-with-separate-parts.ly}
+
+
+@node Vocal ensembles templates
+@appendixsec Modèles pour ensemble vocal
+
+Les exemples ci-après demandent à être recopiés et édités dans vos
+propres fichiers. Pour des constructions simples, vous pouvez adopter
+une construction préprogrammée appelée par une instruction
+@code{\include} -- @pxref{Built-in templates}.
+
+
+@node SATB vocal score
+@appendixsubsec Partition pour chœur SATB
+
+@lilypondfile[verbatim,quote,ragged-right,texidoc]
+{snippets/vocal-ensemble-template.ly}
+
+
+@node SATB vocal score and automatic piano reduction
+@appendixsubsec Partition pour chœur SATB avec réduction pour piano
+
+@lilypondfile[verbatim,quote,ragged-right,texidoc]
+{snippets/vocal-ensemble-template-with-automatic-piano-reduction.ly}
+
+
+@node SATB with aligned contexts
+@appendixsubsec Partition pour chœur SATB avec alignement des contextes
+
+@lilypondfile[verbatim,quote,ragged-right,texidoc]
+{snippets/vocal-ensemble-template-with-lyrics-aligned-below-and-above-the-staves.ly}
+
+
+@node SATB on four staves
+@appendixsubsec Chœur à quatre voix mixtes sur quatre portées
+
+@lilypondfile[verbatim,quote,ragged-right,texidoc]
+{snippets/satb-choir-template---four-staves.ly}
+
+
+@node Solo verse and two-part refrain
+@appendixsubsec Couplet pour solo et refrain à deux voix
+
+@lilypondfile[verbatim,quote,ragged-right,texidoc]
+{snippets/vocal-ensemble-template-with-verse-and-refrain.ly}
+
+
+@node Hymn tunes
+@appendixsubsec Hymnes et cantiques
+
+@lilypondfile[verbatim,quote,ragged-right,texidoc]
+{snippets/hymn-template.ly}
+
+
+@node Psalms
+@appendixsubsec Psalmodie
+
+@lilypondfile[verbatim,quote,ragged-right,texidoc]
+{snippets/anglican-psalm-template.ly}
+
+
+@need 800
+@node Orchestral templates
+@appendixsec Orchestre
+
+
+@node Orchestra choir and piano
+@appendixsubsec Orchestre, chœur et piano
+
+@lilypondfile[verbatim,quote,ragged-right,texidoc]
+{snippets/orchestra,-choir-and-piano-template.ly}
+
+
+@need 800
+@node Ancient notation templates
+@appendixsec Exemples de notation ancienne
+
+
+@node Transcription of mensural music
+@appendixsubsec Transcription de musique mensurale
+
+@lilypondfile[verbatim,quote,ragged-right,texidoc]
+{snippets/incipit.ly}
+
+
+@node Gregorian transcription template
+@appendixsubsec Transcription du grégorien
+
+@lilypondfile[verbatim,quote,ragged-right,texidoc]
+{snippets/ancient-notation-template---modern-transcription-of-gregorian-music.ly}
+
+
+@need 800
+@node Other templates
+@appendixsec Autres modèles
+
+
+@node Jazz combo
+@appendixsubsec Symboles de jazz
+
+@lilypondfile[verbatim,quote,ragged-right,texidoc]
+{snippets/jazz-combo-template.ly}

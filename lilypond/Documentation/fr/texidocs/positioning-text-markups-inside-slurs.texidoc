@@ -1,0 +1,7 @@
+%% Translation of GIT committish: de1e42ce512f3690387cdd065109bddff1b7bd6d
+  texidocfr = "
+Lorsqu'une annotation doit s'incrire à l'intérieur d'une liaison, la
+propriété @code{outside-staff-priority} doit être désactivée.
+"
+
+  doctitlefr = "Positionnement d'une annotation à l'intérieur d'une liaison"

@@ -1,0 +1,11 @@
+%% Translation of GIT committish: de1e42ce512f3690387cdd065109bddff1b7bd6d
+  texidocfr = "
+Il est normalement impensable qu'un saut de ligne tombe au milieu d'une
+ligature. LilyPond le permet néanmoins en activant la propriété
+@code{Beam.breakable}.
+
+Cette propriété n'affecte pas les sauts manuels insérés par les
+commandes comme @code{\\break}.
+"
+
+  doctitlefr = "Ligature au moment d'un saut de ligne"

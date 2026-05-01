@@ -1,0 +1,106 @@
+\input texinfo-ja @c -*- coding: utf-8; mode: texinfo; documentlanguage: ja -*-
+@ignore
+    Translation of GIT committish: 0cc270b871321ae5aa8622cea8d8262aafd16641
+
+
+    When revising a translation, copy the HEAD committish of the
+    version that you are working on.  See TRANSLATION for details.
+@end ignore
+
+@settitle LilyPond 記譜法リファレンス
+@documentencoding UTF-8
+@documentlanguage ja
+@afourpaper
+
+@macro manualIntro
+このマニュアルは LilyPond バージョン @version{} で提供される@c
+すべての記譜法についての参照を提供します。@c
+このマニュアルは、読み手が @rlearningnamed{Top,学習マニュアル} で@c
+扱っている題材に慣れ親しんでいることを前提としています。
+@end macro
+
+@c `Notation Reference' was born 1998-08-14 with this commit:
+@c release: 1.0.2
+@c author: Han-Wen Nienhuys
+@c commit: a3a44f9f3c581b6824b3a65f9039656693e09bbf
+@c   file: Documentation/tex/refman.yo
+
+@macro copyrightDeclare
+Copyright @copyright{} 1999--2026 by 著作者一同
+@end macro
+
+
+@set FDL
+@include ja/macros.itexi
+@iftex
+@include en/hyphenation.itexi
+@end iftex
+
+@c Translators: Yoshiki Sawada, Tomohiro Tatejima
+@c Translation status: post-GDP
+
+@lilyTitlePage{記譜法リファレンス}
+
+
+@ifnottex
+
+@menu
+* Musical notation::              ほとんどすべての楽譜作成で使用される記譜法
+* Specialist notation::          特別な目的でのみ使用される記譜法
+* General input and output::              LilyPond 入力についての一般的な情報
+* Spacing issues::          出力の表示
+* Changing defaults::    出力の調整
+
+付録
+
+* Notation manual tables::      表と図
+* Cheat sheet::     LilyPond 構文についての要約
+* GNU Free Documentation License:: このドキュメントの使用許諾書
+* Index of commands and concepts::
+@end menu
+
+@ignore
+@menu
+
+付録
+
+* 記譜法マニュアル表::      表と図
+* Cheat sheet::     LilyPond 構文についての要約
+* GNU Free Documentation License:: このドキュメントの使用許諾書
+* Index of commands and concepts::
+@end menu
+@end ignore
+@docMain
+@end ifnottex
+
+@contents
+
+@include ja/notation/notation.itely
+@include ja/notation/specialist.itely
+
+@include ja/notation/input.itely
+@include ja/notation/spacing.itely
+
+@include ja/notation/changing-defaults.itely
+
+
+@include ja/notation/notation-appendices.itely
+@include ja/notation/cheatsheet.itely
+
+
+@include en/fdl.itexi
+
+
+@node Index of commands and concepts
+@appendix インデックス
+
+すべての LilyPond コマンドとキーワードに加えて、@c
+このインデックスは、それらに関連する音楽用語や単語をリストアップしていて、@c
+そのトピックスについて説明しているマニュアルのセクションへのリンクがあります。@c
+各リンクは 2 つのパートに分かれています。@c
+最初のパートは、マニュアルの中でトピックスが出現する場所へのリンクです。@c
+2 番目のパートは、マニュアルの中でトピックスが出現するセクションの先頭へのリンクです。
+
+@printindex cp
+
+@bye

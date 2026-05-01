@@ -1,0 +1,6 @@
+%% Translation of GIT committish: 0cc270b871321ae5aa8622cea8d8262aafd16641
+  texidocja = "
+ブレス記号にはいくつかの図形を設定できます: カンマ (デフォルト),
+ティック (斜め線), V字, @qq{線路記号} (カエスーラ) です。
+"
+  doctitleja = "ブレス記号"

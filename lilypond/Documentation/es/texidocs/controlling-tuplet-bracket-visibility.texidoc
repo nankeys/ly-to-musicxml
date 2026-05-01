@@ -1,0 +1,14 @@
+%% Translation of GIT committish: 6f7a4f8fe0e6b95080adc1f386faddca3933d988
+  texidoces = "
+El comportamiento predeterminado de la visibilidad de los corchetes de
+grupo de valoración especial es imprimir el corchete a no ser que haya
+una barra de la misma longitud que el grupo especial.
+
+Para controlar la visibilidad de los corchetes de grupo,
+establezca la propiedad @code{bracket-visibility} a @code{#t}
+(imprimir el corchete siempre), @code{#if-no-beam} (imprimir el
+corchete solamente si no hay barra), o @code{#f} (no imprimir
+nunca el corchete).  Este último equivale de hecho a omitir el
+objeto @code{TupletBracket} de la salida impresa.
+"
+  doctitlees = "Controlar la visibilidad de los corchetes de grupo especial"

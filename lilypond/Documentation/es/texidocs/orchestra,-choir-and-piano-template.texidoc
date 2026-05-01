@@ -1,0 +1,9 @@
+%% Translation of GIT committish: fbf390d05408c5b842a22c122da734c54f92ca12
+  texidoces = "
+Esta plantilla muestra el uso de contextos @code{StaffGroup} y
+@code{GrandStaff} anidados para sub-agrupar instrumentos del mismo
+tipo, y una forma de usar @code{\\transpose} de manera que unas
+variables contengan la música para instrumentos transpositores en
+afinación de concierto.
+"
+  doctitlees = "Plantilla de orquesta, coro y piano"

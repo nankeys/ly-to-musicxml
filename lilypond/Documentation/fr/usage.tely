@@ -1,0 +1,84 @@
+\input texinfo @c -*- coding: utf-8; mode: texinfo; documentlanguage: fr -*-
+@ignore
+    Translation of GIT committish: 606ac3c3b22c41d84aa5fa938d42da5125ac572a
+
+    When revising a translation, copy the HEAD committish of the
+    version that you are working on.  For details, see the Contributors'
+    Guide, node Updating translation committishes..
+@end ignore
+
+@settitle GNU LilyPond -- Utilisation des programmes
+@documentencoding UTF-8
+@documentlanguage fr
+@afourpaper
+
+@c Translators: John Mandereau, Jean-Charles Malahieude
+
+@macro manualIntro
+Ce document constitue le manuel d'utilisation des programmes de GNU
+LilyPond@tie{}@version{}.  De plus, ce manuel suggère des « bonnes
+pratiques » pour une utilisation plus efficace.
+@end macro
+
+@c 'Usage' was born 1999-10-11 with this commit:
+@c release: 1.2.13
+@c author: Han-Wen Nienhuys
+@c commit: 0cf97b5cdceecbba937f43ac827f4065aad5001e
+@c   file: Documentation/user/invoking.itexi
+
+@macro copyrightDeclare
+Copyright @copyright{} 1999--2026 par les auteurs.
+@end macro
+
+@c dircategory and direntries won't be translated
+@c as there is no translation for documentation in info. -JCM
+
+@set FDL
+@include fr/macros.itexi
+
+
+@c urg, makeinfo 4.9.91 French translation is funky
+@c iftex
+@frenchspacing on
+@c end iftex
+
+@lilyTitlePage{Utilisation des programmes}
+
+@c TOC -- non-tex
+@ifnottex
+
+@c  maybe add a "Tasks" or "Specific tasks" or something like
+@c  that, after Suggestions  -gp
+@menu
+* Running lilypond::       Mode d'emploi.
+* Updating files with convert-ly:: Mise à jour d'anciens fichiers.
+* lilypond-book::               Intégration de texte et musique.
+* External programs::         Associer LilyPond à d'autres programmes.
+* Suggestions for writing files::  Comment agencer un fichier.
+
+Annexes
+
+* GNU Free Documentation License:: Licence de ce document.
+* Index of commands and concepts::
+@end menu
+
+@docMain
+@end ifnottex
+
+
+@contents
+
+@include fr/usage/running.itely
+@include fr/usage/updating.itely
+@include fr/usage/lilypond-book.itely
+@include fr/usage/external.itely
+@include fr/usage/suggestions.itely
+
+@include en/fdl.itexi
+
+@node Index of commands and concepts
+@appendix Index des commandes et concepts
+
+@printindex cp
+
+@bye

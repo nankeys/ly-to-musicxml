@@ -1,0 +1,260 @@
+/*
+  This file is part of LilyPond, the GNU music typesetter.
+
+  Copyright (C) 1997--2026 Han-Wen Nienhuys <hanwen@xs4all.nl>
+
+  LilyPond is free software: you can redistribute it and/or modify
+  it under the terms of the GNU General Public License as published by
+  the Free Software Foundation, either version 3 of the License, or
+  (at your option) any later version.
+
+  LilyPond is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+
+  You should have received a copy of the GNU General Public License
+  along with LilyPond.  If not, see <http://www.gnu.org/licenses/>.
+*/
+
+#include "note-head.hh"
+
+#include "directional-element-interface.hh"
+#include "font-interface.hh"
+#include "grob.hh"
+#include "international.hh"
+#include "staff-symbol.hh"
+#include "staff-symbol-referencer.hh"
+#include "warn.hh"
+
+#include <algorithm> //  min, max
+#include <cctype>
+#include <cmath>
+#include <tuple>
+#include <utility>
+
+static Stencil
+internal_print (Grob *me, std::string *font_char)
+{
+  std::string style
+    = robust_symbol2string (get_property (me, "style"), "default");
+
+  std::string suffix = std::to_string (
+    std::min (from_scm (get_property (me, "duration-log"), 2), 2));
+  if (style != "default")
+    suffix = from_scm (get_property (me, "glyph-name"), "");
+
+  Font_metric *fm = Font_interface::get_default_font (me);
+
+  std::string prefix = "noteheads.";
+  std::string idx_symmetric;
+  std::string idx_directed;
+  std::string idx_either = idx_symmetric = prefix + "s";
+  Stencil out = fm->find_by_name (idx_either + suffix);
+  if (out.is_empty ())
+    {
+      const auto dir = get_strict_grob_direction (me);
+      idx_either = idx_directed = prefix + (dir == UP ? "u" : "d");
+      out = fm->find_by_name (idx_either + suffix);
+    }
+
+  if (style == "mensural" || style == "neomensural" || style == "petrucci"
+      || style == "baroque" || style == "kievan")
+    {
+      if (!Staff_symbol_referencer::on_line (
+            me, from_scm (get_property (me, "staff-position"), 0)))
+        {
+          Stencil test = fm->find_by_name (idx_either + "r" + suffix);
+          if (!test.is_empty ())
+            {
+              idx_either += "r";
+              out = test;
+            }
+        }
+    }
+
+  if (style == "kievan"
+      && 3 == from_scm (get_property (me, "duration-log"), 2))
+    {
+      Grob *stem = unsmob<Grob> (get_object (me, "stem"));
+      Grob *beam = unsmob<Grob> (get_object (stem, "beam"));
+      if (beam)
+        out = fm->find_by_name (idx_either + "2kievan");
+    }
+
+  idx_either += suffix;
+  if (out.is_empty ())
+    {
+      me->warning (_f ("none of note heads `%s' or `%s' found",
+                       idx_symmetric.c_str (), idx_directed.c_str ()));
+      out = Stencil (Box (Interval (0, 0), Interval (0, 0)), SCM_EOL);
+    }
+  else
+    *font_char = idx_either;
+
+  return out;
+}
+
+/*
+  TODO: make stem X-parent of notehead.
+ */
+MAKE_SCHEME_CALLBACK (Note_head, stem_x_shift, "ly:note-head::stem-x-shift",
+                      1);
+SCM
+Note_head::stem_x_shift (SCM smob)
+{
+  auto *const me = LY_ASSERT_SMOB (Grob, smob, 1);
+  Grob *stem = unsmob<Grob> (get_object (me, "stem"));
+  if (stem)
+    (void) get_property (stem, "positioning-done");
+
+  return to_scm (0);
+}
+
+MAKE_SCHEME_CALLBACK (Note_head, print, "ly:note-head::print", 1);
+SCM
+Note_head::print (SCM smob)
+{
+  auto *const me = LY_ASSERT_SMOB (Grob, smob, 1);
+
+  std::string idx;
+  return internal_print (me, &idx).smobbed_copy ();
+}
+
+MAKE_SCHEME_CALLBACK (Note_head, include_ledger_line_height,
+                      "ly:note-head::include-ledger-line-height", 1);
+SCM
+Note_head::include_ledger_line_height (SCM smob)
+{
+  auto *const me = LY_ASSERT_SMOB (Grob, smob, 1);
+  Grob *staff = Staff_symbol_referencer::get_staff_symbol (me);
+
+  if (staff)
+    {
+      Real ss = Staff_symbol::staff_space (staff);
+      Interval lines = Staff_symbol::line_span (staff) * (ss / 2.0);
+      Real my_pos = Staff_symbol_referencer::get_position (me) * ss / 2.0;
+      Interval my_ext = me->extent (me, Y_AXIS) + my_pos;
+
+      // The +1 and -1 come from the fact that we only want to add
+      // the interval between the note and the first ledger line, not
+      // the whole interval between the note and the staff.
+      Interval iv (std::min (0.0, lines[UP] - my_ext[DOWN] + 1),
+                   std::max (0.0, lines[DOWN] - my_ext[UP] - 1));
+      return to_scm (iv);
+    }
+
+  return to_scm (Interval (0, 0));
+}
+
+Real
+Note_head::stem_attachment_coordinate (Grob *me, Axis a)
+{
+  Offset off = from_scm (get_property (me, "stem-attachment"), Offset (0, 0));
+
+  return off[a];
+}
+
+/*
+  Stem attachment position for a given stem direction. Each component
+  is measured in a -1 to 1 scale, so that -1 is the left/bottom edge of
+  the note's bounding box and 1 is the right/top edge.
+*/
+Offset
+Note_head::get_stem_attachment (Font_metric *fm, const std::string &key,
+                                Direction dir)
+{
+  Offset att;
+
+  auto mangled_key = [&key] {
+    // TODO: This is a bandage on an inconsistent Font_metric interface.
+    // Font_metric::find_by_name() does this automatically but other methods do
+    // not.  This affects names of breve, longa, and maxima heads.
+    auto copy = key;
+    replace_all (&copy, '-', 'M');
+    return copy;
+  }();
+
+  size_t k = fm->name_to_index (mangled_key);
+  if (k != GLYPH_INDEX_INVALID)
+    {
+      Box b = fm->get_indexed_char_dimensions (k);
+      const auto [wxwy, rotate] = fm->attachment_point (mangled_key, dir);
+      for (const auto a : {X_AXIS, Y_AXIS})
+        {
+          Interval v = b[a];
+          if (!v.is_empty ())
+            {
+              att[a] = (2 * (wxwy[a] - v.center ()) / v.length ());
+            }
+        }
+      if (rotate)
+        att = -att;
+    }
+
+  return att;
+}
+
+MAKE_SCHEME_CALLBACK (Note_head, calc_stem_attachment,
+                      "ly:note-head::calc-stem-attachment", 1);
+SCM
+Note_head::calc_stem_attachment (SCM smob)
+{
+  auto *const me = LY_ASSERT_SMOB (Grob, smob, 1);
+  Grob *stem = unsmob<Grob> (get_object (me, "stem"));
+  Font_metric *fm = Font_interface::get_default_font (me);
+  std::string key;
+  internal_print (me, &key);
+
+  Direction dir = get_grob_direction (stem);
+  if (!dir)
+    dir = UP;
+
+  return to_scm (get_stem_attachment (fm, key, dir));
+}
+
+/*
+  Calculate the default stem attachment for tablature noteheads.
+  Hard-coded to (0.0, 1.35) for upward stems and (0.0, -1.35) for
+  downward stems.
+*/
+MAKE_SCHEME_CALLBACK (Note_head, calc_tab_stem_attachment,
+                      "ly:note-head::calc-tab-stem-attachment", 1);
+SCM
+Note_head::calc_tab_stem_attachment (SCM smob)
+{
+  auto *const me = LY_ASSERT_SMOB (Grob, smob, 1);
+  Grob *stem = unsmob<Grob> (get_object (me, "stem"));
+
+  Direction dir = get_grob_direction (stem);
+  if (!dir)
+    dir = UP;
+
+  return to_scm (Offset (0.0, dir * 1.35));
+}
+
+ADD_INTERFACE (Note_head,
+               R"(
+A note head.  There are many possible values for @code{style}.  For a complete
+list, see @rnotation{Note head styles}.
+
+The sense of the @code{direction} property is the direction of the stem that the
+head is designed to attach to.  For certain glyphs, this might seem
+counterintuitive.  Note that stems do not adapt to forced changes in head
+direction, so even when a head style has direction-dependent glyphs, proper
+attachment to the stem depends on the design of the font.
+               )",
+
+               /* properties */
+               R"(
+accidental-grob
+direction
+duration-log
+glyph-name
+ignore-ambitus
+ledger-extra
+ledger-positions
+note-names
+stem-attachment
+style
+               )");

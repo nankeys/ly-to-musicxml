@@ -1,0 +1,8 @@
+%% Translation of GIT committish: 70abecb938c2bb752967bd56b7402dd8129838a5
+  texidoces = "
+Los diagramas de posiciones de acordes se pueden orientar de tres
+formas.  De manera predeterminada se alinena la cuerda o traste
+superior en las distintas alineaciones.
+
+"
+  doctitlees = "Modificar la orientación de los trastes"

@@ -1,0 +1,9 @@
+%% Translation of GIT committish: c043783aac6c35926d633aa2daf60ed4f2e7ca7a
+  texidocfr = "
+L'indication d'une technique particulière d'articulation, telle le
+« coup de langue » des flûtistes, s'obtient en remplaçant la tête
+de note par un glyphe approprié. Pour ce faire, on peut dessiner une
+tête de note en forme d'accent à l'aide d'un @code{\\markup}.
+"
+
+  doctitlefr = "Coup de langue à la flûte"

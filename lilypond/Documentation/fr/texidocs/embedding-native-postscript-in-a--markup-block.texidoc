@@ -1,0 +1,11 @@
+%% Translation of GIT committish: c043783aac6c35926d633aa2daf60ed4f2e7ca7a
+  texidocfr = "
+Du code PostScript peut directement être intégré dans un bloc
+@code{\\markup}.
+
+En règle générale, il est préférable d'utiliser la commande de
+@emph{markup} @code{\\polygon} qui est fonctionnelle avec tous les
+moteurs de rendu de LilyPond.
+"
+
+  doctitlefr = "Intégration de PostScript dans un @emph{markup}"

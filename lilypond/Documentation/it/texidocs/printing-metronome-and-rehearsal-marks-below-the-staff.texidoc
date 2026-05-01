@@ -1,0 +1,8 @@
+%% Translation of GIT committish: 2f3474d9af596d677ed5b7ce720ae4d0954a6b51
+  texidocit = "
+Di norma, il metronomo e i numeri di chiamata vengono posizionati sopra il
+rigo.  Per metterli sotto il rigo basta impostare correttamente la proprietà
+@code{direction} di @code{MetronomeMark} o @code{RehearsalMark}.
+
+"
+  doctitleit = "Posizionare il metronomo e i numeri di chiamata sotto il rigo"

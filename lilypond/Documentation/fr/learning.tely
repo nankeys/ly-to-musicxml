@@ -1,0 +1,86 @@
+\input texinfo @c -*- coding: utf-8; mode: texinfo; documentlanguage: fr -*-
+@ignore
+    Translation of GIT committish: 606ac3c3b22c41d84aa5fa938d42da5125ac572a
+
+    When revising a translation, copy the HEAD committish of the
+    version that you are working on.  For details, see the Contributors'
+    Guide, node Updating translation committishes..
+@end ignore
+
+@documentencoding UTF-8
+@settitle GNU LilyPond -- Manuel d'initiation
+@documentlanguage fr
+
+@afourpaper
+
+@macro manualIntro
+Ce document constitue le manuel d'initiation à GNU LilyPond
+@version{}.
+@end macro
+
+@c 'Learning Manual' was born 1998-08-14 with this commit:
+@c release: 1.0.2
+@c author: Han-Wen Nienhuys
+@c commit: a3a44f9f3c581b6824b3a65f9039656693e09bbf
+@c   file: Documentation/tex/tutorial.yo
+
+@macro copyrightDeclare
+Copyright @copyright{} 1998--2026 par les auteurs.
+@end macro
+
+@c no dircategory nor direntry in  French
+@c since info is not translated. -JCM
+
+@set FDL
+@include fr/macros.itexi
+
+
+@c Translators: John Mandereau, Jean-Charles Malahieude
+@c Translation status: post-GDP
+
+@c urg, makeinfo 4.9.91 French translation is funky
+@iftex
+@frenchspacing on
+@end iftex
+
+@lilyTitlePage{Manuel d'initiation}
+
+@c TOC -- non-tex
+@ifnottex
+
+@menu
+* Installing::           installation de LilyPond
+* Tutorial::             introduction pratique à la gravure avec LilyPond.
+* Common notation::      débuter avec la notation musicale courante.
+* Fundamental concepts:: concepts de base de LilyPond.
+* Tweaking output::      introduction aux retouches de mise en forme.
+
+Annexes
+
+* Templates::                      modèles prêts à l'emploi.
+* GNU Free Documentation License:: licence de ce document.
+* Index of commands and concepts::
+@end menu
+
+@docMain
+@end ifnottex
+
+@contents
+
+@c INCLUDES
+
+@include fr/learning/installing.itely
+@include fr/learning/tutorial.itely
+@include fr/learning/common-notation.itely
+@include fr/learning/fundamental.itely
+@include fr/learning/tweaks.itely
+
+@include fr/learning/templates.itely
+@include en/fdl.itexi
+
+@node Index of commands and concepts
+@appendix Index des commandes et concepts
+
+@printindex cp
+
+@bye

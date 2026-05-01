@@ -1,0 +1,11 @@
+%% Translation of GIT committish: 606ac3c3b22c41d84aa5fa938d42da5125ac572a
+  texidocfr = "
+Un crochet « non-arpeggiato » peut indiquer que des notes réparties sur
+deux portées différentes doivent être jouées par la même main. Le
+contexte @code{PianoStaff} doit accepter ces crochets « distribués ».
+
+Est ici reproduite la mesure 65 du prélude de Debussy @emph{Les collines
+d’Anacapri}.
+"
+
+  doctitlefr = "Indication d'un accord à cheval sur deux portées par un crochet"

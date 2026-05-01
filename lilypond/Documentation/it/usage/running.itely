@@ -1,0 +1,1507 @@
+@c -*- coding: utf-8; mode: texinfo; documentlanguage: it -*-
+
+@ignore
+    Translation of GIT committish: 6bd05cb24212c72adb5614d06997db7eaa07e92a
+
+    When revising a translation, copy the HEAD committish of the
+    version that you are working on.  For details, see the Contributors'
+    Guide, node Updating translation committishes..
+@end ignore
+
+@c \version "2.17.6"
+
+
+@node Running lilypond
+@chapter Eseguire @command{lilypond}
+
+Questo capitolo descrive dettagliatamente gli aspetti tecnici dell'esecuzione
+di LilyPond.
+
+
+@node Normal usage
+@section Uso normale
+
+La maggior parte degli utenti esegue LilyPond attraverso un'interfaccia grafica
+(GUI); se non lo hai già fatto, leggi il @rlearning{Tutorial}.  Se usi un editor
+diverso per scrivere i file LilyPond, leggi la documentazione di quel programma.
+
+
+@node Command-line usage
+@section Uso da linea di comando
+
+Questa sezione contiene informazioni aggiuntive sull'uso di LilyPond da linea
+di comando.  Questo può essere utile per assegnare opzioni aggiuntive al programma.
+Inoltre, ci sono alcuni programmi complementari di @q{aiuto} (come
+@code{midi2ly}) che funzionano solo da linea di comando.
+
+Con @q{linea di comando} si intende la linea di comando del sistema operativo.
+Gli utenti Windows avranno più familiarità con i termini @q{shell DOS} o
+@q{shell dei comandi}.  Gli utenti MacOS@tie{}X avranno più familiarità con i termini
+@q{terminale} o @q{console}.
+
+Descrivere come usare questa parte di un sistema operativo non rientra negli
+obiettivi di questo manuale; si prega di consultare altra documentazione su
+questo argomento se non si conosce la linea di comando.
+
+
+@node Invoking LilyPond
+@unnumberedsubsec Utilizzo di @command{lilypond}
+
+L'eseguibile @command{lilypond} può essere lanciato dalla linea di comando
+nel seguente modo.
+
+@example
+lilypond [@var{opzione}]@dots{} @var{file}@dots{}
+@end example
+
+
+Se invocato con un nome di file senza estensione, viene tentata per prima
+l'estensione @file{.ly}.  Per leggere l'input da stdin, usare un
+trattino (@code{-}) al posto di @var{file}.
+
+@warning{Nelle versioni di Windows precedenti a Windows 10 1903, LilyPond non sa
+gestire i nomi file Unicode.}
+
+Quando @file{file.ly} viene elaborato, lilypond crea @file{file.pdf} come
+output predefinito.  Possono essere specificati molti file, ognuno dei
+quali viene elaborato in modo indipendente.@footnote{Lo stato di
+GUILE non viene ripristinato dopo l'elaborazione di un file @file{.ly}:
+attenzione quindi a non cambiare alcun valore predefinito dall'interno
+di Scheme.}
+
+Se @file{file.ly} contiene più di un blocco @code{\book}, tutte le altre
+partiture sono salvate in file numerati, a partire da @file{file-1.pdf}.  Inoltre,
+il valore di @code{output-suffix} (suffisso di output) viene inserito tra la base
+del nome del file e il numero.  Per esempio, se @file{file.ly} contiene
+
+@example
+#(define output-suffix "violino")
+\score @{ @dots{} @}
+#(define output-suffix "violoncello")
+\score @{ @dots{} @}
+@end example
+
+@noindent
+LilyPond produce come output @file{file-violino.pdf} e
+@file{file-violoncello-1.pdf}.
+
+
+@subsubheading Usare LilyPond con funzionalità standard della shell
+
+Dato che LilyPond è un'applicazione a linea di comando, si possono sfruttare
+le funzionalità della @q{shell} usata per lanciare LilyPond.
+
+Per esempio,
+
+@example
+lilypond *.ly
+@end example
+
+@noindent
+elabora tutti i file LilyPond nella directory corrente.
+
+Potrebbe essere utile anche redirigere l'output della console (per esempio,
+in un file):
+
+@example
+lilypond file.ly 1> stdout.txt
+
+lilypond file.ly 2> stderr.txt
+
+lilypond file.ly &> all.txt
+@end example
+
+@noindent
+Questi comandi redirigono rispettivamente l'output @q{normale}, gli
+@q{errori} o @q{tutto} in file di testo.  Consulta la documentazione
+della tua shell, del prompt dei comandi (Windows), delle applicazioni
+Terminale o Console (MacOS X), per verificare se la redirezione
+dell'output è supportata o se la sintassi è diversa.
+
+L'esempio seguente cerca e elabora tutti i file di input nella directory
+corrente e in tutte le directory inferiori ricorsivamente.  I file di output
+vengono salvati nella stessa directory in cui è stato lanciato il comando,
+invece delle stesse directory in cui si trovano i file di input.
+
+@example
+find . -name '*.ly' -exec lilypond '@{@}' \;
+@end example
+
+@noindent
+Questo comando dovrebbe funzionare anche in MacOS@tie{}X.
+
+Gli utenti Windows devono lanciare questo comando:
+
+@example
+forfiles /s /M *.ly /c "cmd /c lilypond @@file"
+@end example
+
+@noindent
+nel @code{prompt dei comandi}, che di solito si trova in
+@code{Avvio > Accessori > Prompt dei comandi}, oppure
+scrivendo @q{prompt dei comandi} nella finestra di ricerca.
+
+Altrimenti, si può indicare un percorso esplicito alla cartella che
+contiene tutte le sottocartelle con i file di input tramite l'opzione
+@code{/p}:
+
+@example
+forfiles /s /p C:\Documents\MyScores /M *.ly /c "cmd /c lilypond @@file"
+@end example
+
+Tale percorso, se contiene spazi, deve essere racchiuso tra
+virgolette doppie:
+
+@example
+forfiles /s /p "C:\Documents\My Scores" /M *.ly /c "cmd /c lilypond @@file"
+@end example
+
+
+@node Basic command-line options for LilyPond
+@unnumberedsubsec Opzioni di base della linea di comando per LilyPond
+
+@cindex Utilizzo di @command{lilypond}
+@cindex opzioni della linea di comando per @command{lilypond}
+@cindex linea di comando, opzioni di
+@cindex switch
+
+Sono contemplate le seguenti opzioni.
+
+@table @asis
+
+@item @code{-d}, @code{--define-default=}@var{variabile}[@code{=}@var{valore}]
+Si veda @ref{Advanced command-line options for LilyPond}.
+
+@cindex Scheme, valutazione dell'espressione
+@cindex valutazione dell'espressione, Scheme
+
+@item @code{-e}, @code{--evaluate=}@var{espressione}
+Valuta l'@var{espressione} di Scheme prima di analizzare qualsiasi file @file{.ly}.
+Si possono specificare varie opzioni @option{-e}; saranno analizzate in modo
+sequenziale.
+
+L'espressione viene analizzata nel modulo @code{guile-user}, dunque se vuoi
+usare una definizione come @code{(define-public a 42)} in @var{espressione},
+usa
+
+@example
+lilypond -e '(define-public a 42)'
+@end example
+
+@noindent
+nella linea di comando, e includi
+
+@example
+#(use-modules (guile-user))
+@end example
+
+@noindent
+in cima al file @file{.ly}.
+
+@warning{Gli utenti Windows devono usare i doppi apici invece dei singoli apici.}
+
+@item @code{-E}, @code{--eps}
+Genera file EPS.
+
+Questa opzione è simile a @code{-dseparate-page-formats=ps}.
+
+@cindex output, formato
+@cindex formato, output
+
+@item @code{-f}, @code{--format=}@var{formato}
+Formato del (principale) file di output.  I valori possibili di @var{formato}
+sono @code{ps}, @code{pdf}, @code{png} o @code{svg}.
+
+Esempio: @code{lilypond -fpng file.ly}
+
+Internamente SVG utilizza un backend specifico e dunque non si può ottenere
+nella stessa esecuzione usata per altri formati; @w{@code{-fsvg}} o
+@code{--svg} sono in realtà equivalenti all'opzione @code{-dbackend=svg}.
+Vedi @ref{Advanced command-line options for LilyPond}.
+
+@item @code{-h}, @code{--help}
+Mostra una sintesi dell'utilizzo.
+
+@item @code{-H}, @code{--header=}@var{CAMPO}
+Estrae un campo dell'intestazione nel file @file{NOME.@var{CAMPO}}.
+
+Per esempio, supponiamo di avere un file di input @file{pippo.ly}
+contenente
+
+@example
+\header @{ title = "pluto" @}
+\score @{ c1 @}
+@end example
+
+@noindent
+Il comando
+
+@example
+lilypond -H title pippo.ly
+@end example
+
+@noindent
+crea un file di testo semplice @file{pippo.title} contenente la stringa
+@code{pluto}.
+
+@item @code{-i}, @code{--init=}@var{file}
+Imposta il file di inizializzazione su @var{file} (predefinito: @file{init.ly}).
+
+@cindex ricerca dei file
+@cindex percorso di ricerca
+
+@item @code{-I}, @code{--include=}@var{directory}
+Aggiunge @var{directory} al percorso di ricerca per i file di input con
+percorsi relativi.  Per impostazione predefinita, cerca solo nella directory
+di lavoro corrente.
+
+È possibile assegnare più opzioni @option{-I}.  La ricerca inizia nella
+directory di lavoro corrente, e se il file da includere non viene trovato
+la ricerca continua nella directory indicata dalla prima opzione @option{-I},
+poi nella directory della seconda opzione @option{-I} e così via.
+
+@warning{L'uso del carattere tilde (@code{~}) con l'opzione @option{-I}
+potrebbe causare risultati inaspettati in alcune shell.
+
+Gli utenti Windows devono aggiungere una barra obliqua al termine del
+percorso della directory.}
+
+@cindex gabbia chroot, esecuzione all'interno di
+
+@item @code{-j}, @code{--jail=}@var{utente},@var{gruppo},@var{gabbia},@var{directory}
+[Questa opzione è disponibile solo per i sistemi operativi che supportano la
+funzionalità @code{chroot}.  Windows non la supporta.]
+
+Esegue @command{lilypond} in una gabbia chroot.
+
+L'opzione @option{--jail} fornisce un'alternativa più flessibile a
+@option{--safe} quando la formattazione di LilyPond è messa a disposizione attraverso
+un server web o quando LilyPond esegue sorgenti provenienti dall'esterno
+(si veda @ref{Advanced command-line options for LilyPond}).
+
+L'opzione @option{--jail} modifica la radice di @command{lilypond} in
+@var{gabbia} appena prima di iniziare il vero processo di compilazione.  L'utente
+e il gruppo vengono poi modificati per corrispondere a quelli forniti, e la
+directory corrente viene spostata in @var{directory}.  Questa configurazione
+garantisce che non sia possibile (almeno in teoria) uscire dalla gabbia.  Si noti
+che perché @option{--jail} funzioni @command{lilypond} deve essere eseguito come root;
+di solito questo si fa in modo sicuro col comando @command{sudo}.
+
+Configurare una gabbia è una questione un po' delicata, perché bisogna essere
+sicuri che LilyPond possa trovare tutto quello di cui ha bisogno per compilare il
+sorgente @emph{dentro la gabbia}.  Una configurazione tipica comprende i seguenti
+elementi:
+
+@table @asis
+
+@item Impostare un filesystem distinto
+Si dovrebbe creare un filesystem separato LilyPond, così che possa essere
+montato con opzioni di sicurezza come @code{noexec}, @code{nodev}, e
+@code{nosuid}.  In questo modo è impossibile lanciare degli eseguibili o
+scrivere su un dispositivo direttamente da LilyPond.  Se non si vuole creare
+una partizione separata, si può creare un file di dimensioni ragionevoli e usarlo
+per montare un dispositivo di loop.  Un filesystem separato garantisce inoltre
+che LilyPond non possa scrivere su uno spazio maggiore di quanto permesso.
+
+@item Impostare un altro utente
+Per eseguire LilyPond in una gabbia si dovrebbe usare un altro utente e gruppo
+(ad esempio, @code{lily}/@code{lily}) con pochi privilegi.  Ci dovrebbe essere
+una sola directory scrivibile da questo utente, che dovrebbe essere passata in
+@var{dir}.
+
+@item Preparare la gabbia
+LilyPond ha bisogno di leggere alcuni file quando viene lanciato.  Tutti questi
+file devono essere copiati nella gabbia, sotto lo stesso percorso in cui appaiono
+nel vero filesystem principale.  Si deve copiare l'intero contenuto dell'installazione
+LilyPond (ad esempio, @file{/usr/share/lilypond}).
+
+Se c'è un problema, il modo più semplice per individuarlo è lanciare
+LilyPond usando @command{strace}, che permette di scoprire quali
+file mancano.
+
+@item Eseguire LilyPond
+In una gabbia montata con @code{noexec} è impossibile eseguire qualsiasi
+programma esterno.  Dunque LilyPond deve essere eseguito con un backend che
+non richieda tale programma.  Come è già stato detto, deve essere eseguito
+con privilegi di superutente (che ovviamente perde immediatamente),
+possibilmente con l'uso di @command{sudo}.  È una buona idea limitare il
+numero di secondi di tempo della CPU che LilyPond può usare (ad esempio con
+@command{ulimit -t}), e, se il sistema operativo lo permette, la quantità di
+memoria che può essere allocata.  Si veda anche @ref{LilyPond in chroot jail}.
+@end table
+
+@cindex loglevel
+@cindex log, livello
+@cindex output dettagliato
+
+@item @code{-l}, @code{--loglevel=}@var{livello}
+Imposta la verbosità dell'output della console su @var{livello}. I valori possibili sono:
+@table @code
+
+@item NONE
+Nessun output, nemmeno i messaggi di errore.
+
+@item ERROR
+Solo i messaggi di errore, niente avvisi o messaggi di elaborazione.
+
+@item WARN
+Avvisi e messaggi di errore, nessun messaggio di elaborazione.
+
+@item BASIC
+Messaggi di elaborazione di base (riuscita), avvisi e errori.
+
+@item PROGRESS
+Tutti i messaggi di elaborazione, avvisi e errori.
+
+@item INFO
+Messaggi di elaborazione, avvisi, errori e ulteriori informazioni di esecuzione.
+Questo è il valore predefinito.
+
+@item DEBUG
+Tutti i messaggi possibili, incluso l'output verboso di debug.
+
+@end table
+
+@cindex directory, dirigere l'output in
+@cindex output, impostare il nome del file
+@cindex output, directory
+
+@item @code{-o}, @code{--output=}@var{file}
+@itemx @code{-o}, @code{--output=}@var{cartella}
+Imposta il file di output predefinito @var{file} oppure, se una cartella con
+quel nome esiste già, dirige l'output in @var{cartella}, prendendo il nome
+del file dal file di input.  In entrambi i casi viene aggiunto il suffisso
+appropriato (ad esempio @file{.pdf} per il PDF).
+
+@item @code{-O}, @code{--pspdfopt}
+@cindex pspdfopt
+
+Imposta l'ottimizzazione dell'output PS/PDF su @var{chiave}.  I valori
+possibili sono:
+
+@table @code
+
+@item size
+Genera un documento PS/EPS/PDF molto piccolo.  Questo è il valore predefinito.
+
+L'uso di questo valore è equivalente a impostare le opzioni a linea di comando
+Scheme di LilyPond @code{-dmusic-@/font-@/encodings=@/'#f'} e
+@code{-dgs-@/never-@/embed-@/fonts=@/'#f'}.
+
+@item TeX
+Produce file ottimizzati per l'inclusione in documenti pdf@TeX{}, Lua@TeX{} o Xe@TeX{}.
+
+L'uso di questo valore è equivalente a impostare le opzioni a linea di comando
+Scheme di LilyPond @code{-dmusic-@/font-@/encodings=@/'#t'} e
+@code{-dgs-@/never-@/embed-@/fonts=@/'#f'}.
+
+@item TeX-GS
+Se si desidera includere più di un PDF generato da LilyPond in un documento TeX,
+usare questa opzione e rielaborare il PDF generato da TeX con Ghostscript.
+
+L'uso di questo valore è equivalente a impostare le opzioni a linea di comando
+Scheme di LilyPond @code{-dmusic-@/font-@/encodings=@/'#t'} e
+@code{-dgs-@/never-@/embed-@/fonts=@/'#t'}.
+
+@end table
+
+@cindex PS (Postscript), output
+@cindex Postscript (PS), output
+@cindex output, PS (Postscript)
+
+@item @code{--ps}
+Questa opzione è equivalente a @code{-fps}.
+
+@cindex PNG (Portable Network Graphics), output
+@cindex output, PNG (Portable Network Graphics)
+
+@item @code{--png}
+Genera immagini di ogni pagina in formato PNG.  Questa opzione è equivalente
+a @w{@code{-fpng}}.
+
+La risoluzione dell'immagine può essere impostata in @var{N}@tie{}DPI con
+@example
+-dresolution=@var{N}
+@end example
+
+@cindex PDF (Portable Document Format), output
+@cindex output, PDF (Portable Document Format)
+
+@item @code{--pdf}
+Genera PDF.  Questa è l'opzione predefinita ed è equivalente a @w{@code{-fpdf}}.
+
+@code{-s}, @code{--silent}
+Non mostra il progresso, ma solo i messaggi di errore.  È equivalente a
+@code{-lERROR}.
+
+@cindex SVG (Scalable Vector Graphics), output
+@cindex output, SVG (Scalable Vector Graphics)
+@cindex HTML, partiture SVG incorporabili
+@cindex web, pagine, partiture SVG incorporabili
+
+@item @code{--svg}
+Genera file SVG per ciascuna pagina.  Questa opzione è equivalente a @w{@code{-fsvg}}.
+
+@item @code{-v}, @code{--version}
+Mostra informazioni sulla versione.
+
+@item @code{-V}, @code{--verbose}
+Aumenta la prolissità: mostra i percorsi completi di tutti i file letti, dà
+informazioni sui tempi, etc.  È equivalente a @code{-lDEBUG}.
+
+@item @code{-w}, @code{--warranty}
+Mostra la garanzia con cui viene distribuito GNU LilyPond.  (Distribuito
+con @strong{NESSUNA GARANZIA}!)
+
+@end table
+
+
+@node Advanced command-line options for LilyPond
+@unnumberedsubsec Opzioni avanzate della linea di comando per @command{lilypond}
+
+L'opzione @option{-d} è l'interfaccia a linea di comando alla funzione Scheme
+di LilyPond @code{ly:set-option}.  Ciò significa che tutte le opzioni elencate
+qui possono essere impostate anche nei file @file{.ly}.
+
+@table @asis
+
+@item @code{-d}, @code{--define-default=}@var{nome-opzione}[@code{=}@var{valore}
+@itemx @code{-d}, @code{--define-default=no-}@var{nome-opzione}
+Imposta l'equivalente simbolo interno di Scheme su @var{nome-opzione}.  Per
+esempio, l'opzione da linea di comando
+
+@example
+-dbackend=svg
+@end example
+
+@noindent
+è equivalente a
+
+@example
+#(ly:set-option 'backend 'svg)
+@end example
+
+@noindent
+in un file di input di LilyPond.
+
+Se non viene specificato un @var{valore}, viene usato il valore predefinito
+@code{#t} (che potrebbe produrre risultati strani se il @var{valore} atteso
+non è di tipo booleano).  Per disabilitare un'opzione, si può usare il
+prefisso @code{no-} prima di @var{nome-opzione}.  Per esempio:
+
+@cindex punta e clicca, linea di comando
+
+@example
+-dpoint-and-click='#f'
+@end example
+
+@noindent
+è equivalente a
+@example
+-dno-point-and-click
+@end example
+@end table
+
+[Attenzione: il carattere @samp{#} introduce un commento in molte shell, dunque
+si raccomanda di racchiudere sempre tra virgolette le espressioni che lo
+contengono.]
+
+La seguente tabella elenca tutti i nomi delle opzioni supportate insieme ai
+loro rispettivi valori.  All'interno del codice Scheme, i valori delle
+opzioni possono essere letti usando la funzione @code{ly:get-option}.
+
+@table @asis
+
+@item @code{anti-alias-factor}
+@var{num}
+Elabora a una risoluzione più alta (usando il fattore @var{num}, che deve
+essere un numero intero positivo @leq{}8) e ridimensiona il risultato per
+evitare gli @qq{artefatti} nelle immagini PNG.  Predefinito: @code{1}.
+
+@item @code{aux-files}
+@var{bool}
+Se @var{bool} è @code{#t}, crea i file @file{.tex}, @file{.texi} e @file{.count}.
+Questa opzione viene usata principalmente da @command{lilypond-book}.
+Predefinito: @code{#f}.
+
+@item @code{backend} @var{simbolo}
+Usa @var{simbolo} come backend per l'output di LilyPond.  I valori possibili
+sono:
+
+@table @code
+
+@item ps
+Questa è l'impostazione predefinita.  I file PostScript comprendono i tipi
+di carattere TTF, Type1 e OTF.  Non vengono inclusi i @qq{sottoinsiemi} di
+questi tipi.  Se si usa un set di caratteri @qq{orientali}, si possono
+ottenere file di grosse dimensioni.
+
+Anche per l'output PDF viene usato il backend @code{ps}; i dati PS risultanti
+sono poi rielaborati dallo script di Ghostscript @code{ps2pdf}, che si
+occupa anche dei sottoinsiemi di font.
+
+@item svg
+Scalable Vector Graphics.
+Viene creato un singolo file SVG per ogni pagina dell'output.  I glifi
+musicali vengono tradotti in grafica vettoriale, ma i tipi di carattere
+del testo @emph{non} sono incorporati nei file SVG.  Dunque qualsiasi
+lettore SVG dovrà avere accesso ai tipi di carattere necessari per
+rendere in modo adeguato il testo.  Si raccomanda di non usare
+@qq{liste} o @qq{alias} dei tipi di carattere se il lettore SVG non è
+in grado di gestirli.  Se si usano i file @emph{Web Open Font Format} (WOFF),
+è richiesta anche l'opzione @code{svg-woff}.
+
+@end table
+
+
+@item @code{clip-systems} @var{bool}
+Se @var{bool} è @code{#t}, estrae frammenti musicali da una partitura.  Per
+far ciò è necessario che sia stata definita la funzione @code{clip-regions}
+all'interno del blocco @code{\layout}.  Maggiori informazioni in
+@rnotationnamed{Extracting fragments of music, Estrarre frammenti musicali}.
+Nessun frammento verrà estratto se questa opzione è usata insieme
+all'opzione @option{-dno-print-pages}.  Predefinito: @code{#f}.
+
+@item @code{crop} @var{bool}
+
+Se @var{bool} è @code{#t}, viene creato un secondo file PDF (con estensione
+@file{.cropped.pdf}), insieme a un'immagine (con estensione @file{.cropped.png}).
+Questo file di output comprime tutta la musica e le intestazioni, senza
+margini, in una sola pagina, possibilmente alta.
+Se è impostata l'opzione @option{--svg}, viene prodotto invece un ulteriore
+file SVG (con estensione @file{.cropped.svg}).  Se è impostata l'opzione
+@option{--eps} o @option{--ps}, al posto di un file PDF ritagliato viene
+prodotto invece un EPS ritagliato (con estensione @file{.cropped.eps}).
+Predefinito: @code{#f}.
+
+Si noti che attualmente questa opzione non è adatta all'output con molti
+sistemi perché viene tolto lo spazio verticale tra i sistemi.
+
+@item @code{datadir}
+Prefisso per i file di dati.  Questa è un'opzione di sola lettura; la sua
+impostazione non ha effetto.
+
+@item @code{debug-eval} @var{bool}
+Se @var{bool} è @code{#t}, usa l'analizzatore di debug Scheme, che in caso
+di errori mostra le @emph{backtrace} con i numeri di linea.
+Predefinito: @code{#f}, o @code{#t} quando si usa @code{--verbose}.
+
+@item @code{debug-skylines} @var{bool}
+Se @var{bool} è @code{#t}, fa il debug dei profili (@qq{skyline}).
+Predefinito: @code{#f}.
+
+@item @code{delete-intermediate-files} @var{bool}
+Se @var{bool} è @code{#t}, cancella i file @file{.ps} intermedi e
+inutilizzabili creati durante la compilazione.  Predefinito: @code{#t}.
+
+@item @code{embed-source-code} @var{bool}
+Se @var{bool} è @code{#t}, incorpora i file sorgente LilyPond nel documento
+PDF generato.  Predefinito: @code{#f}.
+
+@item @code{eps-box-padding} @var{num}
+Sposta il margine sinistro della cornice EPS dell'output di @var{num}
+millimetri.  Predefinito: @code{f} (ovvero nessuna cornice).
+
+@item @code{font-export-dir} @var{stringa}
+Imposta la directory per esportare i font come file PostScript su @var{stringa}.
+È utile quando si desidera creare prima un PDF senza font incorporati e poi
+incorporarli con Ghostscript come mostrato sotto.
+
+@example
+$ lilypond -dfont-export-dir=fontdir -dgs-never-embed-fonts foo.ly
+$ gs -q -dBATCH -dNOPAUSE -sDEVICE=pdfwrite \
+     -sOutputFile=foo.embedded.pdf foo.pdf fontdir/*.font.ps
+@end example
+
+@noindent
+Nota: Diversamente da @code{font-ps-resdir}, questo metodo non permette
+di incorporare i font CID con Ghostscript 9.26 e versioni successive.
+
+@noindent
+Nota: Come con @code{font-ps-resdir}, questa opzione non agisce sui
+font TrueType, perché incorporare i font TrueType successivamente produce
+caratteri confusi.  Per evitare che i caratteri siano confusi, usare
+@code{gs-never-embed-fonts}, che a dispetto del nome incorpora i font
+TrueType.
+
+@noindent
+Predefinito: @code{#f} (ovvero non esportare).
+
+@item @code{font-ps-resdir} @var{stringa}
+Imposta la directory (come @var{stringa}) per generare un sottoinsieme della
+directory delle risorse PostScript da usare successivamente per incorporare
+i font.
+È utile quando si desidera creare prima un PDF senza font incorporati e poi
+incorporarli con Ghostscript come mostrato sotto.
+
+@example
+$ lilypond -dfont-ps-resdir=resdir -dgs-never-embed-fonts foo.ly
+$ gs -q -dBATCH -dNOPAUSE -sDEVICE=pdfwrite \
+     -I resdir -I resdir/Font \
+     -sOutputFile=foo.embedded.pdf foo.pdf
+@end example
+
+@noindent
+Nota: È meglio che la directory specificata non contenga il nome
+@file{Resource} perché ha un significato speciale quando utilizzata
+con l'opzione @code{-I} di Ghostscript.
+
+@noindent
+Nota: Diversamente da @code{font-export-dir},
+questo metodo permette di incorporare i font CID con Ghostscript 9.26 e
+versioni successive.
+
+@noindent
+Note: Come con @code{font-export-dir}, questa opzione non agisce sui
+font TrueType, perché incorporare i font TrueType successivamente produce
+caratteri confusi.  Per evitare che i caratteri siano confusi, usare
+@code{gs-never-embed-fonts}, che a dispetto del nome incorpora i font
+TrueType.
+
+@noindent
+Predefinito: @code{#f} (ovvero non generare niente).
+
+@item @code{gs-load-fonts}
+@var{bool}
+Se @var{bool} è @code{#t}, carica i font attraverso Ghostscript.  Questa opzione
+fa sì che file di output di LilyPond contengano solo i riferimenti a tutti i
+font, che devono essere risolti in font reali in un passaggio successivo di
+elaborazione da parte di Ghostscript.  Predefinito: @code{#f}.
+
+@item @code{gs-load-lily-fonts}
+@var{bool}
+Se @var{bool} è @code{#t}, carica i font LilyPond attraverso Ghostscript.
+Questa opzione fa sì che file di output di LilyPond contengano solo i
+riferimenti ai suoi font musicali, che devono essere risolti in font reali
+in un passaggio successivo di elaborazione da parte di Ghostscript.  Tutti
+gli altri font sono generati normalmente.  Predefinito: @code{#f}.
+
+@item @code{gs-never-embed-fonts}
+@var{bool}
+Se @var{bool} è @code{#t}, fa sì che Ghostscript incorpori solo i font TrueType
+e nessun altro formato per font.  Predefinito: @code{#f}.
+
+@item @code{help}
+@var{bool}
+Se @var{bool} è @code{#t}, mostra questo aiuto.  Predefinito: @code{#f}.
+
+@item @code{include-book-title-preview}
+@var{bool}
+Se @var{bool} è @code{#t}, include i titoli dei libri nelle immagini di
+anteprima.  Predefinito: @code{#t}.
+
+@item @code{include-eps-fonts}
+@var{bool}
+Se @var{bool} è @code{#t}, include i font in file EPS con sistemi separati.
+Predefinito: @code{#t}.
+
+@item @code{include-settings}
+@var{stringa}
+Include il file @var{stringa} per le impostazioni globali, che viene incluso
+prima che la partitura sia elaborata.
+Predefinito: @code{#f} (ovvero nessun file per le impostazioni globali).
+
+@item @code{job-count}
+@var{num}
+Elabora in parallelo, usando @var{num} lavori.
+Predefinito: @code{#f} (ovvero nessuna elaborazione in parallelo).
+
+@item @code{log-file}
+@var{string}
+Redirige l'output nel file di log @file{@var{stringa}.log}.
+Predefinito: @code{#f} (ovvero nessun file di log).
+
+@item @code{max-markup-depth}
+@var{num}
+Imposta la massima profondità per la struttura del blocco markup sul valore
+@var{num}. Se un blocco markup ha più livelli, assume che non terminerà da
+solo, stampa un avviso e restituisce al suo posto un markup vuoto.
+Predefinito: @code{1024}.
+
+@item @code{midi-extension}
+@var{string}
+Imposta l'estensione predefinita per il file MIDI su @file{.@var{stringa}}.
+Predefinito: @code{"midi"}.
+
+@item @code{music-strings-to-paths}
+@var{bool}
+Se @var{bool} è @code{#t}, converte le stringhe di testo in percorsi quando
+i glifi appartengono a un font musicale.
+Predefinito: @code{#f}.
+
+@item @code{paper-size}
+@var{stringa-tra-virgolette}
+Imposta la dimensione predefinita del foglio su @var{stringa-tra-virgolette}.
+Nota che la stringa deve essere racchiusa tra virgolette precedute dal segno
+di escape.  Predefinito: @code{"\"a4\""}.
+
+@item @code{pixmap-format}
+@var{simbolo}
+Imposta il formato di output di Ghostscript per le immagini raster su
+@var{simbolo}.  Predefinito: @code{png16m}.
+
+@item @code{png-width} @var{larghezza}
+@itemx @code{png-height} @var{altezza}
+Per l'output PNG, imposta la larghezza e l'altezza (in pixel) del file
+immagine creato.  Se manca una delle opzioni, l'altra dimensione viene
+calcolata in base al riquadro di delimitazione EPS, mantenendo le
+proporzioni.
+
+Oltre a @option{--png}, per ottenere una scala corretta dell'immagine
+senza tagli, si deve usare @option{--eps}, @option{-dcrop} o
+@option{-dpreview}.
+
+L'opzione @option{-dresolution} viene ignorata.
+
+Attenzione, c'è un bug nelle versioni di Ghostscript fino alla 9.52 che
+riguarda queste due opzioni: produce immagini PNG vuote se l'altezza è
+più grande della larghezza.
+
+@item @code{point-and-click}
+@var{bool}
+Se @var{bool} è @code{#t}, aggiunge i collegamenti @qq{punta e clicca}
+all'output PDF e SVG. Si veda @ref{Point and click}.
+Predefinito: @code{#t}.
+
+@item @code{preview}
+@var{bool}
+Se @var{bool} è @code{#t}, crea immagini di anteprima oltre al normale output.
+
+Predefinito: @code{#f}.
+
+Questa opzione è supportata da tutti i backend (@code{pdf}, @code{png},
+@code{ps}, @code{eps} e @code{svg}, eccetto @code{scm}.  Per un file di
+input chiamato @var{file} e backend @var{formato}, genera un file di
+output dal nome @file{@var{file}@code{.preview.}@var{formato}}, contenente
+i titoli e il primo sistema.  Se vengono usati i blocchi @code{\book} o
+@code{\bookpart}, i titoli di @code{\book}, @code{\bookpart} o @code{\score}
+appariranno nell'output, incluso il primo sistema di ogni blocco @code{\score}
+se la variabile @code{print-all-headers} di @code{\paper} è impostata
+su @code{#t}.
+
+Per impedire il normale output, si usano le opzioni @option{-dprint-pages} o
+@option{-dno-print-pages} in base alle proprie esigenze.
+
+@item @code{print-pages}
+@var{bool}
+Se @var{bool} è @code{#t}, genera le pagine complete.
+Predefinito: @code{#t}.
+
+L'opzione @option{-dno-print-pages} è utile in combinazione con
+@option{-dpreview} o @option{-dcrop}.
+
+@item @code{protected-scheme-parsing} @var{bool}
+Se @var{bool} è @code{#t}, continua finché l'analizzatore non coglie degli
+errori nel codice Scheme interno al file di input. Se impostato su @code{#f},
+in caso di errore si ferma e mostra la traccia di stack.
+Predefinito: @code{#t}.
+
+@item @code{relative-includes}
+@var{bool}
+Quando elabora un comando @code{\include}, cerca il file incluso in posizione
+relativa al file corrente se @var{bool} è @code{#t}.  Se impostato su
+@c Non capisco cosa intenda con "root file". - fb
+@code{#f}, cerca il file relativo al file root.
+Predefinito: @code{#t}.
+
+@item @code{resolution}
+@var{num}
+Imposta la risoluzione per generare immagini @code{PNG} su @var{num} dpi.
+Predefinito: @code{101}.
+
+@item @code{safe}
+@var{bool}
+Se @var{bool} è @code{#t}, non si fida dell'input nel file @file{.ly}.
+Predefinito: @code{#f}.
+
+Quando la formattazione di LilyPond viene messa a disposizione tramite un server
+web, si @b{DEVE} passare l'opzione @code{-dsafe} o l'opzione @option{--jail}.
+L'opzione @code{-dsafe} impedisce che il codice Scheme presente nell'input
+possa fare uno scempio,
+
+@example
+% troppo pericoloso per scriverlo correttamente
+#(s ystem "rm -rf /")
+
+% malvagio ma non distruttivo
+@{ c4^$(ly:gulp-file "/etc/passwd") @}
+@end example
+
+L'opzione @option{-dsafe} serve a valutare le espressioni Scheme presenti nell'input
+in uno speciale modulo di sicurezza.  Questo modulo di sicurezza è derivato dal
+modulo Guile @file{safe-r5rs}, ma aggiunge alcune funzioni del
+LilyPond API.  Queste funzioni sono elencate in @file{scm/safe-lily.scm}.
+
+Inoltre, la modalità sicura non permette le direttive @code{\include} e
+disabilita l'uso del backslash nelle stringhe @TeX{}.  In modalità sicura,
+non è possibile importare le variabili di LilyPond in Scheme.
+
+L'opzione @option{-dsafe} @emph{non} rileva il sovrautilizzo di risorse.  È
+ancora possibile far sì che il programma rimanga in sospeso per un tempo
+indefinito, ad esempio alimentando il backend con strutture di dati cicliche.
+Dunque se si vuole usare LilyPond su un server web pubblicamente accessibile,
+si deve limitare il processo nell'uso della CPU e della memoria.
+
+La modalità sicura bloccherà la compilazione di molti utili frammenti di codice
+LilyPond.
+
+L'opzione @option{--jail} è un'alternativa più sicura, ma richiede più lavoro
+per configurarla.  Si veda @ref{Basic command-line options for LilyPond}.
+
+@item @code{separate-log-files}
+@var{bool}
+Per i file di input @file{file1.ly}, @file{file2.ly}, @dots{}, salva i dati di
+log nei file @file{file1.log}, @file{file2.log}, @dots{}, se @var{bool} è
+@code{#t}.
+Predefinito: @code{#f}.
+
+@item @code{separate-page-formats} @var{simbolo}
+Elenco separato da virgola di formati (@code{svg}, @code{pdf},
+@code{png} o @code{eps}) da usare per le immagini di pagini separate
+in @code{lilypond-book}.
+
+@item @code{show-available-fonts}
+@var{bool}
+Se @var{bool} è @code{#t}, elenca i nomi di font disponibili così come li
+consegna la libreria fontconfig.  In fondo a questo elenco LilyPond mostra
+le impostazioni di configurazione di fontconfig.
+Predefinito: @code{#f}.
+
+@item @code{strip-output-dir}
+@var{bool}
+Se @var{bool} è @code{#t}, non usa le directory dei percorsi dei file di input
+per costruire i nomi dei file di output.
+Predefinito: @code{#t}.
+
+@item @code{strokeadjust}
+@var{bool}
+Se @var{bool} è @code{#t}, forza l'aggiustamento del tratto da parte di
+PostScript.  Questa opzione è utile quando il PDF è generato dall'output
+PostScript (l'aggiustamento del tratto di solito è abilitato automaticamente
+per gli strumenti bitmap a bassa risoluzione).  Senza questa opzione, i
+lettori PDF tendono a produrre larghezze dei gambi molto variabili alle
+risoluzioni tipiche dei monitor.  Tuttavia l'opzione non produce effetti
+visibili sulla qualità di stampa e causa un notevole aumento della
+dimensione dei file PDF.
+Predefinito: @code{#f}.
+
+@item @code{svg-woff}
+@var{bool}
+Questa opzione è richiesta se si usano i file del formato per font Web Open
+Font Format (WOFF) col backend @code{svg}.  Se @var{bool} è @code{#t}, viene
+creato un singolo file SVG per ogni pagina di output.  Eccetto i glifi
+musicali di LilyPond, nessun altro tipo di carattere verrà incorporato nel
+file.  Dunque qualsiasi lettore SVG dovrà avere accesso ai tipi di carattere
+per rendere in modo adeguato il testo.  Si raccomanda di non usare gli
+@qq{alias} o le @qq{liste} dei tipi di carattere se il lettore SVG non è
+in grado di gestirli.
+Predefinito: @code{#f}.
+
+@item @code{tall-page-formats} @var{simbolo}
+Elenco separato da virgola di formati (@code{svg}, @code{pdf},
+@code{png} o @code{eps}) da usare per l'immagine `tall page' (pagina
+alta) in @code{lilypond-book}.
+
+@item @code{use-paper-size-for-page} @var{bool}
+Se @var{bool} è @code{#t} (predefinito), ogni pagina è impostata sulla
+dimensione del foglio, forse tagliando le parti che vanno oltre
+il foglio. Impostandolo su @code{#f} la pagina verrà ridimensionata per
+racchiudere il contenuto a seconda delle necessità.
+
+@item @code{verbose}
+Livello di verbosità.  Questa è un'opzione di sola lettura; la sua impostazione
+non ha effetto.
+
+@item @code{warning-as-error}
+@var{bool}
+Se @var{bool} è @code{#t}, trasforma tutti i messaggi di avviso e di
+@qq{errore di programmazione} in errori.
+Predefinito: @code{#f}.
+
+@end table
+
+
+@node Environment variables
+@unnumberedsubsec Variabili d'ambiente
+
+@cindex LANG
+@cindex LILYPOND_DATADIR
+@cindex LILYPOND_LOCALEDIR
+@cindex LILYPOND_RELOCDIR
+@cindex LILYPOND_LOGLEVEL
+
+@command{lilypond} riconosce le seguenti variabili d'ambiente:
+@table @code
+@item LILYPOND_DATADIR
+Specifica la directory predefinita in cui vengono cercati i messaggi della
+localizzazione e i file di dati, scavalcando le posizioni definite al momento
+della compilazione o quelle calcolate dinamicamente all'esecuzione (vedi
+@ref{Relocation}).  Questa directory deve contenere sottodirectory
+chiamate @file{ly}, @file{ps}, @file{tex}, etc.
+
+@item LILYPOND_LOCALEDIR
+Specifica la directory dove si trovano file relativi alla localizzazione.
+Scavalca il valore derivato da @code{LILYPOND_DATADIR}.
+
+@item LILYPOND_RELOCDIR
+Specifica la directory dove si trovano i file di @qq{riposizionamento}
+(@emph{relocation}).  Scavalca il valore derivato dalla posizione del
+binario @command{lilypond}.
+
+@item LANG
+La lingua per i dati LilyPond inviati a @code{stdout} e @code{stderr}, per
+esempio relazioni sullo stato di avanzamento, messaggi di avviso o informazioni
+di debug.  Esempio: @code{LANG=de}.
+
+@item LILYPOND_LOGLEVEL
+Il livello di log (loglevel) predefinito. Se LilyPond viene chiamato senza un
+livello di log esplicito (ovvero senza l'opzione @option{--loglevel} della
+linea di comando), viene usato questo valore.
+
+@item LILYPOND_GC_YIELD
+Una variabile, in forma di percentuale, che regola il modo in cui viene gestita
+la memoria.  Con valori più alti il programma usa più memoria, con valori
+più bassi usa più tempo della CPU.  Il valore predefinito è @code{70}.
+
+@item TMPDIR
+Specifica la directory temporanea in GNU/Linux e Mac.
+Quella predefinita è @file{/tmp}.  È la directory in cui vengono salvati i
+file intermedi (come i file PostScript) durante la compilazione.  Sovrascrivere
+questa variabile può essere utile, per esempio, se l'utente che esegue
+lilypond non ha permesso di scrittura alla directory temporanea predefinita.
+Esempio: @code{TMPDIR=~/foo}.
+@end table
+
+
+@node Relocation
+@unnumberedsubsec Riposizionamento
+
+@cindex relocation
+@cindex riposizionamento
+
+La maggior parte dei programmi del mondo Unix usa directory predefinite
+per i dati determinati al momento della configurazione che precede
+la compilazione.
+LilyPond non fa eccezione.  Per esempio, un'installazione tipica mette
+il binario @file{lilypond} in @file{/usr/@/bin} e tutti i file specifici
+di LilyPond in sottodirectory di @file{/usr/@/share/@/lilypond/@/@version{}/}
+(assumendo che la versione corrente sia @version{}).
+
+Questo approccio, sebbene funzioni bene in caso di compilazione manuale e
+di piattaforme che dispongono di gestori di pacchetti standardizzati, può
+causare problemi laddove tali gestori di pacchetti non siano abituali o
+non siano attivi per impostazione predefinita.  Esempi tipici di tali
+piattaforme sono Windows e MacOS, i cui utenti si aspettano che le
+applicazioni @emph{bundle} possano essere installate ovunque.
+
+L'abituale soluzione a questo problema è il supporto per il riposizionamento
+(in inglese @emph{relocation}): invece di usare percorsi prestabiliti ai file
+di dati, le posizioni dei necessari file di supporto vengono calcolate al
+momento dell'esecuzione (@emph{runtime}) del programma in
+modo @emph{relativo al binario eseguito}.
+
+
+@node Relocation files
+@unnumberedsubsubsec File di riposizionamento
+
+Esiste in realtà un secondo meccanismo per la configurazione runtime:
+LilyPond fa ampio ricorso a programmi e librerie esterne, in particolare
+le librerie @q{FontConfig} e @q{Guile} per trovare i font di sistema e
+gestire i file Scheme, e al programma @command{gs} per convertire i dati
+PS in file PDF.  Tutti questi devono anche essere configurati per individuare
+i propri file di dati.  Per far ciò, il programma @command{lilypond} analizza
+tutti i file presenti in una directory chiamata @file{relocate} (se esiste;
+vedi sotto dove si cerca questa directory) per manipolare le variabili
+d'ambiente, che a loro volta controllano queste librerie e programmi
+esterni.  Il formato di tali file di riposizionamento è semplice; ogni
+riga ha la sintassi
+
+@example
+@var{comando} @var{chiave}=@var{valore}
+@end example
+
+@noindent
+e le righe vuote vengono ignorate.
+
+La direttiva @var{comando} è una delle seguenti.
+
+@table @code
+
+@item set
+Imposta incondizionatamente la variabile d'ambiente @var{chiave} su @var{valore}.
+Sovrascrive un valore impostato precedentemente.
+
+@item set?
+Imposta la variabile d'ambiente @var{chiave} su @var{valore} solo se
+@var{chiave} non è ancora stata definita.  In altre parole, non sovrascrive
+un valore impostato precedentemente.
+
+@item setdir
+Se @var{valore} è una directory, imposta incondizionaramente la variabile
+d'ambiente @var{chiave} su @var{valore}.  Altrimenti, emette un avviso.
+
+@item setfile
+Se @var{valore} è un file, imposta incondizionaramente la variabile
+d'ambiente @var{chiave} su @var{valore}.  Altrimenti, emette un avviso.
+
+@item prependdir
+Antepone il @var{valore} della directory all'elenco delle directory della
+variabile d'ambiente @var{chiave}.  Se @var{chiave} non esiste viene
+creata.
+
+@end table
+
+Le variabili d'ambiente (precedute dal segno del dollaro) sono permesse
+dentro il @var{valore} e vengono espanse prima che la direttiva sia
+eseguita.
+
+Ecco due esempi di comandi di riposizionamento dei file.
+
+@example
+set? FONTCONFIG_FILE=$INSTALLER_PREFIX/etc/fonts/fonts.conf
+prependdir GUILE_LOAD_PATH=$INSTALLER_PREFIX/share/guile/1.8
+@end example
+
+Nei file di riposizionamento si dovrebbe evitare di inserire molteplici
+righe che impostano la stessa variabile d'ambiente, perché l'ordine
+di analisi dei file nella directory @file{relocate} è arbitrario.
+
+
+@node Relocation algorithm
+@unnumberedsubsubsec Algoritmo di riposizionamento
+
+LilyPond usa il seguente algoritmo per trovare i suoi file di dati.
+
+@enumerate
+
+@item
+Calcola la directory in cui si trova il binaio @command{lilypond}
+attualmente eseguito.  Chiamiamola @code{bindir}.  Imposta la
+variabile d'ambiente (interna) @code{INSTALLER_PREFIX} su
+@file{@var{bindir}/..} (ovvero la directory genitore di @code{bindir}).
+
+@item
+Controlla la variabile d'ambiente @code{LILYPOND_DATADIR}.  Se impostata,
+usa il suo valore per la directory dei dati di LilyPond, @code{datadir}.
+Altrimenti usa
+@file{$INSTALLER_PREFIX/@/share/@/lilypond/@/@var{versione}} (dove
+@var{versione} è la versione corrente di LilyPond) o
+@file{$INSTALLER_PREFIX/@/share/@/lilypond/@/current}.
+
+@item
+Controlla la variabile d'ambiente @code{LILYPOND_LOCALEDIR}.  Se  impostata,
+usa il suo valore per la directory dei dati di localizzazione di LilyPond,
+@code{localedir}.  Altrimenti usa
+@file{$INSTALLER_PREFIX/@/share/@/locale}.
+
+@item
+Controlla la variabile d'ambiente @code{LILYPOND_RELOCDIR}.  Se impostata,
+usa il suo valore per la directory di riposizionamento dei file di LilyPond,
+@code{relocdir}.  Altrimenti usa
+@file{$INSTALLER_PREFIX/@/etc/@/relocate}.
+
+@item
+Se @code{datadir} non esiste, usa un valore determinato al momento della
+compilazione.  Idem per @code{localedir} (ma non per @code{relocdir}, dato
+che non ha senso averlo).
+
+@item
+Se @code{relocdir} esiste, elabora tutti i file in questa directory come
+descritto in @ref{Relocation files}.
+
+@end enumerate
+
+
+@node LilyPond in chroot jail
+@unnumberedsubsec LilyPond in una gabbia chroot
+
+Configurare un server perché esegua LilyPond in una gabbia chroot è un lavoro
+complesso.  La procedura è spiegata sotto.  Gli esempi si riferiscono a
+Ubuntu GNU/Linux e potrebbero richiedere l'uso di @code{sudo} in alcune situazioni.
+
+@itemize
+
+@item Installa i pacchetti necessari: LilyPond, Ghostscript e ImageMagick.
+
+@item Crea un nuovo utente dal nome @code{lily}:
+
+@example
+adduser lily
+@end example
+
+@noindent
+Questo comando creerà anche un nuovo gruppo per l'utente @code{lily}, e una
+cartella home,
+@code{/home/lily}
+
+@item Nella cartella home dell'utente @code{lily} crea un file da usare come
+filesystem separato:
+
+@example
+dd if=/dev/zero of=/home/lily/loopfile bs=1k count= 200000
+@end example
+
+@noindent
+In questo esempio è stato creato un file di 200MB da usare come filesystem della
+gabbia.
+
+@item Crea un dispositivo di loop, crea e monta un filesystem, quindi crea
+una cartella scrivibile dall'utente @code{lily}:
+
+@example
+mkdir /mnt/lilyloop
+losetup /dev/loop0 /home/lily/loopfile
+mkfs -t ext3 /dev/loop0 200000
+mount -t ext3 /dev/loop0 /mnt/lilyloop
+mkdir /mnt/lilyloop/lilyhome
+chown lily /mnt/lilyloop/lilyhome
+@end example
+
+@item Nella configurazione dei server, JAIL sarà @code{/mnt/lilyloop}
+e DIR sarà @code{/lilyhome}.
+
+@item Crea un grande albero delle directory nella gabbia copiando i file
+necessari, come mostrato nello script di esempio più in basso.
+
+Puoi usare @code{sed} per creare i comandi di copia necessari per un certo
+eseguibile:
+
+@example
+for i in "/usr/local/lilypond/usr/bin/lilypond" "/bin/sh" "/usr/bin/;  \
+  do ldd $i | sed 's/.*=> \/\(.*\/\)\([^(]*\).*/mkdir -p \1 \&\&  \
+    cp -L \/\1\2 \1\2/' | sed 's/\t\/\(.*\/\)\(.*\) (.*)$/mkdir -p  \
+      \1 \&\& cp -L \/\1\2 \1\2/' | sed '/.*=>.*/d'; done
+@end example
+
+@end itemize
+
+@subheading Script di esempio per Ubuntu 8.04 a 32-bit
+
+@example
+#!/bin/sh
+## Impostazioni predefinite
+
+username=lily
+home=/home
+loopdevice=/dev/loop0
+jaildir=/mnt/lilyloop
+# Il prefisso (senza la barra iniziale!)
+lilyprefix=usr/local
+# La directory di sistema in cui è installato lilypond
+lilydir=/$lilyprefix/lilypond/
+
+userhome=$home/$username
+loopfile=$userhome/loopfile
+adduser $username
+dd if=/dev/zero of=$loopfile bs=1k count=200000
+mkdir $jaildir
+losetup $loopdevice $loopfile
+mkfs -t ext3 $loopdevice 200000
+mount -t ext3 $loopdevice $jaildir
+mkdir $jaildir/lilyhome
+chown $username $jaildir/lilyhome
+cd $jaildir
+
+mkdir -p bin usr/bin usr/share usr/lib usr/share/fonts $lilyprefix tmp
+chmod a+w tmp
+
+cp -r -L $lilydir $lilyprefix
+cp -L /bin/sh /bin/rm bin
+cp -L /usr/bin/convert /usr/bin/gs usr/bin
+cp -L /usr/share/fonts/truetype usr/share/fonts
+
+# Ora la magica ricopiatura della libreria
+for i in "$lilydir/usr/bin/lilypond" "$lilydir/usr/bin/guile" "/bin/sh"  \
+  "/bin/rm" "/usr/bin/gs" "/usr/bin/convert"; do ldd $i | sed 's/.*=>  \
+    \/\(.*\/\)\([^(]*\).*/mkdir -p \1 \&\& cp -L \/\1\2 \1\2/' | sed  \
+      's/\t\/\(.*\/\)\(.*\) (.*)$/mkdir -p \1 \&\& cp -L \/\1\2 \1\2/'  \
+        | sed '/.*=>.*/d'; done | sh -s
+
+# I file condivisi per Ghostscript...
+      cp -L -r /usr/share/ghostscript usr/share
+# I file condivisi per ImageMagick
+      cp -L -r /usr/lib/ImageMagick* usr/lib
+
+### Ora, assumendo di avere test.ly in /mnt/lilyloop/lilyhome,
+### si dovrebbe poter eseguire:
+### Nota che /$lilyprefix/bin/lilypond è uno script, che imposta la variabile
+### LD_LIBRARY_PATH - questo è cruciale
+      /$lilyprefix/bin/lilypond -jlily,lily,/mnt/lilyloop,/lilyhome test.ly
+@end example
+
+
+@node Error messages
+@section Messaggi di errore
+
+@cindex messaggi di errore
+Quando si compila un file possono apparire vari messaggi di errore:
+
+@table @emph
+
+@item Avvertimento
+@cindex avvertimento
+Qualcosa appare sospetto.  Se stai cercando di fare qualcosa di insolito
+allora comprenderai il messaggio e potrai ignorarlo.
+Tuttavia di solito i messaggi di avvertimento indicano che il file di input ha
+qualcosa che non va.
+
+@item Errore
+@cindex errore
+C'è qualcosa di assolutamente sbagliato.  Il passo attualmente in elaborazione
+(analisi, interpretazione o formattazione) verrà completato, ma il passo
+successivo verrà saltato.
+
+@item Errore fatale
+@cindex errore fatale
+C'è qualcosa di assolutamente sbagliato e LilyPond non può continuare.  Questo
+accade raramente.  La causa più comune è un'errata installazione dei tipi di
+carattere.
+
+@item Errore Scheme
+@cindex traccia, Scheme
+@cindex traccia di chiamata
+@cindex errore Scheme
+Gli errori che capitano mentre si esegue del codice Scheme sono individuati
+dall'interprete Scheme.  Se si esegue con l'opzione di prolissità (@code{-V} o
+@option{--verbose}), viene stampata una traccia della chiamata di funzione
+responsabile dell'errore.
+
+@item Errore di programmazione
+@cindex Errore di programmazione
+Si è verificata una qualche incongruenza interna.  Questi messaggi di errore
+servono ad aiutare programmatori e debugger.  Di solito si possono
+ignorare.  Talvolta sono talmente numerosi da nascondere il resto
+dell'output.
+
+@item Sospeso (core dumped)
+@cindex Sospeso (core dumped)
+Segnala un serio errore di programmazione che ha mandato in crash il
+programma.  Questi errori sono considerati critici.  Se ti imbatti in un
+errore simile, invia una segnalazione di errore.
+@end table
+
+@cindex errori, formato del messaggio
+Se gli avvertimenti e gli errori possono essere collegati
+a una parte specifica del file di input, i messaggi di errore
+hanno la seguente forma
+
+@example
+@var{file}:@var{riga}:@var{colonna}: @var{messaggio}
+@var{riga di input responsabile dell'errore}
+@end example
+
+Nella riga responsabile si inserisce un a capo per indicare la colonna
+in cui è stato trovato l'errore.  Ad esempio,
+
+@example
+test.ly:2:19: error: not a duration: 5
+  @{ c'4 e'
+           5 g' @}
+@end example
+
+Queste posizioni indicano il punto in cui LilyPond ritiene più probabile
+che siano apparsi l'avvertimento o l'errore, ma (per loro
+stessa natura) avvertimenti ed errori capitano quando succede qualcosa
+di imprevisto.  Se non riesci a vedere un errore nella riga suggerita,
+prova a controllare una o due righe sopra la posizione indicata.
+
+Attenzione: l'analisi degli errori è sempre attivata nel corso dei vari
+passaggi di elaborazione.  Per esempio, se ci sono parti di input che
+sono elaborati varie volte (es: per produrre l'output midi e quello
+grafico) oppure se viene usata la stessa variabile musicale in vari
+contesti, potrebbe apparire lo stesso messaggio molteplici volte.  Anche
+la diagnosi eseguita in uno degli @q{ultimi} passaggi (es: controlli di
+battuta) può apparire varie volte.
+
+Maggiori informazioni sugli errori si trovano in @ref{Common errors}.
+
+
+@node Common errors
+@section Errori comuni
+
+Le condizioni di errore descritte di seguito capitano spesso, ma la causa
+non è ovvia né facile da trovare.  Una volta che sono state individuate e
+comprese, è facile gestirle.
+
+
+@node Music runs off the page
+@unnumberedsubsec La musica esce dalla pagina
+
+Se la musica esce dalla pagina al di là del margine destro o appare
+eccessivamente compressa, quasi sempre è dovuto all'inserimento di
+una durata errata di una nota, che fa sì che l'ultima nota di una misura si
+estenda oltre la barra di divisione.  Non è sbagliato se la nota finale di
+una misura non termina entro la barra di divisione inserita automaticamente, perché
+semplicemente si assume che la nota continui nella misura successiva.  Ma se
+si presenta una lunga sequenza di misure simili, la musica può
+apparire compressa o può uscire dalla pagina perché gli a capo
+automatici possono essere inseriti soltanto alla fine di misure complete,
+ovvero quando tutte le note finiscono prima o alla fine della misura.
+
+@warning{Una durata sbagliata può inibire l'interruzione di
+linea, portando a una linea di musica estremamente compressa o
+a musica che esce dalla pagina.}
+
+La durata errata può essere trovata facilmente se si usano i controlli di
+battuta, si veda @rnotationnamed{Bar and bar number checks, Controlli di battuta e del numero di battuta}.
+
+Se si vuole davvero ottenere una serie di tali misure sovrapposte
+bisogna inserire una barra di divisione invisibile nel punto in cui
+si desidera l'interruzione di linea.  Per i dettagli si veda
+@rnotationnamed{Bar lines, Stanghette}.
+
+
+@node An extra staff appears
+@unnumberedsubsec Appare un rigo in più
+
+Se i contesti non sono creati esplicitamente con @code{\new} o
+@code{\context}, saranno creati senza avviso appena si incontra
+un comando che non può essere applicato a un contesto
+esistente.  Nelle partiture semplici la creazione automatica dei contesti
+è utile: infatti la maggior parte degli esempi nei manuali LilyPond sfrutta
+questa semplificazione.  Talvolta, però, la creazione silenziosa di contesti
+può causare la comparsa di nuovi righi o partiture non desiderate.  Ad esempio,
+si potrebbe pensare che il seguente codice colori di rosso tutte le teste
+delle note nel rigo, ma in realtà produce due righi, di cui il più basso
+conserva il colore nero predefinito per le teste delle note.
+
+@lilypond[quote,verbatim,fragment]
+\override Staff.NoteHead.color = #red
+\new Staff { a' }
+@end lilypond
+
+Questo accade perché non esiste un contesto @code{Staff} quando viene
+elaborata l'istruzione di override, quindi ne viene implicitamente creato uno e
+l'override viene applicato ad esso.  Ma poi il comando @code{\new Staff} crea
+un altro rigo separato nel quale vengono inserite le note.  Il codice
+corretto per colorare le teste di tutte le note è
+
+@lilypond[quote,verbatim]
+\new Staff {
+  \override Staff.NoteHead.color = #red
+  a'
+}
+@end lilypond
+
+
+@node Error message Unbound variable %
+@unnumberedsubsec Messaggio di errore Unbound variable %
+
+Questo messaggio di errore comparirà in fondo alla console di
+output o nel file di log insieme al messaggio @qq{Guile signalled an error @dots{}}
+ogni volta che viene chiamata una routine di Scheme che contenga (erroneamente)
+un commento @emph{LilyPond} invece di un commento @emph{Scheme}.
+
+I commenti LilyPond iniziano con un segno di percentuale, (@code{%}), e non
+devono essere usati all'interno delle routine di Scheme.  I commenti Scheme
+iniziano con un punto e virgola, (@code{;}).
+
+@node Error message FT_Get_Glyph_Name
+@unnumberedsubsec Messaggio di errore FT_Get_Glyph_Name
+
+Questo messaggio di errore compare nella console di output o nel file di log file
+se un file di input contiene un carattere non-ASCII e non è stato salvato nella
+codifica UTF-8.  Per dettagli si veda @rnotationnamed{Text encoding, Codifica del testo}.
+
+
+@node Warning staff affinities should only decrease
+@unnumberedsubsec Avvertimento sul fatto che le affinità del rigo devono solo diminuire
+
+Questo avvertimento può apparire se non ci sono dei righi nell'output,
+ad esempio se ci sono solo un contesto @code{ChordName} e un
+contesto @code{Lyrics}, come in un lead sheet.  Si possono evitare questi
+messaggi di avvertimento facendo in modo che uno dei contesti si comporti
+come un rigo inserendo
+
+@example
+\override VerticalAxisGroup.staff-affinity = ##f
+@end example
+
+@noindent
+all'inizio del contesto.  Per dettagli si veda @qq{Spacing of non-staff lines} in
+@rnotationnamed{Flexible vertical spacing within systems, Spaziatura verticale flessibile all'interno dei sistemi}.
+
+@node Error message unexpected new
+@unnumberedsubsec Messaggio di errore @code{\new} inaspettato
+
+Un blocco @code{\score} deve contenere una @emph{singola} espressione musicale.
+Se invece contiene vari @code{\new Staff}, @code{\new StaffGroup} o simili
+contesti introdotti con @code{\new} senza che questi siano racchiusi tra
+parentesi graffe, @code{@{ @dots{} @}}, o doppie parentesi uncinate, @code{<< @dots{} >>},
+ovvero così:
+
+@example
+\score @{
+  % Invalido! Genera l'errore: errore di sintassi, \new inaspettato
+  \new Staff @{ @dots{} @}
+  \new Staff @{ @dots{} @}
+@}
+@end example
+
+@noindent
+verrà generato questo messaggio di errore.
+
+Per evitare l'errore, è sufficiente racchiudere tutti i blocchi @code{\new} tra
+parentesi graffe o doppie parentesi uncinate.
+
+Se si usano le parentesi graffe, i blocchi @code{\new} appariranno in
+modo sequenziale:
+
+@lilypond[quote,verbatim]
+\score {
+  {
+    \new Staff { a' a' a' a' }
+    \new Staff { g' g' g' g' }
+  }
+}
+@end lilypond
+
+@noindent
+ma è più probabile che si debbano usare le doppie parentesi uncinate in modo
+che i nuovi righi siano avviati in parallelo, ovvero contemporaneamente:
+
+@lilypond[quote,verbatim]
+\score {
+  <<
+    \new Staff { a' a' a' a' }
+    \new Staff { g' g' g' g' }
+  >>
+}
+@end lilypond
+
+@node Warning this voice needs a voiceXx or shiftXx setting
+@unnumberedsubsec Avviso questa voce ha bisogno di un'impostazione \voiceXx o \shiftXx
+
+Se note appartenenti a due voci diverse con gambi nella stessa
+direzione si trovano nello stesso momento musicale, e per le voci
+non è stato specificato alcun spostamento, quando si compila il
+file apparirà il messaggio di avviso
+@samp{avviso: questa voce ha bisogno di un'impostazione \voiceXx o \shiftXx}.
+Tale avviso apparirà anche quando le note non hanno gambi visibili,
+come nel caso delle semibrevi, se i gambi di note più brevi della
+stessa altezza sono nella stessa direzione.
+
+Ricorda che la direzione del gambo, a meno che non sia specificata, per
+esempio tramite @code{\voiceOne}, etc., dipende dalla posizione della
+nota sul rigo.  Dunque se la direzione del gambo non è specificata, l'avviso
+apparirà solo quando i gambi si trovano nella stessa direzione, ovvero
+quando le note si trovano nella stessa metà del rigo.
+
+Si possono evitare questi avvisi mettendo le note in voci in cui siano
+indicate le direzioni dei gambi e gli spostamenti, per esempio usando
+@code{\voiceOne}, etc.
+
+Le note delle voci con un numero maggiore di due, @code{\voiceThree}, etc., sono
+spostate automaticamente per avitare la collisione tra colonne di note.  Ciò
+causa uno spostamento visibile delle note con gambo, mentre le semibrevi
+non sono spostate visibilmente, a meno che non si verifichi una reale collisione
+tra teste di nota oppure quando le voci si incrociano rispetto al loro ordine
+naturale (quando le note di @code{\voiceThree} sono più alte di quelle di
+@code{\voiceOne}, etc.).
+
+@morerefs
+@rlearningnamed{Explicitly instantiating voices, Definire esplicitamente le voci},
+@rlearningnamed{Real music example, Esempio musicale},
+@rnotationnamed{Single-staff polyphony, Polifonia su un solo rigo},
+@rnotationnamed{Collision resolution, Risoluzione delle collisioni}.
+@endmorerefs

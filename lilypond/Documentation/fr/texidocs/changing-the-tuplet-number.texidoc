@@ -1,0 +1,10 @@
+%% Translation of GIT committish: de1e42ce512f3690387cdd065109bddff1b7bd6d
+  texidocfr = "
+LilyPond imprime par défaut le numérateur de la fraction fournie en
+argument à la commande @code{\\tuplet} du côté du crochet de n-olet.
+
+Il est toutefois possible d'imprimer la fraction entière
+@var{num}:@var{den}, voire de ne rien imprimer du tout.
+"
+
+  doctitlefr = "Modifier l'apparence du chiffre de n-olet"

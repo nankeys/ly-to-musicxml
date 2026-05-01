@@ -1,0 +1,9 @@
+%% Translation of GIT committish: cd3e2b0177d366d0a25b4c7628b26455e52175cd
+  texidoces = "
+De forma predeterminada, las sílabas de la letra que comienzan un
+melisma se alinean a la izquierda sobre su nota correspondiente.  Se
+puede alterar la alineación usando la propiedad
+@code{lyricMelismaAlignment}.
+
+"
+  doctitlees = "Alineación de sílabas con melisma"

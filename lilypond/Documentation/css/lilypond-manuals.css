@@ -1,0 +1,507 @@
+/**********************************************************/
+/*                  GENERAL INFORMATION                   */
+/**********************************************************/
+
+/* Each web manual is styled using a different color. Each
+   one has been assigned a hue value on the HSB color chart.
+   All specific colors for a manual are shades and tints
+   of that hue.
+
+   The brown of the usage manual does not follow this scheme.
+   Neither does the 'default' olive green of the glossary,
+   essay, snippets, and changes manuals.
+
+   Manual            Color          Hue
+   learning          green          120
+   music-glossary
+   essay
+
+   notation          blue           205
+   usage             brown
+   snippets
+
+   changes
+   extending         red            0
+   internals         purple         280
+
+   contributor       black          doesn't matter - desat
+
+/**********************************************************/
+/*                  PAGE-WIDE SETTINGS                    */
+/**********************************************************/
+
+html {
+  height: 100%;
+}
+
+body {
+  margin: 0 auto;
+  padding: 0;
+  height: 100%;
+  font-size: 100%;
+  line-height: 1.125;
+  color: #222;
+  background-color: #fff;
+}
+
+/***********************************************************/
+/*                      HEADERS                            */
+/***********************************************************/
+
+h2.chapter, h3.section, h4.subsection, h4.subsubsection,
+h2.appendix, h3.appendixsec, h4.appendixsubsec,
+h2.unnumbered, h3.unnumberedsec, h4.unnumberedsubsec, h4.unnumberedsubsubsec,
+h4.subheading, h4.subsubheading {
+  color: rgb(32, 74, 135);
+  padding-bottom: 0.15em;
+  margin-top: 0.6em;
+  margin-bottom: 0.6em;
+}
+
+h1.top {
+  font-size: 2em;
+  text-align: center;
+  padding: 0.8em 0.5em;
+  margin: 0;
+}
+
+h2.chapter, h2.appendix, h2.unnumbered,
+h3.section, h3.appendixsec, h3.unnumberedsec,
+h4.subsection, h4.appendixsubsec, h4.unnumberedsubsec,
+h4.subsubsection {
+  font-size: 1.7em;
+  margin-top: 0.9em;
+}
+
+h4.subheading, h4.unnumberedsubsubsec {
+  font-size: 1.5em;
+  margin-top: 0.9em;
+}
+
+/* This is for the first `h4.subheading` child, ... */
+.unnumberedsec > .subheading {
+  border-top: none;
+}
+
+/* ... while this is for all other `h4.subheading` children
+   to get more vertical space and a horizontal line. */
+.unnumberedsec > .subheading ~ .subheading {
+  border-top: 1px solid rgb(200, 200, 200);
+  padding-top: 0.8em;
+}
+
+h4.subsubheading {
+  font-size: 1.15em;
+  font-weight: bold;
+  margin-top: 1.6em;
+}
+
+/***********************************************************/
+/*                       LINKS                             */
+/***********************************************************/
+
+a:link {
+  color: #0c51ab;
+}
+
+a:visited {
+  color: #804f01;
+}
+
+a:active {
+  color: #278800;
+}
+
+a:hover {
+  color: #0105ad;
+}
+
+/***********************************************************/
+/*                  BLOCK FORMATTING                       */
+/***********************************************************/
+
+blockquote,
+blockquote.indentedblock, /* to take precedence over texi2any's rule */
+div.example,
+div.lisp {
+  width: 96%;
+  padding: 0;
+  border: solid #d5d7d6;
+  border-width: 1px 1px 1px 3px;
+  border-radius: 5px;
+  margin: 1em auto;
+  background-color: white;
+}
+
+blockquote p {
+  padding: 1em;
+  margin: 0;
+}
+
+blockquote blockquote {
+  border: none;
+}
+
+pre.verbatim, pre.verbatim-preformatted,
+pre.example, pre.example-preformatted,
+pre.lisp, pre.lisp-preformatted {
+  /* Tested with DejaVu fonts.  Maybe we should specify explicit
+     fonts instead of relying on system defaults anyway? */
+  font-size: 1.03em;
+  padding: 1em;
+  margin: 0;
+}
+
+#main hr {
+  height: 0;
+  padding: 0;
+  border: 0;
+  margin: 0;
+  text-indent: -999em;
+}
+
+table.cartouche {
+  background: #eef;
+  width: 85%;
+  border-collapse: collapse;
+  padding: 0 0.5em;
+  border: 1px solid #c8c8c8;
+  margin: 0 auto 1em;
+}
+
+table.cartouche p {
+  padding: 1em;
+  margin: 0;
+}
+
+table.cartouche td {
+  border: none;
+}
+
+/***********************************************************/
+/*                    MAIN CONTENT                         */
+/***********************************************************/
+
+div#main {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 27%;
+  padding: 0;
+  margin: 0;
+  overflow: auto;
+}
+
+div#main li {
+  padding: 0 1em 0.5em 0;
+}
+
+div#main ul {
+  margin: 0;
+  padding-left: 3em;
+}
+
+h1, h2, h3, h4, p, table, address, dt {
+  padding-left: 18px;
+  padding-right: 18px;
+}
+
+p {
+  margin: 1em 0;
+}
+
+#languages, #highlighting-settings {
+  font-size: 0.9em;
+  padding-left: 0.9em;
+  margin: 0;
+}
+
+#languages {
+  padding-top: 0.5em;
+  padding-bottom: 0.5em;
+}
+
+#highlighting-settings {
+  padding-bottom: 1.3em;
+}
+
+pre.menu-comment {
+  font-size: 1.2em;
+  padding-top: 1em;
+  padding-bottom: 0;
+  margin: 0;
+}
+
+#main .contents li {
+  padding-bottom: 0;
+}
+
+#main .contents > ul {
+  margin-bottom: 1em;
+}
+
+table th {
+  text-align: left;
+}
+
+table td {
+    vertical-align: top;
+    padding-bottom: .5em;
+    padding-right: .5em;
+}
+
+img {
+  vertical-align: middle;
+}
+
+/* This is for images right before a header or end of a blockquote. */
+img:last-child {
+  padding-bottom: 1em;
+}
+
+/***********************************************************/
+/*                     FOOTNOTES                           */
+/***********************************************************/
+
+div.footnote,
+div.footnotes-segment {
+  margin-bottom: 18px;
+  padding-left: 18px;
+  padding-right: 18px;
+}
+div.footnote h4, div.footnote h5,
+div.footnotes-segment h4, div.footnotes-segment h5 {
+  padding: 0;
+}
+.footnote h5,
+.footnotes-segment h5.footnote-body-heading,
+.footnote p,
+.footnotes-segment p {
+  display: inline;
+  padding: 0;
+}
+
+/***********************************************************/
+/*                    TOC SIDEBAR                          */
+/***********************************************************/
+
+div#tocframe {
+  position: absolute;
+  top: 0;
+  right: 73%;
+  bottom: 0;
+  left: 0;
+  padding: 0;
+  margin: 0;
+  overflow: auto;
+  background: #657f40;
+  z-index: 100;
+  list-style-type: none;
+  font-size: 0.83em;
+  line-height: 1.3;
+}
+
+body.learning    #tocframe { background-color: #407f40; }
+body.notation    #tocframe { background-color: #40657f; }
+body.usage       #tocframe { background-color: #81613e; }
+body.extending   #tocframe { background-color: #7f4040; }
+body.internals   #tocframe { background-color: #6a407f; }
+body.contributor #tocframe { background-color: #333333; }
+
+@media screen {
+  body > div#tocframe {
+    position: fixed
+  }
+}
+
+div#tocframe a:link,
+div#tocframe a:visited {
+  color: #eee;
+  text-decoration: none;
+}
+
+div#tocframe a:hover {
+  color: #fff;
+  text-decoration: underline;
+}
+
+div#tocframe p.toc_uplink {
+  font-size: 1em;
+  line-height: 1.125;
+  padding: 0.25em 1em 0.25em 0.5em;
+  margin: 0;
+}
+
+div#tocframe h4 {
+  font-size: 1em;
+  line-height: 1.125;
+  font-weight: bold;
+  font-style: italic;
+  padding: 0.75em 0.5em 0 0.5em;
+  margin: 0;
+}
+
+#tocframe .contents {
+  background-color: transparent;
+  list-style-type: none;
+  padding: 0;
+  border: 0;
+  margin: 0;
+}
+
+#tocframe ul, #tocframe form {
+  padding: 0.25em 0.5em 1em 0.5em;
+  margin: 0;
+}
+#tocframe ul {
+  list-style-type: none;
+}
+
+#tocframe ul ul {
+  padding: 0;
+  margin: 0;
+}
+
+#tocframe ul ul ul {
+  display: none;
+}
+#tocframe ul ul li.toc_current > ul {
+  display: block;
+}
+
+#tocframe ul li {
+  padding: 0;
+  margin: 0;
+}
+
+#tocframe ul > li {
+  font-size: 1em;
+}
+
+#tocframe .contents > ul > li {
+  margin-top: 0.5em;
+}
+
+#tocframe ul li li {
+  padding-left: 1em;
+}
+
+li.toc_current {
+  font-weight: bold;
+  font-style: italic;
+}
+
+li.toc_current ul {
+  font-weight: normal;
+  font-style: normal;
+  background: transparent;
+}
+
+/***********************************************************/
+/*                     NAVIGATION                          */
+/***********************************************************/
+
+.nav_table {
+  width: 100%;
+  background-color: #d5d7d6;
+  color: #505050;
+  font-size: 0.83em;
+  border-collapse: separate;
+  padding: 5px 18px;
+  border: none;
+  margin: 0;
+}
+
+.nav_table a:link,
+.nav_table a:visited {
+  color: #505050;
+  text-decoration: none;
+}
+
+.nav_table a:hover {
+  color: #000;
+  text-decoration: underline;
+}
+
+.nav_table tr,
+.nav_table a {
+  padding: 0;
+  margin: 0;
+}
+
+.nav_table td {
+  padding: 0.1em 0px;
+  margin: 0;
+}
+
+table .title {
+  font-weight: bold;
+}
+
+.footer {
+  font-size: 0.8em;
+  padding: 0.2em 0;
+  margin: 0;
+}
+
+.footer p {
+  padding: 0 18px;
+  margin: 0.4em 0;
+}
+
+table.menu, .section-toc {
+  margin: 0 0 1em;
+}
+
+/***********************************************************/
+/*               OVERRIDES FOR PRINTING                    */
+/***********************************************************/
+
+@media print {
+  /* Hide the sidebar and make the main contents take up the full width */
+  div#main { position: static; overflow: visible; left: 0; }
+  div#tocframe { display: none; }
+  /* Also don't show the navigation toolbars between all sections */
+  .nav_table { display: none; }
+}
+
+/***********************************************************/
+/*               OTHER                                     */
+/***********************************************************/
+
+.warning {
+  background: #eef;
+  text-align: left;
+  padding: 0;
+  border: 1px solid #c8c8c8;
+  border-radius: 5px;
+  margin: 1em;
+}
+
+.warning div.example {
+  background: #eef;
+}
+
+.advanced {
+  background: #ffffc8;
+  text-align: left;
+  padding: 0;
+  border: 1px solid #c8c8c8;
+  border-radius: 5px;
+  margin: 0.5em 0.5em 2em 3em;
+}
+
+/***********************************************************/
+/*               RESPONSIVE DESIGN                         */
+/***********************************************************/
+
+@media (min-width: 1280px) {
+  div#main {
+    left: 346px
+  }
+  div#tocframe {
+    width: 346px;
+    right: 0;
+  }
+}

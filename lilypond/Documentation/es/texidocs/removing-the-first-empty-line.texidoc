@@ -1,0 +1,16 @@
+%% Translation of GIT committish: cd3e2b0177d366d0a25b4c7628b26455e52175cd
+  texidoces = "
+Para eliminar el primer pentagrama vacío de una aprtitura,
+establecemos la propiedad @code{remove-first} del objeto gráfico
+@code{VerticalAxisGroup} al valor @code{#t}.  Esto se puede hacer
+globalmente dentro del bloque @code{\\layout}, o localmente dentro
+del pentagrama concreto que se quiere suprimir.  En este último
+caso, tenemos que especificar el contexto (@code{Staff} se aplica
+solo al pentagrama actual) delante de la propiedad.
+
+El pentagrama inferior del segundo grupo no se elimina, porque el
+ajuste solo se aplica al pentagrama concreto dentro del que se
+escribe.
+
+"
+  doctitlees = "Quitar la primera línea vacía"

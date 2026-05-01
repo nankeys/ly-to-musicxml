@@ -1,0 +1,27 @@
+%% Translation of GIT committish: de1e42ce512f3690387cdd065109bddff1b7bd6d
+  texidocfr = "
+Les regroupement par temps au sein d'une mesure sont contrôlés par des
+propriétés de contexte : @code{beatStructure} liste la longueur de
+chaque temps, en unités de @code{beatBase}. Les valeurs par défaut sont
+répertoriées dans le fichier @code{scm/time-@/signature-@/settings.scm}.
+Ces propriétés sont modifiables grâce à la commande @code{\\set}.
+
+Par ailleurs, l'instruction @code{\\time} accepte des règles de
+pulsation différentes des valeurs par défaut. Dans la mesure où
+@code{\\time} s'applique au contexte @code{Timing}, elle ne redéfinira
+pas les valeurs de @code{beatStructure} ou @code{beatBase} lorsqu'elles
+sont modifiées dans un contexte de niveau inférieur comme @code{Voice}
+par exemple.
+
+Si l'on fait appel au @code{Measure_grouping_engraver}, la fonction
+@code{set-time-signature} créera aussi des symboles
+@code{MeasureGrouping}. Ces symboles aident à la lecture des œuvres
+modernes à la rythmique complexe. Dans l'exemple qui suit, la mesure à
+9/8 est divisée en 2, 2, 2 et 3, alors que la mesure à 5/8 répond aux
+règles par défaut contenues dans le fichier
+@file{scm/time-signature-settings.scm}. Pour une mesure à 4/4, il faudra
+explicitement définir @code{beatBase} en croches afin que le motif
+irrégulier de la mesure soit correctement rendu.
+"
+
+  doctitlefr = "Signes de direction, signes de sous-groupe"

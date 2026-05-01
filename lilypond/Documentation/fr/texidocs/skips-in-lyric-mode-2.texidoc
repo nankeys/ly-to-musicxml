@@ -1,0 +1,9 @@
+%% Translation of GIT committish: de1e42ce512f3690387cdd065109bddff1b7bd6d
+  texidocfr = "
+Sachant qu'un @code{s} au sein d'un bloc @code{\\lyricmode} est
+interprété non comme de l'espace mais comme une syllabe, l'utilisation
+de paires de guillemets informatiques (@code{\"\"}) ou un caractère
+souligné simple (@code{_}) permet de « sauter » une note.
+"
+
+  doctitlefr = "Sauts de notes en mode paroles (2)"

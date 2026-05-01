@@ -1,0 +1,21 @@
+@iftex
+@contents
+@end iftex
+
+@unnumbered Introduction
+
+This document presents regression tests for LilyPond development that are
+related to MIDI output and thus do not contain visually significant output
+in most cases; it mainly exists for completeness and to make the test
+documentation better available.
+
+In the web version of this document, you can click on the
+figure for each example to see the corresponding input file.
+
+@unnumbered Regression test cases
+
+@unmacro lynode
+@macro lynode{TEXT}
+@node \TEXT\
+@unnumberedsec \TEXT\
+@end macro

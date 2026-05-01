@@ -1,0 +1,9 @@
+%% Translation of GIT committish: 2f3474d9af596d677ed5b7ce720ae4d0954a6b51
+  texidocit = "
+Quando l'armatura di chiave cambia, vengono inseriti automaticamente i
+segni di bequadro per annulare le alterazioni di precedenti armature.  Si
+può evitare questo comportamento impostando su @code{f} (falso) la proprietà
+@code{printKeyCancellation} nel contesto @code{Staff}.
+
+"
+  doctitleit = "Impedire l'inserimento dei segni di bequadro quando cambia l'armatura di chiave"

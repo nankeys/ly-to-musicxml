@@ -1,0 +1,5394 @@
+@c -*- coding: utf-8; mode: texinfo; documentlanguage: es -*-
+
+@ignore
+    Translation of GIT committish: d304582e9b791c7e9d54a5bbda3e37dc49a87fd1
+
+    When revising a translation, copy the HEAD committish of the
+    version that you are working on.  For details, see the Contributors'
+    Guide, node Updating translation committishes..
+@end ignore
+
+@c \version "2.25.27"
+
+
+@part Entrada y salida generales
+
+@node Input modes
+@anchor{General input and output} @c retain old label
+@chapter Modos de entrada
+
+La forma en que se interpreta la notación contenida dentro de un
+archivo de entrada, está determinada por el modo de entrada en
+curso.  En general, existen dos maneras de especificar el modo: la
+forma larga, p.ej.  @code{\chordmode}, y la forma corta,
+p.ej. @code{\chords}.  La forma larga se utiliza normalmente
+cuando se aporta código de entrada a una variable o cuando se está
+escribiendo el código directamente dentro de un contexto creado
+explícitamente.  La forma corta crea implícitamente un contexto
+del tipo adecuado para la entrada, y le pasa esta entrada
+directamente.  Es útil en situaciones sencillas donde no se
+requiere crear explícitamente el contexto receptor.
+
+@subsubheading Modo de acordes
+
+@funindex \chordmode
+@funindex \chords
+
+Se activa con la instrucción @code{\chordmode} y produce que la
+entrada se interprete con al sintaxis de la notación de acordes,
+véase @ref{Chord notation}.  La música en el modo de acordes se
+imprime como acordes sobre un pentagrama si se introduce en un
+contexto @code{Staff}, como nombres de acorde cuando se escribe
+dentro de un contexto @code{ChordNames} o como diagramas de
+posiciones de trastes si se escribe en un contexto
+@code{FretBoards}.
+
+El modo de acordes se activa también con la instrucción
+@code{\chords}.  Esto también produce que el código que sigue se
+interprete con la sintaxis de la notación de acordes pero además
+crea implícitamente un contexto @code{ChordNames} nuevo e imprime
+la entrada dentro de él como nombres de acordes, véase
+@ref{Printing chord names}.
+
+@subsubheading Modo de percusión
+
+@funindex \drummode
+@funindex \drums
+
+Se activa con la instrucción @code{\drummode} y produce que el
+código de entrada se interprete con la sintaxis de la notación de
+percusión, véase @ref{Basic percussion notation}.  La música en el
+modo de percusión se imprime como notas de percusión cuando se
+escribe dentro de un contexto @code{DrumStaff}.
+
+El modo de percusión también se activa con la instrucción
+@code{\drums}.  También hace que el código que sigue se interprete
+con la sintaxis de la notación de percusión pero además crea
+implícitamente un contexto @code{DrumStaff} nuevo e imprime la
+entrada dentro de él como notas de percusión, véase @ref{Basic
+percussion notation}.
+
+@subsubheading Modo de cifras
+
+@funindex \figuremode
+@funindex \figures
+
+Se activa con la instrucción @code{\figuremode} y hace que el
+código de entrada se interprete con la sintaxis del bajo cifrado,
+véase @ref{Entering figured bass}.  La música dentro del modo de
+cifras se imprime como bajo cifrado cuando se escribe dentro de un
+contexto de @code{FiguredBass} o de @code{Staff}.
+
+El modo de cifras también se activa con la instrucción
+@code{\figures}.  También hace que el código que viene a
+continuación se interprete con la sintaxis del bajo cifrado pero
+además crea implícitamente un contexto @code{FiguredBass} nuevo e
+imprime la entrada dentro de él como bajo cifrado, véase
+@ref{Introduction to figured bass}.
+
+@subsubheading Modos de traste y tablatura
+
+No existen modos de entrada especiales para introducir símbolos de
+trastes y de tablatura.
+
+Para crear diagramas de trastes, escriba las notas o acordes en el
+modo de notas e imprímalos dentro de un contexto @code{TabStaff},
+véase @ref{Default tablatures}.
+
+Para crear diagramas de trastes encima de un pentagrama, escriba
+las notas o acordes en modo de notas o bien en modo de acordes, y
+desposítelos dentro de un contexto @code{FretBoards}, véase
+@ref{Automatic fret diagrams}.  Como alternativa, los diagramas de
+trastes se pueden introducir como elementos de marcado encima de
+las notas utilizando la instrucción @code{\fret-diagram}, véase
+@ref{Fret diagram markups}.
+
+@subsubheading Modo de letra
+
+@funindex \lyricmode
+@funindex \lyrics
+
+Se activa con la instrucción @code{\lyricmode}, y hace que la
+entrada se interprete como sílabas de la letra de la canción con
+duraciones opcionales y modificadores de letra asociados, véase
+@ref{Vocal music}.  La entrada en el modo de letra se imprime como
+sílabas de la letra si se escribe dentro de un contexto
+@code{Lyrics}.
+
+El modo de letra también se habilita con la instrucción
+@code{\lyrics}.  Esto también hace que la entrada siguiente se
+interprete como sílabas de letra, pero además crea un contexto
+@code{Lyrics} nuevo e imprime la entrada dentro de él como sílabas
+de letra.
+
+Por último, el modo de letra también se puede activar con la
+instrucción @code{\addlyrics}.  De esta forma también se crea un
+contexto @code{Lyrics} nuevo y además se añade una instrucción
+@code{\lyricsto} implícita que asocia la letra que viene a
+continuación con la música precedente, véase @ref{Automatic
+syllable durations}.
+
+@subsubheading Modo de marcado
+
+@funindex \markup
+
+Se activa con la instrucción @code{\markup}, y hace que la entrada
+se interprete con la sintaxis del marcado, véase @ref{Text markup
+commands}.
+
+@subsubheading Modo de notas
+
+@funindex \notemode
+
+Es el modo predeterminado o se puede activar con la instrucción
+@code{\notemode}.  La entrada se interpreta como alturas,
+duraciones, marcado, etc. y se imprime como notación musical sobre
+un pentagrama.
+
+Normalmente no es necesario especificar el modo de notas de forma
+explícita, pero puede ser útil hacerlo en ciertas situaciones, por
+ejemplo si estamos en el modo de letra, en el modo de acordes o en
+otro modo y queremos insertar algo que solamente se puede hacer
+con la sintaxis del modo de notas.
+
+@lilypond[verbatim,quote]
+% This ...
+
+<<
+  \chords { g1:m }
+  { f'1 }
+  \lyrics { foo1 }
+  \drums { sn1 }
+  \figures { <6 4>1 }
+>>
+
+% ... is equivalent to
+
+<<
+  \new ChordNames \chordmode { g1:m }
+  \new Voice \notemode { f'1 }
+  \new Lyrics \lyricmode { foo1 }
+  \new DrumStaff \drummode { sn1 }
+  \new FiguredBass \figuremode { <6 4>1 }
+>>
+@end lilypond
+
+
+@node Input structure
+@chapter Estructura del código de entrada
+
+El formato principal de entrada para LilyPond son archivos de
+texto.  Por convenio, el nombre de estos archivos termina en
+@file{.ly}.
+
+
+@node Structure of a score
+@section Estructura de una partitura
+
+@funindex \score
+
+Un bloque @code{\score} debe contener una expresión musical única
+delimitada por un par de llaves.@footnote{Observe que también
+existe una instrucción de marcado llamada @code{\score},
+@pxref{Scores within markup}.}
+
+@example
+\score @{
+  @dots{}
+@}
+@end example
+
+@warning{Solo puede haber @strong{una} expresión musical dentro
+del bloque @code{@bs{}score}, y @strong{debe} estar encerrada
+entre llaves.}
+
+Esta expresión musical única puede tener cualquier tamaño, y puede
+contener otras expresiones musicales hasta cualquier grado de
+complejidad.  Todos los siguientes ejemplos son expresiones
+musicales:
+
+@example
+@{ c'4 c' c' c' @}
+@end example
+
+@lilypond[verbatim,quote]
+{
+  { c'4 c' c' c' }
+  { d'4 d' d' d' }
+}
+@end lilypond
+
+@lilypond[verbatim,quote]
+<<
+  \new Staff { c'4 c' c' c' }
+  \new Staff { d'4 d' d' d' }
+>>
+@end lilypond
+
+@example
+@{
+  \new GrandStaff <<
+    \new StaffGroup <<
+      \new Staff @{ \flute @}
+      \new Staff @{ \oboe @}
+    >>
+    \new StaffGroup <<
+      \new Staff @{ \violinI @}
+      \new Staff @{ \violinII @}
+    >>
+  >>
+@}
+@end example
+
+@funindexpre %
+@funindex %@{ @dots{} %@}
+@cindex comentario
+@cindex línea, comentario de
+@cindex comentario de una línea
+@cindex comentario de bloque
+@cindex comentario de varias líneas
+
+Los comentarios son una excepción a esta regla general (para ver
+otras excepciones, @pxref{File structure}).  Tanto los comentarios
+de una línea como los que están delimitados por @code{%@{ @dots{}
+%@}} se pueden escribir en cualquier lugar dentro del archivo de
+entrada.  Se pueden escribir dentro o fuera del bloque
+@code{\score}, y dentro o fuera de la expresión musical única
+dentro del bloque @code{\score}.
+
+Recuerde que incluso dentro de un archivo que contenga solamente
+un bloque @code{\score}, éste se encuentra incluido implícitamente
+dentro de un bloque @code{\book}.  Un bloque @code{\book} dentro
+de un archivo fuente produce al menos un archivo de salida, y de
+forma predeterminada el nombre del archivo de salida que se
+produce está derivado del nombre del archivo de entrada, de forma
+que @file{fandangoforelephants.ly} da como resultado
+@file{fandangoforelephants.pdf}.
+
+(Para ver más detalles acerca de los bloques @code{\book},
+consulte @ref{Multiple scores in a book},
+@ref{Multiple output files from one input file} y
+@ref{File structure}.)
+
+@morerefs
+Manual de aprendizaje:
+@rlearningnamed{Working on input files, Trabajar sobre los archivos de entrada},
+@rlearningnamed{Music expressions explained, Explicación de las expresiones musicales},
+@rlearningnamed{A score is a (single) compound musical expression, La partitura es una (única) expresión musical compuesta}.
+@endmorerefs
+
+
+@node Multiple scores in a book
+@section Varias partituras en un libro
+
+@funindex \book
+@cindex movimiento, varios
+
+Un documento puede contener varias piezas de música y texto.  Son
+ejemplos un libro de estudios o una parte orquestal con varios
+movimientos.  Cada movimiento se introduce con un bloque
+@code{\score}:
+
+@example
+\score @{
+  @var{@dots{}música@dots{}}
+@}
+@end example
+
+y los textos se introducen con un bloque @code{\markup}:
+
+@example
+\markup @{
+  @var{@dots{}texto@dots{}}
+@}
+@end example
+
+@funindex \book
+
+Todos los movimientos y textos que aparecen en el mismo archivo
+@file{.ly} se tipografían normalmente en la forma de un solo
+archivo de salida.
+
+@example
+\score @{
+  @var{@dots{}}
+@}
+\markup @{
+  @var{@dots{}}
+@}
+\score @{
+  @var{@dots{}}
+@}
+@end example
+
+Una excepción importante se da dentro de los documentos de
+@command{lilypond-book}, en los que tenemos que escribir
+explícitamente un bloque @code{\book}, pues en caso contrario solo
+aparecerá en la salida el primer @code{\score} o @code{\markup}.
+
+El encabezamiento de cada pieza se puede poner dentro del bloque
+@code{\score}.  Antes de cada movimiento, se imprime el nombre de
+la pieza (@code{piece}) extraído del encabezamiento.  El título
+del libro entero se puede poner dentro del bloque @code{\book},
+pero si no está presente se inserta el encabezamiento
+@code{\header} que está al principio del archivo.
+
+@example
+\header @{
+  title = "Ocho miniaturas"
+  composer = "Igor Stravinsky"
+@}
+\score @{
+  \header @{ piece = "Romanze" @}
+  @dots{}
+@}
+\markup @{
+   @dots{}texto de la segunda estrofa@dots{}
+@}
+\markup @{
+   @dots{}texto de la tercera estrofa@dots{}
+@}
+\score @{
+  \header @{ piece = "Menuetto" @}
+  @dots{}
+@}
+@end example
+
+@funindex \bookpart
+
+Se pueden agrupar distintas piezas de música en partes de un libro
+utilizando bloques @code{\bookpart}.  Las partes de libro se
+separan por medio de saltos de página, y pueden dar comienzo con
+un título, como el libro propiamente dicho, mediante la
+especificación del bloque @code{\header}.
+
+@example
+\bookpart @{
+  \header @{
+    title = "Título del libro"
+    subtitle = "Primera parte"
+  @}
+  \score @{ @dots{} @}
+  @dots{}
+@}
+\bookpart @{
+  \header @{
+    subtitle = "Segunda parte"
+  @}
+  \score @{ @dots{} @}
+  @dots{}
+@}
+@end example
+
+@cindex variable, y @code{\book}
+@cindex variable, y @code{\bookpart}
+@cindex @code{\book}, y variables
+@cindex @code{\bookpart}, y variables
+
+Por principio de diseño, no se pueden definir variables dentro de
+un bloque @code{\book} o @code{\bookpart} (por cierto, lo mismo
+puede decirse de @code{\score}); esto es de especial importancia
+si queremos usar varios archivos para preparar la música con
+variables que deberían ser @q{locales} a archivos individuales.
+Se puede usar la siguiente estructura en tales situaciones.
+
+@example
+% movement1.ly
+variableI = @{ ... @}
+bookpartI = \bookpart @{ \score @{ ... usar la \variableI ... @} @}
+
+% movement2.ly
+variableII = @{ ... @}
+bookpartII = \bookpart @{ \score @{ ... usar la \variableII ... @} @}
+
+% main.ly
+\include "movement1.ly"
+\include "movement2.ly"
+\book @{
+  \bookpart @{ \bookpartI @}
+  \bookpart @{ \bookpartII @}
+@}
+@end example
+
+@cindex @code{\book}, y @code{\layout}
+@cindex @code{\bookpart}, y @code{\layout}
+@cindex @code{\layout}, y @code{\book}
+@cindex @code{\layout}, y @code{\bookpart}
+
+De forma similar, no podemos tener directamente un bloque
+@code{\layout} dentro de @code{\book} o de @code{\bookpart}.  En
+su lugar, escríbalo dentro de un bloque @code{\score} que esté a
+su vez incluido dentro de bloques @code{\book} o @code{\bookpart}.
+
+
+@node Multiple output files from one input file
+@section Varios archivos de salida a partir de uno de entrada
+
+LilyPond crea un archivo de salida por cada bloque @code{\book}.
+Si no hay ningún bloque @code{\book} explícito dentro del archivo
+de entrada, LilyPond trata el archivo completo implícitamente como
+un único bloque @code{\book}, @pxref{File structure}.
+
+De forma predeterminada, LilyPond da nombre al archivo de salida
+usando el nombre del archivo de entrada, y si es necesario, le
+añade un sufijo con un número creciente (esto es, si un archivo de
+salida con el mismo nombre ya se ha creado durante el ciclo de
+ejecución).  El comportamiento predeterminado es añadir un sufijo
+con el número de versión por cada nombre que entre en conflicto,
+de forma que
+
+@example
+\book @{
+  \score @{ @dots{} @}
+  \paper @{ @dots{} @}
+@}
+\book @{
+  \score @{ @dots{} @}
+  \paper @{ @dots{} @}
+@}
+\book @{
+  \score @{ @dots{} @}
+  \paper @{ @dots{} @}
+@}
+@end example
+
+@noindent
+en el archivo fuente @file{eightminiatures.ly}, produce
+
+@example
+eightminiatures.pdf
+eightminiatures-1.pdf
+eightminiatures-2.pdf
+@end example
+
+@noindent
+como archivos de salida.
+
+
+@node Output file names
+@section Nombres de los archivos de salida
+
+@funindex output-filename
+@funindex output-suffix
+
+Es posible sobreescribir tanto el nombre del archivo de salida
+como el sufijo que se añade al nombre de archivo básico dentro de
+los bloques @code{\paper}.
+
+@example
+\paper @{
+  output-filename = "mi_salida_especial"
+@}
+
+\book @{
+  \paper @{
+    output-suffix = "menuetto"
+  @}
+  ...
+@}
+\book @{
+  \paper @{
+    output-suffix = "scherzo"
+  @}
+  ...
+@}
+@end example
+
+@noindent
+El resultado son dos archivos de salida con los nombres
+@file{mi_salida_especial-menuetto.pdf} and
+@file{mi_salida_esecial-scherzo.pdf}.  Tenga cuidado al elegir los
+valores de @code{output-filename} y de @code{output-suffix} de
+forma que sean válidos para los nombres de archivo en su sistema
+operativo.
+
+Si este nombre de archivo de salida ya existe (puede ocurrir, por
+ejemplo, si tanto @code{output-filename} como @code{output-suffix}
+están configurados en el bloque @code{\paper} global y no dentro
+de algún bloque @code{\book}), LilyPond añade otro sufijo con un
+número creciente.
+
+Observe que las variables predefinidas @code{\paper} (@pxref{The
+paper block}) se deben poner antes de las asignaciones de
+@code{output-filename} y @code{output-suffix}, por ejemplo
+
+@example
+bigMargin = \paper @{ top-margin = 10\cm @}
+
+\book @{
+  \paper @{
+    \bigMargin % tiene que ir primero
+    output-filename = "fulanito"
+  @}
+@}
+@end example
+
+
+@node File structure
+@section Estructura del archivo
+
+Un archivo @file{.ly} puede contener cualquier número de
+expresiones del nivel superior, donde una expresión del nivel
+superior es una de las siguientes posibilidades:
+
+@itemize
+@item
+@funindex \paper
+@funindex \midi
+@funindex \layout
+Una definición de salida, como @code{\paper}, @code{\midi} y
+@code{\layout}.  Tal definición en el nivel más alto cambia los
+ajustes predeterminados para todo el libro.  Si se introduce más
+de una de estas definiciones del mismo tipo en el nivel más alto,
+las definiciones se combinan, pero en situaciones de conflicto
+las definiciones más tardías tienen preferencia.  Para ver los
+detalles sobre cómo afecta al bloque @code{\layout}, consulte
+@ref{The layout block}.
+
+@item
+Una expresión directa de Scheme, como
+@code{#(set-default-paper-size "a7" 'landscape)} o
+@code{#(ly:set-option 'point-and-click #f)}.
+
+@item
+@funindex \header
+Un bloque @code{\header}.  Esto establece el bloque de
+encabezamiento global (es decir, al principio del archivo).  Es el
+bloque que contiene los ajustes predeterminados de los campos de
+encabezamientos como el compositor, título, etc. para todos los
+libros que están dentro del archivo (véase @ref{Titles
+explained}).
+
+@item
+@funindex \score
+Un bloque @code{\score}.  Esta partitura se reúne con otras
+partituras del nivel superior, y se combina con ellas formando un
+@code{\book} (libro) único.  Este comportamiento se puede cambiar
+estableciendo el valor de la variable
+@code{toplevel-score-handler} en el nivel superior (el
+@emph{handler} predeterminado se define en el archivo
+@file{../scm/lily-library.scm} y su valor se establece en el
+archivo @file{../ly/declarations-init.ly}.)
+
+@item
+@funindex \book
+Un bloque @code{\book} combina lógicamente varios movimientos (es
+decir, varios bloques @code{\score}) en un solo documento.  Si hay
+varias partituras @code{\score}, se crea un solo archivo de salida
+para cada bloque @code{\book}, en el que se concatenan todos los
+movimientos correspondientes.  La única razón para especificar
+explícitamente bloques @code{\book} en un archivo de entrada
+@file{.ly} es si queremos crear varios archivos de salida a partir
+de un único archivo de entrada.  Una excepción se da dentro de los
+documentos de lilypond-book, en los que tenemos que escribir
+explícitamente un bloque @code{\book} si queremos tener más de una
+única partitura @code{\score} o marcado @code{\markup} en el mismo
+ejemplo.  Se puede cambiar este comportamiento estableciendo el
+valor de la variable @code{toplevel-book-handler} en el nivel
+superior.  El @emph{handler} predeterminado se define en el
+archivo de inicio @file{../scm/lily.scm}.
+
+@item
+@funindex \bookpart
+Un bloque @code{\bookpart}.  Un libro puede dividirse en varias
+partes, utilizando bloques @code{\bookpart}, con objeto de
+facilitar la inserción de saltos de página o usar distintos
+ajustes de @code{\paper} en las distintas partes.
+
+@item
+Una expresión musical compuesta, como
+@example
+@{ c'4 d' e'2 @}
+@end example
+
+Esto añade la pieza al @code{\score} y la conforma dentro de un
+libro único junto a todas las demás partituras @code{\score} y
+expresiones musicales del nivel superior.  En otras palabras, un
+archivo que contiene solo la expresión musical anterior se traduce
+a
+
+@example
+\book @{
+  \score @{
+    \new Staff @{
+      \new Voice @{
+        @{ c'4 d' e'2 @}
+      @}
+    @}
+    \layout @{ @}
+  @}
+  \paper @{ @}
+  \header @{ @}
+@}
+@end example
+
+Se puede cambiar este comportamiento estableciendo el valor de la
+variable @code{toplevel-music-handler} en el nivel más alto.  El
+@emph{handler} predeterminado se define en el archivo de inicio
+@file{../scm/lily.scm}.
+
+@item
+Un texto de marcado, por ejemplo una estrofa
+@example
+\markup @{
+   2.  Estrofa dos, línea uno
+@}
+@end example
+
+Los textos de marcado se colocan encima, en medio o debajo de las
+partituras o expresiones musicales, según donde aparezcan
+escritos.
+
+@item
+@cindex variable
+Una variable o una estructura anidada de listas de asociación de
+Scheme (listas-A)
+
+@example
+fulano = @{ c4 d e d @}    % variable normal
+"Horn 3" = @{ c4 d e d @}  % variable entre comillas
+verse.1 = @{ c4 d e d @}   % variable anidada
+@end example
+
+@noindent
+Las variables se pueden usar más tarde en el archivo
+anteponiéndolas por una barra invertida.
+
+@example
+\foo
+\"Horn 3"
+\verse.1
+@end example
+
+El nombre de una variable no puede contener números (ASCII), más
+de una barra baja seguida, varios signos menos seguidos, ni
+espacios.  Todos los demás caracteres que ofrece Unicode están
+permitidos, por ejemplo latín, griego, chino o cirílico.  También
+se permiten varias barras bajas únicas y signos menos no seguidos.
+En otras palabras, funcionan los nombres de variable como
+@code{TrompaIII} o @code{Скрипка-II}.
+
+Se permite cualquier combinación de caracteres si el nombre de la
+variable está entre dobles comillas (aunque no es
+recomendable).@footnote{En este caso se aplican las reglas
+estándar para las cadenas de caracteres: las barras invertidas y
+las comillas dobles dentro de comillas dobles se tienen que
+escapar con barras invertidas.}  Ejemplos: @code{"fulano
+mengano"}, @code{"a-b-c"}, @code{"Trompa 3"}.
+
+Las listas-A anidadas ofrecen un medio para rodear parcialmente la
+restricción mencionada anteriormente de nombres de variable que no
+contengan un número.  Una lista-A anidada es un nombre de variable
+válido seguido por uno o más conjuntos de un punto y una clave.
+En @code{mus.violin.1 = @{ a1 @}} tenemos una variable llamada
+@code{mus}, que tiene una lista de asociación con una clave
+llamada @code{violin}, que a su vez tiene una clave llamada
+@code{1}, a la cual se asigna finalmente el valor @code{@{ a1 @}}.
+En @code{"1.2"."3.4".5} el nombre de la variable es @code{"1.2"} y
+las claves son @code{"3.4"} y @code{5}. Estas construcciones son
+bastante ilegibles pero pueden ser útiles para generar nombres de
+variables programáticamente.
+
+Ni un nombre de variable ni una clave dentro de una lista anidada
+pueden tener el nombre de una nota.  Si es necesario, enciérrelas
+entre comillas dobles, o mejor aún cambie la clave o el nombre
+conflictivos.
+
+Por razones técnicas, acceder a listas-A anidadas puede fallar
+bajo ciertas circunstancias.  Concretamente, no se puede acceder a
+ellas en el nivel jerárquico superior (esto es, fuera de un bloque
+de música).  Si la orden @command{lilypond} abrta con el error
+@q{bad expression type}, sustituya la lista-A anidada con una
+variable normal o entrecomillada.
+
+@end itemize
+
+El ejemplo siguiente muestra tres cosas que se pueden introducir
+en el nivel superior:
+
+@example
+\layout @{
+  % No justificar la salida
+  ragged-right = ##t
+@}
+
+\header @{
+   title = "Do-re-mi"
+@}
+
+@{ c'4 d' e2 @}
+@end example
+
+
+En cualquier punto del archivo se pueden introducir cualquiera de
+las instrucciones léxicas siguientes:
+
+@itemize
+
+@item @code{\version}
+@funindex \version
+
+@item @code{\include}
+@funindex \include
+
+@item @code{\sourcefilename}
+@funindex \sourcefilename
+
+@item @code{\sourcefileline}
+@funindex \sourcefileline
+
+@item
+@funindexpre %
+@cindex comentario
+@cindex comentario de una línea
+Un comentario de una línea, determinado por un símbolo @code{%}
+al principio.
+
+@item
+@funindex %@{ @dots{} %@}
+@cindex comentario de bloque
+@cindex comentario de varias líneas
+@item Un comentario de varias líneas, delimitado por @code{%@{ @dots{} %@}}.
+
+@end itemize
+
+@cindex espacios en blanco
+
+Por lo general se ignoran los espacios entre elementos del flujo
+de entrada, y se pueden omitir o aumentar tranquilamente para
+mejorar la legibilidad.  Sin embargo, los espacios se deben
+utilizar siempre para evitar errores, en las siguientes
+situaciones:
+
+@itemize
+
+@item Alrededor de todas y cada una de las llaves curvas
+de apertura y cierre.
+
+@item A continuación de las instrucciones y variables, es decir,
+todos los elementos que comienzan con un signo @code{\} de barra
+invertida.
+
+@item A continuación de todo elemento que se deba interpretar
+como expresión de Scheme, es decir, todo elemento que comience
+por un signo@tie{}@samp{#}.
+
+@item Para separar los elementos de una expresión de Scheme.
+
+@item Dentro de @code{lyricmode} antes y después de las instrucciones
+@code{\set} y @code{\override}.
+
+@end itemize
+
+@morerefs
+Manual de aprendizaje:
+@rlearningnamed{How LilyPond input files work, Cómo funcionan los archivos de entrada de LilyPond}.
+
+Referencia de la notación:
+@ref{Titles explained},
+@ref{The layout block}.
+@endmorerefs
+
+
+@node Titles and headers
+@chapter Títulos y encabezamientos
+
+@cindex título
+@cindex encabezamiento
+@cindex pie de página
+
+Casi toda la música impresa tiene un título y el nombre del
+compositor; algunas piezas tienen mucha más información.
+
+
+@need 800
+@node Creating titles headers and footers
+@section Crear títulos, encabezamientos y pies de página
+
+@node Titles explained
+@subsection Explicación de los títulos
+
+Cada bloque @code{\book} de un solo archivo de entrada produce un
+archivo de salida distinto, @pxref{File structure}.  Dentro de
+cada archivo de salida están disponibles tres tipos de zonas para
+títulos: @dfn{Títulos de libro} al principio de cada libro,
+@dfn{Títulos de parte de libro} al principio de cada parte de un
+libro y @dfn{Títulos de partitura} al comienzo de una partitura.
+
+Los valores de los campos para encabezamientos tales como
+@code{title} (para el título) y @code{composer} (para el autor) se
+establecen en bloques @code{\header} (para ver la sintaxis de los
+bloques @code{\header} y una lista completa de los campos
+disponibles de forma predeterminada, @pxref{Default layout of
+bookpart and score titles}).  Tanto los títulos de libro como los
+títulos de parte de libro y los títulos de partitura pueden
+contener los mismos campos, aunque de forma predeterminada los
+campos de los títulos de partitura se limitan a @code{piece}
+(pieza) y @code{opus}.
+
+Los bloques @code{\header} se pueden situar en cuatro lugares
+distintos para formar una jerarquía descendente:
+
+@itemize
+
+@item
+Al principio del archivo de entrada, antes de cualquier otro bloque
+@code{\book}, @code{\bookpart} o @code{\score}.
+
+@item
+Dentro de un bloque @code{\book} pero fuera de los bloques
+@code{\bookpart} y @code{\score} que están dentro de ese libro.
+
+@item
+Dentro de un bloque @code{\bookpart} pero fuera de cualquier bloque
+@code{\score} dentro de dicha parte de libro.
+
+@item
+Dentro de un bloque @code{\score}.
+
+@end itemize
+
+Los valores de los campos se filtran a través de esta jerarquía,
+persistiendo aquellos que se establecen más arriba a no ser que
+se sobreescriban por un valor establecido más abajo en la
+jerarquía.
+
+@itemize
+
+@item
+El título de un libro deriva de los campos establecidos al
+principio del archivo de entrada, modificado por campos
+establecidos en el bloque @code{\book}.  Los campos resultantes se
+usan para imprimir el título de libro para dicho libro, siempre y
+cuando haya otro material que genere una página al comienzo del
+libro, antes de la primera parte de libro.  Es suficiente una sola
+instrucción @code{\pageBreak}.
+
+@item
+Un título de parte de libro se deriva de los campos fijados al
+principio del archivo de entrada, modificado por los campos
+establecidos dentro del bloque @code{\book}, y posteriormente
+modificado por los campos que se fijan dentro del bloque
+@code{\bookpart}.  Los valores resultantes se usan para imprimir
+el título de parte de libro para esa parte.
+
+@item
+Un título de partitura se deriva de los campos que se fijan al
+principio del archivo de entrada, modificados por los campos
+fijados dentro del bloque @code{\book}, posteriormente modificados
+por los campos que se fijan dentro del bloque @code{\bookpart} y
+finalmente modificados por los campos establecidos dentro del
+bloque @code{\score}.  Los valores resultantes se utilizan para
+imprimir el título de partitura.  Observe, sin embargo, que de
+forma predeterminada solamente se imprimen los campos @code{piece}
+y @code{opus} en los títulos de partitura a no ser que la variable
+de @code{\paper}, @code{print-all-headers}, tenga el valor
+@code{#t}.
+
+@end itemize
+
+No es necesario aportar bloques @code{\header} en los cuatro
+lugares: cualquiera de ellos o incluso todos pueden omitirse.  De
+forma similar, los archivos de entrada sencillos pueden omitir los
+bloques @code{\book} y @code{\bookpart}, dejando que se creen de
+forma implícita.
+
+Si el libro solamente tiene una partitura, el bloque
+@code{\header} debiera situarse normalmente al principio del
+archivo de forma que solamente se produce una zona de título de
+parte de libro, haciendo que estén disponibles para su uso todos
+los títulos de encabezamientos.
+
+Si el libro tiene varias partituras, son posibles distintas
+combinaciones de bloques @code{\header}, según los distintos tipos
+de publicaciones musicales.  Por ejemplo, si la publicación
+contiene varias piezas del mismo autor, un bloque @code{\header}
+colocado al principio del archivo que especifique el título del
+libro y el autor, con bloques @code{\header} en cada bloque
+@code{\score} que especifique la @code{piece} y/o el @code{opus}
+sería lo más adecuado, como aquí:
+
+@lilypond[papersize=a5,line-width=14.5\cm,quote,verbatim,noragged-right]
+\header {
+  title = "SUITE I."
+  composer = "J. S. Bach."
+}
+
+\score {
+  \header {
+    piece = "Prélude."
+  }
+  \new Staff \relative {
+    \clef bass
+    \key g \major
+    \repeat unfold 2 { g,16( d' b') a b d, b' d, } |
+    \repeat unfold 2 { g,16( e' c') b c e, c' e, } |
+  }
+}
+
+\score {
+  \header {
+    piece = "Allemande."
+  }
+  \new Staff \relative {
+    \clef bass
+    \key g \major
+    \partial 16 b16 |
+    <g, d' b'~>4 b'16 a( g fis) g( d e fis) g( a b c) |
+    d16( b g fis) g( e d c) b(c d e) fis( g a b) |
+  }
+}
+@end lilypond
+
+Son posibles disposiciones más complejas.  Por ejemplo, los
+campos de texto extraídos del bloque @code{\header} de un libro
+se pueden imprimir en todos los títulos de partitura, con ciertos
+campos sobreescritos y otros suprimidos manualmente:
+
+@lilypond[papersize=a5,line-width=14.5\cm,quote,verbatim,noragged-right]
+\book {
+  \paper {
+    print-all-headers = ##t
+  }
+  \header {
+    title = "DAS WOHLTEMPERIRTE CLAVIER"
+    subtitle = "TEIL I"
+    % Do not display the default LilyPond footer for this book
+    tagline = ##f
+  }
+  \markup { \vspace #1 }
+  \score {
+    \header {
+      title = "PRAELUDIUM I"
+      opus = "BWV 846"
+      % Do not display the subtitle for this score
+      subtitle = ##f
+    }
+    \new PianoStaff <<
+      \new Staff { s1 }
+      \new Staff { \clef "bass" s1 }
+    >>
+  }
+  \score {
+    \header {
+      title = "FUGA I"
+      subsubtitle = "A 4 VOCI"
+      opus = "BWV 846"
+      % Do not display the subtitle for this score
+      subtitle = ##f
+    }
+    \new PianoStaff <<
+      \new Staff { s1 }
+      \new Staff { \clef "bass" s1 }
+    >>
+  }
+}
+@end lilypond
+
+@morerefs
+Referencia de la notación:
+@ref{File structure},
+@ref{Default layout of bookpart and score titles},
+@ref{Custom layout for titles}.
+@endmorerefs
+
+
+@node Default layout of bookpart and score titles
+@subsection Presentación predeterminada de los títulos de partes de libro y partitura
+
+@funindex arranger
+@funindex composer
+@funindex copyright
+@funindex dedication
+@funindex instrument
+@funindex meter
+@funindex opus
+@funindex piece
+@funindex poet
+@funindex subsubtitle
+@funindex subtitle
+@funindex tagline
+@funindex title
+
+El siguiente ejemplo muestra todas las variables impresas de
+@code{\header}. Observe que el espaciado vertica entre los
+distintos elementos de la cabecera en la disposición
+predeterminada está optimizado para elementos de una sola línea.
+Si necesita elementos de varias líneas, por ejemplo el nombre del
+compositor, intente añadir @code{\vspace} al campo si es necesario
+para ajustar el espaciado vertical.  Una alternativa sería definir
+su propia disposición personalizada, @pxref{Custom layout for
+titles}.
+
+@c KEEP LY
+@lilypond[papersize=a6landscape,line-width=14.5\cm,quote,verbatim,noragged-right]
+\book {
+  \header {
+      % Los siguientes campos están centrados
+    dedication = "Dedication (dedicatoria)"
+    title = "Title (título)"
+    subtitle = "Subtitle (subtítulo)"
+    subsubtitle = "Subsubtitle (sub-subtítulo)"
+
+      % Los siguientes campos se distribuyen regularmente
+      % sobre una línea
+      % el campo "instrument" también aparece
+      % en las siguientes páginas
+    instrument = \markup \with-color #green "Instrument (instrumento)"
+    poet = "Poet (poeta)"
+    composer = "Composer (autor)"
+
+      % Los siguientes campos se sitúan en los
+      % extremos opuestos de la misma línea
+    meter = "Meter (metro)"
+    arranger = "Arranger (arreglista)"
+
+      % Los siguientes campos están centrados en la parte inferior
+    tagline = "La tagline o línea de etiqueta va al final de la última página"
+    copyright = "El copyright va al final de la primera página"
+
+  }
+  \score {
+    \header {
+        % Los siguientes campos se colocan en los extremos de una línea
+      piece = "Piece (pieza) 1"
+      opus = "Opus 1"
+    }
+    { s1 }
+  }
+  \score {
+    \header {
+      % Los siguientes campos se sitúan en los extremos
+      % de una línea
+      piece = "Piece (pieza) 2 en la misma página"
+      opus = "Opus 2"
+    }
+    { s1 }
+  }
+  \pageBreak
+  \score {
+    \header {
+      % Los siguientes campos se sitúan en los extremos
+      % de una línea
+      piece = "Piece (pieza) 3 en una página nueva"
+      opus = "Opus 3"
+    }
+    { s1 }
+  }
+}
+@end lilypond
+
+Observe que
+
+@itemize
+@item
+el nombre de instrumento se repite en todas las páginas,
+
+@item
+solamente @code{piece} (la pieza) y @code{opus} se imprimen en
+una @code{\score} cuando la variable de papel
+@code{print-all-headers} se establece a @code{##f} (el valor
+predeterminado),
+
+@item
+los campos de texto que se dejan sin establecer dentro de un
+bloque @code{\header} no producen ninguna salida de manera que no
+ocupen espacio innecesariamente,
+
+@item
+los ajustes predeterminados para @code{scoreTitleMarkup} sitúan
+los campos de texto @code{piece} y @code{opus} en extremos
+opuestos de la misma línea.
+
+@end itemize
+
+Para cambiar la disposición predeterminada, @pxref{Custom layout for titles}.
+
+@funindex breakbefore
+
+Si un bloque @code{\book} comienza inmediatamente con un bloque
+@code{\bookpart}, no se imprime ningún título de libro, pues no
+existe ninguna página en que imprimirlo.  Si es necesario un
+título de libro, inicie el bloque @code{\book} con algún material
+de marcado o con una instrucción @code{\pageBreak}.
+
+Utilice la variable @code{breakbefore} dentro de un bloque
+@code{\header} que está propiamente dentro de un bloque
+@code{\score} para hacer que los títulos del bloque
+@code{\header} del nivel superior aparezcan ocupando toda la
+primera página, empezando la música (definida en el bloque
+@code{\score}) en la página siguiente.
+
+@c KEEP LY
+@lilypond[papersize=c7landscape,verbatim,noragged-right]
+\book {
+  \header {
+    title = "Este es mi Title (título)"
+    subtitle = "Este es mi Subtitle (subtítulo)"
+    copyright = "Este es el final de la primera página"
+  }
+  \score {
+    \header {
+      piece = "Esto es la música"
+      breakbefore = ##t
+    }
+    \repeat unfold 4 { e'' e'' e'' e'' }
+  }
+}
+@end lilypond
+
+@morerefs
+Manual de aprendizaje:
+@rlearningnamed{How LilyPond input files work, Cómo funcionan los archivos de entrada de LilyPond}
+
+Referencia de la notación:
+@ref{Custom layout for titles},
+@ref{File structure}.
+
+Archivos de inicio:
+@file{ly/titling-init.ly}.
+@endmorerefs
+
+
+@node Default layout of headers and footers
+@subsection Disposición predeterminada de las cabeceras y pies de página
+
+@cindex página, encabezamiento
+@cindex página, pie
+@cindex encabezamiento, página
+@cindex pie, página
+
+Las @dfn{cabeceras} y los @dfn{pies} de página son líneas de
+texto que aparecen en la parte más alta y en la más baja de las
+páginas separadas del texto principal de un libro.  Se controlan
+mediante las siguientes variables de @code{\paper}:
+
+@itemize
+@item @code{oddHeaderMarkup} (marcado de cabecera impar)
+@item @code{evenHeaderMarkup} (marcado de cabecera par)
+@item @code{oddFooterMarkup} (marcado de pie impar)
+@item @code{evenFooterMarkup} (marcado de pie par)
+@end itemize
+
+Estas variables de marcado se definen en el archivo
+@file{ly/titling-init.ly}.  De forma predeterminada hacen lo
+siguiente.
+
+@itemize
+
+@item
+los números de página se sitúan automáticamente en el extremo
+superior izquierdo (si es par) o superior derecho (si es impar),
+a partir de la segunda página.
+
+@item
+el campo de cabecera @code{instrument} se sitúa en el centro en
+cada página, a partir de la segunda página.
+
+@item
+el campo de cabecera @code{copyright} se centra en la parte baja
+de la primera página.
+
+@item
+el campo de cabecera @code{tagline} se centra al final de la
+última página, y debajo del texto de @code{copyright} si solo hay
+una página.
+
+@end itemize
+
+El ejemplo siguiente muestra cómo cambiar la línea inferior de
+etiqueta.
+
+@lilypond[papersize=a8landscape,verbatim]
+\book {
+  \header {
+    tagline = "... music notation for Everyone"
+  }
+  \score {
+    \relative {
+      c'4 d e f
+    }
+  }
+}
+@end lilypond
+
+Para eliminar la línea de pie de página, establezca el valor de
+@code{tagline} a @code{##f}.
+
+@morerefs
+Referencia de la notación:
+@ref{Custom layout for headers and footers}.
+@endmorerefs
+
+
+@need 800
+@node Custom titles headers and footers
+@section Títulos, encabezamientos y pies de página personalizados
+
+@c TODO: somewhere put a link to header spacing info
+@c       (you'll have to explain it more in NR 4).
+
+
+@node Custom text formatting for titles
+@subsection Formateo personalizado del texto de los bloques de título
+
+Se pueden usar instrucciones @code{\markup} estándar para
+personalizar el texto de cualquier cabecera, pie o título dentro
+del bloque @code{\header}.
+
+@lilypond[quote,verbatim,noragged-right]
+\score {
+  \header {
+    piece = \markup { \fontsize #4 \bold "PRAELUDIUM I" }
+    opus = \markup { \italic "BWV 846" }
+  }
+  { s1 }
+}
+@end lilypond
+
+@morerefs
+Referencia de la notación:
+@ref{Formatting text}.
+@endmorerefs
+
+
+@node Custom layout for titles
+@subsection Personalización de los títulos
+
+@funindex bookTitleMarkup
+@funindex scoreTitleMarkup
+
+Las instrucciones @code{\markup} dentro del bloque @code{\header}
+son útiles para dar un formato simple al texto, pero no permiten
+un control preciso sobre la colocación de los títulos.  Para
+personalizar la colocación de los campos de texto, cambie una o
+las dos variables de @code{\paper} siguientes:
+
+@itemize
+@item @code{bookTitleMarkup} (marcado de título del libro)
+@item @code{scoreTitleMarkup} (marcado de título de la partitura)
+@end itemize
+
+@xref{Default layout of bookpart and score titles} para la
+colocación de los títulos cuando se utilizan los valores
+predeterminados de estas variables de @code{\markup}.
+
+Los ajustes predeterminados para @code{scoreTitleMarkup} tal y
+como están definidos en el archivo @file{ly/titling-init.ly} son
+los siguientes.
+
+@example
+scoreTitleMarkup = \markup \column @{
+  \if \should-print-all-headers @{ \bookTitleMarkup \hspace #1 @}
+  \fill-line @{
+    \fromproperty #'header:piece
+    \fromproperty #'header:opus
+  @}
+@}
+@end example
+
+Esto sitúa los campos de texto @code{piece} y @code{opus} en
+extremos opuestos de la misma línea:
+
+@lilypond[quote,verbatim,noragged-right]
+\score {
+  \header {
+    piece = "PRAELUDIUM I"
+    opus = "BWV 846"
+  }
+  { s1 }
+}
+@end lilypond
+
+El ejemplo siguiente redefine @code{scoreTitleMarkup} de manera
+que el campo de texto @code{piece} aparece centrado y en un tipo
+de letra grande y en negrita.
+
+@lilypond[papersize=a5,line-width=14.5\cm,quote,verbatim,noragged-right]
+\book {
+  \paper {
+    indent = 0\mm
+    scoreTitleMarkup = \markup {
+      \fill-line {
+        \null
+        \fontsize #4 \bold \fromproperty #'header:piece
+        \fromproperty #'header:opus
+      }
+    }
+  }
+  \header { tagline = ##f }
+  \score {
+    \header {
+      piece = "PRAELUDIUM I"
+      opus = "BWV 846"
+    }
+    { s1 }
+  }
+}
+@end lilypond
+
+Los campos de texto que normalmente no son efectivos dentro de los
+bloques @code{\header} de una partitura se pueden imprimir en la
+zona del Título de la partitura si se coloca
+@code{print-all-headers} dentro del bloque @code{\paper}.  Una
+desventaja de la utilización de este método es que los campos de
+texto que están orientados específicamente para la zona del título
+de parte de libro han de suprimirse manualmente en cada uno de los
+bloques @code{\score}.  @xref{Titles explained}.
+
+Para evitarlo, añada el campo de texto deseado a la definición de
+@code{scoreTitleMarkup}.  En el ejemplo siguiente, el campo de
+texto @code{composer} (asociado normalmente con
+@code{bookTitleMarkup}) se añade a @code{scoreTitleMarkup},
+permitiendo que cada partitura muestre un compositor diferente.
+
+@lilypond[papersize=a5,line-width=14.5\cm,quote,verbatim,noragged-right]
+\book {
+  \paper {
+    indent = 0\mm
+    scoreTitleMarkup = \markup {
+      \fill-line {
+        \null
+        \fontsize #4 \bold \fromproperty #'header:piece
+        \fromproperty #'header:composer
+      }
+    }
+  }
+  \header { tagline = ##f }
+  \score {
+    \header {
+      piece = "MENUET"
+      composer = "Christian Petzold"
+    }
+    { s1 }
+  }
+  \score {
+    \header {
+      piece = "RONDEAU"
+      composer = "François Couperin"
+    }
+    { s1 }
+  }
+}
+@end lilypond
+
+También podemos crear nuestros propios campos de texto
+personalizados, y referirnos a ellos en la definición del
+elemento de marcado.
+
+@lilypond[papersize=a5,line-width=14.5\cm,quote,verbatim,noragged-right]
+\book {
+  \paper {
+    indent = 0\mm
+    scoreTitleMarkup = \markup {
+      \fill-line {
+        \null
+        \override #`(direction . ,UP)
+        \dir-column {
+          \center-align \fontsize #-1 \bold
+            \fromproperty #'header:mycustomtext %% User-defined field
+          \center-align \fontsize #4 \bold
+            \fromproperty #'header:piece
+        }
+        \fromproperty #'header:opus
+      }
+    }
+  }
+  \header { tagline = ##f }
+  \score {
+    \header {
+      piece = "FUGA I"
+      mycustomtext = "A 4 VOCI" %% User-defined field
+      opus = "BWV 846"
+    }
+    { s1 }
+  }
+}
+@end lilypond
+
+@morerefs
+Referencia de la notación:
+@ref{Titles explained}.
+@endmorerefs
+
+
+@node Custom layout for headers and footers
+@subsection Disposición personalizada de cabeceras y pies de página
+
+@c can make-header and make-footer be removed from
+@c paper-defaults-init.ly? -mp
+
+Las instrucciones @code{\markup} dentro del bloque @code{\header}
+son de utilidad para dar formato al texto de una manera sencilla,
+pero no permiten un control preciso sobre la colocación de las
+cabeceras y los pies de página.  Para personalizar la colocación
+de los campos de texto, use una o más de las siguientes variables
+de @code{\paper}.
+
+@itemize
+@item @code{oddHeaderMarkup} (marcado de encabezamiento impar)
+@item @code{evenHeaderMarkup} (marcado de encabezamiento par)
+@item @code{oddFooterMarkup} (marcado de pie de página impar)
+@item @code{evenFooterMarkup} (marcado de pie de página par)
+@end itemize
+
+@cindex marcado, condicional
+@funindex \if
+@funindex \unless
+
+La instrucción de marcado @code{\if} se puede utilizar para añadir
+elementos de forma condicional al texto de encabezamiento y pie de
+página definido dentro del bloque @code{\paper}, usando la
+sintaxis siguiente dentro de @code{\markup}:
+
+@example
+\if @var{condición} @var{argumento}
+@end example
+
+@noindent
+La @var{condición} se comprueba cada vez que se interpreta el
+elemento de marcado.  El marcado resultante es @var{argumento} si
+se cumple la condición, y vacío si no se cumple.  Entre las
+condiciones más comunes encontramos pruebas de números de página
+(si es la primera, la última, una página específica, @dots{}).
+Para hacer la comprobación de si la condición es falsa, sustituya
+@code{\if} por @code{\unless}.
+
+El ejemplo siguiente centra los números de página en la parte baja
+de las páginas.  En primer lugar, los ajustes predeterminados para
+@code{oddHeaderMarkup} y @code{evenHeaderMarkup} se eliminan
+definiéndolos como un marcado @emph{nulo}.  Después de esto, se
+redefine @code{oddFooterMarkup} con el número de página centrado.
+Finalmente, @code{evenFooterMarkup} recibe la misma disposición
+definiéndola como @code{\oddFooterMarkup}:
+
+@lilypond[papersize=a8,quote,verbatim,noragged-right]
+\book {
+  \paper {
+    print-page-number = ##t
+    print-first-page-number = ##t
+    oddHeaderMarkup = ##f
+    evenHeaderMarkup = ##f
+    oddFooterMarkup = \markup {
+      \fill-line {
+        \if \should-print-page-number
+          \fromproperty #'page:page-number-string
+      }
+    }
+    evenFooterMarkup = \oddFooterMarkup
+  }
+  \score {
+    \new Staff { s1 \break s1 \break s1 }
+  }
+}
+@end lilypond
+
+Aquí aparece una lista de todos los procedimientos predefinidos
+disponibles para su uso con @code{\if} y @code{\unless}.
+
+@indentedblock
+@multitable {@code{\should-print-page-numbers-global}} {¿Es la primera página en la parte de libro?}
+
+@headitem Sintaxis                     @tab  Condición que se comprueba
+@item @code{\on-first-page}            @tab  ¿Es la primera página del libro?
+@item @code{\on-last-page}             @tab  ¿Es la última página del libro?
+@item @code{\on-first-page-of-part}    @tab  ¿Es la primera página en la parte de libro?
+@item @code{\on-last-page-of-part}     @tab  ¿Es la última página en la parte de libro?
+@item @code{\on-page @var{n}}          @tab  ¿Está en la página número @var{n}?
+@item @code{\single-page}              @tab  ¿El libro entero cabe en una sola página?
+@item @code{\should-print-page-numbers-global} @tab ¿Imprimir números de página en el libro?
+  @footnote{@code{\should-@/print-@/page-@/numbers-@/global} puede ser diferente de
+  @code{\should-@/print-@/page-@/number} para la primera página dentro del libro,
+  dependiento del valor de @code{print-@/first-@/page-@/number} del bloque
+  @code{\paper}.}
+@item @code{\should-print-page-number} @tab ¿Imprimir el número de la página actual?
+@item @code{\should-print-all-headers} @tab ¿Es @code{print-all-headers} verdadero?
+
+@end multitable
+@end indentedblock
+
+
+@morerefs
+Referencia de la notación:
+@ref{Titles explained},
+@ref{Default layout of bookpart and score titles},
+@ref{Conditional markup}.
+
+Archivos instalados:
+@file{../ly/titling-init.ly}.
+@endmorerefs
+
+
+@node Creating output file metadata
+@section Crear metadatos en los archivos de salida
+
+@cindex PDF, metadatos de
+@cindex MIDI, metadatos de
+
+Además de mostrarse en la salida impresa, las variables de
+encabezamiento de @code{\header} se usan para establecer los
+metadatos para los archivos de salida.  Por ejemplo, con los
+archivos PDF, estos metadatos pueden mostrarse por parte de los
+lectores de documentos como @code{propiedades} del PDF.  Para cada
+tipo de archivo de salida, solamente se consultan las definiciones
+de @code{\header} de los bloques que definen archivos separados de
+ese tipo, y los bloques más altos en la jerarquía de bloques.  Por
+tanto, para los archivos PDF, solo afectan a los metadatos de PDF
+de cada documento las definiciones de @code{\header} de los
+niveles de @code{\book} y de nivel superior, mientras que para
+archivos MIDI, se usan todas las cabeceras que están por encima o
+al nivel de @code{\score}.
+
+Por ejemplo, si se establece la propiedad @code{title} del bloque
+@code{header} como @q{Sinfonía núm. 1}, el documento PDF llevará
+también este título, y lo usará como el nombre de la secuencia del
+archivo MIDI.
+
+@example
+\header @{
+  title = "Sinfonía núm. 1"
+@}
+@end example
+
+Si quiere fijar el título de la salida impresa con un texto pero
+quiere que la propiedad de título del PDF tenga un texto
+diferente, puede usar @code{pdftitle} como se muestra a
+continuación.
+
+@example
+\header @{
+  title = "Sinfonía núm. 1"
+  pdftitle = "Sinfonía núm. 1 de Beethoven"
+@}
+@end example
+
+Todas las variables @code{title}, @code{subject}, @code{keywords},
+@code{subtitle}, @code{composer}, @code{arranger}, @code{poet},
+@code{author} y @code{copyright} establecen propiedades del PDF y
+pueden hacerse preceder de @q{pdf} para fijar una propiedad del
+archivo PDF a un valor distinto del de la salida impresa.
+
+La propiedad de PDF @code{Creator} se fija automáticamente a
+@q{LilyPond} más la versión actual de LilyPond, y las variables
+@code{CreationDate} y @code{ModDate} se fijan a la fecha y hora
+actuales.  Se puede sobreescribir @code{ModDate} mediante el
+establecimiento de un valor para la variable de cabecera
+@code{moddate} (o @code{pdfmoddate}) a una cadena de fecha de PDF
+válida.
+
+La variable @code{title} establece también el nombre de la
+secuencia para el archivo MIDI.  Se puede usar la variable
+@code{midititle} para fijar el nombre de la secuencia
+independientemente del valor usado para la salida impresa.
+
+@node Creating footnotes
+@section Crear notas al pie
+
+@cindex nota al pie
+
+Las notas al pie se pueden usar en muchas situaciones diferentes.
+En todos los casos, se sitúa una @q{footnote mark} como referencia
+dentro del texto o la música, y el @q{texto de la nota al pie}
+correspondiente aparece en la parte inferior de la misma página,
+separado de la música por una línea horizontal.  La apariencia
+visual de este spearadoe se puede modificar estableciendo la
+variable @code{footnote-separator-markup} del bloque @code{paper},
+véase @ref{paper variables concerning headers and markups}.
+
+Las notas al pie dentro de las expresiones musicales y las notas
+al pie dentro de elementos de texto autocontenidos fuera de las
+expresiones musicales, se crean de formas diferentes.
+
+
+@node Footnotes in music expressions
+@subsection Notas al pie dentro de expresiones musicales
+
+@cindex nota al pie dentro de expresiones musicales
+@funindex \footnote
+
+@subsubheading Panorámica de las notas al pie
+
+Las notas al pie dentro de expresiones musicales se agrupan en dos
+categorías:
+
+@table @emph
+@item Notas al pie basadas en eventos
+Se adjuntan a un evento en particular.  Son ejemplos de tales
+eventos las notas sueltas, las articulaciones (como indicaciones
+de digitación, acentos, indicaciones dinámicas) y los post-eventos
+(como las ligaduras de expresión y las barras de corchea
+manuales).  La forma general de las notas al pie basadas en
+eventos es como sigue:
+
+@example
+[@var{dirección}] \footnote [@var{marca}] @var{desplazamiento} @var{texto-de-la-nota} @var{música}
+@end example
+
+@item Notas al pie basadas en tiempo
+Se ligan a un punto temporal determinado, dentro de un contexto
+musical.  Algunas instrucciones como @code{\time} y @code{\clef}
+en realidad no usan eventos para crear objetos como la indicación
+de compás y la clave.  Un acorde tampoco crea un evento por sí
+mismo: su plica o corchete se crea al final de un paso de tiempo
+(nominalmente, a través de uno de los eventos de nota que
+contiene).  Una nota al pie basada en tiempo permite anotar tales
+objetos de presentación sin referirse a ningún evento.
+
+Una nota al pie basada en tiempo permite que tales objetos de
+presentación se puedan anotar sin hacer referencia a un evento.
+La forma general para las notas al pie basadas en tiempo es:
+
+@example
+\footnote [@var{marca}] @var{desplazamiento} @var{texto-de-la-nota} [@var{Contexto}].@var{Nombre-del-Grob}
+@end example
+
+@end table
+
+Los elementos para las dos formas son como sigue:
+
+@table @var
+
+@item dirección
+Si (y solo si) el @code{\footnote} se está aplicando a un
+post-evento o articulación, debe ir precedida de un indicador de
+dirección (@samp{-}, @samp{_}, @samp{^}) con el objeto de adjuntar
+la @var{música} (con una marca de nota al pie) a la nota o
+silencio precedente.
+
+@item marca
+@funindexpost \default
+es un elemento de marcado o cadena de caracteres que especifica la
+marca de nota al pie que se usa para marcar tanto el punto de
+referencia como la propia nota al pie en la parte inferior de la
+página.  Se puede omitir (o, de forma equivalente, sustituirse por
+@code{\default}) en cuyo caso se genera un número secuencialmente
+de forma automática.  Por omisión, tales secuencias numéricas se
+reinician en cada página que contiene una nota al pie.  Las notas
+al pie se pueden numerar en orden creciente a través de los saltos
+de página estableciendo la variable
+@code{reset-@/footnotes-@/on-@/new-@/page} a @code{#f},
+@pxref{paper variables concerning headers and markups}.
+
+
+@item desplazamiento
+es una pareja de números tal como @samp{#'(2 . 1)} que especifica
+los desplazamientos en X y en Y en unidades de espacios de
+pentagrama a partir del límite del objeto en que se desea situar
+la marca.  Los valores de desplazamiento positivos se toman a
+partir del borde superior derecho, los valores negativos a partir
+del borde inferior izquierdo y cero implica que la marca se centra
+sobre el borde.
+
+@item Contexto
+es el contexto en que se crea el grob que recibe la nota al pie.
+Se puede omitir si el grob está en un contexto del nivel inferior,
+p. ej. un contexto @code{Voice}.
+
+@item Nombre-del-Grob
+especifica un tipo de grob que marcar (como @samp{Flag} para el
+corchete).  Si se da, la nota al pie no se adjunta a una expresión
+musical en particular, sino a todos los grobs del tipo
+especificado que ocurren en dicho momento de tiempo musical.
+
+@item texto-de-la-nota
+es el elemento de marcado o cadena de caracteres que especifica el
+texto de la nota al pie que utilizar en la parte baja de la
+página.
+
+@item música
+es el evento musical, post-evento o articulación que se está
+anotando.
+
+@end table
+
+@subsubheading Notas al pie basadas en eventos
+
+@cindex nota al pie, basada en eventos
+
+Una nota al pie se adjunta a un objeto de presentación causado
+directamente por el evento que corresponde a @var{música}, con la
+sintaxis siguiente:
+
+@example
+\footnote [@var{marca}] @var{desplazamiento} @var{texto-de-la-nota} @var{música}
+@end example
+
+@c In this and the following footnote examples we use `\markup`
+@c commands to ensure enough vertical space so that footnotes are
+@c not clipped.  This is issue #6128.
+
+@c KEEP LY
+@lilypond[quote,verbatim,papersize=a8landscape]
+\book {
+  \header { tagline = ##f }
+  \markup "notas al pie basadas en evento"
+  \markup \null
+  \relative c'' {
+    \footnote #'(-1 . 3) "Una nota." a4
+    a4
+    \footnote #'(2 . 2) "Un silencio." r4
+    a4
+  }
+}
+@end lilypond
+
+Si un acorde está marcado con una nota al pie basada en evento,
+cada nota del acorde recibe una nota al pie idéntica pero
+independiente, algo que normalmente no es lo que se desea hacer.
+Sin embargo, es posible crear notas al pie para las notas
+individuales dentro de un acorde.
+
+@c KEEP LY
+@lilypond[quote,verbatim,papersize=a8landscape]
+\book {
+  \header { tagline = ##f }
+  \markup "notas al pie basadas en evento"
+  \markup \null
+  \relative c'' {
+    \footnote #'(1 . 3) "Un acorde." <a-3 c-5>2
+    <a-3 \footnote #'(3 . 0.5) "Una nota de un acorde." c-5>4
+  }
+}
+@end lilypond
+
+Si se desea que la nota al pie se adjunte a un post-evento o
+articulación, la instrucción @code{\footnote} @emph{debe} ir
+precedida por un indicador de dirección, (@samp{-}, @samp{_},
+@samp{^}), y seguida por el post-evento o articulación que se
+desea anotar como argumento @var{música}.  En esta forma, la
+@code{\footnote} se puede considerar como una simple copia de su
+último argumento con una marca de nota al pie adjunta.  La
+sintaxis es:
+
+@example
+@var{dirección} \footnote [@var{marca}] @var{desplazamiento} @var{texto-de-la-nota} @var{música}
+@end example
+
+@c KEEP LY
+@lilypond[quote,verbatim,papersize=a8landscape]
+\book {
+  \header { tagline = ##f }
+  \markup "notas al pie basadas en evento"
+  \markup \null
+  \relative {
+    a'4_\footnote #'(0 . -1) "Ligadura forzada hacia abajo" (
+    b8^\footnote #'(1 . 0.5) "Barra manual forzada hacia arriba" [
+    b8 ]
+    c4 )
+    c-\footnote #'(1 . 1) "Tenuto." --
+  }
+}
+@end lilypond
+
+
+@subsubheading Notas al pie basadas en tiempo
+
+@cindex nota al pie, basada en tiempo
+
+Si el objeto de presentación que recibe la nota al pie está
+causado @emph{indirectamente} por un evento (como un objeto
+@code{Accidental}, alteración, o @code{Stem}, plica, causados por
+un evento @code{NoteHead}, cabeza de nota), el nombre del grob
+@var{GrobName} del objeto de presentación es necesario después del
+texto de la nota al pie, en lugar de @var{música}:
+
+@c KEEP LY
+@lilypond[quote,verbatim,papersize=a8landscape]
+\book {
+  \header { tagline = ##f }
+  \markup "notas al pie basadas en tiempo"
+  \markup \null
+  \relative c'' {
+    \footnote #'(-1 . -3) "Un bemol." Accidental
+    aes4 c
+    \footnote #'(-1 . 0.5) "Otro bemol." Accidental
+    ees
+    \footnote #'(1 . -2) "Una plica." Stem
+    aes
+  }
+}
+@end lilypond
+
+Sin embargo, observe que cuando se especifica un @var{GrobName}
+(el nombre de un grob), se adjunta una nota al pie a todos los
+grobs de ese tipo dentro del instante de tiempo actual:
+
+@c KEEP LY
+@lilypond[quote,verbatim,papersize=a8landscape]
+\book {
+  \header { tagline = ##f }
+  \markup "notas al pie basadas en tiempo"
+  \markup \null
+  \markup \null
+  \relative c' {
+    \footnote #'(-1 . 3) "Un bemol." Accidental
+    <ees ges bes>4
+    \footnote #'(2 . 0.5) "Articulación." Script
+    c'->-.
+  }
+}
+@end lilypond
+
+@funindex \single
+
+Una nota dentro de un acorde puede recibir una nota al pie
+individual, basada en evento.  El único grob causado directamente
+por una nota de un acorde es @samp{NoteHead}, por lo que la
+instrucción de nota al pie basada en evento @emph{solamente} es
+apta para añadir una nota al pie a la @samp{NoteHead} dentro de un
+acorde.  Todos los demás grobs de notas de acorde están causados
+indirectamente. La propia instrucción @code{\footnote} no ofrece
+ninguna sintaxis para especificar al mismo tiempo un tipo concreto
+de grob @emph{y también} un evento concreto al que adjuntar la
+nota.  Sin embargo, se puede usar una instrucción @code{\footnote}
+basada en tiempo para especificar el tipo de grob, y luego añadir
+la instrucción @code{\single} como prefijo, con el objeto de que
+se aplique solamente al evento siguiente:
+
+@c KEEP LY
+@lilypond[quote,verbatim,papersize=a8landscape]
+\book {
+  \header { tagline = ##f }
+  \markup "notas al pie basadas en tiempo"
+  \markup \null
+  \relative c'' {
+    < \footnote #'(1 . -2) "Un La." a
+      \single \footnote #'(-1 . -1) "Un sostenido." Accidental
+      cis
+      \single \footnote #'(0.5 . 0.5) "Un bemol." Accidental
+      ees fis
+    >2
+  }
+}
+@end lilypond
+
+@warning{Cuando las notas al pie se adjuntan a varios elementos
+musicales que están dentro del mismo momento musical, como ocurre
+en el ejemplo anterior, las notas al pie se numeran desde los
+elementos más altos a los más bajos tal y como aparecen en la
+salida impresa, no en el orden en que se escriben en el flujo de
+entrada.}
+
+Los objetos de presentación como las claves y las armaduras de
+cambio de tonalidad están, más bien, causadas por propiedades que
+cambian, y no por eventos.  Otros, como las líneas divisorias y
+los números de compás, son una consecuencia directa del paso del
+tiempo.  Por esta razón, las notas al pie sobre tales objetos
+tienen que basarse en su tiempo musical.  Las notas al pie
+basadas en tiempo so preferibles también cuando se marcan cosas
+como las plicas y las barras de corchea en @emph{acordes}: dado
+que estas funcionalidades de cada acorde individual están
+asignadas normalmente a @emph{un solo} evento dentro del acorde,
+sería imprudente descansar en una elección particular.
+
+En las notas al pie basadas en tiempo, siempre se debe
+especificar explícitamente el objeto de presentación en cuestión,
+y si el grob se crea dentro de un contexto distinto al de nivel
+más bajo, debe especificarse el contexto apropiado.
+
+@c KEEP LY
+@lilypond[quote,verbatim,papersize=a8landscape]
+\book {
+  \header { tagline = ##f }
+  \markup "notas al pie basadas en tiempo"
+  \relative c'' {
+    r1 |
+    \footnote #'(-0.5 . -1) "Cambio de compás." Staff.TimeSignature
+    \time 3/4
+    \footnote #'(1 . -1) "Plica de acorde." Stem
+    <c e g>4 q q
+    \footnote #'(-0.5 . 2) "Línea divisoria." Staff.BarLine
+    q q
+    \footnote #'(0.5 . -1) "Cambio de armadura." Staff.KeySignature
+    \key c \minor
+    q
+  }
+}
+@end lilypond
+
+Se pueden usar marcas personalizadas como alternativas a las
+marcas numéricas, y se puede suprimir la línea de anotación que
+une el objeto marcado con su marca:
+
+@c KEEP LY
+@lilypond[quote,verbatim,papersize=a8landscape]
+\book {
+  \header { tagline = ##f }
+  \markup "notas al pie con marcas personalizadas"
+  \markup \null
+  \relative c' {
+    \footnote "*" #'(0.5 . -2) \markup { \italic "* La primera nota" }
+    a'4 b8
+    \footnote \markup { \super "$" } #'(0.5 . 1)
+      \markup { \super "$" \italic " La segunda nota." } e
+    c4
+    \once \override Score.Footnote.annotation-line = ##f
+    b-\footnote \markup \tiny "+" #'(0.1 . 0.1)
+      \markup { \super "+" \italic " Editorial." } \p
+  }
+}
+@end lilypond
+
+Se muestran más ejemplos de marcas personalizadas en
+@ref{Footnotes in stand-alone text}.
+
+
+@node Footnotes in stand-alone text
+@subsection Notas al pie en texto independiente
+
+@cindex nota al pie, en texto independiente
+
+Se utilizan dentro de un elemento de marcado fuera de cualquier
+expresión musical.  No se traza una línea hasta el punto de
+referencia: la marca simplemente sigue al elemento de marcado que
+se referencia.  Se pueden insertar las marcas automáticamente, en
+cuyo caso son numéricas.  De forma alternativa, se pueden aportar
+manualmente marcas personalizadas.
+
+Las notas al pie para texto independiente con marcas automáticas y
+personalizadas se crean de distintas formas.
+
+@subsubheading Notas al pie en texto independiente con marcas automáticas
+
+La sintaxis de una nota al pie sobre texto independiente con
+marcas automáticas es
+
+@example
+\markup @{ @dots{} \auto-footnote @var{texto} @var{nota} @dots{} @}
+@end example
+
+Los elementos son:
+
+@table @var
+@item texto
+es el elemento de marcado o cadena de caracteres que se ha de marcar,
+
+@item nota
+es el elemento de marcado o cadena que especifica el texto de la
+nota al pie a utilizar en la parte baja de la página.
+@end table
+
+Por ejemplo:
+
+@c KEEP LY
+@lilypond[verbatim,quote,ragged-right,papersize=a8]
+\book {
+  \header { tagline = ##f }
+  \markup {
+    "Una sencilla"
+    \auto-footnote "melodía" \italic " Hecha por mí."
+    "aparece a continuación.  Es una composición"
+    \auto-footnote "reciente" \italic " Agosto de 2012."
+  }
+  \relative {
+    a'4 b8 e c4 d
+  }
+}
+@end lilypond
+
+@subsubheading Notas al pie sobre texto independiente con marcas personalizadas
+
+La sintaxis de una nota al pie sobre texto independiente con
+marcas personalizadas es
+
+@example
+\markup @{ @dots{} \footnote @var{marca} @var{nota} @dots{} @}
+@end example
+
+Los elementos son:
+
+@table @var
+
+@item marca
+es un elemento de marcado o cadena de caracteres que especifica
+la marca que se usa para señalar el punto de referencia.  Observe
+que esta marca @emph{no} se inserta automáticamente antes de la
+propia nota al pie.
+
+@item nota
+es el elemento de marcado o cadena de caracteres que especifica
+el texto de la nota que aparece en la parte baja de la página,
+precedida por la @var{marca} especificada.
+
+@end table
+
+Se puede usar como marca un carácter fácil de teclear, como
+@samp{*} ó @samp{+}, según se muestra en @ref{Footnotes in music
+expressions}.  De forma alternativa, se pueden usar alias en ASCII
+(@pxref{ASCII aliases}):
+
+@c KEEP LY
+@lilypond[verbatim,quote,ragged-right,papersize=a8]
+\book {
+  \paper { #(include-special-characters) }
+  \header { tagline = ##f }
+  \markup {
+    "Una sencilla melodía"
+    \footnote "*" \italic "* Hecha por mí."
+    "aparece a continuación.  Es una composición reciente"
+    \footnote \super &dagger; \concat {
+      \super &dagger; \italic " Agosto de 2012."
+    }
+  }
+  \relative {
+    a'4 b8 e c4 d
+  }
+}
+@end lilypond
+
+También pueden utilizarse códigos de caracteres Unicode para
+especificar las marcas (véase @ref{Unicode}):
+
+@c KEEP LY
+@lilypond[verbatim,quote,ragged-right,papersize=a8]
+\book {
+  \header { tagline = ##f }
+  \markup {
+    "Una sencilla melodía"
+    \footnote \super \char##x00a7 \concat {
+      \super \char##x00a7 \italic " Hecha por mí."
+    }
+    "aparece a continuación.  Es una composición reciente"
+    \footnote \super \char##x00b6 \concat {
+      \super \char##x00b6 \italic " Agosto de 2012."
+    }
+  }
+  \relative {
+    a'4 b8 e c4 d
+  }
+}
+@end lilypond
+
+@morerefs
+Manual de aprendizaje:
+@rlearningnamed{Objects and interfaces, Objetos e interfaces}.
+
+Referencia de la notación:
+@ref{ASCII aliases},
+@ref{Balloon help},
+@ref{List of special characters},
+@ref{Text marks},
+@ref{Text scripts},
+@ref{Unicode}.
+
+Referencia de funcionamiento interno:
+@rinternals{FootnoteEvent},
+@rinternals{Footnote},
+@rinternals{Footnote_engraver}.
+@endmorerefs
+
+@knownissues
+Varias notas al pie en la misma página solo pueden ir apiladas
+unas sobre otras; no se pueden imprimir en la misma línea.
+
+Las notas al pie pueden colisionar con las pautas, objetos
+@code{\markup}, otras marcas de notas al pie y líneas de
+anotación.
+
+@node Creating in-notes
+@section Creación de notas interiores
+
+@cindex nota, interior
+
+Las notas interiores funcionan como las notas al pie en el sentido
+de que sirven para anotar la música, pero se diferencian en que se
+tipografían encima o debajo del sistema a que pertenece el objeto
+gráfico que se está anotando.
+
+@funindex in-note-padding
+@funindex in-note-system-padding
+@funindex in-note-direction
+
+Para crear una nota interior, fije la propiedad @code{footnote}
+del objeto gráfico @code{Footnote} al valor @code{#f}.  La
+distancia entre dos notas interiores se puede controlar con la
+variable @code{in-note-padding} del bloque @code{paper}, y la
+distancia entre la nota interior y su sistema asociado mediante
+@code{in-note-system-padding}.  Si quiere que las notas interiores
+estén posicionadas debajo de su sistema asociado, establezca la
+variable @code{in-note-direction} del bloque @code{paper} al valor
+@code{DOWN}.
+
+@lilypond[verbatim,quote,papersize=a6]
+music = { a4 b8 e c4 d }
+
+\book {
+  \relative c'' {
+    \override Score.Footnote.footnote = ##f
+
+    \repeat unfold 5 \music
+    \footnote #'(1 . 1) "An in-note." NoteHead
+    <>-> \repeat unfold 4 \music
+    \footnote "" #'(0 . 0) "An in-note without number." NoteHead
+    <>-> \repeat unfold 2 \music
+    \footnote "" #'(0 . 0) "Another numberless in-note." NoteHead
+    <>-> \music
+  }
+
+  \paper {
+    in-note-system-padding = 5
+    in-note-padding = 2
+    tagline = ##f
+  }
+}
+@end lilypond
+
+
+@node Reference to page numbers
+@section Referencia a números de página
+
+@cindex marcadores
+@cindex página, referenciar números de
+
+Un lugar determinado de una partitura puede señalizarse usando la
+instrucción @code{\label} (etiqueta), ya sea en el nivel superior
+o dentro de la música.  Podemos referirnos a esta etiqueta más
+tarde dentro de un elemento de marcado, para obtener el número de
+la página en la que se sitúa el punto señalizado, usando la
+instrucción de marcado @code{\page-ref}.
+
+@c KEEP LY
+@lilypond[verbatim,papersize=a8landscape]
+\header { tagline = ##f }
+\book {
+  \label #'firstScore
+  \score {
+    {
+      c'1
+      \pageBreak \mark A \label #'markA
+      c'1
+    }
+  }
+  \markup { La primera partitura comienza en la página \page-ref #'firstScore "0" "?" }
+  \markup { La marca A está en la página \page-ref #'markA "0" "?" }
+}
+@end lilypond
+
+La instrucción de marcado @code{\page-ref} toma tres argumentos:
+@enumerate
+@item la etiqueta, un símbolo de Scheme, p.ej. @code{#'firstScore};
+@item un elemento de marcado que se usará como medidor para estimar las dimensiones del marcado;
+@item un elemento de marcado que se utilizará en sustitución del número de página si la etiqueta es desconocida.
+@end enumerate
+
+El motivo de que se necesite un medidor es que en el momento en
+que se están interpretando los marcados, los saltos de página aún
+no se han producido y por tanto los números de página no se
+conocen todavía.  Para sortear este inconveniente, la
+interpretación real del marcado se retrasa hasta un momento
+posterior; sin embargo, las dimensiones del marcado se tienen que
+conocer de antemano, así que se usa el medidor para decidir estas
+dimensiones.  Si el libro tiene entre 10 y 99 páginas, el medidor
+puede ser @qq{00}, es decir, un número de dos dígitos.
+
+Si el tamaño del texto final es diferente del medidor, puede ser
+útil configurar la alineación horizontal relativa al medidor con
+la propiedad @code{x-align}.  Por omisión está alineado a la derecha.
+
+@lilypond[quote,verbatim]
+\markup {
+  \box
+    \page-ref #'foo "???" "?" " right-aligned (default)"
+}
+\markup {
+  \box
+    \override #`(x-align . ,LEFT)
+    \page-ref #'foo "???" "?" " left-aligned"
+}
+\markup {
+  \box
+    \override #'(x-align . -2.5)
+    \page-ref #'foo "???" "?" " left outside"
+}
+@end lilypond
+
+En el ejemplo, el medidor @samp{???} es más ancho que el texto de
+sustitución @samp{?}.  La sustitución se usa porque la etiqueta
+@code{#'foo} no existe.  La propiedad @code{x-align} se puede
+establecer con números cualesquiera.  También se pueden usar los
+símbolos predefinidos @code{LEFT}, @code{CENTER} o @code{RIGHT}
+para fijar la alineación a la izquierda, centrada o a la derecha
+en relación al medidor.
+
+@predefined
+@funindex \label
+@funindex \page-ref
+
+@code{\label},
+@code{\page-ref}.
+@endpredefined
+
+
+@node Table of contents
+@section Tabla de contenidos
+
+@cindex @'indice general
+@cindex tabla de contenidos
+@cindex marcadores
+
+Se puede insertar un índice general o tabla de contenidos
+utilizando la instrucción @code{\markuplist \table-of-contents}.
+Los elementos que deben aparecer en la tabla de contenidos se
+introducen con la instrucción @code{\tocItem}, que se puede usar
+en el nivel más alto de la jerarquía del código, o dentro de una
+expresión musical.
+
+@verbatim
+\markuplist \table-of-contents
+\pageBreak
+
+\tocItem \markup "Primera partitura"
+\score {
+  {
+    c'4  % ...
+    \tocItem \markup "Un punto concreto dentro de la primera partitura"
+    d'4  % ...
+  }
+}
+
+\tocItem \markup "Segunda partitura"
+\score {
+  {
+    e'4 % ...
+    \tocItem actI \markup "Act I"
+    f'4 % ...
+    \tocItem actI.sceneI \markup "Scene 1"
+    g'4 % ...
+    \tocItem actI.sceneI.recitativo \markup "Recit."
+    a'4 % ...
+  }
+}
+@end verbatim
+
+De manera opcional se puede asociar una etiqueta con un elemento
+en particular o con una lista jerárquica de etiquetas existentes,
+terminando con la etiqueta de ese elemento.  Esta última
+posibilidad nos permite marcar el elemento como un @q{hijo} de los
+elementos etiquetados precedentes, haciendo así aparente la
+estructura de la partitura en el índice general.
+
+Los elementos de marcado que se usan para dar formato al índice
+general o tabla de contenidos se encuentran definidos dentro del
+bloque @code{\paper}.  Hay tres elementos de marcado
+@q{predefinidos} disponibles:
+
+@itemize
+
+@item
+@code{tocTitleMarkup}
+
+@noindent
+Utilizado para dar formato al título del índice general.
+
+@verbatim
+tocTitleMarkup = \markup \huge \column {
+  \fill-line { \null "Índice general" \null }
+  \null
+}
+@end verbatim
+
+@item
+@code{tocItemMarkup}
+
+@noindent
+Usado para dar formato a los elementos del índice general.
+
+@verbatim
+tocItemMarkup = \markup \fill-line {
+  \fromproperty #'toc:text \fromproperty #'toc:page
+}
+@end verbatim
+
+@item
+@code{tocFormatMarkup}
+
+@noindent
+Cómo se formatean las entradas del nivel superior de la tabla (si
+existen varios niveles jerárquicos).  Esto es un procedimiento en
+realidad, como se explica en @rextendnamed{Markup construction in
+Scheme, Construcción de elementos de marcado en Scheme}.
+
+@verbatim
+tocFormatMarkup = #make-bold-markup
+@end verbatim
+@item
+@code{tocIndentMarkup}
+
+@noindent
+Usado para definir cómo la jerarquía del esquema general se hace
+aparente.  Este elemento de marcado se imprime ninguna, una o
+varias veces dependiendo del nivel de cada entrada.
+
+@verbatim
+tocIndentMarkup = \markup \hspace #4
+@end verbatim
+
+@end itemize
+
+@noindent
+Cualquiera de estas variables puede modificarse.
+
+He aquí un ejemplo que traduce el título del índice general al
+francés:
+
+@verbatim
+\paper {
+  tocTitleMarkup = \markup \huge \column {
+    \fill-line { \null "Table des matières" \null }
+    \hspace #1
+  }
+@end verbatim
+
+A continuación aparece un ejemplo que modifica el tamaño de fuente
+tipográfica de los elementos del índice general:
+
+@verbatim
+tocItemMarkup = \markup \large \fill-line {
+  \fromproperty #'toc:text \fromproperty #'toc:page
+}
+@end verbatim
+
+Observe la forma en que nos referimos al texto y al número de
+página del elemento de índice, dentro de la definición
+@code{tocItemMarkup}.
+
+@funindex \tocItemWithDotsMarkup
+
+La instrucción @code{\tocItemWithDotsMarkup} se puede incluir
+dentro de @code{tocItemMarkup} para llenar la línea con puntos
+entre un elemento del índice general y su número de página
+correspondiente:
+
+@lilypond[verbatim,line-width=10.0\cm]
+\header { tagline = ##f }
+\paper {
+  tocItemMarkup = \tocItemWithDotsMarkup
+}
+
+\book {
+  \markuplist \table-of-contents
+  \tocItem \markup { Allegro }
+  \tocItem \markup { Largo }
+  \markup \null
+}
+@end lilypond
+
+@funindex add-toc-item!
+@cindex @'indice general, funciones personalizadas
+
+Además del mecanismo incorporado de construcción del índice
+general, las instrucciones predefinidas pueden definirse también
+para que construyan un índice general más personalizado con
+diferentes elementos de marcado.  En el ejemplo siguiente se
+define un estilo nuevo para introducir los actos y escenas de una
+ópera en el índice general:
+
+@noindent
+Una nueva variable de marcado (llamada @code{tocActMarkup}) se
+define en el bloque @code{\paper}:
+
+@verbatim
+\paper {
+  tocActMarkup = \markup \large \column {
+    \hspace #1
+    \fill-line { \null \italic \fromproperty #'toc:text \null }
+    \hspace #1
+  }
+}
+@end verbatim
+
+@noindent
+A continuación se crea una función musical personalizada
+(@code{tocAct}), que usa la nueva definición de marcado
+@code{tocActMarkup}, y permite especificar una etiqueta para cada
+acto.
+
+@verbatim
+tocAct =
+  #(define-music-function (label text) (symbol? markup?)
+     (add-toc-item! 'tocActMarkup text label))
+@end verbatim
+
+@noindent
+Usando estas definiciones personalizadas y modificando algunas de
+las definiciones existentes, el archivo fuente se podría escribir
+entonces de la manera siguiente:
+
+@funindex \fill-with-pattern
+
+@lilypond[line-width=10.0\cm]
+\header { tagline = ##f }
+\paper {
+  tocActMarkup = \markup \large \column {
+    \hspace #1
+    \fill-line { \null \italic \fromproperty #'toc:text \null }
+    \hspace #1
+  }
+  tocItemMarkup = \markup \fill-line {
+    \fill-with-pattern #1.5 #CENTER .
+    \line {
+      \hspace #-4 %% Cancelling the first level's tocIndentMarkup
+      \fromproperty #'toc:indent \fromproperty #'toc:text
+      \hspace #2
+    }
+    \fromproperty #'toc:page
+  }
+}
+
+tocAct =
+#(define-music-function (label text) (symbol-list-or-symbol? markup?)
+   (add-toc-item! 'tocActMarkup text label))
+
+\book {
+  \markuplist \table-of-contents
+  \tocAct actI \markup { Atto Primo }
+  \tocItem actI.sceneI \markup { Coro. Viva il nostro Alcide }
+  \tocItem actI.sceneII \markup { Cesare. Presti omai l'Egizia terra }
+  \tocItem actI.sceneII.recitativo \markup { \italic Recit. Curio, Cesare venne, e vide, e vinse. }
+  \tocAct actII \markup { Atto Secondo }
+  \tocItem actII.sceneI \markup { Sinfonia }
+  \tocItem actII.sceneII \markup { Cleopatra. V'adoro, pupille, saette d'Amore }
+  \markup \null
+}
+@end lilypond
+
+@noindent
+El ejemplo anterior muestra también cómo usar la instrucción de
+marcado @code{\fill-with-pattern} dentro del contexto de un índice
+general o tabla de contenidos.
+
+@morerefs
+Archivos de inicio:
+@file{ly/toc-init.ly}.
+@endmorerefs
+
+@predefined
+@funindex \table-of-contents
+@funindex \tocItem
+@funindex tocItemMarkup
+@funindex tocTitleMarkup
+@funindex tocFormatMarkup
+@funindex tocIndentMarkup
+
+@code{\table-of-contents},
+@code{\tocItem},
+@code{tocItemMarkup},
+@code{tocTitleMarkup},
+@code{tocFormatMarkup},
+@code{tocIndentMarkup}.
+@endpredefined
+
+
+@need 1500
+@node Working with input files
+@chapter Trabajar sobre los archivos de entrada
+
+@node Including LilyPond files
+@section Inclusión de archivos de LilyPond
+
+@funindex \include
+@cindex inclusión de archivos
+
+Un proyecto grande se puede dividir en varios archivos.  Para
+referirse a otro archivo, utilice
+
+@example
+\include "otroarchivo.ly"
+@end example
+
+La línea @code{\include "otroarchivo.ly"} equivale a pegar todo el
+contenido de @file{otroarchivo.ly} en el archivo actual en el
+lugar en que aparece el @code{\include}.  Por ejemplo, en un
+proyecto grande podríamos querer archivos distintos para cada
+parte instrumental y crear un archivo de @qq{partitura completa}
+que reúne los archivos individuales de los instrumentos.
+Normalmente el archivo incluido define un cierto número de
+variables que a partir de entonces quedan disponibles para
+poderlas utilizar en el archivo de la partitura completa.  En los
+archivos incluidos se pueden marcar las secciones etiquetadas para
+ayudar a hacerlas utilizables en distintos lugares de la
+partitura, véase @ref{Different editions from one source}.
+
+Los archivos que están en el directorio de trabajo actual se
+pueden referenciar simplemente especificando el nombre después de
+la instrucción @code{\include}.  Los archivos en otros lugares se
+pueden incluir proporcionando una referencia de ruta completa o
+una ruta relativa (pero utilice la barra inclinada normal del
+UNIX, /, no la barra invertida de DOS/Windows, \, como separador
+de directorio).  Por ejemplo, si @file{material.ly} está situado
+un directorio por encima del directorio de trabajo actual, utilice
+
+@example
+\include "../material.ly"
+@end example
+
+@noindent
+o si los archivos de las partes orquestales incluidas están todos
+situados en un subdirectorio llamado @file{partes} dentro del
+directorio actual, use
+
+@example
+\include "partes/VI.ly"
+\include "partes/VII.ly"
+@dots{} etc.
+@end example
+
+Los archivos de inclusión también pueden contener enunciados
+@code{\include} a su vez.  Estos enunciados @code{\include} de
+segundo nivel se interpretan de manera relativa a la ruta del
+archivo que contiene dicha instrucción, lo que es conveniente para
+varios archivos ubicados dentro del mismo subdirectorio.  Por
+ejemplo, una biblioteca general, bibA, puede a su vez usar
+sub-archivos que son incluidos por el archivo principal de dicha
+biblioteca, así:
+
+@example
+bibA/
+  bibA.ly
+  A1.ly
+  A2.ly
+  @dots{}
+@end example
+
+@noindent
+entonces el archivo de entrada, @code{bibA.ly}, contiene
+
+@example
+\include "A1.ly"
+\include "A2.ly"
+@dots{}
+@end example
+
+Cualquier archivo @file{.ly} puede entonces incluir la biblioteca
+completa, simplemente con
+
+@example
+\include "~/bibA/bibA.ly"
+@end example
+
+@noindent
+Sin embargo, este comportamiento se puede modificar de forma
+global pasando la opción @option{-drelative-includes=#f} en la
+línea de órdenes (o añadiendo @code{#(ly:set-option
+'relative-includes #f)} al principio del archivo principal de
+entrada).  En tal caso, cada archivo se incuirá relativamente a la
+ubicación del archivo principal, sin importar dónde está situado
+su instrucción @code{\include}.  Estructuras de archivo complejas
+que requieren realizar la inclusión tanto de archivos relativos al
+directorio principal como de archivos relativos a algún otro
+directorio, pueden incluso configurarse estableciendo
+@code{relative-includes} a los valores @code{#f} o @code{#t} en
+los lugares adecuados dentro de dichos archivos.
+
+También se pueden incluir archivos de un directorio que está en
+una ruta de búsqueda especificada como opción al invocar a
+LilyPond desde la línea de órdenes.  Los archivos incluidos se
+especifican usando solamente su nombre de archivo.  Por ejemplo,
+para compilar mediante este método un archivo @file{principal.ly}
+que incluye archivos situados en un subdirectorio llamado
+@file{partes}, cambie al directorio que contiene
+@file{principal.ly} e introduzca
+
+@example
+lilypond --include=partes principal.ly
+@end example
+
+y en @file{principal.ly} escriba
+
+@example
+\include "VI.ly"
+\include "VII.ly"
+@dots{} etc.
+@end example
+
+Los archivos que se incluyen en muchas partituras se pueden poner
+en el directorio de LilyPond @file{../ly} (la localización de este
+directorio depende de la instalación: véase
+@rlearningnamed{Other sources of information, Otras fuentes de información}).
+Estos archivos se pueden incluir sencillamente por su nombre en un
+enunciado @code{\include}.  De esta forma se incluyen los archivos
+dependientes del idioma como @file{espanol.ly}.
+
+LilyPond incluye de forma predeterminada ciertos archivos cuando
+se inicia el programa.  Estas inclusiones no son visibles para el
+usuario, pero los archivos se pueden identificar ejecutando
+@code{lilypond --verbose} desde la línea de órdenes.  Esto
+presentará una lista de rutas y archivos que utiliza LilyPond,
+junto a muchas otras indicaciones.  De forma alternativa, pueden
+verse explicaciones sobre los archivos más importantes de este
+conjunto en @rlearningnamed{Other sources of information, Otras
+fuentes de información}.  Estos archivos se pueden editar, pero
+los cambios realizados sobre ellos se perderán al instalar una
+nueva versión de LilyPond.
+
+Pueden verse ejemplos sencillos sobre el uso de @code{\include}
+en @rlearningnamed{Scores and parts, Partituras y particellas}.
+
+@morerefs
+Manual de aprendizaje:
+@rlearningnamed{Other sources of information, Otras fuentes de información},
+@rlearningnamed{Scores and parts, Partituras y particellas}.
+@endmorerefs
+
+@knownissues
+Si un archivo incluido recibe un nombre igual al de uno de los
+archivos de instalación de LilyPond, el archivo que tiene
+prioridad es el de los archivos de instalación de LilyPond.
+
+
+@node Different editions from one source
+@section Distintas ediciones a partir de una misma fuente
+
+Se pueden usar varios métodos para generar la producción de
+distintas versiones de una partitura a partir de la misma fuente
+musical.  Las variables son quizá el más útil para combinar
+secciones extensas de música y/o anotaciones.  Las etiquetas son
+más útiles para seleccionar una sección de entre varias secciones
+de música alternativas, más cortas, y se pueden usar también para
+dividir piezas de música en distintos trozos.
+
+Cualquiera que sea el método utilizado, la separación de la
+notación de la estructura de la partitura hará que sea más fácil
+cambiar la estructura dejando intacta la notación.
+
+
+@node Using variables
+@subsection Uso de las variables
+
+@cindex variables, uso de las
+
+Si las secciones de la música se definen dentro de variables, se
+pueden reutilizar en distintas partes de la partitura, véase
+@rlearningnamed{Organizing pieces with variables, Organizar las
+piezas mediante variables}.  Por ejemplo, una partitura vocal
+@notation{a cappella} con frecuencia incluye una reducción de
+piano de las partes para ensayar que es idéntica a la música
+vocal, por lo que ésta solo se tiene que escribir una vez.  Se
+puede combinar sobre un solo pentagrama la música de dos
+variables, véase @ref{Automatic part combining}.  He aquí un
+ejemplo:
+
+@lilypond[verbatim,quote]
+sopranoMusic = \relative { a'4 b c b8( a) }
+altoMusic = \relative { e'4 e e f }
+tenorMusic = \relative { c'4 b e d8( c) }
+bassMusic = \relative { a4 gis a d, }
+allLyrics = \lyricmode { King of glo -- ry }
+<<
+  \new Staff = "Soprano" \sopranoMusic
+  \new Lyrics \allLyrics
+  \new Staff = "Alto" \altoMusic
+  \new Lyrics \allLyrics
+  \new Staff = "Tenor" {
+    \clef "treble_8"
+    \tenorMusic
+  }
+  \new Lyrics \allLyrics
+  \new Staff = "Bass" {
+    \clef "bass"
+    \bassMusic
+  }
+  \new Lyrics \allLyrics
+  \new PianoStaff <<
+    \new Staff = "RH" {
+      \partCombine \sopranoMusic \altoMusic
+    }
+    \new Staff = "LH" {
+      \clef "bass"
+      \partCombine \tenorMusic \bassMusic
+    }
+  >>
+>>
+@end lilypond
+
+Se pueden producir partituras distintas que presenten solo las
+partes vocales o solo la parte de piano, cambiando solamente los
+enunciados estructurales, sin modificar la notación musical.
+
+Para partituras extensas, las definiciones de variable se pueden
+poner en archivos separados que se incluyen más tarde, véase
+@ref{Including LilyPond files}.
+
+
+@node Using tags
+@subsection Uso de etiquetas
+
+@funindex \tag
+@cindex tag
+
+La instrucción @code{\tag} marca una expresión musical con un
+nombre.
+
+@example
+\tag #'fulano @{ ... @}
+@end example
+
+@noindent
+Las expresiones etiquetadas de esta manera se pueden tratar de una
+forma muy conveniente como un todo.
+
+
+@subsubheading Mantenimiento y eliminación de música etiquetada
+
+@funindex \keepWithTag
+@funindex \removeWithTag
+@cindex mantener música etiquetada
+@cindex quitar música etiquetada
+
+La instrucción @code{\keepWithTag} selecciona música etiquetada.
+En cambio, @code{\removeWithTag} excluye la música etiquetada.
+
+@indentedblock
+@multitable @columnfractions .55 .45
+@headitem Filtro
+  @tab Resultado
+
+@item
+Música etiquetada precedida de
+
+@example
+\keepWithTag #'@var{nombre}
+@end example
+
+@noindent
+o de
+
+@example
+\keepWithTag #'(@var{nombre1} @var{nombre2}@dots{})
+@end example
+
+@code{\keepWithTag #'(@var{nombre1} @var{nombre2}@dots{})}
+  @tab Se incluye la música no etiquetada y la música etiquetada con el
+nombre o nombres de etiqueta dados; se excluye la música
+etiquetada con cualquier otro nombre de etiqueta.
+
+@item
+Música etiquetada precedida de
+
+@example
+\removeWithTag #'@var{nombre}
+@end example
+
+@noindent
+o de
+
+@example
+\removeWithTag #'(@var{nombre1} @var{nombre2}@dots{})
+@end example
+
+  @tab Se incluye la música no etiquetada y la música que no está
+etiquetada con ninguno de los nombres de etiqueta dados; se
+excluye la música etiquetada con los nombres de etiqueta dados.
+
+@item
+Música etiquetada no precedida de @code{\keepWithTag} ni de
+@code{\removeWithTag}
+  @tab Se incluye toda la música etiquetada y no etiquetada.
+@end multitable
+@end indentedblock
+
+Los argumentos de las instrucciones @code{\tag},
+@code{\keepWithTag} y @code{\removeWithTag} deben ser un símbolo o
+una lista de símbolos (como @code{#'score} o @code{#'(violinI
+violinII)}, seguida de una expresión musical.  Si @emph{y solo si}
+los símbolos son identificadores de LilyPond válidos (caracteres
+alfabéticos solamente, sin números, guiones bajos ni guiones
+normales y que no puedan confundirse con notas), el prefijo
+@code{#'} se puede omitir y, como abreviatura, una lista de
+símbolos puede usar el separador de coma.  Por ejemplo, @code{\tag
+#'(violinI violinII)} se puede escribir como @code{\tag
+violinI,violinII}.  Lo mismo vale para los argumentos de
+@code{\keepWithTag} y @code{\removeWithTag}.  Las instrucciones de
+etiquetado son funciones musicales, por lo que no se pueden usar
+para filtrar elementos que no son expresiones musicales, tales
+como bloques @code{\book} o @code{\score}.
+
+En el ejemplo siguiente vemos dos versiones de una pieza musical,
+una que muestra trinos con la notación usual y otra con los
+trinos expandidos explícitamente.
+
+@lilypond[verbatim,quote]
+music = \relative {
+  g'8. c32 d
+  \tag #'trills { d8.\trill }
+  \tag #'expand { \repeat unfold 3 { e32 d } }
+  c32 d
+ }
+
+\score {
+  \keepWithTag #'trills \music
+}
+\score {
+  \keepWithTag #'expand \music
+}
+@end lilypond
+
+@noindent
+De forma alternativa, a veces es más fácil excluir secciones de música.
+
+@lilypond[verbatim,quote]
+music = \relative {
+  g'8. c32 d
+  \tag #'trills { d8.\trill }
+  \tag #'expand { \repeat unfold 3 { e32 d } }
+  c32 d
+ }
+
+\score {
+  \removeWithTag #'expand \music
+}
+\score {
+  \removeWithTag #'trills \music
+}
+@end lilypond
+
+@cindex @code{\cueDuring}, and tags
+@cindex @code{\quoteDuring}, and tags
+@cindex @code{\tag}, and quoting music
+
+Si las etiquetas marcan alternativas que tienen una duración no
+nula, las alternativas son normalmente simultáneas como concepto.
+En este caso es mejor poner las alternativas dentro de una
+expresión musical simultánea de manera que la expresión musical
+tenga la misma duración sin importar qué etiquetas se están
+reteniendo.  Esto es importante especialmente si está usando
+etiquetas en combinación con instrucciones como @code{\cueDuring}.
+
+@lilypond[verbatim,quote]
+outputTypeTag = "isScore"
+
+firstInstrument = \relative c' {
+  <<
+    \tag #'isPart {
+      \cueDuring "quoteSecondInstrument" #UP { r2 } }
+    \tag #'isScore { r2 }
+  >>
+  e4 f |
+  g4 a b c |
+}
+
+secondInstrument= \relative c'' {
+  c4 c r2 |
+  \cueDuring "quoteFirstInstrument" #DOWN { r2 }
+  c4 c |
+}
+
+\addQuote quoteFirstInstrument \firstInstrument
+\addQuote quoteSecondInstrument \secondInstrument
+
+\new Staff {
+  \keepWithTag \outputTypeTag \firstInstrument
+}
+
+\new Staff {
+  \keepWithTag \outputTypeTag \secondInstrument
+}
+@end lilypond
+
+El fitrado mediante etiquetas se puede aplicar a articulaciones,
+textos, etc., anteponiendo
+
+@example
+-\tag #'@var{mi-etiqueta}
+@end example
+
+@noindent
+a una articulación.  Por ejemplo, lo siguiente define una nota con
+una indicación opcional de digitación y una nota con una anotación
+condicional.
+
+@example
+c1-\tag #'finger ^4
+c1-\tag #'warn ^"¡Ojo!"
+@end example
+
+Se pueden poner varias etiquetas sobre expresiones con varias
+entradas de @code{\tag}, o combinando varias etiquetas en una
+lista de símbolos.
+
+@lilypond[quote,verbatim]
+music = \relative c'' {
+  \tag AA \tag AB { a4 a a a }
+  \tag BB,both { b4 b b b }
+}
+
+<<
+  \keepWithTag AA \music
+  \keepWithTag BB \music
+  \keepWithTag AB \music
+>>
+@end lilypond
+
+Se pueden aplicar varios filtros @code{\removeWithTag} a una sola
+expresión musical para quitar varias secciones etiquetadas con
+nombres distintos.  De forma alternativa, podemos usar una sola
+instrucción @code{\removeWithTag} con una lista de etiquetas.
+
+@lilypond[verbatim,quote]
+music = \relative c'' {
+  \tag AA { a4 a a a }
+  \tag BB { b4 b b b }
+  \tag CC { c4 c c c }
+  \tag DD { d4 d d d }
+}
+
+\new Voice {
+  \removeWithTag BB \removeWithTag CC \music
+  \removeWithTag BB,CC \music
+}
+@end lilypond
+
+El uso de dos o más filtros @code{\keepWithTag} sobre una sola
+expresión musical produce la eliminación de @emph{todas} las
+secciones etiquetadas, que no es lo que queremos: el primer filtro
+quita todas excepto la que se nombra, y cualquier filtro posterior
+elimina el resto.  En su lugar, use una sola instrucción
+@code{\keepWithTag} con una lista de varias etiquetas para
+suprimir todas las secciones etiquetadas que no aparezcan
+especificadas en la lista.  Como ejemplo, el código siguiente
+imprime música etiquetada con @var{violinI} y @var{violinII} pero
+no la etiquetada con @var{viola} ni @var{cello}.
+
+@lilypond[verbatim,quote]
+music = \relative c'' {
+  \tag violinI { a4 a a a }
+  \tag violinII { b4 b b b }
+  \tag viola { c4 c c c }
+  \tag cello { d4 d d d }
+}
+
+\new Staff {
+  \keepWithTag violinI,violinII \music
+}
+@end lilypond
+
+@subsubsubheading Uso de los grupos de etiquetas
+
+@cindex grupos de etiquetas
+@funindex \tagGroup
+
+Aunque @code{\keepWithTag} es útil para el manejo de @emph{un
+solo} conjunto de alternativas, la eliminación de música
+etiquetada con otras etiquetas no relacionadas es problemática si
+se utilizan para más de un propósito.  En ese caso las etiquetas
+se pueden agrupar con @code{\tagGroup}.  El código siguiente
+
+@example
+\tagGroup violinI,violinII,viola,cello
+@end example
+
+@noindent
+sitúa las cuatro etiquetas en un solo grupo de etiquetas.  Como
+resultado, un código como el siguiente
+
+@example
+\keepWithTag violinI @dots{}
+@end example
+
+@noindent
+ahora mostrará solamente la música etiquetada a partir del grupo
+de etiquetas @code{violinI} y cualquier fragmento musical
+etiquetado con una de las otras etiquetas resultará suprimido,
+como muestra el ejemplo siguiente.
+
+@lilypond[verbatim,quote]
+\tagGroup violinI,violinII
+\tagGroup original,arranged
+
+music = \relative {
+  \tag violinI { c''4^"violinI" c c c }
+  \tag violinII { a2 a }
+  \tag original { e8 e e2. }
+  \tag arranged { d'2 d4 d }
+  \tag other { f^"other" f f f }
+  R1^"untagged"
+}
+
+\new Voice {
+  \keepWithTag violinI \music
+}
+@end lilypond
+
+Observe que las etiquetas individuales no pueden ser miembros de
+más de un grupo de etiquetas.
+
+@funindex \tagGroupRef
+
+Existe la posibilidad de modificar los grupos de etiquetas.  Hay
+una forma alternativa de definirlos mediante el uso de
+@code{\tagGroupRef} para así poder hacer referencia al grupo más
+tarde para su modificación.  La llamada
+
+@example
+tg = \tagGroupRef violinI,violinII
+@end example
+
+@noindent
+es, en esencia, lo mismo que
+
+@example
+tg = #'(violinI violinII)
+\tagGroup \tg
+@end example
+
+Hay varias posibilidades diferentes para modificar grupos de
+etiquetas existentes.
+
+@itemize
+@funindex \resetTagGroups
+
+@item
+Para deshacer los efectos de cada llamada de @code{\tagGroup} o de
+@code{\tagGroupRef} podemos simlemente usar
+@code{\resetTagGroups}.
+
+@lilypond[verbatim,quote]
+\tagGroup tagI,tagII
+
+music = \relative {
+  \tag tagI { c''4^"tagI" c c c }
+  \tag tagII { a2^"tagII" a }
+  \tag otherI { d4^"otherI" d d d }
+  \tag otherII { f,4^"otherII" g a c }
+}
+
+\new Voice {
+  \keepWithTag tagI \music
+}
+
+\resetTagGroups
+
+\new Voice {
+  \keepWithTag tagI \music
+}
+@end lilypond
+
+@funindex \resetTagGroup
+
+@item
+Si queremos reiniciar un grupo de etiquetas específico, tenemos
+que usar @code{\resetTagGroup} con un grupo de etiquetas dado,
+especificado a través de todas sus etiquetas.  Es cómodo usar
+@code{\tagGroupRef} para la definición del grupo de etiquetas.
+
+@lilypond[verbatim,quote]
+tgI = \tagGroupRef tagI,tagII
+tgII = \tagGroupRef otherI,otherII
+
+music = \relative {
+  \tag tagI { c''4^"tagI" c c c }
+  \tag tagII { a2^"tagII" a }
+  \tag otherI { d4^"otherI" d d d }
+  \tag otherII { f,4^"otherII" g a c }
+  \tag test { c8^"test" a g f e2 }
+}
+
+% 'otherI', 'otherII' and 'test' are not in the same group
+% as 'tagI' so they stay untouched.
+\new Voice {
+  \keepWithTag tagI \music
+}
+
+\resetTagGroup \tgI
+
+% now only 'otherI' and 'otherII' are in a tag group,
+% so '\keepWithTag tagI' filters 'tagII' and 'test'.
+\new Voice {
+  \keepWithTag tagI \music
+}
+@end lilypond
+
+@funindex \addToTagGroup
+@funindex \removeFromTagGroup
+
+@item
+Otra manera de modificar un grupo de etiquetas existente es añadir
+o eliminar etiquetas sencillas con las instrucciones
+@code{\addToTagGroup} y @code{\removeFromTagGroup}.
+
+@lilypond[verbatim,quote]
+tgI = \tagGroupRef tagI,tagII
+tgII = \tagGroupRef otherI,otherII
+
+music = \relative {
+  \tag tagI { c''4^"tagI" c c c }
+  \tag tagII { a2^"tagII" a }
+  \tag otherI { d4^"otherI" d d d }
+  \tag otherII { f,4^"otherII" g a c }
+  \tag test { c8^"test" a g f e2 }
+}
+
+% 'otherI', 'otherII' and 'test' are not in the same group
+% as 'tagI' so they stay untouched.
+\new Voice {
+  \keepWithTag tagI \music
+}
+
+\addToTagGroup \tgI test
+
+% now 'tagI', 'tagII' and 'test' are in the same group
+% so 'tagII' and 'test' are removed.
+\new Voice {
+  \keepWithTag tagI \music
+}
+
+\removeFromTagGroup \tgII otherII
+\addToTagGroup \tgI otherII
+
+% now 'otherII' is removed from 'tgII' and
+% added to 'tgI' so only 'otherI' is in its
+% own tag group and is not filtered.
+\new Voice {
+  \keepWithTag tagI \music
+}
+@end lilypond
+
+@end itemize
+
+@subsubheading Añadir contenido antes y después de la música etiquetada
+
+@funindex \pushToTag
+@funindex \appendToTag
+@cindex dividir en música etiquetada
+
+A veces podemos desear dividir la música en un determinado lugar
+dentro de una expresión musical existente.  Podemos usar
+@code{\pushToTag} y @code{\appendToTag} para añadir material
+delante o al final de los @code{elements} de diversas
+construcciones musicales.  Los lugares contemplados son
+
+@indentedblock
+@table @asis
+@item música secuencial y simultánea
+Si etiqueta una construcción completa @code{@{@dots{}@}} o
+@code{<<@dots{}>>}, puede añadir expresiones musicales por delante
+o por detrás.
+@item acordes
+Si etiqueta un acorde @code{<@dots{}>}, puede añadir notas
+por delante o bien por detrás, o articulaciones para el acorde
+completo.
+@item notas y silencios
+Si etiqueta una nota (también dentro de un acorde) o un silencio,
+puede añadir articulaciones por delante o por detrás de las
+articulaciones existentes.  Observe que para añadir otras notas,
+en cambio, tiene que poner la nota dentro de un acorde y etiquetar
+el @emph{acorde}.
+
+Observe también que no se puede etiquetar una sola articulación y
+añadirla porque no es inherentemente una lista.  En lugar de ello,
+etiquete la nota.
+@end table
+@end indentedblock
+
+Las dos instrucciones toman una etiqueta, el material en el que
+separar en cada aparición de la etiqueta, y la expresión
+etiquetada.
+
+@lilypond[verbatim,quote]
+music = { \tag #'here { \tag #'here <<c''>> } }
+
+{
+  \pushToTag #'here c'
+  \pushToTag #'here e'
+  \pushToTag #'here g' \music
+  \appendToTag #'here c'
+  \appendToTag #'here e'
+  \appendToTag #'here g' \music
+}
+@end lilypond
+
+
+@subsubheading Sustituir música etiquetada
+
+@funindex \replaceWithTag
+
+Se puede sustituir música etiquetada con otra música.
+
+@lilypond[verbatim,quote]
+music = { c' \tag #'here { d' } e' }
+
+{
+  \music
+  \replaceWithTag #'here c' \music
+}
+@end lilypond
+
+No olvide que la etiqueta desaparece después de la sustitución, de
+manera que solo podemos sustituirla una vez.  Asimismo, no se
+puede realizar un filtrado después de la susticuión.
+
+@lilypond[verbatim,quote]
+music = { c' \tag #'here { d' } e' }
+
+{
+  \removeWithTag #'here % does nothing because tag is replaced
+  \replaceWithTag #'here c'
+  \music
+}
+@end lilypond
+@subsubheading Etiquetado dentro de elementos de marcado
+
+@funindex \keep-with-tag
+@funindex \remove-with-tag
+@funindex \push-to-tag
+@funindex \append-to-tag
+@funindex \replace-with-tag
+
+La instrucción @code{\tag} también se puede usar dentro de
+entornos @code{\markup}.  LilyPond aporta las instrucciones de
+marcado @code{\keep-with-tag}, @code{\remove-with-tag},
+@code{\push-to-tag}, @code{\append-to-tag} y
+@code{\replace-with-tag} de forma análoga a las instrucciones
+correspondientes para expresiones musicales.
+
+@lilypond[verbatim,quote]
+test = \markup {
+  \tag #'AA a
+  \tag #'BB b
+  \tag #'CC c
+}
+
+\markup { \keep-with-tag #'BB \test }
+\markup { \remove-with-tag #'BB \test }
+\markup { \push-to-tag #'CC pre \test }
+\markup { \append-to-tag #'CC post \test }
+\markup { \replace-with-tag #'CC sub \test }
+@end lilypond
+
+Las instrucciones musicales como @code{\keepWithTag} y
+@code{\removeWithTag} filtran etiquetes dentro de las partes
+@code{\markup} dentro de la música relacionada, también.
+
+@lilypond[verbatim,quote]
+music = \relative {
+  c'4^\markup { \tag #'one first \tag #'two second part } c c c
+}
+
+{
+  \keepWithTag #'one \music
+  \removeWithTag #'one \music
+}
+@end lilypond
+
+@funindex \pushToTagMarkup
+@funindex \appendToTagMarkup
+@funindex \replaceWithTagMarkup
+
+También es posible añadir algo al principio y al final del
+@code{\markup} de objetos musicales.  Sin embargo, no se pueden
+usar @code{\pushToTag}, @code{\appendToTag} ni
+@code{\replaceWithTag} porque solo insertan música, así que
+necesitamos instrucciones como @code{\pushToTagMarkup},
+@code{\appendToTagMarkup} o @code{\replaceWithTagMarkup} para
+insertar elementos de marcado.
+
+@lilypond[verbatim,quote]
+music = \relative {
+  c'4^\markup { \tag #'part part } c c c
+}
+
+{
+  \pushToTagMarkup #'part "great" \music
+  \appendToTagMarkup #'part \markup { is also great } \music
+  \replaceWithTagMarkup #'part \markup { cool substitution } \music
+}
+@end lilypond
+
+El filtrado de etiquetas también funciona para música empotrada
+dentro de bloques @code{\score} en instrucciones de marcado.
+
+@lilypond[verbatim,quote]
+music = \relative {
+  c'2^\markup { \tag #'first first \tag #'second second } c
+  \tag #'first { d d }
+  \tag #'second { f f }
+}
+
+\markup {
+  \keep-with-tag #'first \score { \music }
+  \remove-with-tag #'first \score { \music }
+}
+@end lilypond
+
+@funindex \tag-list
+
+El uso de etiquetas con listas de marcado requiere un cuidado
+especial.  Aunque las funciones de filtrado funcionan como se
+espera, no es así con instrucciones como @code{\push-to-tag},
+@code{\append-to-tag} y @code{\replace-with-tag}.
+
+@lilypond[verbatim,quote]
+\markup {
+  \remove-with-tag #'test { a \tag #'test { b c } d }
+}
+\markup {
+  \push-to-tag #'test "twice" { a \tag #'test { b c } d }
+}
+\markup {
+  \replace-with-tag #'test "twice" { a \tag #'test { b c } d }
+}
+@end lilypond
+
+El motivo de este comportamiento es que LilyPond resuelve
+
+@example
+\tag #'test @{ b c @}
+@end example
+
+@noindent
+internamente a
+
+@example
+\tag #'test b
+\tag #'test c
+@end example
+
+@noindent
+y por ello el texto dado aparece insertado dos veces.  Para
+etiquetar una lista para insertar o añadir algo antes o después de
+la lista completa, se debe usar la instrucción @code{\tag-list}.
+
+@lilypond[verbatim,quote]
+\markup {
+  \push-to-tag #'test "once" { a \tag-list #'test { b c } d }
+}
+@end lilypond
+
+@morerefs
+Manual de aprendizaje:
+@rlearningnamed{Organizing pieces with variables, Organizar las piezas mediante variables}.
+
+Referencia de la notación:
+@ref{Automatic part combining},
+@ref{Including LilyPond files}.
+@endmorerefs
+
+@knownissues
+Al llamar a @code{\relative} sobre una expresión musical obtenida
+mediante el filtrado de música con las instrucciones
+@code{\keepWithTag} o @code{\removeWithTag}, podría ocurrir que
+cambiaran las relaciones de octava, dado que solo se tienen en
+cuenta las alturas de las notas que efectivamente permanecen en la
+expresión filtrada.  La aplicación de @code{\relative} en primer
+lugar, antes de @code{\keepWithTag} o de @code{\removeWithTag},
+evita este peligro porque en este caso @code{\relative} actúa
+sobre todas las notas tal y como se introducen.
+
+Incluso si se usan grupos de etiquetas, las instrucciones como
+@code{\keepWithTag} no son conmutativas.  Un código como el
+siguiente
+
+@example
+\keepWithTag violinI,original \someMusic
+@end example
+
+@noindent
+no produce la misma salida que
+
+@example
+\keepWithTag violinI \keepWithTag original \someMusic
+@end example
+
+
+@node Using global settings
+@subsection Uso de ajustes globales
+
+@cindex inclusión de ajustes
+
+Se pueden incluir ajustes globales a partir de un archivo
+distinto:
+
+@example
+lilypond -dinclude-settings=MIS_AJUSTES.ly MI_PARTITURA.ly
+@end example
+
+En archivos diferentes se pueden almacenar grupos de ajustes como
+el tamaño de la página o las fuentes tipográficas, y estos grupos
+de ajustes se pueden cargar con varias opciones de
+@code{-dinclude-settings}.  Ello permite hacer diferentes
+ediciones de la misma partitura así como aplicar ajustes estándar
+a muchas partituras, simplemente por medio de la especificación
+del archivo de ajustes adecuado.
+
+Esta técnica también funciona bien con el uso de hojas de estilo,
+como se estudia en @rlearningnamed{Style sheets, Hojas de estilo}.
+
+@morerefs
+Manual de aprendizaje:
+@rlearningnamed{Organizing pieces with variables, Organizar las piezas mediante variables},
+@rlearningnamed{Style sheets, Hojas de estilo}.
+
+Referencia de la notación:
+@ref{Including LilyPond files}.
+@endmorerefs
+
+
+@node Using music functions
+@section Uso de las funciones musicales
+
+@c TODO -- add @morerefs, etc. to these subsections
+
+En los lugares donde se necesita reutilizar los trucos con
+diferentes expresiones musicales, suele ser conveniente hacer que
+el truco forme parte de una @emph{función_musical}.  En esta
+sección vamos a tratar solo las funciones de @emph{sustitución},
+donde el objeto sustituye a una variable dentro del código de
+entrada de LilyPond.  Otra funciones más complejas aparecen
+descritas en @rextend{Music functions}.
+
+
+@node Substitution function syntax
+@subsection Sintaxis de las funciones de sustitución
+
+Es fácil hacer una función que sustituya a una variable en código
+de LilyPond.  La forma general de estas funciones es
+
+@example
+function =
+#(define-music-function
+     (@var{arg1} @var{arg2} @dots{})
+     (@var{tipo1?} @var{tipo2?} @dots{})
+   #@{
+     @var{@dots{}música@dots{}}
+   #@})
+@end example
+
+@noindent
+donde
+
+@indentedblock
+@multitable @columnfractions .2 .7
+@item @code{@var{argN}}
+@tab El @var{n}-ésimo argumento.
+
+@item @code{@var{tipoN?}}
+@tab Un @emph{predicado_de_tipo} de Scheme para el que @code{@var{argN}}
+debe devolver @code{#t}.
+
+@item @code{@var{@dots{}música@dots{}}}
+@tab Código normal de entrada de LilyPond, que usa @samp{$} (en
+aquellos lugares donde solo se admiten construcciones de LilyPond)
+o @samp{#} (para usarlo como un valor de Scheme o argumento de
+función musical o música dentro de listas de música) para
+referenciar argumentos (p.ej., @samp{#arg1}).
+@end multitable
+@end indentedblock
+
+La lista de predicados de tipo es obligatoria.  Algunos de los
+predicados de tipo más comunes que se usan en las funciones
+musicales son:
+
+@itemize @w{}
+@item boolean?
+@item cheap-list?  @emph{(usar en lugar de }@q{list?}@emph{ para un
+procesamiento más rápido)}
+@item ly:duration?
+@item ly:music?
+@item ly:pitch?
+@item markup?
+@item number?
+@item pair?
+@item string?
+@item symbol?
+@end itemize
+
+@noindent
+Para ver una lista de los predicados de tipo disponibles,
+@pxref{Predefined type predicates}.  También se permiten
+predicados de tipo definidos por el usuario.
+
+@morerefs
+Referencia de la notación:
+@ref{Predefined type predicates}.
+
+Manual de extensión de LilyPond:
+@rextend{Music functions}.
+
+Archivos instalados:
+@file{lily/music-scheme.cc},
+@file{scm/c++.scm},
+@file{scm/lily.scm}.
+@endmorerefs
+
+
+@node Substitution function examples
+@subsection Ejemplos de funciones de sustitución
+
+Esta sección introduce algunos ejemplos de funciones de
+sustitución.  No pretenden ser exhaustivos, sino más bien mostrar
+algunas de las posibilidades de las funciones de sustitución
+sencillas.
+
+En el primer ejemplo, se define una función que simplifica el
+establecimiento de un espacio de relleno para un objeto gráfico
+@code{TextScript}:
+
+@lilypond[quote,verbatim,ragged-right]
+padText =
+#(define-music-function
+     (padding)
+     (number?)
+   #{
+     \once \override TextScript.padding = #padding
+   #})
+
+\relative {
+  c''4^"piu mosso" b a b
+  \padText 1.8
+  c4^"piu mosso" b a b
+  \padText 2.6
+  c4^"piu mosso" b a b
+}
+@end lilypond
+
+Además de números, se pueden usar expresiones como notas en los
+argumentos de las funciones musicales:
+
+@lilypond[quote,verbatim,ragged-right]
+custosNote =
+#(define-music-function
+     (note)
+     (ly:music?)
+   #{
+     \tweak NoteHead.stencil #ly:text-interface::print
+     \tweak NoteHead.text
+        \markup \musicglyph "custodes.mensural.u0"
+     \tweak Stem.stencil ##f
+     #note
+   #})
+
+\relative { c'4 d e f \custosNote g }
+@end lilypond
+
+@funindex \etc
+Ambas funciones son expresiones únicas sencillas en las que solo
+falta el último elemento de una llamada de función o una
+sobreescritura.  Para esas definiciones de función en particular
+existe una sintaxis alternativa más simple, que consiste en
+escribir solo la parte constante de la expresión y sustituir el
+elemento final que falta con @code{\etc}:
+
+@lilypond[quote,verbatim,ragged-right]
+padText =
+  \once \override TextScript.padding = \etc
+
+\relative {
+  c''4^"piu mosso" b a b
+  \padText 1.8
+  c4^"piu mosso" b a b
+  \padText 2.6
+  c4^"piu mosso" b a b
+}
+@end lilypond
+
+@lilypond[quote,verbatim,ragged-right]
+custosNote =
+  \tweak NoteHead.stencil #ly:text-interface::print
+  \tweak NoteHead.text
+     \markup \musicglyph "custodes.mensural.u0"
+  \tweak Stem.stencil ##f
+  \etc
+
+\relative { c'4 d e f \custosNote g }
+@end lilypond
+
+
+Se pueden definir funciones de sustitución con más de un
+argumento:
+
+@lilypond[quote,verbatim,ragged-right]
+tempoPadded =
+#(define-music-function
+     (padding tempotext)
+     (number? markup?)
+   #{
+     \once \override Score.MetronomeMark.padding = #padding
+     \tempo \markup { \bold #tempotext }
+   #})
+
+\relative {
+  \tempo \markup { "Low tempo" }
+  c''4 d e f g1
+  \tempoPadded 4.0 "High tempo"
+  g4 f e d c1
+}
+@end lilypond
+
+@c TODO: add appropriate @@ref's here.
+
+
+@node How to prevent sharing of music expressions
+@subsection Cómo evitar la compartición de expresiones musicales
+
+@cindex expresión musical, compartir
+@cindex expresión musical, copiar
+
+Al escribir funciones musicales, es importante tener en cuenta una
+regla: las mismas expresiones musicales no se deben compartir en
+más de un lugar.  Como ejemplo, he aquí una función problemática:
+
+@lilypond[verbatim,quote]
+simpleAccompaniment =
+#(define-music-function
+   (bass-1 bass-2 chord) (ly:music? ly:music? ly:music?)
+   #{
+     #bass-1 #chord #bass-2 #chord
+   #})
+
+{
+  \clef bass
+  \simpleAccompaniment c g, <e g>
+  \simpleAccompaniment d g, <f g>
+}
+@end lilypond
+
+El problema con esta función queda claro si se transporta el
+resultado:
+
+@lilypond[verbatim,quote]
+simpleAccompaniment =
+#(define-music-function
+   (bass-1 bass-2 chord) (ly:music? ly:music? ly:music?)
+   #{
+     #bass-1 #chord #bass-2 #chord
+   #})
+
+\transpose c e {
+  \clef bass
+  \simpleAccompaniment c g, <e g>
+  \simpleAccompaniment d g, <f g>
+}
+@end lilypond
+
+Aunque las notas del bajo son correctas, el acorde no se
+transporta adecuadamente: de hecho, se transporta dos veces.  El
+motivo de esto es que la expresión musical @var{chord} se ha usado
+dos veces en el resultado de la función, sin copiarlo.  Las
+funciones como @code{\transpose} modifican el objeto musical
+directamente (en el caso de @code{\transpose}, cambia la altura de
+las notas).  Si se reutiliza el mismo objeto musical, las
+modificaciones efectuadas en un lugar donde se usa afecan a los
+dos lugares, porque contienen el mismo objeto.  En este caso,
+@code{\transpose} encuentra el objeto dos veces y por tanto lo
+transporta dos veces también.
+
+Una forma de arreglar esta función es usar @samp{$} en lugar de
+@samp{#} para referenciar las variables, lo cual hace una copia.
+La diferencia entre @samp{#} y @samp{$} se detalla en
+@rextend{LilyPond Scheme syntax}.
+
+@lilypond[verbatim,quote]
+simpleAccompaniment =
+#(define-music-function
+   (bass-1 bass-2 chord) (ly:music? ly:music? ly:music?)
+   #{
+     $bass-1 $chord $bass-2 $chord
+   #})
+
+\transpose c e {
+  \clef bass
+  \simpleAccompaniment c g, <e g>
+  \simpleAccompaniment d g, <f g>
+}
+@end lilypond
+
+
+@node Substitution functions and relative octave entry
+@subsection Funciones de sustitución y escritura de octava relativa
+
+@cindex sustitución, función, y escritura de octava relativa
+@funindex \relative
+@funindex make-relative
+
+Cuando se aplica @code{\relative} a una expresión musical,
+atraviesa su busqueda de notas con su altura, y modifica las
+alturas en el orden en que las va encontrando, cambiando la octava
+de cada altura de acuerdo con sus marcas de octava (@samp{'} y
+@samp{,}) y la altura de la nota anterior.  Cuando se escribem
+funciones de sustitución, esto puede dar lugar a una situación en
+que una expresión musical resulta @q{relativizada} de una forma
+inesperada porque la salida de la función usa los parámetros
+varias veces y/o en un orden distinto.  Considere esta función y
+cómo su salida reacciona al @code{\relative}:
+
+@lilypond[verbatim,quote]
+simpleAccompaniment =
+#(define-music-function
+   (bass-1 bass-2 chord) (ly:music? ly:music? ly:music?)
+   #{
+     $bass-1 $chord $bass-2 $chord
+   #})
+
+\relative {
+  \clef bass
+  \simpleAccompaniment c g <e' g>
+  \simpleAccompaniment d g, <f' g>
+}
+@end lilypond
+
+En este ejemplo, la salida es la misma que la de
+
+@lilypond[verbatim,quote]
+\relative {
+  \clef bass
+  c <e' g> g <e' g>
+  d <f' g>  g, <f' g>
+}
+@end lilypond
+
+
+Sin embargo, este no es el resultado deseado cuando se usa la
+función @code{\simpleAccompaniment}.  La nota @code{g,} es
+relativa a la primera nota del acorde que la precede, @code{<e'
+g>}, aunque aparece después de @code{c} en la entrada.  Claramente
+las alturas tendrían que ser relativas de acuerdo al orden en que
+se escriben al usar la función, no en el orden en que aparecen en
+la salida de la función.  Esto se puede conseguir usando el macro
+de Scheme @code{make-relative}.  Sus argumentos son: una lista de
+variables, una expresión de referencia, y una expresión musical
+principal.  La expresión de referencia tiene el propósito de
+servir como maqueta de cómo las variables se escribieron en la
+entrada.  Casi siempre puede ser una expresión simple hecha con
+@code{#@{ @dots{} #@}} conteniendo las variables en orden.  Tenga
+cuidado de @emph{no} hacer copias en la expresión de referencia
+(concretamente, use @samp{#} y no @samp{$}).  El ejemplo anterior
+se puede arreclar usando @code{make-relative} de esta forma:
+
+@lilypond[verbatim,quote]
+simpleAccompaniment =
+#(define-music-function
+   (bass-1 bass-2 chord) (ly:music? ly:music? ly:music?)
+   (make-relative
+    (bass-1 bass-2 chord)
+    #{ #bass-1 #bass-2 #chord #}
+    #{ $bass-1 $chord $bass-2 $chord #}))
+
+\relative {
+  \clef bass
+  \simpleAccompaniment c g <e' g>
+  \simpleAccompaniment d g, <f' g>
+}
+@end lilypond
+
+
+@need 1500
+@node Special characters
+@section Caracteres especiales
+
+@cindex caracteres especiales
+@cindex caracteres no ASCII
+
+
+@node Text encoding
+@subsection Codificación del texto
+
+@cindex UTF-8
+@cindex texto, codificación
+@cindex codificación, de texto
+
+LilyPond usa el conjunto de caracteres definido por el consorcio
+Unicode y la norma ISO/IEC 10646.  Define un nombre único y un
+código para los conjuntos de caracteres que se utilizan en
+prácticamente todos los idiomas modernos y también en muchos
+otros.  Unicode se puede implementar utilizando varios esquemas de
+codificación distintos.  LilyPond usa la codificación UTF-8 (UTF
+son las siglas de @emph{Unicode Transformation Format}, o formato
+de transformación de Unicode) que representa todos los caracteres
+comunes de la codificación Latin en un solo byte, y representa
+otros caracteres usando un formato de longitud variable de hasta
+cuatro bytes.
+
+El aspecto visual real de los caracteres viene determinado por los
+glifos que se definen en las fuentes tipográficas concretas que se
+tengan disponibles: una fuente tipográfica define la asignación de
+un subconjunto de los códigos de Unicode a glifos.  LilyPond usa
+la biblioteca Pango para representar y disponer tipográficamente
+textos multilingües.
+
+LilyPond no realiza ninguna conversión en la codificación de la
+entrada.  Esto significa que cualquier text, ya sea el título, la
+letra de la canción o una instrucción musical que contenga
+caracteres distintos a los del conjunto ASCII, se deben codificar
+en UTF-8.  La forma más fácil de escribir dicho texto es utilizar
+un editor preparado para Unicode y guardar el archivo con la
+codificación UTF-8.  Casi todos los editores modernos populares
+contemplan el UTF-8, por ejemplo lo hacen vim, Emacs, jEdit y
+Gedit.  Todos los sistemas MS Windows posteriores a NT usan
+Unicode como codificación de caracteres nativa, de manera que
+incluso el accesorio Bloc de Notas (Notepad) puede editar y
+guardar un archivo en el formato UTF-8.  Una alternativa más
+funcional para Windows es BabelPad.
+
+Si un archivo de entrada que contiene un carácter que no es
+ASCII, no se guarda en el formato UTF-8, se genera el mensaje de
+error
+
+@example
+FT_Get_Glyph_Name () error: argumento inválido
+@end example
+
+He aquí un ejemplo que muestra texto cirílico, hebreo y portugués:
+
+@c NOTE: No verbatim in the following example as the code does not
+@c display correctly in PDF Font settings for Cyrillic and Hebrew
+
+@lilypond[quote]
+% Linux Libertine fonts contain Cyrillic and Hebrew glyphs.
+\paper {
+  property-defaults.fonts.serif = "Linux Libertine O,serif"
+  property-defaults.fonts.sans = "Linux Biolinum O,sans-serif"
+  property-defaults.fonts.typewriter = "Linux Libertine Mono O,monospace"
+}
+
+% Cyrillic
+bulgarian = \lyricmode {
+  Жълтата дюля беше щастлива, че пухът, който цъфна, замръзна като гьон.
+}
+
+% Hebrew
+hebrew = \lyricmode {
+  זה כיף סתם לשמוע איך תנצח קרפד עץ טוב בגן.
+}
+
+% Portuguese
+portuguese = \lyricmode {
+  à vo -- cê uma can -- ção legal
+}
+
+\relative {
+  c'2 d e f g f e
+}
+\addlyrics { \bulgarian }
+\addlyrics { \hebrew }
+\addlyrics { \portuguese }
+@end lilypond
+
+
+@node Unicode
+@subsection Unicode
+
+@cindex Unicode
+
+Para introducir un carácter aislado para el que se conoce el punto
+de código Unicode pero no está disponible en el editor que se está
+usando, use @code{\char ##xhhhh} o bien @code{\char #dddd} dentro
+de un bloque @code{\markup}, donde @code{hhhh} es el código
+hexadecimal del carácter en cuestión y @code{dddd} es su valor
+decimal correspondiente.  Pueden omitirse los ceros iniciales,
+pero es costumbre indicar los cuatro caracteres en la
+representación hexadecimal (observe que @emph{no} debe utilizarse
+la codificación UTF-8 del punto de código Unicode después de
+@code{\char}, pues la codificación UTF-8 contiene bits adicionales
+que indican el número de octetos).  Hay tablas de códigos Unicode
+y un índice de nombres de caracteres que da el punto de código en
+hexadecimal para cualquier carácter en el portal del Consorcio
+Unicode, @uref{https://www.unicode.org/}.
+
+Por ejemplo, tanto @code{\char ##x03BE} como @code{\char #958}
+insertan el carácter Unicode U+03BE, que tiene el nombre Unicode
+@qq{Letra griega Xi pequeña}.
+
+Se puede escribir de esta forma cualquier punto de código Unicode,
+y si todos los caracteres especiales se escriben en este formato
+no es necesario guardar el archivo de entrada en formato UTF-8.
+Por supuesto, debe estar instalada y estar disponible para
+LilyPond una fuente tipográfica que contenga codificados todos
+estos caracteres.
+
+El ejemplo siguiente muestra valores hexadecimales Unicode que se
+usan en cuatro lugares: en una llamada de ensayo, como texto de
+articulación, en la letra y como texto independiente bajo la
+partitura:
+
+@lilypond[quote,verbatim]
+\score {
+  \relative {
+    c''1
+    \textMark \markup { \char ##x03A8 }
+    c1_\markup { \tiny { \char ##x03B1 " to " \char ##x03C9 } }
+  }
+  \addlyrics { O \markup { \concat { Ph \char ##x0153 be! } } }
+}
+\markup { "Copyright 2008--2026" \char ##x00A9 }
+@end lilypond
+
+@cindex copyright, símbolo de
+
+Para escribir el símbolo de copyright en la nota de créditos,
+utilice:
+
+@example
+\header @{
+  copyright = \markup @{ \char ##x00A9 "2008" @}
+@}
+@end example
+
+
+@node ASCII aliases
+@subsection Alias de ASCII
+
+Se puede incluir una lista de alias de ASCII para caracteres
+especiales:
+
+@lilypond[quote,verbatim]
+\paper {
+  #(include-special-characters)
+}
+
+\markup "&flqq; &ndash; &OE;uvre incomplète&hellip; &frqq;"
+
+\score {
+  \new Staff { \repeat unfold 9 a'4 }
+  \addlyrics {
+    This is al -- so wor -- kin'~in ly -- rics: &ndash;_&OE;&hellip;
+  }
+}
+
+\markup \column {
+  "The replacement can be disabled:"
+  "&ndash; &OE; &hellip;"
+  \override #'(replacement-alist . ()) "&ndash; &OE; &hellip;"
+}
+@end lilypond
+
+@cindex sustitución, de cadenas, automática
+@cindex automática, sustitución, de cadenas
+@cindex cadena, sustitución automática
+@cindex global, sustitución automática de cadenas
+
+También podemos hacer nuestros propios alias, ya sea de forma
+global,
+
+@lilypond[quote,verbatim]
+\paper {
+  #(add-text-replacements!
+    '(("100" . "hundred")
+      ("dpi" . "dots per inch")))
+}
+\markup "A 100 dpi."
+@end lilypond
+
+o local:
+
+@lilypond[quote,verbatim]
+\markup \replace #'(("100" . "hundred")
+                    ("dpi" . "dots per inch")) "A 100 dpi."
+@end lilypond
+
+La sustitución no es necesariamente una cadena de caracteres;
+puede ser un elemento de marcado arbitrario.  A nivel de sintaxis,
+esto requiere usar la sintaxis de cuasi-cita de Scheme, con un
+apóstrofo invertido @samp{`} en lugar de un apóstrofo simple
+normal @samp{'} para escribir la lista-A.
+
+@lilypond[quote,verbatim]
+\markup \replace
+  #`(("2nd" . ,#{ \markup \concat { 2 \super nd } #})) "2nd time"
+@end lilypond
+
+Los propios alias no se siguen procesando para posibles
+sustituciones.
+
+@morerefs
+Referencia de la notación:
+@ref{List of special characters}.
+
+Archivos instalados:
+@file{ly/text-replacements.ly}.
+@endmorerefs
+
+
+@need 1500
+@node Controlling output
+@chapter Controlar la salida
+
+@node Extracting fragments of music
+@section Extracción de fragmentos de música
+
+@funindex clip-regions
+@cindex fragmento de música
+@cindex música, fragmento
+
+Es posible producir en la salida uno o más fragmentos de una
+partitura.  Para hacerlo, use la variable @code{clip-regions}
+dentro del bloque @code{\layout} o @code{\paper} para definir una
+lista de ubicaciones explícitas de la música que se quiere
+extraer, y a continuación ejecute @command{lilypond} con la opción
+@option{-dclip-systems}.
+
+@example
+\layout @{
+  clip-regions
+  = #(list (cons (make-rhythmic-location 5 1 2)
+                 (make-rhythmic-location 7 3 4)))
+@}
+@end example
+
+Este ejemplo extrae un solo fragmento del archivo de entrada
+comenzando después de la duración de una blanca en el quinto
+compás (@code{5 1 2}) y terminando después de la tercera negra del
+compás séptimo (@code{7 3 4}).
+
+Se pueden extraer fragmentos adicionales añadiendo más pares de
+entradas de @code{make-rhythmic-location} a la lista
+@code{clip-regions} dentro del bloque @code{\layout}.
+
+Si se incluyen los comienzos y finales de los sistemas, incluyen
+las dimensiones del objeto gráfico @code{System}, p.ej. los
+nombres de instrumento.
+
+No se incluyen las notas de adorno en el punto de final de la
+región.
+
+Cada fragmento de música se escribe como un archivo distinto. La
+música extraída se imprime como si hubiera sido literalmente
+@q{recortada} a partir de la partitura original impresa, de manera
+que si un fragmento se extiende sobre una o más líneas, se genera
+un archivo de salida diferente por cada línea.  Suponiendo que el
+ejemplo de arriba ocupa dos líneas en la salida PDF del archivo de
+entrada @file{foo.ly}, los archivos de salida para los fragmentos
+musicales se llamarían
+@file{foo-@/from-5.1.2-@/to-7.3.4-@/clip.pdf} y
+@file{foo-@/from-5.1.2-@/to-7.3.4-@/clip-1.pdf}.
+
+@morerefs
+Referencia de la notación:
+@ref{The layout block}.
+
+Manual de utilización:
+@rprogramnamed{Command-line usage, Utilización desde la línea de órdenes}.
+@endmorerefs
+
+
+
+@node Skipping corrected music
+@section Saltar la música corregida
+
+@funindex skipTypesetting
+@funindex showFirstLength
+@funindex showLastLength
+@cindex saltar el tipografiado
+@cindex tipografiado, saltar
+
+Al escribir o copiar música, normalmente solo es interesante de
+ver y corregir la música cercana al final (donde estamos añadiendo
+las notas).  Para acelerar este proceso de corrección, es posible
+saltar la composición tipográfica de todos excepto unos pocos de
+los últimos compases.  Esto se consigue definiendo una variable
+especial al principio del archivo fuente, como sigue:
+
+@example
+showLastLength = R1*5
+\score @{ @dots{} @}
+@end example
+
+@noindent
+En este ejemplo no se dibujará nada excepto los últimos cinco
+compases (suponiendo un compás de 4/4) de cada una de las
+partituras @code{\score} del archivo de entrada.  Para piezas
+largas, el tipografiado de únicamente una parte pequeña es con
+frecuencia un orden de magnitud más rápido que el de la obra
+completa.  Si estamos trabajando sobre el principio de una
+partitura que ya hemos tipografiado (p.ej., para añadir una parte
+instrumental nueva), también puede ser útil la propiedad
+@code{showFirstLength}.
+
+Este mecanismo de pasar por alto partes de un partitura se puede
+controlar con un grano más fino mediante la propiedad
+@code{Score.skipTypesetting}.  Cuando su valor está establecido,
+no se lleva a cabo ningún tipografiado en absoluto. Como propiedad
+del contexto @code{Score}, afecta a todas las voces y pentagramas;
+véase @ref{Score - the master of all contexts}.
+
+Esta propiedad se usa también para controlar la salida hacia el
+archivo MIDI. Si algún evento dentro de la sección que se salta
+altera alguna de sus propiedades de contexto, por ejemplo una
+indicación de tempo o un cambio de instrumento, entonces el ajuste
+tendrá efecto solamente en el punto temporal en que
+@code{skipTypesetting} se desactiva de nuevo:
+
+@lilypond[quote,ragged-right,verbatim]
+\relative c' {
+  c4 c c c
+  \set Score.skipTypesetting = ##t
+  d4 d d d
+  \tempo 4 = 80
+  e4 e e e
+  \set Score.skipTypesetting = ##f
+  f4 f f f
+}
+@end lilypond
+
+@predefined
+@code{showLastLength},
+@code{showFirstLength}.
+@endpredefined
+
+@morerefs
+Referencia de la notación:
+@ref{Interpretation contexts},
+@ref{Score - the master of all contexts}.
+
+Referencia de funcionamiento interno:
+@rinternalsnamed{Tunable context properties, Todas las propiedades de contexto}.
+@endmorerefs
+
+
+@node Alternative output formats
+@section Formatos de salida alternativos
+
+@cindex salida de gráficos de vector escalables
+@cindex SVG, salida
+@cindex salida de PostScript encapsulado
+@cindex EPS, salida
+@cindex PostScript encapsulado, salida de
+
+Los formatos de salida predeterminados para la partitura impresa
+son el formato de documento portátil (PDF) y PostScript (PS).  Los
+formatos de salida Gráficos de red portátiles (PNG), Gráficos de
+vector escalables (SVG) y PostScript encapsulado (EPS) también
+están disponibles a través de opciones de la línea de órdenes,
+véase @rprogramnamed{Basic command-line options for LilyPond,
+Opciones básicas de la línea de órdenes para LilyPond}.
+
+
+@node SVG Output
+@subsection Salida de SVG
+
+La salida de SVG puede contener, opcionalmente, metadatos para
+objetos gráficos (grobs) como cabezas de nota, silencios, etc.
+Estos metadatos pueden ser atributos SVG estándar como @code{id} y
+@code{class}, o atributos personalizados no estándar.  Especifique
+los atributos y sus values mediante la sobreescritura de la
+propiedad de grob @code{output-attributes} con una lista de
+asociación de Scheme (alist).  Los valores pueden ser números,
+cadenas de caracteres o símbolos.  Por ejemplo:
+
+@example
+@{
+  \once \override NoteHead.output-attributes =
+  #'((id . 123)
+     (class . "esto aquello")
+     (data-lo-que-sea . algo))
+  c
+@}
+@end example
+
+@noindent
+El código de entrada anterior produce la siguiente etiqueta
+@code{<g>} (grupo) dentro del archivo SVG:
+
+@example
+<g id="123" class="esto aquello" data-lo-que-sea="algo">
+  ...elementos del SVG de objetos gráficos como cabezas de nota...
+</g>
+@end example
+
+@noindent
+La etiqueta @code{<g>} contiene todos los elementos de SVG para un
+grob dado (ciertos grobs generan más de un elemento del SVG).  En
+la sintaxis del SVG el prfijo @code{data-} se usa para atributos
+de medios personalizados no estándar.
+
+@node Embedding files in PDF output
+@section Empotrar archivos dentro de la salida PDF
+
+@cindex PDF, empotrar archivos
+@cindex empotrar archivos, en PDF
+@cindex archivos, empotrar en PDF
+
+La opción de la línea de órdenes @option{-dembed-source-code} hace
+que LilyPond @emph{empotre} o inserte todos los archivos fuente
+(del usuario) necesarios para la compilación, dentro del archivo
+final PDF de salida (véase @rprogram{Advanced command-line options
+for LilyPond}); un visor de PDF puede extraer después esos
+contenidos adjuntos para su uso posterior.
+
+De forma parecida, es posible incrustar archivos arbitrarios
+dentro de la salida PDF con la función
+@code{ly:note-extra-source-file} (véase @rinternals{Scheme
+functions}).
+
+@node Replacing the notation font
+@section Sustituir la tipografía de la notación
+
+Gonville es un conjunto de glifos alternativo a la tipografía Feta
+(que es parte de la tipografía Emmentaler que se usa en LilyPond).
+Se puede descargar de:
+
+@example
+@uref{http://www.chiark.greenend.org.uk/~sgtatham/gonville/ ,http://www.chiark.greenend.org.uk/~sgtatham/gonville/}
+@end example
+
+Aquí presentamos algunos compases de muestra tipografiados con la
+fuente Gonville:
+
+@c NOTE: these images are a bit big, but that's important
+@c       for the font comparison.  -gp
+@sourceimage{Gonville_after,15cm,}
+
+Aquí hay unos compases de muestra tipografiados con los glifos
+Feta de LilyPond:
+
+@sourceimage{Gonville_before,15cm,}
+
+@subsubheading Instrucciones de instalación
+
+@itemize
+@item
+Descargue y extraiga los archivos de fuente tipográfica.
+
+@item
+Copie@footnote{Por el momento es necesario repetir estos pasos
+después de instalar cada nueva versión de LilyPond.  Si está
+ejecutando el archivo binario @command{lilypond} directamente a
+partir del directorio de compilación, consulte @rcontrib{Replacing
+the notation fonts in development versions} para ver más
+información.} los archivos
+
+@example
+gonville-11.otf
+gonville-13.otf
+gonville-14.otf
+gonville-16.otf
+gonville-18.otf
+gonville-20.otf
+gonville-23.otf
+gonville-26.otf
+gonville-brace.otf
+@end example
+
+@noindent
+al directorio
+@file{@dots{}/@/share/@/lilypond/@/@var{X.Y.Z}/@/fonts/@/otf}.
+
+@item
+Si tiene archivos @file{gonville-*.svg}, cópielos al directorio
+@file{@dots{}/@/share/@/lilypond/@/@var{X.Y.Z}/@/fonts/@/svg}.
+@end itemize
+
+Para ver más información, consulte @rlearning{Other sources of information}.
+
+Nota: los archivos @file{gonville-*.otf} son para el back-end
+@code{ps} y @code{cairo} (para las salidas PDF y PostScript, así
+como para todos los formatos de salida cuando se usa el back-end
+Cairo).  Los archivos @file{gonville-*.svg} son para el back-end
+@code{svg}.  Para más información, véase @rprogram{Advanced
+command-line options for LilyPond}.
+
+El código siguiente modifica la fuente de notación a Gonville.
+
+@example
+\paper @{
+  property-defaults.fonts.music = "gonville"
+@}
+@end example
+
+Para más información, @pxref{Changing fonts}.
+
+@morerefs
+Manual de aprendizaje:
+@rlearningnamed{Other sources of information, Otras fuentes de información}.
+
+Referencia de la notación:
+@ref{The Emmentaler font},
+@ref{Changing fonts}.
+@endmorerefs
+
+@knownissues
+Gonville no se puede usar para tipografiar notación de @q{Música
+Antigua} y es probable que cualquier nuevo glifo en versiones
+posteriores de LilyPond no existan en la familia tipográfica
+Gonville.  Diríjase a la página web del autor para obtener más
+información sobre éste y otros asuntos, entre ellos el régimen de
+licencias de Gonville.
+
+@subsubheading Otras fuentes de notación
+
+Si tiene otras fuentes de notación como
+@file{@var{fontname}-*.otf} y @file{@var{fontname}-*.svg}, puede
+usarlas de la misma manera que Gonville.
+
+Esto es, copie los archivos @file{@var{fontname}-*.otf} a la
+carpeta
+@file{@dots{}/@/share/@/lilypond/@/@var{X.Y.Z}/@/fonts/@/otf}.  Si
+tiene los archivos @file{@var{fontname}-*@/.svg}, cópielos a
+@file{@dots{}/share/lilypond/current/fonts/svg} o a
+@file{@dots{}/@/share/@/lilypond/@/@var{X.Y.Z}/@/fonts/@/svg}.
+
+Nota: por el momento, LilyPond espera que los nombres de archivo
+tengan los siguientes sufijos, todos los cuales deben estar
+presentes en las carpetas de instalación arriba mencionadas para
+que funcionen adecuadamente: @file{-11}, @file{-13}, @file{-14},
+@file{-16}, @file{-18}, @file{-20}, @file{-23}, @file{-26},
+@file{-brace}.  Por ejemplo, @file{emmentaler-11.otf},
+@file{emmentaler-20.svg}, etc.
+
+El código siguiente cambia la fuente tipográfica de la notación a
+la fuente @var{tipoletra}.
+
+@example
+\paper @{
+  % nombre del archivo de fuente sin el sufijo ni la extensión
+  property-defaults.fonts.music = "@var{tipoletra}"
+@}
+@end example
+
+@node Creating MIDI output
+@chapter Creación de salida MIDI
+
+@cindex sonido
+@cindex MIDI
+
+LilyPond puede producir archivos que siguen el estándar MIDI
+(Musical Instrument Digital Interface; interfaz digital para
+instrumentos musicales) y permitir así comprobar la música por el
+oído (con la ayuda de alguna aplicación o dispositivo que entienda
+el MIDI).  La escucha de la salida MIDI también puede ser de ayuda
+en la localización de errores tales como notas que se han
+introducido incorrectamente, alteraciones omitidas y otros casos
+por el estilo.
+
+Los archivos MIDI no contienen sonido (como los archivos AAC, MP3
+o Vorbis) pero requieren software adicional para producir el
+sonido a partir de ellos.
+
+
+
+@node Supported notation for MIDI
+@section Notación contemplada por el MIDI
+
+@cindex MIDI, notación contemplada
+
+Se puede usar la notación musical siguiente con las posibilidades
+predeterminadas de LilyPond para producir salida MIDI:
+
+@itemize
+@item Marcas de respiración
+@item Acordes introducidos como nombres de acorde
+@item Crescendos y decrescendos sobre más de una nota.  El volumen se altera de forma lineal entre los dos extremos
+@item Indicadores dinámicos desde @code{ppppp} hasta @code{fffff}, incluyendo @code{mp}, @code{mf} y @code{sf}
+@item Letra de las canciones
+@item Marcadores: llamadas de ensayo, segni, codas y etiquetas de sección
+@item Microtonos, pero @emph{no} acordes microtonales.  Se necesita también un reproductor de MIDI capaz de ejecutar eventos de rueda de tono.
+@item Altura de las notas
+@item Ritmo introducido como duraciones de las notas, incluidos los grupos de valoración especial como los tresillos
+@item Articulaciones @q{sencillas}; picado, staccato, acento, marcato y portato
+@item Cambios de tempo introducidos con la función @code{\tempo}, including for fractional metronome values
+@item Ligaduras de unión
+@item Trémolos que  @emph{no} se hayan introducido como un valor del tipo @q{@code{:}[@var{número}]}
+@end itemize
+
+También se pueden controlar el panorama, el balance, la expresión
+y los efectos de reverberación y chorus mediante el
+establecimiento de propiedades de contexto, véase @ref{Context
+properties for MIDI effects}.
+
+Si se combina con el script @file{articulate}, es posible producir
+la salida por el MIDI de los siguientes elementos adicionales de
+notación musical:
+
+@itemize
+@item Appoggiaturas (apoyaturas).  Se les da la mitad de la duración de
+      la nota siguiente (sin tener en cuenta los puntillos).  Por ejemplo:
+
+@example
+\appoggiatura c8 d2.
+@end example
+
+@noindent
+El Do toma la duración de una negra.
+
+@item Notas y grupos de adorno (mordentes de una nota, trinos, grupetos circulares, etc.)
+@item Rallentando, accelerando, ritardando y a tempo
+@item Ligaduras de expresión y de fraseo
+@item Tenuto
+@end itemize
+
+@noindent
+Véase @ref{Enhancing MIDI output}.
+
+
+
+@node Unsupported notation for MIDI
+@section Notación no contemplada en el MIDI
+
+@cindex MIDI, notación no contemplada
+
+Los siguientes elementos de notación musical no se pueden hacer
+salir por el MIDI:
+
+@itemize
+@item Articulaciones distintas al picado, staccato, acento, marcato y portato
+@item Crescendos y decrescendos sobre una @emph{sola} nota
+@item Calderón
+@item Bajo cifrado
+@item Glissandos
+@item Caídas y elevaciones
+@item Acordes microtonales
+@item Duraciones introducidas como anotaciones, p.ej. el swing
+@item Cambios de tempo sin @code{\tempo} (p.ej., introducidas como anotaciones)
+@item Trémolos que @emph{se introducen} con la notación de la forma @q{@code{:}[@var{número}]}
+@end itemize
+
+
+@node The MIDI block
+@section El bloque MIDI
+
+@cindex MIDI, bloque
+
+Para crear un archivo de salida MIDI a partir de un archivo de
+entrada de LilyPond, introduzca un bloque @code{\midi}, que puede
+estar vacío, dentro del bloque @code{\score}. @footnote{Observe
+que también existe una instrucción de marcado llamada
+@code{\score} que no produce ninguna salida MIDI, incluso si está
+presente un bloque @code{\midi}.  @xref{Scores within markup}.}
+
+@example
+\score @{
+  @var{@dots{} música @dots{}}
+  \layout @{ @}
+  \midi @{ @}
+@}
+@end example
+
+@warning{Un bloque @code{@bs{}score} que, además de la música,
+contiene solamente un bloque @code{@bs{}midi} (o sea, @emph{sin}
+el bloque @code{@bs{}layout}), solo produce archivos de salida
+MIDI; no se imprime ninguna notación musical.
+
+Se puede usar un bloque @code{@bs{}midi} en el nivel jerárquico
+superior para cambiar los ajustes de MIDI de forma global; sin
+embargo, la generación de un verdadero archivo MIDI solo se
+produce cuando un bloque @code{@bs{}midi} forma parte de un bloque
+@code{@bs{}score}.
+
+De manera parecida, un bloque @code{@bs{}layout} en el nivel
+jerárquico superior afecta a los ajustes de disposición de forma
+global pero no influye en si se produce una salida impresa o no.}
+
+La extensión predeterminada para los archivos de salida
+(@code{.midi}) se puede cambiar usando la opción
+@code{-dmidi-extension} con la instrucción @code{lilypond}:
+
+@example
+lilypond -dmidi-extension=mid Archivo.ly
+@end example
+
+Como alternativa, puede añadirse la siguiente expresión de Scheme
+antes del comienzo de uno de los bloques @code{\book},
+@code{\bookpart} o @code{\score}.  Véase @ref{File structure}.
+
+@example
+#(ly:set-option 'midi-extension "mid")
+@end example
+
+@morerefs
+Referencia de la notación:
+@ref{File structure},
+@ref{Creating output file metadata}.
+
+Archivos instalados:
+@file{scm/midi.scm}.
+@endmorerefs
+
+@knownissues
+Están disponibles 15 canales MIDI y un canal adicional (el número
+10) para la percusión.  Los pentagramas se asignan a los canales
+por orden, de forma que una partitura que contenga más de 15
+pentagramas da como resultado que los pentagramas adicionales
+comparten (pero no sobreescriben) el mismo canal MIDI.  Esto puede
+ser problemático si los pentagramas que comparten canal tienen
+establecidas propiedades MIDI, basadas en canal, en mutuo
+conflicto (como distintos instrumentos MIDI).
+
+@node Controlling MIDI dynamics
+@section Control de las dinámicas del MIDI
+
+Es posible controlar el volumen MIDI general, el volumen relativo
+de las indicaciones de matiz dinámico y el volumen relativo de
+los distintos instrumentos.
+
+Las indicaciones matiz dinámico se traducen automáticamente a
+niveles de volumen dentro del rango de volúmenes MIDI disponible
+mientras que los crescendos y decrescendos varían el volumen
+linealmente entre sus dos extremos.  Es posible controlar el
+volumen relativo de las indicaciones de matiz dinámico, y el
+volumen general de los diferentes instrumentos.
+
+
+
+@node Dynamic marks in MIDI
+@subsection Indicaciones de matiz dinámico en el MIDI
+
+@cindex MIDI, matices dinámicos
+@cindex dinámica del MIDI
+
+Solo las marcas de dinámica desde @code{ppppp} hasta @code{fffff},
+incluidos @code{mp}, @code{mf} y @code{sf} tienen valores
+asignados.  Este valor se aplica a continuación al valor del rango
+de volumen MIDI general para obtener el volumen final que se
+incluye en la salida MIDI para esa indicación de matiz dinámico en
+particular.  Las fracciones predeterminadas varían desde 0.25 para
+el @notation{ppppp} hasta 0.95 para el @notation{fffff}. El
+conjunto completo de las indicaciones de matiz dinámico pueden
+verse en el archivo @file{ly/midi-init.ly}.
+
+
+@snippets
+
+@cindex dinámica personalizada en MIDI
+@cindex MIDI, dinámicas personalizadas
+@lilypondfile[verbatim,quote,ragged-right,texidoc,doctitle]
+{snippets/creating-custom-dynamics-in-midi-output.ly}
+
+Archivos instalados:
+@file{ly/script-init.ly}
+@file{scm/midi.scm}.
+
+Fragmentos de código:
+@rlsr{MIDI}.
+
+Referencia de funcionamiento interno:
+@rinternals{Dynamic_performer}.
+
+
+@node Setting MIDI volume
+@subsection Establecimiento del volumen MIDI
+
+@cindex MIDI, volumen
+
+Los volúmenes generales mínimo y máximo de las indicaciones de
+matiz dinámico MIDI se controlan estableciendo las propiedades
+@code{midiMinimumVolume} y @code{midiMaximumVolume} en el nivel
+del bloque @code{Score}.  Estas propiedades tienen efecto
+solamente al comienzo de una vos y sobre las indicaciones
+dinámicas.  La fracción que corresponde a cada indicación dinámica
+se modifica con esta fórmula:
+
+@example
+midiMinimumVolume + (midiMaximumVolume - midiMinimumVolume) * fracción
+@end example
+
+En el ejemplo siguiente, el rango dinámico del volumen MIDI
+general se limita al intervalo entre @code{0.2} y @code{0.5}.
+
+@example
+\score @{
+  <<
+    \new Staff @{
+      \set Staff.midiInstrument = "flute"
+      @var{@dots{} music @dots{}}
+    @}
+    \new Staff @{
+      \set Staff.midiInstrument = "clarinet"
+      @var{@dots{} music @dots{}}
+    @}
+  >>
+  \midi @{
+    \context @{
+      \Score
+      midiMinimumVolume = 0.2
+      midiMaximumVolume = 0.5
+    @}
+  @}
+@}
+@end example
+
+@cindex MIDI, ecualización
+
+Se puede obtener una ecualización sencilla de instrumentos MIDI
+estableciendo las propiedades @code{midiMinimumVolume} y
+@code{midiMaximumVolume} dentro del contexto @code{Staff}.
+
+@example
+\score @{
+  \new Staff @{
+    \set Staff.midiInstrument = "flute"
+    \set Staff.midiMinimumVolume = 0.7
+    \set Staff.midiMaximumVolume = 0.9
+    @var{@dots{} music @dots{}}
+  @}
+  \midi @{ @}
+@}
+@end example
+
+Para partituras con más de un pentagrama y más de un instrumento
+MIDI, se pueden fijar individualmente los volúmenes relativos de
+cada instrumento:
+
+@example
+\score @{
+  <<
+    \new Staff @{
+      \set Staff.midiInstrument = "flute"
+      \set Staff.midiMinimumVolume = 0.7
+      \set Staff.midiMaximumVolume = 0.9
+      @var{@dots{} music @dots{}}
+    @}
+    \new Staff @{
+      \set Staff.midiInstrument = "clarinet"
+      \set Staff.midiMinimumVolume = 0.3
+      \set Staff.midiMaximumVolume = 0.6
+      @var{@dots{} music @dots{}}
+    @}
+  >>
+  \midi @{ @}
+@}
+@end example
+
+En este ejemplo el volumen del clarinete se reduce de forma
+relativa al volumen de la flauta.
+
+Si no se establecen estas propiedades de volumen, LilyPond aún
+aplica un @q{pequeño grado} de ecualización a ciertos
+instrumentos.  Véase @file{scm/midi.scm}.
+
+Archivos instalados:
+@file{scm/midi.scm}.
+
+@morerefs
+Referencia de la notación:
+@ref{Score layout}.
+
+Referencia de funcionamiento interno:
+@rinternals{Dynamic_performer}.
+@endmorerefs
+
+
+@snippets
+
+@cindex MIDI, sustituir la ecualización de instrumento predeterminada
+@cindex instrumento MIDI, sustituir la ecualización predeterminada
+@cindex ecualización predeterminada, instrumento MIDI, sustitución de la
+@lilypondfile[verbatim,quote,ragged-right,texidoc,doctitle]
+{snippets/replacing-default-midi-instrument-equalization.ly}
+
+
+@knownissues
+Los cambios en el volumen del MIDI solamente tienen lugar en el
+comienzo de una nota, por lo que los crescendos y decrescendos no
+afectan al volumen de una sola nota.
+
+@node Setting MIDI block properties
+@subsection Establecimiento de las propiedades del bloque MIDI
+
+El bloque @code{\midi} puede contener distintas disposiciones de
+los contextos, definiciones de contexto nuevas o código que fija
+los valores de ciertas propiedades.
+
+@example
+\score @{
+  @var{@dots{} music @dots{}}
+  \midi @{
+    \tempo 4 = 72
+  @}
+@}
+@end example
+
+Aquí, el tempo se establece a 72 pulsos de negra por minuto.  La
+indicación de tempo dentro del bloque @code{\midi} no aparece en
+la partitura impresa.  Aunque cualquier otra indicación de
+@code{\tempo} que se especifique dentro del bloque @code{\score}
+también se reflejará en la salida MIDI.
+
+Dentro de un bloque @code{\midi}, la instrucción @code{\tempo}
+está estableciendo propiedades durante la interpretación de la
+música y en el contexto de las definiciones de salida; así, se
+interpreta @emph{como si} fuera una modificación de contesto.
+
+@cindex MIDI, definiciones de contexto
+@cindex contexto, definiciones con  MIDI
+
+Las definiciones de contexto siguen la misma sintaxis que las del
+bloque @code{\layout}:
+
+@example
+\score @{
+  @var{@dots{} music @dots{}}
+  \midi @{
+    \context @{
+      \Voice
+      \remove Dynamic_performer
+    @}
+  @}
+@}
+@end example
+
+Este ejemplo suprime el efecto de las indicaciones dinámicas
+sobre la salida MIDI.  Nota: los módulos de traducción de
+LilyPond usados para el sonido se llaman @q{performers}.
+
+@morerefs
+Manual de aprendizaje:
+@rlearningnamed{Other sources of information, Otras fuentes de información}.
+
+Referencia de la notación:
+@ref{Expressive marks},
+@ref{Score layout}.
+
+Archivos instalados:
+@file{ly/performer-init.ly}.
+
+Fragmentos de código:
+@rlsr{MIDI}.
+
+Referencia de funcionamiento interno:
+@rinternals{Dynamic_performer}.
+@endmorerefs
+
+@knownissues
+Ciertos reproductores de MIDI no siempre maneja correctamente los
+cambios de tempo en la salida MIDI.
+
+Los cambios efectuados al @code{midiInstrument}, así como ciertas
+opciones MIDI, al @emph{comienzo} de un pentagrama pueden aparecer
+dos veces en la salida MIDI.
+
+
+
+@node Using MIDI instruments
+@section Uso de los instrumentos MIDI
+
+@cindex instrumento, nombre
+@cindex MIDI, instrumento
+@funindex midiInstrument
+
+Los instrumentos MIDI se establecen usando la propiedad
+@code{midiInstrument} dentro de un contexto @code{Staff}.
+
+@example
+\score @{
+  \new Staff @{
+    \set Staff.midiInstrument = "glockenspiel"
+    @var{@dots{} music @dots{}}
+  @}
+  \midi @{ @}
+@}
+@end example
+
+o
+
+@example
+\score @{
+  \new Staff \with @{midiInstrument = "cello"@} @{
+    @var{@dots{} music @dots{}}
+  @}
+  \midi @{ @}
+@}
+@end example
+
+Si el instrumento elegido no coincide exactamente con uno de los
+instrumentos de la lista de la sección @q{instrumentos MIDI}, se
+usará el instrumento Piano de Cola (@code{"acoustic grand"}).
+Véase @ref{MIDI instruments}.
+
+@morerefs
+Manual de aprendizaje:
+@rlearningnamed{Other sources of information, Otras fuentes de información}.
+
+Referencia de la notación:
+@ref{MIDI instruments},
+@ref{Score layout}.
+
+Archivos instalados:
+@file{scm/midi.scm}.
+@endmorerefs
+
+@knownissues
+Los instrumentos de percusión cuya notación está en un contexto
+@code{DrumStaff} se encontrará a la salida, correctamente, sobre
+el canal MIDI número@tie{}10 pero ciertos instrumentos de
+percusión afinada como el xilófono, el vibráfono o los timbales,
+se tratan como instrumentos @qq{normales}, de forma que la música
+de éstos se debe introducir en un contexto @code{Staff} (no
+@code{DrumStaff}) para obtener una salida MIDI correcta.  Hay una
+lista completa de entradas de los @code{sets de percusión del
+canal 10} en el archivo @file{scm/midi.scm}.  Véase
+@rlearningnamed{Other sources of information, Otras fuentes de
+información}.
+
+
+@node Using repeats with MIDI
+@section Uso de las repeticiones con el MIDI
+
+@cindex repeticiones en MIDI
+@cindex MIDI con repeticiones
+@funindex \unfoldRepeats
+
+Las repeticiones se pueden representar en la salida MIDI
+aplicando la instrucción @code{\unfoldRepeats}.
+
+@example
+\score @{
+  \unfoldRepeats @{
+    \repeat tremolo 8 @{ c'32 e' @}
+    \repeat percent 2 @{ c''8 d'' @}
+    \repeat volta 2 @{ c'4 d' e' f' @}
+    \alternative @{
+      \volta 1 @{ g' a' a' g' @}
+      \volta 2 @{ f' e' d' c' @}
+    @}
+  @}
+  \midi @{ @}
+@}
+@end example
+
+Para restringir el efecto de @code{\unfoldRepeats} a la salida
+MIDI únicamente, y al mismo tiempo genera partituras imprimibles,
+es necesario hacer @emph{dos} bloques @code{\score}: uno para el
+MIDI (con las repeticiones desplegadas) y otro para la notación
+(con repeticiones de primera y segunda vez, trémolos y del tipo
+porcentaje);
+
+@example
+\score @{
+  @var{@dots{} music @dots{}}
+  \layout @{ @}
+@}
+\score @{
+  \unfoldRepeats @{
+    @var{@dots{} music @dots{}}
+  @}
+  \midi @{ @}
+@}
+@end example
+
+Si se usan varias voces, cada una de ellas debe contener las
+repeticiones completamente desplegadas para poder obtener una
+salida MIDI correcta.
+
+@morerefs
+Referencia de la notación:
+@ref{Repeats}.
+@endmorerefs
+
+
+@node MIDI channel mapping
+@section Asignación de canales MIDI
+
+@cindex MIDI, canales
+@cindex MIDI, pistas
+@funindex midiChannelMapping
+
+Cuando se está generando un archivo MIDI de una partitura,
+LilyPond asigna cada nota de la partitura automáticamente a un
+canal MIDI, aquel en que se tocaría cuando se envía hacia un
+dispositivo MIDI.  Un canal MIDI tiene una cierta cantidad de
+controles disponibles para seleccionar, por ejemplo, el
+instrumento que usar para reproducir las notas en ese canal, u
+ordenar al dispositivo MIDI que aplique diversos efectos al sonido
+producido sobre el canal.  En todo momento, cada control de un
+canal MIDI solo puede tener asignado un valor único (que sin
+embargo se puede modificar, por ejemplo, para cambiar a otro
+instrumento en mitad de una partitura).
+
+El estándar MIDI contempla solamente 16 canales por dispositivo
+MIDI.  Este límite en el número de canales limita también el
+número de instrumentos diferentes que pueden estar tocando al
+mismo tiempo.
+
+LilyPond crea pistas MIDI separadas para cada pentagrama (o
+instrumento o voz, según el valor de
+@code{Score.midiChannelMapping}), y también para cada contexto de
+letra.  No hay un límite para el número de pistas.
+
+Para solventar el número limitado de canales MIDI, LilyPond
+contempla algunos modos diferentes para la asignación de canales
+MIDI, que se seleccionan usando la propiedad de contexto
+@code{Score.midiChannelMapping}.  En cada caso, si se necesitan
+más canales MIDI que el límite, los números de canal asignados
+vuelven a contar desde cero, causando posiblemente una asignación
+incorrecta de instrumento a algunas notas.  Esta propiedad de
+contexto se puede fijar a uno de los siguientes valores:
+
+@table @code
+
+@item 'staff
+
+Reservar un canal MIDI distinto para cada uno de los pentagramas
+de la partitura (es el ajuste predeterminado).  Todas las notas
+de todas las voces comparten el canal MIDI del pentagrama que las
+encierra, y todas se codifican dentro de la misma pista MIDI.
+
+El límite de 16 canales se aplica al número total de contextos de
+pentagrama y de letra, incluso aunque las letras del MIDI no
+consumen un canal MIDI.
+
+@item 'instrument
+
+Reservar un canal MIDI distinto a cada uno de los instrumentos
+diferentes especificados en la partitura.  Esto significa que
+todas las notas reproducidas con el mismo instrumento MIDI
+comparten el mismo canal MIDI (y la misma pista), incluso aunque
+las notas provengan de diferentes voces o pentagramas.
+
+En este caso los contextos de letra no cuentan para el límite de
+16 canales MIDI (ya que no se asignan a un instrumento MIDI), de
+forma que este ajuste puede permitir una mejor distribución de
+los canales MIDI cuando el número de contextos de pentagrama y de
+letra en la partitura excede la cantidad de 16.
+
+@item 'voice
+
+Reservar un canal MIDI distinto a cada voz de la partitura que
+tenga un nombre único entre las voces de su pentagrama
+circundante.  Las voces de los distintos pentagramas siempre se
+asignan a distintos canales MIDI pero dos voces cualesquiera
+contenidas dentro del mismo pentagrama comparten el mismo canal
+MIDI sin tienen el mismo nombre.  A causa de que
+@code{midiInstrument} y los diversos controles MIDI para los
+efectos son propiedades del contexto de pentagrama, no se pueden
+fijar independientemente para cada voz. La primera voz se
+reproduce con el instrumento y los efectos especificados para el
+pentagrama, y las voces con un nombre distinto de la primera
+recibirán el instrumento y los efectos predeterminados.
+
+Nota: se pueden asignar distintos instrumentos y/o efectos a
+varias voces dentro del mismo pentagrama moviendo el
+@code{Staff_performer} del contexto @code{Staff} al contexto
+@code{Voice}, y dejando que @code{midiChannelMapping} conserve su
+valor predeterminado de @code{'staff} o se fije al valor
+@code{'instrument}; véase el fragmento de código siguiente.
+
+@end table
+
+Por ejemplo, la asignación predeterminada de canal MIDI de una
+partitura puede cambiarse al ajuste @code{'instrument} como se
+muestra a continuación:
+
+@example
+\score @{
+  ...music...
+  \midi @{
+    \context @{
+      \Score
+      midiChannelMapping = #'instrument
+    @}
+  @}
+@}
+@end example
+
+
+@snippets
+
+@cindex MIDI, un canal por cada voz
+@lilypondfile[verbatim,quote,ragged-right,texidoc,doctitle]
+{snippets/changing-midi-output-to-one-channel-per-voice.ly}
+
+
+@node Context properties for MIDI effects
+@section Propiedades de contexto para efectos MIDI
+
+@cindex efectos en MIDI
+@cindex MIDI, efectos
+
+Se pueden usar las siguientes propiedades de contexto para aplicar
+diversos efectos MIDI a las notas que se reproducen sobre el canal
+MIDI asociado con el pentagrama, instrumento MIDI o voz actual
+(dependiendo del valor de la propiedad de contexto
+@code{Score.midiChannelMapping} y del contexto en que está situado
+el @code{Staff_performer}; véase @ref{MIDI channel mapping}).
+
+Los cambios en estas propiedades de contexto afectan a todas las
+notas que se reproducen sobre el canal después del cambio, aunque
+algunos de los efectos se pueden incluso aplicar también a notas
+que están ya sonando en ese momento (dependiendo de la
+implementación del dispositivo de salida MIDI).
+
+Se contemplan las siguientes propiedades de contexto:
+
+@table @code
+
+@item Staff.midiPanPosition
+@funindex midiPanPosition
+@cindex panorama, en MIDI
+@cindex MIDI, posición de panorama
+
+La posición de panorama controla cómo se distribuye el sonido de
+un canal MIDI entre las salidas estéreo izquierda y derecha.  La
+propiedad de contexto acepta un número entre -1.0 (@code{#LEFT}) y
+1.0 (@code{#RIGHT}); el valor -1.0 pone toda la potencia de sonido
+en la salida estéreo izquierda (dejando la salida derecha en
+completo silencio), el valor 0.0 (@code{#CENTER}) distribuye el
+sonido por igual entre las salidas estéreo izquierda y derecha, y
+el valor 1.0 mueve todo el sonido a la salida estéreo derecha.
+Los valores entre -1.0 y 1.0 se pueden usar para obtener
+distribuciones mezcladas entre las salidas estéreo izquierda y
+derecha.
+
+@item Staff.midiBalance
+@funindex midiBalance
+@cindex estéreo
+@cindex balance estéreo, en MIDI
+@cindex MIDI, balance estéreo
+@cindex balance, en MIDI
+@cindex MIDI, balance
+
+Equilibrio estéreo de un canal MIDI.  De forma similar a la
+posición de panorama esta propiedad de contexto acepta un número
+entre -1.0 (@code{#LEFT}) y 1.0 (@code{#RIGHT}).  Varía el volumen
+relativo que se envía a los dos altavoces estéreo sin afectar a la
+distribución de las propias señales estéreo.
+
+@item Staff.midiExpression
+@funindex midiExpression
+@cindex expresión, en MIDI
+@cindex MIDI, expresión
+
+Nivel de expresión (como una fracción del nivel máximo disponible)
+que se aplica a un canal MIDI.  Un dispositivo MIDI combina el
+nivel de expresión del canal MIDI con el nivel actual de dinámica
+de una voz (controlado mediante las instrucciones de dinámica como
+@code{\p} o @code{\ff}) para obtener el volumen total de cada nota
+dentro de la voz.  El control de expresión se puede usar, por
+ejemplo, para implementar efectos de crescendo y decrescendo sobre
+notas mantenidas (algo que LilyPond no contempla de forma
+automática).
+
+@c Issue 4059 contains an attached snippet which shows how this might
+@c be done, but this is too large and complex for the NR, even as a
+@c referenced snippet.  It could be added to the LilyPond Wiki.
+
+El rango de los niveles de expresión se extiende desde 0.0
+(ninguna expresión, lo que significa un volumen nulo) hasta 1.0
+(expresión al máximo).
+
+@item Staff.midiReverbLevel
+@funindex midiReverbLevel
+@cindex reverberación, en MIDI
+@cindex MIDI, reverberación
+
+El nivel de reverberación (cono una fracción del máximo nivel
+disponible) que se aplica a un canal MIDI.  Esta propiedad acepta
+números entre 0.0 (sin reverberación) y 1.0 (efecto máximo).
+
+@item Staff.midiChorusLevel
+@funindex midiChorusLevel
+@cindex chorus, nivel, en MIDI
+@cindex MIDI, chorus, nivel
+
+Nivel del efecto Chorus (como una fracción del máximo nivel
+disponible) que se aplica a un canal MIDI.  Esta propiedad acepta
+números entre 0.0 (sin efecto de chorus) y 1.0 (efecto al máximo).
+
+@end table
+
+
+@knownissues
+
+Dado que los archivos MIDI no contienen en realidad ninguna
+información sonora, los cambios en estas propiedades de contexto
+solamente se convierten en peticiones para que cambien los
+controles de canal MIDI dentro de los archivos MIDI emitidos.  Si
+un dispositivo MIDI determinado (como un reproductor MIDI por
+software) puede de hecho manejar cualquiera de estas solicitudes
+de un archivo MIDI, es algo que depende totalmente de la
+implementación del mismo: un dispositivo podría optar por ignorar
+algunas o todas estas solicitudes.  Asimismo, la forma en que un
+dispositivo MIDI interpreta los diferentes valores de estos
+controles (generalmente, el estándar MIDI determina el
+comportamiento solamente en los puntos extremos del rango de
+valores disponibles para cada control), y el hecho de si un cambio
+en el valor de un control afecta a las notas que ya se están
+reproduciendo sobre ese canal MIDI o no, también son aspectos
+específicos de la implementación del dispositivo MIDI.
+
+Al generar archivos MIDI, LilyPond sencillamente convierte de
+forma lineal los valores fraccionarios dentro de cada rango (7
+bits, o 14 bits para los controles de canal MIDI que admiten
+resolución fina) en valores enteros dentro del rango
+correspondiente (de 0 a 127 o de 0 a 16383, respectivamente),
+redondeando los valores fraccionarios hacia el entero más próximo
+en dirección opuesta al cero.  Los valores enteros convertidos se
+almacenan tal cual en el archivo MIDI generado.  Consulte la
+documentación de su dispositivo MIDI para ver información acerca
+de cómo interpreta estos valores.
+
+
+@node Enhancing MIDI output
+@section Enriquecimiento de la salida MIDI
+
+La salida MIDI predeterminada es muy básica, pero se puede mejorar
+mediante el establecimiento de instrumentos MIDI y varias
+propiedades del bloque @code{\midi}.
+
+Algunos guiones adicionales permiten el ajuste fino de la forma en
+que se trasladan al MIDI los matices dinámicos, las articulaciones
+y el ritmo: el guion @file{articulate} y el guion @file{swing}.
+
+
+@node The articulate script
+@subsection El script @file{articulate}
+
+@cindex @code{articulate.ly}, script
+
+Para utilizar el script Articulate, tenemos que incluirlo al
+principio de nuestro archivo de entrada:
+
+@example
+\include "articulate.ly"
+@end example
+
+El script crea una salida MIDI en que las notas tienen una
+duración ajustada en el tiempo de forma que se correspondan con
+una serie de indicaciones de articulación y de tempo.  Sin
+embargo, la salida tipografiada también se altera para reflejar
+literalmente el contenido de la salida MIDI.
+
+@example
+\score @{
+  \articulate <<
+    @var{@dots{} music @dots{}}
+  >>
+  \midi @{ @}
+@}
+@end example
+
+@funindex \articulate
+
+La instrucción @code{\articulate} habilita el procesado de las
+abreviaturas como trinos y mordentes de varias notas.  En el
+propio script puede verse una lista completa de los elementos que
+están previstos.  Véase @file{ly/articulate.ly}.
+
+@morerefs
+Manual de aprendizaje:
+@rlearningnamed{Other sources of information, Otras fuentes de información}.
+
+Referencia de la notación:
+@ref{Score layout}.
+
+Archivos instalados:
+@file{ly/articulate.ly}.
+@endmorerefs
+
+@warning{El script @file{articulate} puede acortar los acordes, lo
+que podría no ser adecuado para algunos tipos de instrumento, como
+el órgano.  Las notas que no tienen ninguna articulación también
+se pueden acortar; así, para contener el alcance de este efecto
+limite el uso de de la función @code{@bs{}articulate} a segmentos
+de música más breves o modifique los valores de las variables
+definidas dentro del script @file{articulate} para compensar el
+efecto de acortamiento de las notas.}
+
+
+@node The swing script
+@subsection El script @file{swing}
+
+@cindex @code{swing.ly}, script
+
+El script o guion @file{swing} aporta funciones adicionales que
+permiten tocar duraciones regulares con un ritmo desigual.  El
+ejemplo más obvio es la interpretación con @q{swing} que podemos
+encontrar habitualmente en la música de jazz donde las corcheas de
+subdivisión binaria se tocan de forma ternaria; sin embargo tmbién
+se contemplan otros tipos de interpretación.
+
+Este guion se tiene que incluir con la instrucción @code{\include}
+al comienzo del archivo de entrada:
+
+@example
+\include "swing.ly"
+@end example
+
+Se proporcionan tres instrucciones:
+@itemize
+@item
+@funindex \tripletFeel
+@code{\tripletFeel} crea un swing de tipo tresillo.  Toma dos
+argumentos: las duraciones que deben quedar afectadas por él
+(normalmente @code{8} para las corcheas), y después la expresión
+musical a la que se debe aplicar.
+
+@item
+@funindex \applySwing
+@code{\applySwing} toma un argumento adicional previo a la
+expresión musical: una @q{lista de pesos} de @var{n} relaciones
+numéricas que expresan la forma en que se deben tocar las notas
+normales: por ejemplo, @code{#'(2 1)} indica que las notas
+alternas se deben tocar el doble de largas que la nota siguiente
+(de hecho, @code{\tripletFeel @var{duration} @{@var{music}@}} es
+realmente una forma abreviada de escribir @code{\applySwing
+@var{duration} #'(2 1) @{@var{music}@}}).  Se pueden obtener
+corcheas con un swing más suave con una lista de pesos de
+@code{#'(3 2)}, u otros valores según el gusto de cada uno.
+
+@noindent
+Esta lista puede incluir más de dos valores, lo que permite
+patrones de alteración del ritmo más largos y sofisticados; por
+ejemplo, un ritmo tipo samba para las semicorcheas se puede
+obtener como sigue:
+
+@example
+\score @{
+  \applySwing 16 #'(3 2 2 3) @{
+    @var{@dots{} music @dots{}}
+  @}
+  \midi @{ @}
+@}
+@end example
+
+@item
+@funindex \applySwingWithOffset
+@code{\applySwingWithOffset} añade un argumento más entre la
+@q{lista de pesos} y la expresión musical: una longitud de
+desplazamiento.  Esta instrucción se debe usar cuando la expresión
+musical tiene que comenzar fuera del pulso, con un ciclo de swing
+parcial.
+@end itemize
+
+@warning{Igual que con el script @file{articulate}, todas las
+instrucciones de swing se trasladan también a la salida impresa,
+lo que da como resultado un espaciado irregular de las notas.
+Esto se puede evitar usándolas solamente dentro de un bloque
+@code{@bs{}score} dedicado a la salida MIDI, en lugar de a la
+música impresa.}
+
+Hay más ayuda e información incluida en el propio archivo del
+guion: véase @file{ly/swing.ly}.
+
+@morerefs
+Manual de aprendizaje:
+@rlearning{Other sources of information}.
+
+Referencia de la notación:
+@ref{Rhythms}.
+
+Archivos instalados:
+@file{ly/swing.ly}.
+@endmorerefs
+
+@knownissues
+@itemize
+@item
+Las construcciones @code{\repeat} dentro de la música (incluso
+@code{\repeat unfold}) no se tienen en cuenta para la
+determinación de los tiempos de las notas.  Esto da lugar a
+problemas a no ser que las duraciones de todas las partes
+repetidas sean múltiplos enteros de la duración del ciclo de
+swing.
+@item
+Estas funciones ignoran por completo las indicaciones de compás y
+los compases.  Es la razón de que se tengan que aportar
+desplazamientos suando @code{\applySwingWithOffset} si la música
+comienza fuera del pulso.
+@item
+Las notas de adorno se ignoran y simplemente se dejan sin afectar;
+lo mismo para los grupos de valoración especial como los
+tresillos.
+@end itemize
+
+
+@node Extracting musical information
+@chapter Extraer información musical
+
+Además de crear un resultado visual y MIDI, LilyPond es capaz de
+presentar información musical en forma de texto.
+
+
+@node Displaying LilyPond notation
+@section Mostrar la notación de LilyPond
+
+@funindex \displayLilyMusic
+La impresión textual de una expresión musical en notación de
+LilyPond puede hacerse con la función musical
+@code{\displayLilyMusic}.  Para ver el resultado, lo más usual es
+llamar a LilyPond mediante la línea de órdenes.  Por ejemplo,
+
+@example
+@{
+  \displayLilyMusic \transpose c a, @{ c4 e g a bes @}
+@}
+@end example
+
+imprime lo siguiente:
+
+@example
+@{ a,4 cis4 e4 fis4 g4 @}
+@end example
+
+De forma predeterminada, LilyPond imprime estos mensajes en la
+consola junto al resto de los mensajes de la compilación de
+LilyPond.  Para discernir entre estos mensajes y guardar el
+resultado de @code{\displayLilyMusic}, redireccione la salida
+hacia un archivo.
+
+@example
+lilypond archivo.ly >resultado.txt
+@end example
+
+@funindex \void
+Observe que LilyPond no se limita a mostrar la expresión musical,
+sino que también la interpreta (porque @code{\displayLilyMusic}
+la devuelve además de mostrarla).  Simplemente inserte
+@code{\displayLilyMusic} dentro de
+la música existente con el objeto de obtener información sobre
+ella.
+
+Para interpretar y mostrar una sección de música en la consola,
+y al mismo tiempo suprimirla del archivo de salida,
+use la instrucción @code{\void}.
+
+@example
+@{
+  \void \displayLilyMusic \transpose c a, @{ c4 e g a bes @}
+  c1
+@}
+@end example
+
+
+@node Displaying Scheme music expressions
+@section Impresión de las expresiones musicales de Scheme
+
+Véase @rextendnamed{Displaying music expressions, Presentación de las expresiones musicales}.
+
+
+@node Saving music events to a file
+@section Guardar los eventos musicales en un archivo
+
+Los eventos musicales se pueden guardar en un archivo pentagrama
+a pentagrama mediante la inclusión de un archivo en nuestra
+partitura principal.
+
+@example
+\include "event-listener.ly"
+@end example
+
+De esta forma se crean uno o más archivos llamados
+@file{FILENAME-STAFFNAME.notes} ó
+@file{FILENAME-unnamed-staff.notes} para cada pentagrama.
+Observe que si tiene más de un pentagrama sin nombre, los eventos
+de todos los pentagramas se mezclarán entre sí dentro del mismo
+archivo.  El resultado tiene el aspecto siguiente:
+
+@example
+0.000   note     57       4   p-c 2 12
+0.000   dynamic  f
+0.250   note     62       4   p-c 7 12
+0.500   note     66       8   p-c 9 12
+0.625   note     69       8   p-c 14 12
+0.750   rest     4
+0.750   breathe
+@end example
+
+La sintaxis consiste en una línea delimitada por caracteres de
+tabulación, con dos campos fijos en cada línea seguidos de
+parámetros opcionales.
+
+@example
+@var{tiempo} @var{tipo} @var{@dots{}parámetros@dots{}}
+@end example
+
+Esta información se puede leer fácilmente por parte de otros
+programas como guiones de Python, y pueden ser muy útiles para
+aquellos investigadores que desean realizar un análisis musical o
+hacer experimentos de reproducción con LilyPond.
+
+@knownissues
+No todos los eventos musicales de lilypond están contemplados por
+@file{event-listener.ly}.  Se pretende que sea una @qq{prueba de
+concepto} bien realizada.  Si algunos eventos que quiere ver no
+aparecen incluidos, copie @file{event-listener.ly} en su carpeta
+de lilypond y modifique el archivo de forma que produzca la
+información que desea.

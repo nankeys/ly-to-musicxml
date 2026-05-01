@@ -1,0 +1,9 @@
+%% Translation of GIT committish: de1e42ce512f3690387cdd065109bddff1b7bd6d
+  texidocfr = "
+Dès lors que la propriété @code{subdivideBeams} aura été activée, une
+ligature sera subdivisée autant que possible. Les limites dans la
+profondeur sont gérées par les propriétés @code{beamMinimumSubdivision}
+et @code{beamMaximumSubdivision}.
+"
+
+  doctitlefr = "Subdivision de ligatures automatiques"

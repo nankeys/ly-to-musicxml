@@ -1,0 +1,24 @@
+@c -*- coding: utf-8; mode: texinfo; documentlanguage: es -*-
+@ignore
+    Translation of GIT committish: b22569ea33c9c9a6a26e17624d79449bffa81b22
+
+    When revising a translation, copy the HEAD committish of the
+    version that you are working on.  For details, see the Contributors'
+    Guide, node Updating translation committishes..
+@end ignore
+
+@c \version "2.16.0"
+
+
+@part Notación especializada
+
+@include es/notation/vocal.itely
+@include es/notation/keyboards.itely
+@include es/notation/unfretted-strings.itely
+@include es/notation/fretted-strings.itely
+@include es/notation/percussion.itely
+@include es/notation/wind.itely
+@include es/notation/chords.itely
+@include es/notation/contemporary.itely
+@include es/notation/ancient.itely
+@include es/notation/world.itely

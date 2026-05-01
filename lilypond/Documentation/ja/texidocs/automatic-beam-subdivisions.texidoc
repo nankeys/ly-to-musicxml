@@ -1,0 +1,7 @@
+%% Translation of GIT committish: 0cc270b871321ae5aa8622cea8d8262aafd16641
+  texidocja = "
+連桁の細分は自動で行われます。@c
+プロパティ @code{subdivideBeams} をセットすることで、@c
+(@code{beatBase} で指定できるような) 拍の位置で連桁が細分されます。
+"
+  doctitleja = "自動的な連桁細分"

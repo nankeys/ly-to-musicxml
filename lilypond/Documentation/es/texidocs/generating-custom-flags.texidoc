@@ -1,0 +1,8 @@
+%% Translation of GIT committish: fbf390d05408c5b842a22c122da734c54f92ca12
+  texidoces = "
+La propiedad @code{stencil} del grob @code{Flag} (el objeto gráfico corchete)
+se puede fijar a una función de Scheme personalizada que genere el
+glifo del corchete.
+
+"
+  doctitlees = "Generar corchetes personalizados"

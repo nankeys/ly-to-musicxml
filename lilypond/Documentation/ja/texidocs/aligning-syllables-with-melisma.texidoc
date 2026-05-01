@@ -1,0 +1,6 @@
+%% Translation of GIT committish: 0cc270b871321ae5aa8622cea8d8262aafd16641
+  texidocja = "
+デフォルトでは、メリスマの頭の歌詞音節は音符に左揃えされます。@c
+これは @code{lyricMelismaAlignment} プロパティで変更することができます。
+"
+  doctitleja = "歌詞音節をメリスマに揃える"

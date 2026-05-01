@@ -1,0 +1,7 @@
+%% Translation of GIT committish: 35d4cc1b78c4105643ca5fdcb44cb717578d6d4a
+  texidoces = "
+La presentación del acorde de séptima mayor se puede ajustar
+mediante la propiedad de contexto @code{majorSevenSymbol}.
+
+"
+  doctitlees = "Nombre de acorde maj7"

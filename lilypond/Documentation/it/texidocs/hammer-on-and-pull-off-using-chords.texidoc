@@ -1,0 +1,7 @@
+%% Translation of GIT committish: 2f3474d9af596d677ed5b7ce720ae4d0954a6b51
+  texidocit = "
+Quando il martellato o lo strappato si applicano a delle note in un accordo, viene disegnato
+un solo arco.  Ma è possibile avere un @qq{doppio arco} impostando la proprietà
+@code{doubleSlurs} su @code{#t}.
+"
+  doctitleit = "Martellato e strappato usando accordi"

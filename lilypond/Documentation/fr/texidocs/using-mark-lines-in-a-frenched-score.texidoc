@@ -1,0 +1,14 @@
+%% Translation of GIT committish: 18cf09c1f24d22eeb0cdc187dec0af734d60cfc8
+  texidocfr = "
+Le recours à des contextes @code{MarkLine} (tel qu'indiqué dans
+@uref{https://wiki.lilypond.community/wiki/Placing_rehearsal_marks_other_than_above_the_top_staff,
+Inscrire les repères ailleurs que sur la première portée}) dans une
+partition « à la française » peut s'avérer problématique lorsque toutes
+les portées entre deux contextes @code{Markline} sont absentes d'un
+système. La présence du @code{Keep_alive_together_engraver} au sein de
+chacun des @code{StaffGroup} permet de maintenir actif le
+@code{MarkLine} uniquement lorsque les autres portées du regroupement
+sont elles-mêmes actives.
+"
+
+  doctitlefr = "Utilisation de lignes de repères dans une partition « à la française »"

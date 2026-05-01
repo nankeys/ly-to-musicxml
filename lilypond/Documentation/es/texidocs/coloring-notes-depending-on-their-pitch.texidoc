@@ -1,0 +1,8 @@
+%% Translation of GIT committish: b755a07257fe4ce66ad58f95c15309bbe3d8230e
+  texidoces = "
+Es posible colorear la cabeza de las notas dependiendo de su altura
+y/o de su nombre: la función que se usa en este ejemplo hace posible
+incluso distinguir los armónicos.
+
+"
+  doctitlees = "Colorear las notas según su altura"

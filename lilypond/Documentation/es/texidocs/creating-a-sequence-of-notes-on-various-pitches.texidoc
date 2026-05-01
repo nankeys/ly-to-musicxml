@@ -1,0 +1,13 @@
+%% Translation of GIT committish: 4f16fa98fd258f08e64203c793028ea3e363b1c0
+  texidoces = "
+En una música que tenga muchas apariciones de la misma secuencia
+de notas a distintas alturas, podría ser de utilidad la siguiente
+función musical.  Admite una nota, de la que solo se utiliza su
+altura.  Las funciones de apoyo en Scheme se han tomado prestadas
+del documento de \"Consejos y trucos\"de la versión 2.10 del
+manual.
+
+Este ejemplo crea las duraciones rítmicas que se usan a todo lo
+largo de @emph{Marte}, de @emph{Los Planetas} de Gustav Holst.
+"
+  doctitlees = "Crear una secuencia de notas a distintas alturas"

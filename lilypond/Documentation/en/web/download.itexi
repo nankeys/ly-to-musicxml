@@ -1,0 +1,237 @@
+@c -*- coding: utf-8; mode: texinfo; -*-
+@ignore
+    Translation of GIT committish: FILL-IN-HEAD-COMMITTISH
+
+    When revising a translation, copy the HEAD committish of the
+    version that you are working on.  For details, see the Contributors'
+    Guide, node Updating translation committishes..
+@end ignore
+
+@node Download
+@unnumbered Download
+
+@divClass{heading-center}
+@heading Downloads for LilyPond @versionStable
+
+@divEnd
+
+
+@divClass{link-headings}
+
+
+@divClass{column-center-top}
+@subheading Essential links
+
+@subsubheading For new users
+
+@ref{Text input}:  LilyPond is a @strong{text-based} music engraver;
+it is more similar to a programming language than a graphical score
+editing program.  Read this to understand the basic LilyPond editing
+workflow.
+
+@ifWebLinks{@manualStableLearningSplitNoName,@rlearningnamed{Top,Learning}}
+This gentle introduction to LilyPond shows how to install it
+and guides you through your first steps with the program.
+
+@subsubheading For users who upgrade from a previous version
+
+@ifWebLinks{@manualStableChangesSplitNoName,@rchangesnamed{Top,Changes}}
+What's new in LilyPond @versionStable{}.
+
+@ifWebLinks{@manualStableUsageSplitNoName,@rprogramnamed{Top,Usage}}
+Explains how to run @command{convert-ly} to effortlessly update
+existing input files written for older versions.
+
+@ifWebLinks{@manualStableLearningSplitNoName,@rlearningnamed{Top,Learning}}
+The installation method shown in the tutorial allows installing
+several versions of LilyPond in parallel seamlessly.
+
+@divEnd
+
+
+@divClass{column-left-top}
+@subheading GNU/Linux
+
+@subsubheading Generic Packages or Distribution-Specific Packages?
+
+Many distributions include LilyPond within their normal package
+repositories.  However, these may be significantly older than the
+current stable version.  If this is the case for you, we strongly
+recommend that you use our generic packages.
+
+@subsubheading Downloads for Generic Packages
+
+@itemize
+@item
+@sourceimage{logo-linux,,}
+@downloadStableLinux
+@end itemize
+
+@divEnd
+
+
+
+@divClass{column-right-top}
+
+@subheading Windows
+
+@subsubheading Downloads for Generic Packages
+
+These binaries work under current Windows versions (Windows 7
+and Windows 8 are not supported).
+
+@itemize
+@item
+@sourceimage{logo-windows,,}
+@downloadStableMingw
+@end itemize
+
+@divEnd
+
+
+
+@divClass{column-left-bottom}
+@subheading macOS
+
+@subsubheading Downloads for Generic Packages
+
+These binaries work on macOS 10.15 (Catalina) and higher.
+For older macOS versions, please use MacPorts.
+
+@itemize
+@item
+@sourceimage{logo-macosx,,}
+@downloadStableDarwin
+@end itemize
+
+@subsubheading Using a Package Manager
+
+@itemize
+@item
+@sourceimage{logo-macports,,}
+@uref{https://www.macports.org/,MacPorts}, a package manager
+for macOS, has a @uref{https://ports.macports.org/port/lilypond/summary,
+LilyPond port}.
+
+@item
+@sourceimage{logo-homebrew,,}
+@uref{https://brew.sh/,Homebrew}, another package manager
+for macOS, has a @uref{https://formulae.brew.sh/formula/lilypond,
+LilyPond formula}.
+@end itemize
+
+@divEnd
+
+
+
+@divClass{column-right-bottom}
+@subheading For developers
+
+@ref{Source}:
+for packagers
+
+@ref{Old downloads}:
+old versions
+
+@ref{Development}:
+latest unstable version
+
+@divEnd
+
+
+@divEnd @c link-headings
+
+
+
+@divClass{column-center-middle-color2}
+
+@subheading Software License
+
+LilyPond is published under the
+@ref{GPL, GNU General Public License}.
+@divEnd
+
+
+
+@divClass{column-center-bottom}
+@subheading Legalese
+
+@divClass{legal}
+All logos and product images are copyright and trademark
+acknowledged.
+
+@logoLegalLinux
+
+@logoLegalMacOSX
+
+@logoLegalWindows
+
+@divEnd
+@divEnd
+
+
+
+@menu
+* Source::
+* Old downloads::
+* GPL::
+@end menu
+
+
+
+@node Source
+@unnumberedsec Source
+
+@warning{We @strong{do not} recommend that you attempt to build
+LilyPond yourself; almost all user needs are better met with the
+pre-built version.}
+
+
+@divClass{column-center-top}
+
+@subheading Source tarball
+
+@downloadStableSource{}
+
+Compiling instructions are listed in @rcontrib{Compiling}.
+
+@divEnd
+
+
+
+
+@node Old downloads
+@unnumberedsec Old downloads
+
+@divClass{column-center-top}
+@subheading All versions
+
+To obtain the source and binaries for any release, visit our
+@uref{https://gitlab.com/lilypond/lilypond/-/releases,GitLab
+releases page} for versions since 2.23.6, or the previous
+@uref{https://lilypond.org/download/binaries/,download site} for
+earlier versions.
+
+@divEnd
+
+
+
+
+@node GPL
+@unnumberedsec GPL
+
+@divClass{column-center-top}
+@subheading Software license
+
+GNU LilyPond is published under the GNU General Public License.
+An introduction to this license, and our reasons for choosing it,
+is given in @ref{Freedom}.
+
+@divEnd
+
+@divClass{column-center-bottom}
+@subheading GNU General Public License
+
+@include en/gpl.itexi
+
+@divEnd

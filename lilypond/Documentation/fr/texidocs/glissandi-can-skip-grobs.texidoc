@@ -1,0 +1,6 @@
+%% Translation of GIT committish: de1e42ce512f3690387cdd065109bddff1b7bd6d
+  texidocfr = "
+Un glissando peut sauter un objet @code{NoteColumn}.
+"
+
+  doctitlefr = "Glissando par dessus un objet graphique"

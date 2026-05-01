@@ -1,0 +1,82 @@
+\input texinfo @c -*- coding: utf-8; mode: texinfo; documentlanguage: it -*-
+@c This file is part of lilypond-learning.tely
+@ignore
+    Translation of GIT committish: 4c4cff796e86152e97321aa7934ff785f6c5012d
+
+    When revising a translation, copy the HEAD committish of the
+    version that you are working on.  For details, see the Contributors'
+    Guide, node Updating translation committishes..
+@end ignore
+@settitle Manuale di apprendimento di LilyPond
+@documentencoding UTF-8
+@documentlanguage it
+@afourpaper
+
+@macro manualIntro
+Questo file fornisce un'introduzione alla versione di LilyPond
+@version{}.
+@end macro
+
+@macro copyrightDeclare
+Copyright @copyright{} 1999--2026 by the authors.
+@end macro
+
+@dircategory LilyPond -- il compositore tipografico musicale
+@direntry
+* Apprendimento: (lilypond-learning).        Introduzione.  Inizia da qui.
+@end direntry
+
+@set FDL
+@include it/macros.itexi
+
+
+@c Translators: Federico Bruni
+@c Translation checkers: Luca Rossetto Casel
+
+@lilyTitlePage{Manuale di apprendimento}
+
+@c TOC -- non-tex
+@ifnottex
+
+@menu
+* Installing::                     Installazione di LilyPond.
+* Tutorial::                          Le basi della composizione tipografica in LilyPond.
+* Common notation::  Come si scrive la notazione più comunemente utilizzata.
+* Fundamental concepts::             Concetti di base necessari per leggere gli altri manuali.
+* Tweaking output::              Introduzione alla modifica dell'output.
+
+Appendici
+
+* Templates::                           Modelli già pronti.
+* GNU Free Documentation License::    Licenza di questo documento.
+* Index of commands and concepts::
+@end menu
+
+@docMain
+@end ifnottex
+
+
+@c TOC - tex
+@contents
+
+@iftex
+@allowcodebreaks false
+@end iftex
+
+@c INCLUDES
+
+@include it/learning/installing.itely
+@include it/learning/tutorial.itely
+@include it/learning/common-notation.itely
+@include it/learning/fundamental.itely
+@include it/learning/tweaks.itely
+
+@include it/learning/templates.itely
+@include en/fdl.itexi
+
+@node Index of commands and concepts
+@appendix Indice
+
+@printindex cp
+
+@bye

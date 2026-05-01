@@ -1,0 +1,372 @@
+\input texinfo @c -*- coding: utf-8; mode: texinfo; documentlanguage: es -*-
+@ignore
+    Translation of GIT committish: d304582e9b791c7e9d54a5bbda3e37dc49a87fd1
+
+    When revising a translation, copy the HEAD committish of the
+    version that you are working on.  For details, see the Contributors'
+    Guide, node Updating translation committishes..
+@end ignore
+
+@settitle LilyPond: notación musical para todos
+@documentencoding UTF-8
+@documentlanguage es
+@afourpaper
+
+@set FDL
+@set web
+@include es/macros.itexi
+@include weblinks.itexi
+
+
+@c Translators: Francisco Vila
+
+@c 'Web' was born 2003-03-30 with this commit:
+@c Initial revision
+@c author: Han-Wen Nienhuys
+@c commit: d189a2119004c2f75da2020ea2ed36d817582fc5
+
+@c @macro copyrightDeclare
+@c Copyright @copyright{} 2003--2026 por los autores.
+@c @end macro
+
+@copying
+Copyright @copyright{} 2003--2026 por los autores.
+
+@c next line is necessary for broken pre-4.13 texinfo's
+@c install-info, so leave it there until we officially
+@c bump the required version.  -gp
+This file documents the LilyPond website.
+
+@quotation
+Permission is granted to copy, distribute and/or modify this
+document under the terms of the GNU Free Documentation License,
+Version 1.1 or any later version published by the Free Software
+Foundation; with no Invariant Sections.  A copy of the license is
+included in the section entitled ``GNU Free Documentation
+License''.
+@end quotation
+@end copying
+
+
+@c Info files are no longer installed in a subdirectory, images are
+@c expected to be found in lilypond/ subdirectory.
+@dircategory GNU LilyPond: el tipografiador de música
+@direntry
+* Sitio web: (lilypond-web). Versión en Info de lilypond.org.
+@end direntry
+
+
+@c TITLE PAGE
+@ifnottex
+@node Top
+@c This must exactly match @settitle above.
+@top LilyPond: notación musical para todos
+@end ifnottex
+
+
+@c hack for texi2html, bleh -gp
+@ifnothtml
+
+@finalout
+
+@titlepage
+@title LilyPond
+@subtitle El tipografiador de música
+@titlefont{Información general}
+@author El equipo de desarrollo de LilyPond
+
+@vskip 0pt plus 1filll
+@c @vskip 20pt
+
+@insertcopying
+
+Para LilyPond versión @version{}
+@end titlepage
+@end ifnothtml
+@c end hack for texi2html
+
+
+@c ************************ WEBSITE START ***************
+
+
+@ifhtml
+@node index
+@unnumbered LilyPond
+@end ifhtml
+
+@divId{pageHeader}
+@heading LilyPond
+
+... notación musical para todos
+@divEnd
+
+@c @imageId{cmws,web-clef-g-eight-alpha.png,Catchy Musical Web Snippet}
+@imageId{lilylogo,double-lily-modified3,png,LilyPond logo}
+@c @im ageId{cmws,web-snippet-alpha.png,Catchy Musical Web Snippet}
+
+@divId{quickSummary}
+LilyPond es un programa de tipografía musical o edición de
+partituras, consagrado a la producción de partituras de la calidad
+más alta posible.  Lleva la estética de la música tipografiada de
+la forma tradicional a las partituras impresas mediante ordenador.
+LilyPond es software libre y forma parte del
+@uref{https://gnu.org,Proyecto GNU}.
+
+
+@divClass{align-right}
+¡Puede leer más en nuestra @ref{Introduction}!
+
+@divEnd
+@divEnd
+
+
+@divId{homepage-main}
+
+@divClass{column-center-top}
+
+@subheading La belleza de las partituras
+
+@c This example image is the image from the website version of the essay
+@c manual, downloaded to the pictures directory for use on the home page.
+@c Large version is generated manually from ly file in pictures directory.
+@divId{homepage-example-image-wrapper}
+@imageClickable{bwv861-lilypond,png,,bwv861-lilypond-large,png,center}
+@divEnd
+
+@ifclear web_version
+  @c no anchor links, just text
+
+LilyPond es una poderosa y flexible herramienta
+para la edición de toda clase de partituras,
+ya sean clásicas (como el ejemplo de J.S. Bach que aparece arriba) o
+notación compleja, música antigua, música moderna,
+tablaturas, música vocal, hojas-guía de acordes (lead sheets),
+materiales didácticos, grandes proyectos orquestales,
+salida personalizada e incluso gráficos de Schenker.
+
+@end ifclear
+@ifset web_version
+  @c anchor links, link to individual examples by their <a> tag
+  @c Translators should use the localized anchor name
+  @c (e.g. examples.html#Musica-Antica)
+  @c to be found in out-www/web/examples.LL.html
+
+LilyPond es una poderosa y flexible herramienta para la edición
+de toda clase de partituras, ya sean
+@uref{examples.html#Musica-Clasica, clásicas}
+(como el ejemplo de J.S. Bach que aparece arriba),
+@uref{examples.html#Notacion-compleja, notación compleja},
+@uref{examples.html#Musica-antigua, música antigua},
+@uref{examples.html#Musica-moderna, música moderna},
+@uref{examples.html#Tablatura, tablaturas},
+@uref{examples.html#Musica-vocal, música vocal},
+@uref{examples.html#Musica-pop, hojas-guía de acordes (lead sheets)},
+@uref{examples.html#Aplicaciones-para-la-educacion, materiales didácticos},
+@uref{examples.html#Proyectos-grandes, grandes proyectos orquestales},
+@uref{examples.html#Salida-personalizada, salida personalizada},
+e incluso
+@uref{examples.html#Schenker-Graphs, gráficos de Schenker}.
+
+@end ifset
+
+¡Admire nuestra galería de @ref{Examples} e inspírese!
+
+@divEnd
+
+@divClass{column-center-middle-color2}
+@subheading Noticias
+
+@c TODO: generate this automatically, including RSS feed.
+@include en/web/news-headlines.itexi
+
+@ref{News, Más novedades...}
+
+@divEnd
+
+@divEnd
+
+
+@ifclear web_version
+  @c do nothing
+@end ifclear
+@ifset web_version
+  @c make the side bar:
+@divId{homepage-sidebar}
+@subheading Versión estable
+
+@c TODO: javascript to detect OS and suggest download?
+
+@ref{Download, Descarga de @versionStable}
+
+@ref{Manuals, Manuales de @versionStable}
+
+@subheading Versión de desarrollo
+
+@ref{Development, Descarga de @versionDevel}
+
+@ref{Development, Manuales de @versionDevel}
+
+@subheading Novedades
+@c VO Pondings
+@divId{pondingsText}
+
+@divEnd
+
+@divEnd
+@end ifset
+
+
+@html
+
+<script language="JavaScript" type="text/javascript">
+  function loadXMLDoc(dname)
+    {
+      if (window.XMLHttpRequest)
+        {
+          xhttp=new XMLHttpRequest();
+        }
+      else
+        {
+          xhttp=new ActiveXObject("Microsoft.XMLHTTP");
+        }
+      xhttp.open("GET",dname,false);
+      xhttp.send();
+      return xhttp.responseXML;
+    }
+
+  var xmlDoc = loadXMLDoc("tweets.xml");
+  var tweets = xmlDoc.getElementsByTagName("tweet");
+  var index = Math.floor(Math.random() * tweets.length);
+  var tweet = tweets[index];
+  var text = tweet.childNodes[0];
+  document.getElementById("pondingsText").innerHTML = text.nodeValue;
+</script>
+
+@end html
+
+
+@ifnottex
+
+@menu
+* Introduction::     Empiece aquí a crear partituras musicales.
+* Download::         Obtener LilyPond.
+* Manuals::         Léase los dichosos manuales (RTFM).
+* Community::        Póngase en contacto con otros usuarios.
+@end menu
+
+@end ifnottex
+
+@contents
+
+@c ****************** GENERAL STUFF FOR INFO ************
+@ignore
+Distributions will want to install lilypond.info in postinstall, doing:
+
+    install-info --info-dir=/usr/share/info out[-www]/lilypond-web.info
+
+  * Prepend GNU for dir, must be unique.
+
+  * Do not list the 'lilypond' node at toplevel, so that `info lilypond`
+    goes to Top.
+
+  * List all commands in direntry.
+
+@end ignore
+
+@c FIXME: this still doesn't solve the broken links in pdf and big
+@c        html; we'll need a bunch of @iftext and stuff in here. -gp
+@c ****************** SPECIAL MACROS FOR WEB MANUAL ************
+@macro docLinks{name,base,refLink,split,big,pdf}
+@subheading Léalo
+
+@docLinksBare{\name\,\base\,\refLink\,\split\,\big\,\pdf\}
+
+@end macro
+
+
+@macro docLinkSplit{name,base,webLink}
+  @docLink{\name\ (HTML seccionado),\base\/index.html,\webLink\}
+@end macro
+
+@macro docLinkBig{name,base,webLink}
+  @docLink{\name\ (HTML monolítico),\base\-big-page.html,\webLink\}
+@end macro
+
+@macro docLinkPdf{name,base,webLink}
+  @docLink{\base\.pdf,\base\.pdf,\webLink\}
+@end macro
+
+
+@macro docLinksBare{name,base,refLink,split,big,pdf}
+
+@divClass{keep-bullets}
+@itemize
+
+@item @docLinkSplit{\name\,\base\,\split\} @minus{}
+  el manual está dividido en muchas páginas HTML.
+  @*@ @ @emph{(una descarga pequeña por cada página)}
+
+@item @docLinkBig{\name\,\base\,\big\} @minus{}
+  lea este manual como una sola página HTML enorme.
+  @*@ @ @docDownload{(una sola descarga grande, \base\-big-page.html, )}
+
+@item @docLinkPdf{\name\,\base\,\pdf\} @minus{}
+  descárguelo como un archivo en formato PDF.
+  @*@ @ @docDownload{(una sola descarga grande, \base\.pdf, )}
+
+@end itemize
+
+@divEnd
+
+@end macro
+
+
+@c don't add any extra spaces in this macro -gp
+@macro ifWebLinks{webLink,normalLink}
+@ifclear web_version
+  \normalLink\:
+@end ifclear
+@ifset web_version
+  \webLink\:
+@end ifset
+@end macro
+
+
+@ifhtml
+@macro contactUsAbout{topic}
+
+@divClass{heading-center}
+@divClass{contactBox}
+Si tiene conocimiento de cualesquiera otros \topic\ que merezcan
+aparecer relacionados aquí, le rogamos que nos lo haga saber
+escribiendo un mensaje a la lista de correo bug-lilypond.  Si no
+está suscrito a la lista, aún puede hacerlo en la
+@uref{https://lists.gnu.org/mailman/listinfo/bug-lilypond,página informativa}.
+
+@divEnd
+@divEnd
+
+@end macro
+@end ifhtml
+
+@ifnothtml
+@macro contactUsAbout{topic}
+@cartouche
+Si tiene conocimiento de cualesquiera otros \topic\ que merezcan
+aparecer relacionados aquí,
+le rogamos que nos lo haga saber según se explica
+en las instrucciones que aparecen en la sección
+@ref{Bug reports}.
+
+@end cartouche
+
+@end macro
+@end ifnothtml
+
+@include es/web/introduction.itexi
+@include es/web/download.itexi
+@include es/web/manuals.itexi
+@include es/web/community.itexi
+
+
+@bye

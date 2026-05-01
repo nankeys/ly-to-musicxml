@@ -1,0 +1,7 @@
+%% Translation of GIT committish: de1e42ce512f3690387cdd065109bddff1b7bd6d
+  texidocfr = "
+La propriété @code{shortest-duration-space} peut devoir être retouchée
+pour ajuster l'apparence des chutes ou sauts.
+"
+
+  doctitlefr = "Ajustement du galbe des chutes ou sauts"

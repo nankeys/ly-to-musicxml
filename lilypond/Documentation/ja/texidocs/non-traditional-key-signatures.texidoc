@@ -1,0 +1,22 @@
+%% Translation of GIT committish: f11513f36c131dab18338d6a3a729e24a927150d
+  texidocja = "
+広く使われている @code{\\key} コマンドは、@code{Staff} コンテキストの
+@code{keyAlterations} をセットしています。@c
+非標準な調号を作成するには、このプロパティを直接セットします。
+
+コマンドの形式は以下のようなリストです:
+
+@code{ \\set Staff.keyAlterations = #`(((octave . step) . alter) ((octave
+. step) . alter) ...) } 
+
+が構文です。リストの各要素について、@code{octave} がオクターブを指定し
+(0 がミドル C からその上の B まで)、@code{step} はオクターブ内の@c
+音階 (0 が C, 6 が B)、@code{alter} が @code{,SHARP ,FLAT ,DOUBLE-SHARP}
+などです。
+
+または、各要素についてより簡潔な形式があり、@c
+@code{(step . alter)} は全てのオクターブに対して変化記号が適用されます。@c
+@qq{シャープ} が 100 セントではない微分音のスケールでは、@code{alter}
+を 200 セントの全音を 1 とした数値で指定できます。
+"
+  doctitleja = "非伝統的な調号"

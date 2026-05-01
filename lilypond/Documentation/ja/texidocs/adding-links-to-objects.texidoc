@@ -1,0 +1,11 @@
+%% Translation of GIT committish: f11513f36c131dab18338d6a3a729e24a927150d
+  texidocja = "
+grob-stencil にリンクを追加する場合、ここに定義されている @code{add-link} を@c
+使用することができます。@code{\\override} や @code{\\tweak} と動作します。@c
+ただし、リンクが設定された Grob は @code{point-and-click} が無効になります。
+
+制限: PDF でのみ動作します。
+
+リンクされたオブジェクトに色が付いているのは、別のコマンドによるものです。
+"
+  doctitleja = "オブジェクトにリンクを追加する"

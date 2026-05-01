@@ -1,0 +1,172 @@
+\input texinfo @c -*- coding: utf-8; mode: texinfo; documentlanguage: fr -*-
+@ignore
+    Translation of GIT committish: 606ac3c3b22c41d84aa5fa938d42da5125ac572a
+
+    When revising a translation, copy the HEAD committish of the
+    version that you are working on.  For details, see the Contributors'
+    Guide, node Updating translation committishes..
+@end ignore
+
+@settitle GNU LilyPond -- Manuel de notation
+@documentencoding UTF-8
+@documentlanguage fr
+@afourpaper
+
+@macro manualIntro
+Ce document constitue le manuel de notation de GNU LilyPond @version{}.
+Sa lecture requiert une familiarité avec le contenu présenté dans le
+@rlearning{Top}.
+@end macro
+
+@c 'Notation Reference' was born 1998-08-14 with this commit:
+@c release: 1.0.2
+@c author: Han-Wen Nienhuys
+@c commit: a3a44f9f3c581b6824b3a65f9039656693e09bbf
+@c   file: Documentation/tex/refman.yo
+
+@macro copyrightDeclare
+Copyright @copyright{} 1998--2026 par les auteurs.
+@end macro
+
+@c no dircategory nor direntry in  French
+@c since info is not translated. -JCM
+
+@set FDL
+@include fr/macros.itexi
+@iftex
+@include en/hyphenation.itexi
+@end iftex
+
+@c @direntry has not been added yet, as Emacs and standalone Info have
+@c no i18n support -JM
+
+@c Translators: John Mandereau, Jean-Charles Malahieude
+
+@c urg, makeinfo 4.9.91 French translation is funky
+@iftex
+@documentlanguage fr
+@frenchspacing on
+@end iftex
+
+@lilyTitlePage{Manuel de notation}
+
+
+@ifnottex
+
+@menu
+Notation générale
+
+* Pitches::               Écriture et gravure des hauteurs de note.
+* Rhythms::               Écriture et gravure des durées.
+* Expressive marks::      Ajout de signes d'exécution et d'interprétation.
+* Repeats::               Différents types de répétitions de musique.
+* Simultaneous notes::    Polyphonie et accords.
+* Staff notation::        Gravure de la portée.
+* Editorial annotations:: Annotations d'édition ou à usage pédagogique.
+* Text::                  Ajout de texte à la partition.
+
+Notation à usage spécifique
+
+* Vocal music::           Paroles, opéras…
+* Keyboard and other multi-staff instruments::
+                          Piano, harpe, etc.
+* Unfretted string instruments::
+                          Violon et apparentés.
+* Fretted string instruments::
+                          Guitare, luth, etc.
+* Percussion::            Batterie et autres.
+* Wind instruments::      Bois, cuivres et autres.
+* Chord notation::        Accords et basse chiffrée.
+* Contemporary music::    Traite aussi de notation graphique.
+* Ancient notation::      Musique mensurale, chant grégorien et kiévien, etc.
+* World music::           Musique non-européenne.
+
+Généralités sur les fichiers sources et les sorties
+
+* Input modes::           Mode note, mode paroles, mode @emph{markup}, etc.
+* Input structure::       Ce à quoi ressemble un fichier source LilyPond.
+* Titles and headers::    Le bloc @code{\header}, notes de bas de page,
+                            table des matières, etc.
+* Working with input files::
+                          Inclusion de fichier, balisage de musique, etc.
+* Controlling output::    Extraction et escamotage de fragments, formats
+                            de sortie, adjonction de fichier au PDF, etc.
+* Creating MIDI output::  Notation supportée, nuances, instruments,
+                            cannaux, et plus encore.
+* Extracting musical information::
+                          Affichage des structures de donnée LilyPond.
+
+
+Gestion de l'espace
+
+* Page layout::           Format de page, espacement fixe et vertical,
+                            variables du bloc @code{\paper}.
+* Score layout::          Taille de portée, le bloc @code{\layout}.
+* Breaks::                Sauts de ligne et de page.
+* Vertical spacing::      Espacement et positionnement vertical des
+                            portées et systèmes.
+* Horizontal spacing::    Espacement selon la section, espacement strict
+                            et autres considérations.
+* Fitting music onto fewer pages::
+                          Mise en évidence et modification de
+                            l'espacement vertical.
+
+Modification des réglages prédéfinis
+
+* Tuning output::         Préambule.
+* Interpretation contexts::
+                          Création et référencement des contextes, etc.
+* Explaining the Internals Reference::
+                          Comment trouver une description des
+                            @emph{grobs}, propriétés, graveurs et autres
+                            concepts.
+* Modifying properties::  @code{\set}, @code{\override}, @code{\tweak}, etc.
+* Useful concepts and properties::
+                          Comment les objets graphiques et leurs
+                            propriétés sont classés.
+
+Annexes
+
+* Markup commands::        Description détaillée des commandes de
+                             @emph{markup}.
+* Notation manual tables:: Tables et diagrammes.
+* Cheat sheet::            Résumé de la syntaxe de LilyPond.
+* GNU Free Documentation License::
+                           Licence de ce document.
+* Index of commands and concepts::
+@end menu
+
+@docMain
+@end ifnottex
+
+
+@contents
+
+@include fr/notation/notation.itely
+@include fr/notation/specialist.itely
+
+@include fr/notation/input.itely
+@include fr/notation/spacing.itely
+
+@include fr/notation/changing-defaults.itely
+
+
+@include fr/notation/notation-appendices.itely
+@include fr/notation/cheatsheet.itely
+
+@include en/fdl.itexi
+
+@node Index of commands and concepts
+@appendix Index des commandes et concepts
+
+En plus des commandes et mots réservés de LilyPond, cet index recense
+les termes musicaux qui s'y rapportent.
+@ifhtml
+Chaque lien est constitué de deux parties : la première pointe
+directement là où la commande ou le terme apparaît, la seconde au début
+de la section où la commande ou le terme est abordé.
+@end ifhtml
+
+@printindex cp
+
+@bye

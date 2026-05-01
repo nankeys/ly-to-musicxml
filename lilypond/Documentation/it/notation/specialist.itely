@@ -1,0 +1,31 @@
+@c -*- coding: utf-8; mode: texinfo; documentlanguage: it -*-
+@ignore
+    Translation of GIT committish: 1d41e22bfaca4a1b05089d5eea99f59b81322864
+
+    When revising a translation, copy the HEAD committish of the
+    version that you are working on.  For details, see the Contributors'
+    Guide, node Updating translation committishes..
+@end ignore
+
+@c \version "2.16.0"
+
+@node Specialist notation
+@chapter Notazione specialistica
+
+Questo capitolo spiega come creare la notazione musicale per particolari
+tipi di strumento o per stili specifici.
+
+La musica d'orchestra e di insieme non è trattata in una sezione separata,
+ma si possono trovare varie nozioni usate comunemente nelle partiture
+orchestrali in @ref{References for opera and stage musicals}.
+
+@include it/notation/vocal.itely
+@include it/notation/keyboards.itely
+@include it/notation/unfretted-strings.itely
+@include it/notation/fretted-strings.itely
+@include it/notation/percussion.itely
+@include it/notation/wind.itely
+@include it/notation/chords.itely
+@include it/notation/contemporary.itely
+@include it/notation/ancient.itely
+@include it/notation/world.itely

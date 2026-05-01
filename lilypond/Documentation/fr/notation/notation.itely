@@ -1,0 +1,22 @@
+@c -*- coding: utf-8; mode: texinfo; documentlanguage: fr -*-
+
+@ignore
+    Translation of GIT committish: 467b57a5e9a012d9ecbca354dfe137cedfbc7b86
+
+    When revising a translation, copy the HEAD committish of the
+    version that you are working on.  For details, see the Contributors'
+    Guide, node Updating translation committishes..
+@end ignore
+
+@c \version "2.16.0"
+
+@part Notation musicale générale
+
+@include fr/notation/pitches.itely
+@include fr/notation/rhythms.itely
+@include fr/notation/expressive.itely
+@include fr/notation/repeats.itely
+@include fr/notation/simultaneous.itely
+@include fr/notation/staff.itely
+@include fr/notation/editorial.itely
+@include fr/notation/text.itely

@@ -1,0 +1,87 @@
+\input texinfo-ja @c -*- coding: utf-8; mode: texinfo; -*-
+@ignore
+    Translation of GIT committish: 0cc270b871321ae5aa8622cea8d8262aafd16641
+
+    When revising a translation, copy the HEAD committish of the
+    version that you are working on.  For details, see the Contributors'
+    Guide, node Updating translation committishes..
+@end ignore
+
+@settitle GNU LilyPond 学習マニュアル
+@documentencoding UTF-8
+@documentlanguage ja
+@afourpaper
+
+@macro manualIntro
+このマニュアルは LilyPond バージョン @version{} の導入部です。
+@end macro
+
+
+@c `Learning Manual' was born 1998-08-14 with this commit:
+@c release: 1.0.2
+@c author: Han-Wen Nienhuys
+@c commit: a3a44f9f3c581b6824b3a65f9039656693e09bbf
+@c   file: Documentation/tex/tutorial.yo
+
+@macro copyrightDeclare
+Copyright @copyright{} 1998--2026 by the authors.
+@end macro
+
+@set FDL
+@include ja/macros.itexi
+
+
+@c Translators: Masamichi Hosoda, Yoshiki Sawada
+@c Translation status: post-GDP
+
+
+@lilyTitlePage{学習マニュアル}
+
+@c TOC -- non-tex
+@ifnottex
+
+@menu
+* Installing::               Installing LilyPond
+* Tutorial::              LilyPond で譜刻するための基本
+* Common notation::              LilyPond 導入の手引き
+* Fundamental concepts::        このマニュアルの残りの部分を読むために@c
+必要とされる基本的なコンセプト
+* Tweaking output::              出力を変更するための導入部
+
+付録
+
+* Templates::                    作成 (コンパイル) 準備ができている@c
+テンプレート
+* GNU Free Documentation License::  このドキュメントの使用許諾書
+* Index of commands and concepts::
+@end menu
+
+@docMain
+@end ifnottex
+
+
+@c TOC - tex
+@contents
+
+@iftex
+@allowcodebreaks false
+@end iftex
+
+@c INCLUDES
+
+@include en/learning/installing.itely
+@include ja/learning/tutorial.itely
+@include ja/learning/common-notation.itely
+@include ja/learning/fundamental.itely
+@include ja/learning/tweaks.itely
+
+@include ja/learning/templates.itely
+@include en/fdl.itexi
+
+
+@node Index of commands and concepts
+@appendix インデックス
+
+@printindex cp
+
+@bye

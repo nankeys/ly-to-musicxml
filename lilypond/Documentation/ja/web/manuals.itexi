@@ -1,0 +1,599 @@
+@c -*- coding: utf-8; mode: texinfo; documentlanguage: ja -*-
+@ignore
+    Translation of GIT committish: 5a886a7c8348e53e52ce65f4d8e9e197db3d5103
+
+    When revising a translation, copy the HEAD committish of the
+    version that you are working on.  For details, see the Contributors'
+    Guide, node Updating translation committishes..
+@end ignore
+
+@c Translators: Masamichi Hosoda, Yoshiki Sawada
+
+@node Manuals
+@unnumbered マニュアル
+
+@macro details{node, label}
+@spanClass{detail}
+(@ref{\node\, \label\ の詳細})
+@spanEnd
+@end macro
+
+@divClass{heading-center}
+@ifclear web_version
+@heading LilyPond @version 用のマニュアル
+@end ifclear
+@ifset web_version
+@heading LilyPond @versionStable 用のマニュアル
+@end ifset
+
+@divEnd
+
+@divClass{link-headings}
+
+@divClass{column-center-top}
+@subheading 導入部
+
+@itemize
+
+@item
+@ref{Text input}:
+LilyPond は @strong{テキスト ベース} の楽譜作成プログラムです。@c
+まず最初にこのドキュメントを読んでください！
+
+@item
+@ifWebLinks{@manualStableLearningSplitNoName-ja,@rlearningnamed{Top,学習}}
+@qq{必読} のやさしい LilyPond 入門書です。
+@details{Learning, 学習}
+
+@item
+@ifWebLinks{@manualStubStableGlossarySplitNoName-ja,@rglosnamed{Top,用語集}}
+@emph{(副読本)}
+音楽用語についての説明と、
+英語の音楽用語に馴染みの無いユーザのための訳語を提供します。
+@details{Glossary, 用語集}
+
+@item
+@ifWebLinks{@manualStubStableEssaySplitNoName-ja,@ressaynamed{Top,Essay}}
+@emph{(副読本)}
+コンピュータによる譜刻についての背景。
+@details{Essay, エッセー}
+
+@end itemize
+
+@divEnd
+
+@divClass{column-left-top}
+@subheading 常用するマニュアル
+
+@itemize
+
+@item
+@ifWebLinks{@manualStableNotationSplitNoName-ja,@rnotationnamed{Top,記譜法}}
+構文リファレンス。
+@details{Notation, 記譜法}
+
+@item
+@ifWebLinks{@manualStableUsageSplitNoName-ja,@rprogramnamed{Top,使用方法}}
+このプログラムの実行方法。
+@details{Usage, 使用方法}
+
+@item
+@ifWebLinks{@manualStubStableSnippetsSplitNoName-ja,@rlsrnamed{Top,Snippets}}
+ちょっとしたトリック、秘訣。
+@details{Snippets, コード断片集}
+
+@end itemize
+
+@divEnd
+
+
+@divClass{column-right-top}
+@subheading 常用外のマニュアル
+
+@itemize
+
+@item
+@ref{FAQ}:
+頻繁に質問されること。
+
+@item
+@ref{Top, Web}:
+このドキュメント。
+@details{Web, Web}
+
+@item
+@ifWebLinks{@manualStubStableChangesSplitNoName-ja,@rchangesnamed{Top,Changes}}
+変更点。
+@details{Changes, 変更点}
+
+@item
+@ifWebLinks{@manualStubStableExtendingSplitNoName-ja,@rextendnamed{Top,Extending}}
+変則的な調整。
+@details{Extending, 拡張}
+
+@item
+@ifWebLinks{@manualStubStableInternalsSplitNoName-ja,@rinternalsnamed{Top,Internals}}
+調整のためのリファレンス。
+@details{Internals, 内部リファレンス}
+
+@end itemize
+
+@divEnd
+
+
+@divClass{column-center-bottom}
+@subheading その他の資料
+
+@itemize
+
+@item
+@ref{All}:
+圧縮したアーカイブとして提供する以前と現在の安定バージョンの@c
+ドキュメント。
+
+@item
+@uref{https://lsr@/.di@/.unimi@/.it,LilyPond Snippet Repository}:
+ユーザが作成した例、ヒント、それに TIPS。
+
+@item
+@uref{https://bit.ly/LearnLilyPond,ビデオチュートリアル}:
+LilyPond ユーザの Ben Lemon は、自分のブログで新規ユーザのための@c
+ビデオチュートリアルを作成しています。
+
+@item
+@ref{Development}:
+不安定な開発バージョンのマニュアル。
+
+@item
+@ref{FDL}:
+これらのマニュアルは GNU Free Documentation License に基づいて@c
+発行されています。
+
+@end itemize
+
+@divEnd
+
+@divClass{column-center-bottom}
+@subheading マニュアルの形式
+
+LilyPond のマニュアルは通常 3 つの形式があります:
+ページ毎に分割された HTML, 1 つの大きな HTML そして PDF です。@c
+ページ毎に分割された HTML はオンラインで読むのに適しています。@c
+1 つの大きな HTML （非常に大きいものもあります）は、@c
+単一のページで全体のマニュアルが含まれています。@c
+PDF はダウンロードしてオフラインで利用することができます。@c
+これら 3 形式を取得するためには、マニュアル名の詳細のリンクをたどってください。
+
+@divEnd
+
+@divEnd
+
+
+@menu
+* Learning::            学習
+* Glossary::          用語集
+* Essay::        エッセー
+* Notation::          リファレンス
+* Usage::        使用方法
+* Snippets::    コード断片集
+* FAQ::             FAQ
+* Web::             Web
+* Changes::          ニュース
+* Extending::           プログラミング
+* Internals::内部リファレンス
+* All::          すべてのマニュアル
+* FDL::             ライセンス
+@end menu
+
+
+@c TRANSLATORS, most of the text in this file came from
+@c LM 1.1 About the documentation  (before this section was
+@c removed in July 2009).
+
+@node Learning
+@unnumberedsec 学習
+
+@divClass{column-left-top}
+@subheading 学習マニュアル
+
+本書は LilyPond の学習の始め方を説明します。@c
+同時に、キーとなるコンセプトのいくつかをやさしい用語で説明します。@c
+各章を順番に読んでいくことをお勧めします。
+
+各セクションの最後に @strong{参照} という段落があります。@c
+ここには他のセクションへの相互参照があります:
+初読時にはこの相互参照を追いかけていくべきではありません。@c
+このマニュアルをすべて読み終えて、いくつかのセクションを再読するときに、@c
+更なる情報を求めてこの相互参照を追っていくことになるかもしれません。
+@divEnd
+
+@divClass{column-right-bottom}
+
+@docLinks{学習, learning,
+  @rlearningnamed{Top,学習},
+  @manualStableLearningSplit-ja,
+  @manualStableLearningBig-ja,
+  @manualStubStableLearningPdf-ja}
+
+@divEnd
+
+
+@node Glossary
+@unnumberedsec 用語集
+
+@divClass{column-left-top}
+@subheading 用語集
+
+本書は音楽用語について説明します。@c
+さまざまな言語への訳語も含みます。@c
+記譜法や音楽用語に馴染みが無い場合 (特に、英語圏ではない人であれば)、@c
+この用語集を調べると大いに役立つでしょう。
+
+@divEnd
+
+@divClass{column-right-bottom}
+
+@docLinks{音楽用語集, music-glossary,
+  @rglosnamed{Top,音楽用語集},
+  @manualStubStableGlossarySplit-ja,
+  @manualStubStableGlossaryBig-ja,
+  @manualStubStableGlossaryPdf-ja}
+
+@divEnd
+
+
+@node Essay
+@unnumberedsec エッセー
+
+@divClass{column-left-top}
+@subheading エッセー
+
+本書は楽譜の活版技術の歴史について簡単に説明し、@c
+LilyPond の譜刻テクニックの例を挙げます。@c
+さらに、LilyPond と他の楽譜譜刻システムを比較します。
+
+@warning{活版技術の詳細についての例は、@c
+分析しやすくするため、高解像度の PDF 形式としています。}
+
+@divEnd
+
+@divClass{column-right-bottom}
+
+@docLinks{エッセー, essay,
+  @ressaynamed{Top,エッセー},
+  @manualStubStableEssaySplit-ja,
+  @manualStubStableEssayBig-ja,
+  @manualStubStableEssayPdf-ja}
+
+@divEnd
+
+
+@node Notation
+@unnumberedsec 記譜法
+
+@divClass{column-left-top}
+@subheading 記譜法リファレンス
+
+本書は楽譜を生み出す LilyPond コマンドをすべて説明します。
+
+@warning{
+この記譜法リファレンスは、@c
+読み手が学習マニュアルでカバーされている基本的な題材についての知識を有していて、@c
+音楽用語集で提供されている英語の音楽用語に馴染みがあることを前提としています。
+}
+
+@divEnd
+
+@divClass{column-right-bottom}
+
+@docLinks{記譜法, notation,
+  @rnotationnamed{Top,記譜法},
+  @manualStableNotationSplit-ja,
+  @manualStableNotationBig-ja,
+  @manualStubStableNotationPdf-ja}
+
+@divEnd
+
+
+@node Usage
+@unnumberedsec 使用方法
+
+@divClass{column-left-top}
+@subheading 使用法マニュアル
+
+本書はこのプログラムの実行のしかた、@c
+LilyPond 記譜法を他のプログラムと統合する方法について説明します。@c
+さらに、効果的な使い方をするための @qq{最良の習慣} を提案します。@c
+大きなプロジェクトに取り組む前に、本書を読むことをお勧めします。
+@divEnd
+
+@divClass{column-right-bottom}
+
+@docLinks{使用方法, usage,
+  @rprogramnamed{Top,使用方法},
+  @manualStableUsageSplit-ja,
+  @manualStableUsageBig-ja,
+  @manualStubStableUsagePdf-ja}
+
+@divEnd
+
+
+@node Snippets
+@unnumberedsec コード断片集
+
+@divClass{column-left-top}
+@subheading コード断片集
+
+これは @uref{https://lsr@/.di@/.unimi@/.it,LilyPond コード断片リポジトリ}
+(LSR) から選び出した LilyPond のコード断片集です。@c
+LSR にあるすべてのコード断片はパブリック ドメインにあります
+(公開されています)。
+
+このコード断片集に含まれるコード断片は、必ずしも LSR にあるわけではありません。@c
+LSR は LilyPond の安定版で実行することを前提としているため、@c
+開発版の新機能をデモンストレーションするコード断片を別に付け加える必要があります。@c
+新機能を使用するコード断片は、LilyPond ソース ツリーの中の  @file{input/new/} に@c
+保存されています。
+
+さらに、記譜法リファレンスの各サブセクションに対応するコード断片のリストは、@c
+記譜法リファレンスの @strong{参照} 部分からリンクが張られています。
+@divEnd
+
+@divClass{column-right-bottom}
+
+@docLinks{コード断片集, snippets,
+  @rlsrnamed{Top,コード断片集},
+  @manualStubStableSnippetsSplit-ja,
+  @manualStubStableSnippetsBig-ja,
+  @manualStubStableSnippetsPdf-ja}
+
+@divEnd
+
+
+@node FAQ
+@unnumberedsec FAQ
+
+@divClass{column-center-top}
+@subheading 使い始めの質問
+
+@subsubheading グラフィカルなキャンバス、メニュー、それにツールバーはどこに@c
+あるのですか？
+
+LilyPond は、ユーザが音楽をテキストで書くソフトウェアです。@c
+@ref{Text input} を読んでください。
+
+
+@subsubheading ドキュメントがたくさんあります！すべて読む必要があるのですか！？
+
+読む必要があるのは @ref{Learning, 学習マニュアル} です。@c
+他のドキュメントで読む必要があるのは、@c
+作成したい記譜について議論しているセクションだけです。
+
+
+@subsubheading それでもまだ、読むものがたくさんあります！そこまでする価値のあるソフトウェアなのですか？
+
+あなた自身で決めてください。@c
+LilyPond を使う理由については、@ref{Introduction} に書かれています。
+
+@divEnd
+
+@divClass{column-center-bottom}
+@subheading 使い方についての質問
+@c Usage questions
+
+@subsubheading 何かがうまくいっていません！どうやって直せば良いのですか？
+
+修正方法については、@rprogramnamed{Troubleshooting, トラブルシュート} で説明されています。
+
+
+@subsubheading 何故、構文が変更されるのですか？
+
+そのことについては、@rprogramnamed{Why does the syntax change?, 何故構文は変更されるのか？} で説明されています。
+
+@divEnd
+
+
+@node Web
+@unnumberedsec Web
+
+@divClass{column-left-top}
+@subheading Web
+
+本書は LilyPond についての全般的な情報を提供します。@c
+さらに、さまざまなコミュニティ フォーラム、バグ レポート、@c
+それに開発についての情報も含んでいます。
+
+@divEnd
+
+@divClass{column-right-bottom}
+@subheading お読みください
+
+@subsubheading 最新のマニュアル
+
+@divClass{keep-bullets}
+@itemize
+@ref{Top,Web}
+@end itemize
+@divEnd
+
+@subsubheading @versionDevel の Web マニュアル
+
+@docLinksBare{Web, web,
+  @ref{Top,Web},
+  @manualDevelWebSplit-ja,
+  @manualDevelWebBig-ja,
+  @manualStubDevelWebPdf-ja}
+
+@divEnd
+
+
+@node Changes
+@unnumberedsec 変更点
+
+@divClass{column-left-top}
+@subheading 変更点
+
+本書は、LilyPond の前の安定バージョンからの、@c
+重要な変更点と新しい機能についての要約です。
+
+@divEnd
+
+@divClass{column-right-bottom}
+
+@docLinks{変更点, changes,
+  @rchangesnamed{Top,変更点},
+  @manualStubStableChangesSplit-ja,
+  @manualStubStableChangesBig-ja,
+  @manualStubStableChangesPdf-ja}
+
+@divEnd
+
+
+@node Extending
+@unnumberedsec 拡張
+
+@divClass{column-left-top}
+@subheading LilyPond の拡張
+
+本書は、LilyPond を拡張する方法について説明しています。
+
+@divEnd
+
+@divClass{column-right-bottom}
+
+@docLinks{拡張, extending,
+  @rextendnamed{Top,拡張},
+  @manualStubStableExtendingSplit-ja,
+  @manualStubStableExtendingBig-ja,
+  @manualStubStableExtendingPdf-ja}
+
+@divEnd
+
+
+@node Internals
+@unnumberedsec 内部リファレンス
+
+@divClass{column-left-top}
+@subheading 内部リファレンス
+
+本書は、LilyPond のクラス、オブジェクト、それに関数を@c
+それぞれすべて詳細に、かつ具体的にドキュメント化した@c
+幾重にもリンクし合う HTML ページのセットです。@c
+本書は、ソース コードのフォーマット定義から直接生成されます。
+
+内部的に使用されるフォーマット関数のほとんどすべてを、@c
+ユーザが直接使用できます。@c
+例えば、太さ、間隔等を制御する変数の値のほとんどを、@c
+入力ファイルの中で変更することが可能です。@c
+膨大な数のフォーマット オプションがあり、@c
+それらすべてが本書の中で記述されています。@c
+記譜法リファレンスの各セクションには @b{参照} というサブセクションがあり、@c
+そこから本書を参照しています。@c
+HTML ドキュメントでは、それらサブセクションにはクリック可能なリンクがあります。
+
+@divEnd
+
+@divClass{column-right-bottom}
+
+@docLinks{内部リファレンス, internals,
+  @rinternalsnamed{Top,内部リファレンス},
+  @manualStubStableInternalsSplit-ja,
+  @manualStubStableInternalsBig-ja,
+  @manualStubStableInternalsPdf-ja}
+
+@divEnd
+
+
+@node All
+@unnumberedsec すべて
+
+@divClass{column-left-top}
+@subheading ダウンロード可能なバージョン
+
+@ifclear web_version
+ダウンロード可能な .tar.gz ファイルは @uref{https://lilypond.org} でのみ入手可能です。
+@end ifclear
+@ifset web_version
+
+@divClass{keep-bullets}
+@itemize
+
+@item @doctarballStable-ja
+
+@end itemize
+
+@divEnd
+@end ifset
+
+@divEnd
+
+@divClass{column-right-bottom}
+@subheading 以前の安定バージョン
+
+@divClass{keep-bullets}
+@itemize
+
+@item @uref{https://lilypond.org/doc/v2.18/Documentation/web/manuals,
+LilyPond 2.18 ドキュメント}
+
+@item @uref{https://lilypond.org/doc/v2.16/Documentation/web/manuals,
+LilyPond 2.16 ドキュメント}
+
+@item @uref{https://lilypond.org/doc/v2.14/Documentation/web/manuals,
+LilyPond 2.14 ドキュメント}
+
+@item @uref{https://lilypond.org/doc/v2.12/Documentation/,
+LilyPond 2.12 ドキュメント}
+
+@item @uref{https://lilypond.org/doc/v2.10/Documentation/,
+LilyPond 2.10 ドキュメント}
+
+@item @uref{https://lilypond.org/doc/v2.8/Documentation/,
+LilyPond 2.8 ドキュメント}
+
+@item @uref{https://lilypond.org/doc/v2.6/Documentation/,
+LilyPond 2.6 ドキュメント}
+
+@item @uref{https://lilypond.org/doc/v2.4/Documentation/out-www/,
+LilyPond 2.4 ドキュメント}
+
+@item @uref{https://lilypond.org/doc/v2.2/Documentation/out-www/,
+LilyPond 2.2 ドキュメント}
+
+@item @uref{https://lilypond.org/doc/v2.0/Documentation/out-www/,
+LilyPond 2.0 ドキュメント}
+
+@item @uref{https://lilypond.org/doc/v1.8/Documentation/out-www/,
+LilyPond 1.8 ドキュメント}
+
+@item @uref{https://lilypond.org/doc/v1.6/Documentation/out-www/,
+LilyPond 1.6 ドキュメント}
+
+@end itemize
+
+@divEnd
+@divEnd
+
+
+@node FDL
+@unnumberedsec FDL
+
+@divClass{column-center-top}
+@subheading ドキュメント ライセンス
+
+GNU LilyPond のドキュメントは、@c
+GNU Free Documentation License に基づいて公開されています。@c
+このライセンスの紹介と、このライセンスを選択した理由については、@c
+@ref{Freedom} に記述されています。@c
+(訳者) GNU GPL, GNU FDL の日本語訳は
+@uref{https://www.opensource.jp/,Open Source Group Japan}
+を参照してください。
+
+@divEnd
+
+@divClass{column-center-bottom}
+@subheading GNU Free Documentation License 1.3
+
+@include en/fdl.itexi
+
+@divEnd

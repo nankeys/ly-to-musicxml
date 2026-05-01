@@ -1,0 +1,1538 @@
+@c -*- coding: utf-8; mode: texinfo; documentlanguage: fr -*-
+
+@ignore
+   Translation of GIT committish: 18cf09c1f24d22eeb0cdc187dec0af734d60cfc8
+
+   When revising a translation, copy the HEAD committish of the
+   version that you are working on.  For details, see the Contributors'
+   Guide, node Updating translation committishes..
+@end ignore
+
+@c \version "2.17.6"
+
+@c Translators: Jean-Charles Malahieude
+@c Translation checkers:
+
+
+@node Running lilypond
+@chapter Exécution de @command{lilypond}
+
+Ce chapitre passe en revue ce qui se passe lorsque vous lancez LilyPond.
+
+
+@node Normal usage
+@section Utilisation habituelle
+
+La plupart des utilisateurs de LilyPond le font au travers d'une
+interface graphique (@emph{GUI} pour @emph{graphical user interface}).
+Si vous ne l'avez pas encore parcouru, lisez le
+@rlearningnamed{Tutorial, Tutoriel}. Si vous utilisez un éditeur
+alternatif pour rédiger vos fichiers LilyPond, référez-vous à la
+documentation de celui-ci.
+
+
+@node Command-line usage
+@section Utilisation en ligne de commande
+
+Nous nous intéresserons ici aux spécificités de LilyPond employé en
+ligne de commande. La ligne de commande permet de faire appel à
+certaines options particulières. D'autre part, certains utilitaires
+associés, tel que @code{midi2ly}, ne sont disponibles qu'en ligne de
+commande.
+
+Par « ligne de commande », nous entendons l'interface de commande du
+système. Les utilisateurs de Windows seront certainement plus familiers
+des termes « fenêtre DOS » ou « invite de commande ». Quant aux
+utilisateurs de MacOS X, ils connaissent assurément les termes
+« console » et « terminal ».
+
+Notre propos n'est pas ici d'expliquer ce qu'est l'interface de commande
+pour un système informatique ni comment elle fonctionne. Aussi, si vous
+ne savez de quoi il retourne, nous vous renvoyons aux nombreuses
+documentations que vous pourrez trouver sur ce sujet.
+
+Il est préférable que la ligne de commande utilise Unicode dans un
+encodage UTF-8. C'est actuellement le standard pour les système de type
+Unix y xompris macOS et GNU/Linux. En ce qui concerne Windows, on peut
+choisir UTF-8 en sélectionant un code-page approprié : tapez
+
+@example
+chcp 65001
+@end example
+
+@noindent
+sur la ligne de commande avant de lancer @command{lilypond.exe}. Des
+solutions pour activer de façon permanente UTF-8 sur la ligne de
+commande de Windows sont disponibles sur
+internet.@footnote{@uref{https://stackoverflow.com/a/57134096/1276195}
+par exemple donne une réponse argumentée.}
+
+
+@node The PATH environment variable
+@unnumberedsubsec La variable d'environnement @env{PATH}
+
+[Vous pouvez passer cette section si vous utilisez un gestionnaire de
+paquetage tel que MacPorts pour installer LilyPond ; @env{PATH} devrait
+être réglé correctement.]
+
+Dans les différents manuels de LilyPond, les exemples font référence à
+@command{lilypond} comme étant le programme à lancer. Ceci ne fonctionne
+toutefois que dès lors que la variable d'environnement @env{PATH} est
+réglée de telle sorte qu'elle inclut le répertoire contenant les
+binaires de LilyPond.
+
+Partant du principe que vous avez déplié le paquetage de la version
+@version{} de LilyPond dans le répertoire @file{/home/moi}, le
+répertoire des binaires à ajouter à @env{PATH} est
+
+@example
+/home/moi/lilypond-@version{}/bin
+@end example
+
+@noindent
+Sur Windows, il devrait normalement s'agir de
+
+@example
+C:\Utilisateurs\moi\lilypond-@version{}\bin
+@end example
+
+Consultez la documentation pour votre système opératoire ou faites une
+recherche sur internet pour savoir comment modifier @env{PATH}. Dans le
+cas où vous mettez à jour une ancienne version de LilyPond, assurez-vous
+que l'ancien répertoire de binaires est supprimé de @env{PATH}. Vous
+pourrez alors vérifier qu'un appel en ligne de commande à @code{lilypond
+--version} renvoie la bonne version.
+
+Si, pour quelque raison que ce soit, vous ne parvenez pas à régler
+@env{PATH}, ou si vous avez plusieurs versions de LilyPond installées,
+il vous faudra utiliser le chemin complet d'accès au binaire, par
+exemple
+
+@example
+/home/moi/lilypond-@version{}/bin/lilypond musique.ly
+@end example
+
+
+@node Invoking LilyPond
+@unnumberedsubsec Lancement de LilyPond
+
+L'exécutable @command{lilypond} en ligne de commande se lance ainsi :
+
+@example
+lilypond [@var{option}]@dots{} @var{fichier}@dots{}
+@end example
+
+Lorsque le fichier est fourni sans extension, LilyPond présume qu'il
+s'agit de @file{.ly}. Pour interpréter directement l'entrée standard
+(@emph{stdin}), fournissez un tiret (@code{-}) en lieu et place de
+@var{fichier}.
+
+@warning{En ce qui concerne les versions de Windows antérieures à
+Windows 10 1903, LilyPond est incapable de gérer les noms de fichier
+Unicode.}
+
+Le traitement de @file{monfichier.ly} produira @file{monfichier.pdf} par
+défaut. Vous pouvez spécifier plusieurs fichiers à la fois ; ils seront
+traités indépendamment les uns des autres.@footnote{Le statut de Guile
+n'étant pas réinitialisé après traitement d'un fichier @file{.ly},
+veillez à ne pas modifier les réglages par défaut du système à partir
+d'assertions en Scheme.}
+
+Lorsque @file{monfichier.ly} contient plus d'une section @code{\book},
+les fichiers produits -- à partir du deuxième -- seront numérotés. Voir
+@rnotationnamed{Output file names, Nom des fichiers de sortie} à propos
+de la dénomination des fichiers résultants.
+
+
+@subsubheading Utilisation de LilyPond avec les fonctionnalités standard de l'interpréteur
+
+Dans la mesure où LilyPond est une application qui fonctionne en ligne
+de commande, les fonctionnalités de l'interpréteur utilisé pour lancer
+LilyPond peuvent se révéler utiles.
+
+Par exemple,
+
+@example
+lilypond *.ly
+@end example
+
+@noindent
+traite tous les fichiers LilyPond présents dans le répertoire en
+cours.
+
+Rediriger, par exemple dans un fichier, ce qui est émis à l'écran peut
+s'avérer utile.
+
+@example
+lilypond fichier.ly 1> stdout.log
+lilypond fichier.ly 2> stderr.log
+lilypond fichier.ly &> tous.log
+@end example
+
+@noindent
+Les commandes ci-dessus redirigeront respectivement le « verbiage
+normal », les erreurs ou tout, dans un fichier texte.
+
+Consultez avant tout la documentation de votre interpréteur habituel --
+terminal, console, etc. -- pour vérifier qu'il prend en charge les
+options dans cette syntaxe.
+
+Voici comment traiter un jeu de fichiers répartis dans un répertoire
+donné ainsi que tous ses différents sous-répertoires. Les fichiers
+résultants sont regroupés dans le répertoire à partir duquel la commande
+a été exécutée, non selon l'emplacement des fichiers sources.
+
+@example
+find . -name '*.ly' -exec lilypond '@{@}' \;
+@end example
+
+@noindent
+Cette commande, bien qu'effective uniquement dans un terminal, devrait
+être fonctionnelle aussi pour les utilisateurs de MacOS X.
+
+Les utilisateurs de windows utiliseront l'instruction
+
+@example
+forfiles /s /M *.ly /c "cmd /c lilypond @@file"
+@end example
+
+@noindent
+dans l'@code{interpréteur de commandes}, qui se trouve normalement sous
+@code{Démarrer > Accessoires > Interpréteur de commandes} ou, pour la
+version 8, en faisant une recherche sur « interpréteur de commande ».
+
+Par ailleurs, il est possible de spécifier de manière explicite le
+chemin d'accès au dossier comportant des sous-répertoires où se trouvent
+les fichiers sources, à l'aide de l'option @code{/p} :
+
+@example
+forfiles /s /p C:\Documents\MesPartitions /M *.ly /c "cmd /c lilypond @@file"
+@end example
+
+Dans le cas où ce chemin d'accès comporte des espaces, l'intégralité de
+ce chemin devra être borné par des guillemets informatiques :
+
+@example
+forfiles /s /p "C:\Documents\Mes Partitions" /M *.ly /c "cmd /c lilypond @@file"
+@end example
+
+
+@node Basic command-line options for LilyPond
+@unnumberedsubsec Options basiques de @command{lilypond}
+
+@cindex lancement de @command{lilypond}
+@cindex ligne de commande, options pour @command{lilypond}
+@cindex options, ligne de commande
+@cindex switches
+@cindex commutateurs
+
+Gardez bien à l'esprit que lorsque l'argument à une option contient des
+espaces, il doit être encadré par des guillemets. Par exemple, pour
+écrire la sortie de LilyPond dans un répertoire @samp{foo bar}, il
+faudra ajouter @code{-o "foo bar"} (ou @code{--output="foo bar"}) aux
+arguments de @command{lilypond} en ligne de commande. Ces guillemets
+informatiques encadrant des arguments sont reconnus par pratiquement
+tous les interpréteurs en ligne de commande, que ce soit sur Windows ou
+les différents type d'Unix (y compris macOS).
+
+Différentes options sont disponibles en ligne de commande :
+
+@table @asis
+
+@item @code{-d}, @code{--define-default=}@var{var}[@code{=}@var{val}]
+Voir @ref{Advanced command-line options for LilyPond}.
+
+@cindex Scheme, évaluation d'expression
+@cindex expression Scheme, évaluation
+
+@item @code{-e}, @code{--evaluate=}@var{expr}
+Évalue l'expression Scheme @var{expr} avant d'analyser tout fichier
+@file{.ly}. Lorsque vous spécifiez l'option @option{-e} à plusieurs
+reprises, l'évaluation est faite en séquence.
+
+Dans la mesure où l'expression est évaluée par le module
+@code{guile-user}, vous devez, dès lors que @var{expr} utilise des
+définitions telles que @code{(define-public a 42)}, spécifier
+
+@example
+lilypond -e "(define-public a 42)"
+@end example
+
+@noindent
+en ligne de commande, et ajouter la ligne
+
+@example
+#(use-modules (guile-user))
+@end example
+
+@noindent
+en tête de votre fichier @file{.ly}.
+
+@item @code{-E}, @code{--eps}
+Génère des fichiers EPS.
+
+Cette option est équivalente à
+@code{-dseparate-page-formats=eps -dtall-page-formats=eps}.
+
+@cindex sortie, format
+@cindex format de sortie
+@item @code{-f}, @code{--format=}@var{format}
+Détermine le format à produire.  Il peut s'agir de @code{ps},
+@code{pdf}, @code{png} ou @code{svg}.
+
+Exemple : @code{lilypond -fpng monfichier.ly}
+
+SVG utilisant en interne un moteur spécifique, il ne peut donc s'obtenir
+de la même manière que les autres formats ; l'utilisation de
+@w{@code{-fsvg}} ou @code{--svg} revient en fait à utiliser l'option
+@code{-dbackend=svg} -- voir @ref{Advanced command-line options for
+LilyPond}.
+
+@item @code{-h}, @code{--help}
+Affiche un résumé des commandes.
+
+@item @code{-H}, @code{--header=}@var{CHAMP}
+Recopie le champ d'entête dans le fichier @file{RACINE.@var{CHAMP}}.
+
+Par exemple, si un fichier @file{toto.ly} contient
+
+@example
+\header @{ title = "tutu" @}
+\score @{ c1 @}
+@end example
+
+@noindent
+La commande
+
+@example
+lilypond -H title toto.ly
+@end example
+
+@noindent
+produit un fichier texte plat @file{toto.title} contenant la chaîne
+@code{tutu}.
+
+@item @code{-i}, @code{--init=}@var{fichier}
+Définit @var{fichier} (par défaut @file{init.ly}) en tant que fichier
+d'initialisation.
+
+@cindex recherche de fichier
+@cindex chemin de recherche
+@cindex inclusion, chemin
+@item @code{-I}, @code{--include=}@var{répertoire}
+Ajoute @var{répertoire}, de façon relative, au chemin de recherche pour
+les inclusions. Par défaut, seul le répertoire courant est consulté.
+
+Vous pouvez mentionner plusieurs fois l'option @option{-I}, auquel cas
+la recherche commencera dans le premier répertoire inclus et, si le
+fichier en question ne s'y trouve pas, les répertoires suivants seront
+examinés l'un après l'autre.
+
+@warning{L'utilisation du tilde (@code{~}) avec l'option @option{-I}
+peut produire des résultats inattendus selon le @emph{shell}.
+
+Les utilisateurs de Windows doivent ajouter une oblique (@code{/})
+finale au chemin d'accès.}
+
+@cindex chroot jail, fonctionnement
+@item @code{-j}, @code{--jail=}@var{user}@code{,}@var{group}@code{,}@var{jail}@code{,}@var{dir}
+[Cette option n'est disponible que dès lors que l'environnement dispose
+de la fonctionnalité @code{chroot}. Windows, plus particulièrement, ne le
+prend pas en charge.]
+Lance @command{lilypond} dans un environnement protégé.
+
+L'option @option{--jail} peut s'utiliser pour des raisons de sécurité
+lorsque LilyPond est installé sur un serveur web ou traite des fichiers
+externes -- voir @ref{Advanced command-line options for LilyPond}. Dans
+la mesure où LilyPond procure de quoi faire tourner des programmes
+Guile, il est primordial, en pareil cas, que ce soit dans un
+environnement contraint de telle sorte que les fichiers alors compilés
+ne mettent pas en péril l'intégrité du système comme, par exemple, avec
+un
+
+@example
+% trop dangereux à écrire sans faute
+#(s yste m "rm -rf /")
+% malveillant mais pas destructeur
+@{ c4^$(ly:gulp-file "/etc/passwd") @}
+@end example
+
+L'option @option{--jail} permet d'obtenir une telle incarcération. Un
+autre moyen consiste à utiliser LilyPond dans un conteneur Docker.
+
+L'option @option{--jail} va détourner la racine de @command{lilypond}
+sur @var{jail} juste avant d'effectuer la compilation à proprement
+parler. L'utilisateur et le groupe sont modifiés en conséquence, et le
+répertoire en cours devient @var{dir}. Ces réglages assurent -- du moins
+en théorie -- l'impossibilité de s'échapper de la cellule. Notez
+cependant que, pour que l'option @option{--jail} soit fonctionnelle,
+@command{lilypond} doit être lancé en tant qu'administrateur -- ce qui
+se réalise aisément à l'aide de la commande @command{sudo}.
+
+La création d'un environnement sécurisé requiert quelques précautions
+dans la mesure où LilyPond doit disposer de tout ce dont il a besoin
+pour compiler le fichier source @strong{à l'intérieur de la cellule}.
+L'ermitage, avant d'être viable, requiert donc les étapes suivantes :
+
+@table @asis
+
+@item Création d'un système de fichiers indépendant
+L'intérêt d'un système de fichiers dédié à LilyPond réside dans le fait
+qu'on peut le brider à l'aide des options @code{noexec}, @code{nodev} et
+@code{nosuid}. Il sera de fait impossible de lancer des exécutables ou
+d'écrire sur un périphérique à partir de LilyPond. Si vous n'avez pas
+l'intention de créer un tel système sur une partition séparée, vous
+pouvez avoir recours à un pseudo-périphérique (@emph{loop device}) monté
+à partir d'un simple fichier de taille raisonnable. D'autre part, le
+recours à un système de fichiers indépendant permet de limiter l'espace
+dévolu à LilyPond.
+
+@item Création d'un utilisateur spécifique
+L'utilisation de LilyPond au sein de la cellule devrait être réservé à
+un utilisateur aux droits restreints. Il faudra donc créer un
+utilisateur et un groupe spécifiques -- disons
+@w{@code{lily}/@code{lily}} -- qui n'aura accès en écriture qu'à un
+unique répertoire déterminé par la valeur de @var{dir}.
+
+@item Agencement des lieux
+LilyPond a besoin d'un certain nombre de fichiers pour pouvoir tourner
+correctement. Ces fichiers devront donc tous se retrouver dans
+l'environnement protégé, distribués selon la même arborescence que dans
+le système d'origine. Ainsi l'intégralité de l'installation de LilyPond
+(en principe @file{/usr/share/lilypond}) doit y être dupliquée.
+
+En cas de problème, lancer LilyPond en utilisant @command{strace}
+vous permettra de déterminer quels fichiers manquent à l'appel.
+
+@item Lancement de LilyPond
+Dans un environnement protégé monté avec l'option @code{noexec}, il est
+impossible de lancer un quelconque programme extérieur. LilyPond ne
+saurait donc avoir recours à un moteur de traitement qui le mettrait
+dans cette situation. Comme nous l'avons vu plus haut, LilyPond sera
+lancé avec les privilèges de l'administrateur -- privilèges qu'il perd
+aussitôt --, ce qui peut nécessiter le recours à la commande
+@code{sudo}. Il est par ailleurs judicieux de limiter le temps
+processeur alloué à LilyPond -- grâce à @command{ulimit -t} par exemple
+-- ainsi que, si votre système le permet, la taille de la mémoire.
+@end table
+
+@cindex loglevel
+@cindex verbosité, définir le degré de
+@item @code{-l}, @code{--loglevel=}@var{degré}
+Règle le niveau de verbosité des messages console à @var{degré}.  Les
+différentes valeurs sont :
+
+@table @code
+@item NONE
+Aucun verbiage, même pas les messages d'erreur.
+
+@item ERROR
+Uniquement les messages d'erreur ; pas de message d'avertissement
+ni de progression.
+
+@item WARN
+Messages d'avertissement ou d'erreur ; pas d'information de
+progression.
+
+@item BASIC
+Information de progression basique (réussite) et avertissements ou
+erreurs.
+
+@item PROGRESS
+Toutes les informations de progression, avertissements et erreurs.
+
+@item INFO
+Informations de progression, avertissements et erreurs, ainsi que
+d'autres informations relatives à l'exécution. Ceci est la valeur par
+défaut.
+
+@item DEBUG
+Tout ce qui peut être affiché, y compris le verbiage utile au débogage.
+
+@end table
+
+@cindex redirection
+@cindex répertoire de destination
+@cindex fichier de destination
+@item @code{-o}, @code{--output=}@var{FICHIER}
+@itemx @code{-o}, @code{--output=}@var{RÉPERTOIRE}
+Détermine le nom par défaut du fichier résultant à @var{FICHIER} ;
+lorsque l'argument @var{RÉPERTOIRE} correspond à un répertoire déjà
+existant, c'est là que les fichiers résultants seront déposés. Le
+suffixe adéquat sera ajouté (par ex. @file{.pdf} pour du PDF) dans tous
+les cas.
+
+@cindex pspdfopt
+@item @code{-O}, @code{--pspdfopt=}@var{clé}
+Détermine l'optimisation des PS/PDF résultants à @var{clé}. Les valeurs
+possibles sont :
+
+@table @code
+
+@item size
+Génère un document PS, EPS ou PDF le plus léger possible. Il s'agit
+de la valeur par défaut.
+
+L'utilisation de cette valeur revient à lancer les commandes Scheme de
+LilyPond @code{-dmusic-@/font-@/encodings=@/"#f"} et
+@code{-dgs-@/never-@/embed-@/fonts=@/"#f"}.
+
+@item TeX
+Produit des fichiers optimisés pour leur inclusion dans des documents
+pdf@TeX{}, Lua@TeX{} ou Xe@TeX{}.
+
+L'utilisation de cette valeur revient à lancer les commandes Scheme de
+LilyPond @code{-dmusic-@/font-@/encodings=@/"#t"} et
+@code{-dgs-@/never-@/embed-@/fonts=@/"#f"}.
+
+@item TeX-GS
+L'inclusion de plusieurs PDF générés par LilyPond dans un document
+@TeX{} nécessite l'utilisation de cette option et un retraitement du PDF
+généré par @TeX{} à l'aide de Ghostscript.
+
+L'utilisation de cette valeur revient à lancer les commandes Scheme de
+LilyPond @code{-dmusic-@/font-@/encodings=@/"#t"} et
+@code{-dgs-@/never-@/embed-@/fonts=@/"#t"}.
+
+@end table
+
+@cindex PostScript, output
+@cindex PS (PostScript), output
+@item @code{--ps}
+Génère du PostScript. Cette option est équivalente à @code{-fps}.
+
+@cindex Portable Network Graphics (PNG), output
+@cindex PNG (Portable Network Graphics), output
+@item @code{--png}
+Génère une image par page, au format PNG. Cette option est équivalente à
+@w{@code{-fpng}}.
+
+La résolution de l'image peut se régler à @var{N}@tie{}DPI en ajoutant
+@example
+-dresolution=@var{N}
+@end example
+
+@cindex Portable Document Format (PDF), output
+@cindex PDF (Portable Document Format), output
+@item @code{--pdf}
+Génère du PDF. Ceci est la valeur par défaut, et est équivalant à
+@w{@code{-fpdf}}.
+
+@item @code{-s}, @code{--silent}
+N'affiche rien de plus que les messages d'erreur. Ceci est équivalent à
+@code{-lERROR}.
+
+@cindex SVG (Scalable Vector Graphics), sortie
+@cindex sortie, SVG (Scalable Vector Graphics)
+@cindex HTML, partitions SVG empaquetables
+@cindex pages internet, partitions SVG empaquetables
+
+@item @code{--svg}
+Génère un fichier SVG par page. Cette option est équivalente à
+@w{@code{-fsvg}}.
+
+@item @code{-v}, @code{--version}
+Affiche le numéro de version.
+
+@item @code{-V}, @code{--verbose}
+Active le mode verbeux : affichage de l'intégralité du chemin d'accès de
+chaque fichier, et information des temps de traitement. Ceci est
+équivalent à @code{-lDEBUG}.
+
+@item @code{-w}, @code{--warranty}
+Affiche les informations de garantie applicables à GNU LilyPond -- il
+est livré @strong{SANS GARANTIE} !
+
+@end table
+
+
+@node Advanced command-line options for LilyPond
+@unnumberedsubsec Options avancées de @command{lilypond}
+
+L'option @option{-d} est l'interface de la ligne de commande à la
+fonction Scheme de LilyPond @code{ly:set-option}. Par voie de
+conséquence, toutes les options listées ci-après peuvent aussi se
+définir au sein même des fichiers @file{.ly}.
+
+@table @asis
+
+@item @code{-d}, @code{--define-default=}@var{nom-option}[@code{=}@var{valeur}]
+@itemx @code{-d}, @code{--define-default=no-}@var{nom-option}
+Affecte la valeur Scheme @var{valeur} à l'option interne
+@var{nom-option} du programme. Par exemple, l'option en ligne de
+commande
+
+@example
+-dbackend=svg
+@end example
+
+@noindent
+équivaut à
+
+@example
+#(ly:set-option 'backend 'svg)
+@end example
+
+@noindent
+dans un fichier source LilyPond.
+
+En l'absence de @var{valeur}, le programme utilisera @var{#t}. Préfixer
+@var{nom-option} d'un @code{no-} permet de désactiver une option,
+autrement dit affecte @code{#f} à @var{valeur}. Ainsi,
+
+@cindex point and click, ligne de commande
+@cindex pointer-cliquer, ligne de commande
+
+@example
+-dno-point-and-click
+@end example
+
+@noindent
+revient au même que
+@example
+-dpoint-and-click="#f"
+@end example
+@end table
+
+[Note : le caractère @samp{#} introduit un commentaire dans de nombreux
+@emph{shells} ; c'est pourquoi nous recommandons de toujours borner par
+des @code{'} les expressions qui le contiennent.]
+
+Voici les différentes options disponibles, ainsi que leur valeur par
+défaut. Au sein de code Scheme, la valeur des options est interprétée
+par la fonction @code{ly:get-option}.
+
+@table @asis
+
+@item @code{anti-alias-factor} @var{num}
+Adopte une résolution supérieure, selon le facteur @var{num} donné
+(entier positif inférieur ou égal à 8), puis réduit au niveau du
+résultat afin d'éviter les « distorsions » des images @code{PNG}. La
+valeur par défaut est de @code{1}.
+
+@item @code{aux-files} @var{bool}
+Si @var{bool} est fixé à @code{#t}, génère les fichiers @code{.tex},
+@code{.texi} et @code{.count} pour le moteur de rendu @code{eps}. Cette
+option est principalement destinée à @command{lilypond-book}. La valeur
+par défaut est @code{#t}.
+
+@item @code{backend} @var{symbole}
+Détermine @var{symbole} comme moteur de traitement de LilyPond. Les
+valeurs possibles sont :
+
+@table @code
+
+@item ps
+Il s'agit du réglage par défaut. Les fichiers PostScript incluent les
+fontes @code{TTF}, @code{Type1} et @code{OTF}, et ce en intégralité. Si
+vous utilisez des jeux de caractères orientaux, le fichier aura vite
+fait d'atteindre une taille conséquente.
+
+Pour l'obtention d'un fichier PDF, c'est aussi le moteur @code{ps} qui
+est utilisé. Les données PS sont ensuite retraitées par @code{ps2pdf},
+script de Ghostscript, qui par défaut extrait des sous-ensembles des
+fontes.
+
+@item cairo
+Crée des sorties graphiques à l'aide de la bibliothèque Cairo. Ce moteur
+peut générer du PS, du EPS, du PDF, du PNG et du SVG.
+
+@item svg
+Génère du @emph{Scalable Vector Graphics}. Cette option permet de créer
+un fichier SVG par page. Les glyphes musicaux sont codés en tant que
+graphiques vectoriels mais les fontes textuelles @strong{ne sont pas}
+incorporées aux fichiers @file{SVG} résultants. Quel que soit le
+programme utilisé pour visionner ces fichiers, il devra avoir accès aux
+fontes en question pour pouvoir afficher correctement les textes et
+paroles. Il est préférable de ne pas recourir aux « alias de police » ni
+aux listes de fontes si la visionneuse de fichier SVG ne peut le traiter
+correctement.
+
+@end table
+
+@item @code{clip-systems} @var{bool}
+Si @var{bool} est déterminé à @code{#t}, extrait des fragments musicaux
+d'une partition. Ceci requiert que la fonction @code{clip-regions} a été
+définie au sein du bloc @code{\layout} -- voir
+@rnotationnamed{Extracting fragments of music, Extraction de fragments
+musicaux}. Bien entendu, aucun fragment ne sera extrait si l'on utilise
+l'option @option{-dno-print-pages}. La valeur par défaut est @code{#f}.
+
+@item @code{compile-scheme-code} @var{bool}
+Utilise le compilateur de Guile pour traiter du code Scheme, au lieu de
+l'évaluateur. Pour de plus amples informations, voir
+@rextendnamed{Debugging Scheme code, Débogage de code Scheme}.
+
+@item @code{crop} @var{bool}
+Si @var{bool} est déterminé à @code{#t}, un second fichier PDF sera créé
+(avec l'extension @file{.cropped.pdf}) ainsi que son rendu sous forme
+d'image (avec l'extension @file{.cropped.png}). Ce fichier résultant
+(musique et entêtes) sera à la taille de l'image générée, sans marge.
+Dans le cas où est utilisée l'option @option{--svg} sera alors produit
+un fichier SVG (avec l'extension @file{.cropped.svg}). Dès lors que sont
+utilisées les options @option{--eps} ou @option{--ps}, un fichier réduit
+PS (avec l'extension @file{.cropped.eps}) sera généré en lieu et place
+d'un PDF réduit. La valeur par défaut est @code{#f}.
+
+Pour les fonctionnalités de LilyPond, les dimensions de l'image réduite
+sont toujours arrondies à un nombre entier de @emph{big points}
+(PostScript), ce qui peut résulter en un peu d'espace blanc sur la marge
+droite. Il est possible de l'éviter en réglant la variable de papier à
+une valeur entière de @emph{big points} comme @code{450\bp}.
+
+Notez bien que cette option n'est, à ce jour, pas très adaptée dans le
+cadre d'une sortie comportant plusieurs systèmes puisque l'espace les
+séparant est supprimé.
+
+@item @code{datadir} @var{chaîne}
+Détermine le préfixe des fichiers de données (lecture seule).
+
+@item @code{debug-eval} @var{bool}
+Si @var{bool} est déterminé à @code{#t}, LilyPond utilisera l'évaluateur
+de déboguage Scheme qui affichera les traçage et les numéros de ligne en
+cas d'erreur. La valeur par défaut est @code{#f}, mais @code{#t} lorsque
+@code{--verbose} est utilisé.
+
+@item @code{debug-skylines} @var{bool}
+Si @var{bool} est déterminé à @code{#t}, permet le débogage des lignes
+d'horizon. La valeur par défaut est @code{#f}.
+
+@item @code{delete-intermediate-files} @var{bool}
+Si @var{bool} est déterminé à @code{#t}, supprime les fichiers
+@file{.ps} inutiles créés lors de la compilation. La valeur par défaut
+est @code{#t}.
+
+@item @code{embed-source-code} @var{bool}
+Si @var{bool} est déterminé à @code{#t}, intègre les fichiers source
+LilyPond au document PDF généré. La valeur par défaut est @code{#f}.
+
+@item @code{eps-box-padding} @var{num}
+Décale le bord gauche du typon EPS d'une valeur @var{num} donnée en
+millimètres. La valeur par défaut est @code{#f}, autrement dit sans
+décalage.
+
+@item @code{first} @var{chaîne}
+Génère la partition sur une durée donnée par @var{chaîne} à compter du
+début. Ceci est équivalent à une clause
+
+@example
+showFirstLength = @var{chaîne}
+@end example
+
+@noindent
+mentionnée au début du fichier source. Dès lors que @option{-dfirst} et
+@code{showFirstLength} sont tous deux présents, l'option de la ligne de
+commande aura priorité. Voir @rnotationnamed{Extracting fragments of
+music, Extraction de fragments musicaux}. La valeur par défaut
+est @code{#f}.
+
+@item @code{font-export-dir} @var{chaîne}
+Détermine à @var{chaîne} le répertoire dans lequel exporter les fontes
+en tant que fichiers PostScript. Ceci est tout à fait approprié lorsque
+l'on crée un fichier PDF sans y incorporer les fontes dans un premier
+temps, et laisse Ghostscript le faire par la suite comme indiqué
+ci-dessous.
+
+@example
+$ lilypond -dfont-export-dir=fontdir\
+           -dgs-never-embed-fonts foo.ly
+$ gs -q -dBATCH -dNOPAUSE -sDEVICE=pdfwrite \
+     -sOutputFile=foo.embedded.pdf foo.pdf fontdir/*.font.ps
+@end example
+
+@noindent
+Note : Contrairement à @code{font-ps-resdir}, cette méthode ne permet
+pas d'incorporer de fonte CID avec une version de Ghostscript égale ou
+supérieure à 9.26.
+
+@noindent
+Note : De la même manière que @code{font-ps-resdir}, cette option ignore
+les fontes TrueType dans la mesure où les incorporer @i{a posteriori}
+peut causer une altération des caractères. L'utilisation de
+@code{gs-never-embed-fonts}, dans la mesure où elle incorpore les fontes
+TrueType en dépit de ce qu'elle prétend d'après son nom, permet d'éviter
+les caractères altérés.
+
+@noindent
+La valeur par défaut est @code{#f}, autrement dit absence de répertoire
+pour l'export.
+
+@item @code{font-ps-resdir} @var{chaîne}
+Détermine à @var{chaîne} le répertoire dans lequel sera construit le
+sous-ensemble des ressources PostScript utilisé pour l'incorporation
+ultérieure des fontes. Ceci est tout à fait approprié lorsque l'on crée
+un fichier PDF sans y incorporer les fontes dans un premier temps, et
+laisse Ghostscript le faire par la suite comme indiqué ci-dessous.
+
+@example
+$ lilypond -dfont-ps-resdir=resdir
+           -dgs-never-embed-fonts foo.ly
+$ gs -q -dBATCH -dNOPAUSE -sDEVICE=pdfwrite \
+     -I resdir -I resdir/Font \
+     -sOutputFile=foo.embedded.pdf foo.pdf
+@end example
+
+@noindent
+Note : Il vaut mieux éviter que le nom du répertoire contienne le mot
+@file{Resource}, qui a une signification particulière lorsqu'utilisé
+avec une option @code{-I} de Ghostscript.
+
+@noindent
+Note : Contrairement à @code{font-export-dir}, cette méthode permet
+l'incorporation de fontes CID avec une version de Ghostscript égale ou
+supérieure à 9.26.
+
+@noindent
+Note : De la même manière que @code{font-export-dir}, cette option
+ignore les fontes TrueType dans la mesure où les incorporer @i{a
+posteriori} peut causer une altération des caractères. L'utilisation de
+@code{gs-never-embed-fonts}, dans la mesure où elle incorpore les fontes
+TrueType en dépit de ce qu'elle prétend d'après son nom, permet d'éviter
+les caractères altérés.
+
+@noindent
+La valeur par défaut est @code{#f}, autrement dit absence de
+construction d'un répertoire de sous-ensemble.
+
+@item @code{gs-load-fonts} @var{bool}
+Si @var{bool} est déterminé à @code{#t}, charge les fontes grâce à
+Ghostscript. Cette option a pour conséquence que les fichiers générés
+par LilyPond ne contiendront que les références des fontes, qui seront
+ensuite résolues en fontes réelles lors de l'étape de retraitement par
+Ghostscript. La valeur par défaut est @code{#f}.
+
+@item @code{gs-load-lily-fonts} @var{bool}
+Si @var{bool} est déterminé à @code{#t}, limite les fontes chargées par
+Ghostscript aux seules fontes LilyPond. Cette option a pour conséquence
+que les fichiers générés par LilyPond ne contiendront les références que
+des fontes musicales de LilyPond, qui seront ensuite résolues en fontes
+réelles lors de l'étape de retraitement par Ghostscript. Les autres
+fontes sont générées normalement. La valeur par défaut est @code{#f}.
+
+@item @code{gs-never-embed-fonts} @var{bool}
+Si @var{bool} est déterminé à @code{#t}, intime à Ghostscript
+d'embarquer les fontes uniquement au format TrueType, sans exception. La
+valeur par défaut est @code{#f}.
+
+@item @code{help} @var{bool}
+Si @var{bool} est déterminé à @code{#t}, affiche un écran d'aide. La
+valeur par défaut est @code{#f}.
+
+@item @code{include-book-title-preview} @var{bool}
+Si @var{bool} est déterminé à @code{#t}, inclut les titres de l'ouvrage
+dans les images de prévisualisation. La valeur par défaut est @code{#t}.
+
+@item @code{include-eps-fonts} @var{bool}
+Si @var{bool} est déterminé à @code{#t}, inclut les fontes dans chaque
+fichier EPS contenant un système. La valeur par défaut est @code{#t}.
+
+@item @code{include-settings} @var{chaîne}
+Inclut le fichier @var{chaîne} contenant les réglages globaux, qui sera
+inclus avant traitement de la partition. Cette option peut se multiplier
+afin d'incorporer plusieurs réglages. La valeur par défaut n'est pas
+déterminée, autrement dit absence de fichier de réglages.
+
+@item @code{job-count} @var{num}
+Traite plusieurs fichiers en parallèle, selon le nombre @var{num} (un
+entier positif) de @emph{jobs}. La valeur par défaut est @code{#f},
+autrement dit sans traitement parallèle.
+
+@item @code{last} @var{chaîne}
+Génère la partition sur une durée donnée par @var{chaîne} à compter de
+la fin. Ceci est équivalent à une clause
+
+@example
+showLastLength = @var{chaîne}
+@end example
+
+@noindent
+mentionnée au début du fichier source. Dès lors que @option{-dlast} et
+@code{showLastLength} sont tous deux présents, l'option de la ligne de
+commande aura priorité. Voir @rnotationnamed{Extracting fragments of
+music, Extraction de fragments musicaux}. La valeur par défaut
+est @code{#f}.
+
+@item @code{log-file} @var{chaîne}
+Redirige la sortie dans le fichier journal @file{@var{chaîne}.log}. La
+valeur par défaut est @code{#f}, autrement dit absence de fichier de
+journalisation.
+
+@item @code{max-markup-depth} @var{num}
+Détermine à @var{num} (un entier positif) la profondeur maximale de
+l'arborescence de @emph{markups}. Si un @emph{markup} était plus
+profond, part du principe qu'on n'aboutira pas, émet un avertissement et
+renvoie alors un @emph{markup} vide. La valeur par défaut
+est @code{1024}.
+
+@item @code{midi-extension} @var{chaîne}
+Détermine à @var{chaîne} l'extension par défaut des fichiers MIDI.La
+valeur par défaut est @code{"midi"}.
+
+@item @code{music-strings-to-paths} @var{bool}
+Si @var{bool} est déterminé à @code{#t}, convertit les chaînes
+textuelles en chemins lorsque les glyphes font partie d'une fonte
+musicale. La valeur par défaut est @code{#f}.
+
+@cindex @code{paper-size}, ligne de commande
+@item @code{paper-size} @var{chaîne}
+Détermine la taille par défaut du papier à @var{chaîne}. La valeur par
+défaut est @code{"a4"}.
+@c Match " in context-sensitive editors
+
+@item @code{pixmap-format} @var{chaîne}
+Détermine le format de sortie en images pixélisées pour Ghostscript à
+@var{chaîne}. La valeur par défaut est @code{"png16m"}.
+
+@item @code{png-width} @var{largeur}
+@itemx @code{png-height} @var{hauteur}
+Dans le cas d'une sortie PNG, détermine la largeur et la hauteur, en
+pixels, des images créées. En l'absence de l'une de ces options, l'autre
+dimension sera calculée relativement à la boîte EPS englobante tout en
+maintenant le ratio d'aspect. Les valeurs @var{largeur} et @var{hauteur}
+sont toutes deux des entiers positifs.
+
+En complément de l'option @option{--png}, les options @option{--eps},
+@option{-dcrop} ou @option{-dpreview} devraient permettre une mise à
+l'échelle correcte sans détourage.
+
+L'option @option{-dresolution} est ignorée.
+
+Notez la présence d'un bogue dans les versions de Ghostscript
+inférieures à 9.52 avec ces deux options : l'image PNG produite sera
+vide dès lors que la hauteur est supérieure à la largeur.
+
+La valeur par défaut est @code{0} autant pour @var{largeur} que pour
+@var{hauteur}, ce qui signifie que ces deux dimensions seront
+déterminées par la boîte EPS englobante.
+
+@item @code{point-and-click} @var{valeur}
+Si @var{valeur} est déterminé à @code{#t}, ajoute les liens « point &
+click » à la sortie PDF ou SVG -- voir @ref{Point and click}. La valeur
+par défaut est @code{#t}.
+
+@cindex format de sortie, définition
+@cindex @code{preview}, ligne de commande
+@item @code{preview} @var{bool}
+Si @var{bool} est déterminé à @code{#t}, génère une prévisualisation en
+plus de la sortie normale. La valeur par défaut est @code{#f}.
+
+Cette option, disponible dans tous les formats de sortie imprimables --
+rendus @code{pdf}, @code{png}, @code{ps}, @code{eps} et @code{svg} --
+génère un fichier de la forme
+@file{@var{fichierSource}@code{.preview.}@var{rendu}} comprenant le
+titrage et le premier système. S'il existe plusieurs sections
+@code{\book} ou @code{\bookpart}, ce fichier contiendra les titrage et
+premier système de chacun des @code{\book}, @code{\bookpart} et
+@code{\score}, dès lors que la variable @code{print-all-headers} du bloc
+@code{\paper} est activée.
+
+Pour l'éviter, utilisez conjointement l'une des options
+@option{-dprint-pages} ou @option{-dno-print-pages} selon vos besoins.
+
+@item @code{print-pages} @var{bool}
+Si @var{bool} est déterminé à @code{#t}, génère l'intégralité des pages
+de la partition. La valeur par défaut est @code{#t}.
+
+L'option @option{-dno-print-pages} est particulièrement utile
+lorsqu'utilisée conjointement avec les options @option{-dpreview} et
+@option{-dcrop}.
+
+@item @code{protected-scheme-parsing} @var{bool}
+Si @var{bool} est déterminé à @code{#t}, continue en dépit des erreurs
+que l'analyseur syntaxique détecterait dans du code Scheme inclus.
+Lorsque basculé sur @code{#f}, stoppe le traitement s'il y a erreur et
+affiche une trace de la pile. La valeur par défaut est @code{#t}.
+
+@item @code{read-file-list} @var{bool}
+Si @var{bool} est déterminé à @code{#t}, considère tous les fichiers en
+argument sur la ligne de commande comme étant des listes de fichiers
+sources LilyPond à traiter, ces listes mentionnant un fichier par ligne.
+La valeur par défaut est @code{#f}.
+
+@item @code{relative-includes} @var{bool}
+Face à une instruction @code{\include}, recherche les fichiers à inclure
+relativement à l'endroit où se trouve le fichier en cours de traitement
+si @var{bool} est déterminé à @code{#t}, plutôt que par rapport au
+fichier maître. La valeur par défaut est @code{#t}.
+
+@item @code{resolution} @var{num}
+Détermine la résolution des pixmaps @code{PNG} à générer à @var{num} (un
+entier positif) @code{dpi}. La valeur par défaut est @code{101}.
+
+@item @code{separate-log-files} @var{bool}
+Pour les fichiers @file{fichier1.ly}, @file{fichier2.ly}, etc.
+enregistre le déroulement dans les journaux @file{fichier1.log},
+@file{fichier2.log}@dots{} si @var{bool} est déterminé à @code{#t}. La
+valeur par défaut est @code{#f}.
+
+@item @code{separate-page-formats} @var{chaîne}
+Liste des formats (@code{svg}, @code{pdf}, @code{png}, ou @code{eps}),
+séparés par des virgules, à utiliser pour les images séparées des pages
+pour @code{lilypond-book} -- voir @ref{Other programs}. La valeur par
+défaut est @code{#f}.
+
+@item @code{show-available-fonts} @var{bool}
+Si @var{bool} est déterminé à @code{#t}, liste le nom des fontes
+disponibles tel que le ressort la bibliothèque fontconfig. LilyPond
+ajoute à cette liste les réglages et la configuration de fontconfig. La
+valeur par défaut est @code{#t}.
+
+@item @code{staff-size} @var{num}
+Détermine la taille globale de portée à @var{num} (un nombre positif)
+points. Ceci est équivalent à une clause
+
+@example
+#(set-global-staff-size @var{num})
+@end example
+
+@noindent
+mentionnée au début du fichier source. La valeur par défaut est
+20@dmn{pt}.
+
+@item @code{strip-output-dir} @var{bool}
+Si @var{bool} est déterminé à @code{#t}, supprime, lors du nommage des
+fichiers résultants, la partie correspondant au répertoire des fichiers
+sources. La valeur par défaut est @code{#t}.
+
+@item @code{strokeadjust} @var{bool}
+Si @var{bool} est déterminé à @code{#t}, force l'ajustement des traits
+PostScript. Cette option trouve toute son utilité pour générer du PDF à
+partir de PostScript -- l'ajustement des traits est en principe
+automatiquement activé pour les périphériques bitmap à faible
+résolution. Sans cette option, les visionneurs de PDF ont tendance à ne
+pas rendre de manière constante l'épaisseur des hampes dans les
+résolutions habituelles des écrans. Bien que n'affectant pas notoirement
+la qualité d'impression, cette option accroît notablement la taille des
+fichiers PDF. La valeur par défaut est @code{#f}.
+
+@item @code{tall-page-formats} @var{chaîne}
+Liste des formats (@code{svg}, @code{pdf}, @code{png}, ou @code{eps}),
+séparés par des virgules, à utiliser pour l'image pleine page pour
+@code{lilypond-book} -- voir @ref{Other programs}. La valeur par défaut
+est @code{#f}.
+
+@item @code{use-paper-size-for-page} @var{bool}
+Si @var{bool} est déterminé à @code{#t}, chaque page est dimensionnée au
+format du papier, tout en éliminant les parties qui pourraient déborder.
+Lorsque cette option est déterminée à @code{#f}, la feuille sera
+redimensionnée pour contenir autant que nécessaire. La valeur par défaut
+est @code{#t}.
+
+@item @code{verbose} @var{bool}
+Passe en mode verbeux, ce qui correspond à un niveau de journalisation
+@code{DEBUG} (lecture seule).
+
+@item @code{warning-as-error} @var{bool}
+Si @var{bool} est déterminé à @code{#t}, considère tous les messages
+d'avertissement et « erreur de programmation » comme étant de véritables
+erreurs. La valeur par défaut est @code{#f}.
+
+@end table
+
+
+@node Environment variables
+@unnumberedsubsec Variables d'environnement
+
+@cindex LANG
+@cindex LILYPOND_DATADIR
+@cindex LILYPOND_LOCALEDIR
+@cindex LILYPOND_RELOCDIR
+@cindex LILYPOND_LOGLEVEL
+
+@command{lilypond} reconnaît les variables d'environnement
+suivantes :
+
+@table @code
+@item LILYPOND_DATADIR
+Cette variable spécifie le répertoire où sont recherchés par défaut les
+différentes versions des messages ainsi qu'un certain nombre de fichiers
+nécessaires au traitement, dérogeant ainsi aux endroits définis soit
+lors de la compilation, soit calculés dynamiquement lors de l'exécution
+-- voir @ref{Relocation}. Il devrait contenir les sous-répertoires
+@file{ly/}, @file{ps/}, @file{tex/}, etc.
+
+@item LILYPOND_LOCALEDIR
+Cette variable spécifie le répertoire où sont situés les fichiers
+linguistiques, dérogeant ainsi aux valeurs dérivées de
+@code{LILYPOND_DATADIR}.
+
+@item LILYPOND_RELOCDIR
+Cette variable spécifie le répertoire dans lequel résident les fichiers
+de réadressage. Ceci constitue une dérogation aux endroits définis à
+partir d'où réside le binaire @command{lilypond}.
+
+@item LANG
+Cette variable détermine la langue dans laquelle sont émises les données
+sur @code{stdout} (sortie standard) et @code{stderr} (sortie des
+erreurs), pour afficher la progression, les avertissements ou messages
+de débogage. Par exemple : @code{LANG=de}.
+
+@item LILYPOND_LOGLEVEL
+Cette variable détermine le niveau par défaut de verbosité. En l'absence
+de niveau explicite -- autrement dit la ligne de commande ne comporte
+pas de @option{--loglevel} -- c'est cette valeur qui sera utilisée.
+
+@item LILYPOND_GC_YIELD
+Cette variable permet d'ajuster l'empreinte mémoire et le rendement de
+la machine. Il s'agit en fait d'un pourcentage d'allocation de mémoire :
+lorsqu'il est élevé, le programme favorisera l'utilisation de la
+mémoire ; une faible valeur consommera plus de temps processeur. Par
+défaut, cette valeur est fixée à @code{70}.
+
+@item TMPDIR
+Cette variable permet de déterminer, sur GNU/Linux et Mac, le répertoire
+temporaire. La valeur par défaut est @file{/tmp}. Il s'agit du
+répertoire dans lequel seront enregistrés, durant la compilation, les
+fichiers intermédiaires tels que les fichiers PostScript. Apporter une
+dérogation à cette variable peut s'avérer utile lorsque, par exemple,
+l'utilisateur qui lance @command{lilypond} n'a pas les droits en
+écriture sur le répertoire temporaire par défaut. Exemple :
+@code{TMPDIR=~/toto}.
+
+@end table
+
+
+@node Relocation
+@unnumberedsubsec Réadressage
+
+@cindex relocation
+@cindex réadressage
+
+La plupart des programmes dans le monde Unix utilise des répertoires par
+défaut pour leurs données, déterminés au moment de leur configuration
+avant même leur compilation. LilyPond n'y fait pas exception ; par
+exemple, une installation typique met le fichier binaire @file{lilypond}
+dans le répertoire @file{/usr/@/bin} et tous les fichiers propres à
+LilyPond dans des sous-répertoires de
+@file{/usr/@/share/@/lilypond/@/@version{}/} si tant est que la version
+en cours soit @version{}.
+
+Alors que cette approche est tout à fait fonctionnelle dans le cadre
+d'une compilation manuelle et des plateformes disposant de gestionnaires
+de paquetages standardisés, elle peut entraîner des problèmes lorsque de
+tels gestionnaires ne sont pas courants ou pas utilisés par défaut -- on
+peut citer à titre d'exemple Windows et macOS pour lesquels les
+utilisateurs s'attendent à ce que l'installation des programmes se fasse
+n'importe où.
+
+La solution habituelle en pareil cas est la prise en charge du
+réadressage : au lieu d'utiliser des chemins codés en dur pour les
+fichiers de données, la localisation des fichiers de support nécessaires
+est calculée lors de l'exécution @emph{relativement au binaire lancé}.
+
+
+@node Relocation files
+@unnumberedsubsubsec Fichiers de réadressage
+
+Un deuxième mécanisme intervient en fait pour la configuration de
+l'exécution : LilyPond dépend fortement de programme ou bibliothèques
+externes, en particulier les bibliothèques @command{FontConfig} et
+@command{Guile} pour trouver respectivement les fontes du système et les
+traitement des fichiers Scheme, ainsi que le programme @command{gs} pour
+convertir les données PostScript en fichiers PDF. Tout ceci doit aussi
+être configuré pour retrouver ses propres fichiers de données. Pour y
+parvenir, le programme @command{lilypond} analyse tous les fichiers d'un
+répertoire dénommé @file{relocate}, s'il existe -- voir ci-après les
+endroits où ce répertoire est recherché -- afin de manipuler les
+variables d'environnement ce qui, en retour, contrôlera ces programmes
+et bibliothèques externes. Les format de ces fichiers de réadressage est
+simple, chaque ligne répondant à la syntaxe
+
+@example
+@var{commande} @var{clé}=@var{valeur}
+@end example
+
+@noindent
+et les lignes vides y seront ignorées
+
+La directive @var{commande} est l'une des suivantes :
+
+@table @code
+
+@item set
+Définit de manière inconditionnelle la variable d'environnement
+@var{clé} à @var{valeur}. Ceci écrase la valeur précédemment définie.
+
+@item set?
+Définit la variable d'environnement @var{clé} à @var{valeur} uniquement
+si @var{clé} n'est pas déjà définie. En d'autres termes, une valeur
+précédemment définie ne sera pas écrasée.
+
+@item setdir
+Lorsque @var{valeur} est un répertoire, définit inconditionnellement
+@var{clé} à @var{valeur}. Un message d'avertissement est émis dans le
+cas contraire.
+
+@item setfile
+Lorsque @var{valeur} est un fichier, définit inconditionnellement
+@var{clé} à @var{valeur}. Un message d'avertissement est émis dans le
+cas contraire.
+
+@item prependdir
+Ajoute le répertoire @var{valeur} à la liste des répertoires de la
+variable d'environnement @var{clé}. Dans le cas où @var{clé} n'existe
+pas, celle-ci sera créée.
+
+@end table
+
+Les variables d'environnement, identifiables au signe dollar qui les
+préfixe, sont permises en tant que @var{valeur} et seront expansées
+avant l'exécution de la directive.
+
+Voici deux exemples d'entrée d'un fichier de réadresssage.
+
+@example
+set? FONTCONFIG_FILE=$INSTALLER_PREFIX/etc/fonts/fonts.conf
+prependdir GUILE_LOAD_PATH=$INSTALLER_PREFIX/share/guile/1.8
+@end example
+
+Dans la mesure où l'ordre d'analyse des fichiers du répertoire
+@file{relocate} est arbitraire, mieux vaut s'abstenir de définir une
+même variable d'environnement à de multiples lignes des fichiers de
+réadressage.
+
+
+@node Relocation algorithm
+@unnumberedsubsubsec Algorithme de réadressage
+
+Afin de trouver ses fichiers de données, LilyPond utilise l'algorithme
+suivant.
+
+@enumerate
+
+@item
+Localisation du répertoire où se trouve le binaire @command{lilypond}
+actuellement exécuté et nommage en @code{bindir}. Détermination, en
+interne, de la variable d'environnement @code{INSTALLER_PREFIX} à
+@file{@var{bindir}/..} -- autrement dit le répertoire parent de
+@code{bindir}.
+
+@item
+Contrôle de la variable d'environnement @code{LILYPOND_DATADIR}. Si elle
+est définie, utilisation de sa valeur pour le répertoire de données --
+@code{datadir} -- de LilyPond. Dans le cas contraire, utilisation soit
+de @file{$INSTALLER_PREFIX/@/share/@/lilypond/@/@var{version}} (avec
+@var{version} étant la version courante de LilyPond), soit
+@file{$INSTALLER_PREFIX/@/share/@/lilypond/@/current}.
+
+@item
+Contrôle de la variable d'environnement @code{LILYPOND_LOCALEDIR}. Si
+elle est définie, utilisation de sa valeur pour le répertoire de données
+linguistiques -- @code{localedir} -- de LilyPond. Dans le cas contraire,
+ce sera @file{$INSTALLER_PREFIX/@/share/@/locale}.
+
+@item
+Contrôle de la variable d'environnement @code{LILYPOND_RELOCDIR}. Si
+elle existe, utilisation de sa valeur pour le répertoire des fichiers de
+réadressage -- @code{relocdir} -- de LilyPond. Dans le cas contraire, ce
+sera @file{$INSTALLER_PREFIX/@/etc/@/relocate}.
+
+@item
+En l'absence de @code{datadir}, utilisation d'une valeur déterminée au
+fil de la compilation. Idem pour @code{localedir}, mais pas pour
+@code{relocdir} (cela n'a aucun sens de le faire).
+
+@item
+Si @code{relocdir} existe, traiter tous les fichiers dans ce répertoire,
+comme indiqué dans @ref{Relocation files}.
+
+@end enumerate
+
+
+@node Error messages
+@section Messages d'erreur
+
+@cindex erreur, messages
+
+Différents messages d'erreur sont susceptibles d'apparaître au cours de
+la compilation d'un fichier :
+
+@table @emph
+
+@item Warning -- Avertissement
+@cindex warning
+@cindex avertissement
+Ce type de message est émis lorsque LilyPond détecte quelque chose de
+suspect. Si vous avez demandé quelque chose qui sort de l'ordinaire,
+vous saurez probablement ce à quoi il est fait référence et ignorerez de
+tels messages sans remord. Néanmoins, les messages d'avertissement
+indiquent la plupart du temps une incohérence dans le fichier source.
+
+@item Error -- Erreur
+@cindex error
+LilyPond a détecté une erreur. L'étape en cours, qu'il s'agisse de
+l'analyse, de l'interprétation des données ou bien du formatage, sera
+menée à son terme, puis LilyPond s'arrêtera.
+
+@item Fatal error -- Erreur fatale
+@cindex fatal error
+LilyPond est confronté à une anomalie bloquante. Ceci ne se produit que
+très rarement, et la plupart du temps en raison d'une installation
+défectueuse des fontes.
+
+@item Scheme error -- Erreur Scheme
+@cindex trace, Scheme
+@cindex call trace
+@cindex Scheme error
+Les erreurs qui interviennent lors de l'exécution de code Scheme sont
+gérées par l'interpréteur Scheme. L'utilisation du mode verbeux (options
+@option{-V} ou @option{--verbose}) vous permettra de localiser l'appel
+de fonction délictueux.
+
+@item Programming error -- Erreur de programmation
+@cindex Programming error
+@cindex Erreur de programmation
+LilyPond est confronté à une incohérence interne. Ce type de message est
+destiné à venir en aide aux développeurs et débogueurs. En règle
+générale, vous pouvez tout simplement les ignorer. Parfois, il y en a
+tant qu'ils masquent ce qui pourrait vous intéresser@dots{}
+
+@item Aborted (core dumped) -- Abandon
+@cindex Aborted (core dumped)
+Ce type de message indique que LilyPond a planté en raison d'une grave
+erreur de programmation. La survenance d'un tel message est considérée
+comme de la plus haute importance. Si vous y étiez confronté,
+transmettez un rapport de bogue.
+@end table
+
+@cindex erreur, format du message
+Lorsque l'avertissement ou l'erreur est directement lié au fichier
+source, le message est libellé sous la forme
+
+@example
+@var{fichier}:@var{ligne}:@var{colonne}: @var{message}
+@var{contenu de la ligne litigieuse}
+@end example
+
+Un saut de ligne est placé dans la ligne de code, indiquant l'endroit
+précis du problème, comme ici :
+
+@example
+test.ly:2:19: erreur: n'est pas une durée: 5
+  @{ c'4 e'
+           5 g' @}
+@end example
+
+Notez que ces coordonnées constituent l'approximation au mieux par
+LilyPond dans le code ayant déclenché l'avertissement ou l'erreur. En
+règle générale, erreurs et avertissements surviennent lorsque LilyPond
+rencontre quelque chose d'inattendu. Lorsque la ligne indiquée ne vous
+semble pas comporter d'élément litigieux, remontez de quelques lignes
+dans votre code.
+
+Par ailleurs, des diagnostics peuvent être déclenchés à n'importe quel
+moment au cours des différentes étapes du traitement. Par exemple,
+lorsque certaines parties de la source sont traitées plusieurs fois --
+sortie MIDI et sortie imprimable -- ou qu'une même variable musicale est
+utilisée dans plusieurs contextes, peut apparaître le même message à
+plusieurs reprises. Les diagnostics effectués à une étape avancée du
+traitement, tels que les contrôles de mesure, sont aussi susceptibles
+d'apparaître plusieurs fois.
+
+Vous trouverez d'autres informations sur les erreurs au chapitre
+@ref{Common errors}.
+
+
+@node Common errors
+@section Quelques erreurs des plus courantes
+
+Les conditions amenant aux erreurs qui suivent sont fréquentes, bien
+qu'elles ne soient pas évidentes ni facilement localisables. Nous
+espérons que ces explications vous aideront à les résoudre plus
+facilement.
+
+
+@node Music runs off the page
+@unnumberedsubsec La musique déborde de la page
+
+Lorsque la musique s'épanche au delà de la marge droite ou bien semble
+anormalement comprimée, la raison en est le plus souvent une note à la
+durée erronée ; cela finit par provoquer le débordement de la dernière
+note d'une mesure. Rien ne s'oppose à ce que la dernière note d'une
+mesure ne s'arrête avant la barre de mesure ; on considère simplement
+qu'elle se prolonge sur la mesure suivante. Des débordements à
+répétition finissent par générer une musique comprimée ou qui sort de la
+page, pour la simple et bonne raison que les sauts de ligne automatiques
+ne peuvent intervenir qu'à la fin d'une mesure complète, autrement dit
+lorsque toutes les notes sont terminées avant la fin de la mesure.
+
+@warning{Une durée erronée peut empêcher les sauts de ligne, ce qui
+conduit à une musique compressée, voire à un débordement de la page.}
+
+Une erreur de durée sera bien plus facilement localisable si vous
+positionnez régulièrement des contrôles de barre de mesure -- voir
+@rnotationnamed{Bar and bar number checks, Vérification des limites et
+numéros de mesure}.
+
+Si vous tenez absolument à enchaîner de tels débordements, vous devrez
+insérer des barres de mesure invisibles là où vous souhaitez positionner
+un saut de ligne. Consultez le chapitre @rnotationnamed{Bar lines,
+Barres de mesure} pour plus de détails.
+
+
+@node An extra staff appears
+@unnumberedsubsec Apparition d'une portée supplémentaire
+
+Lorsque les contextes ne sont pas créés explicitement par la commande
+@code{\new}, ils le seront si la commande à exécuter n'est pas censée
+s'appliquer au contexte en cours. Pour des partitions simples, le fait
+que les contextes soient automatiquement créés rend bien des services,
+et c'est d'ailleurs le cas pour la majorité des exemples contenus dans
+les manuels de LilyPond. Cependant, la création implicite d'un contexte
+peut aboutir à l'apparition d'une portée « parasite ». On s'attend par
+exemple, en lisant le code qui suit, à ce que toutes les têtes de note
+soient en rouge, alors que le résultat nous présente deux portées et que
+les notes, placées sur la portée inférieure, restent en noir.
+
+@lilypond[quote,verbatim,fragment]
+\override Staff.NoteHead.color = #red
+\new Staff { a' }
+@end lilypond
+
+Étant donné qu'aucun contexte @code{Staff} n'existe lorsque la
+dérogation est introduite, LilyPond le crée implicitement pour lui
+appliquer la directive considérée. Survient alors la commande
+@code{\new Staff} qui, à son tour, crée une nouvelle portée pour
+contenir les notes qui suivent. Voici la syntaxe correcte pour obtenir
+ces notes en rouge :
+
+@lilypond[quote,verbatim]
+\new Staff {
+  \override Staff.NoteHead.color = #red
+  a'
+}
+@end lilypond
+
+
+@node Error message Unbound variable %
+@unnumberedsubsec Message d'erreur @code{Unbound variable %}
+
+Ce message d'erreur, qu'il apparaisse sur le terminal ou en fin de
+fichier journal, est associé à un message du type « Guile a signalé une
+erreur@dots{} ». Il survient à chaque fois qu'un commentaire
+@emph{LilyPond} est indûment placé dans une routine @emph{Scheme}.
+
+Un commentaire LilyPond est introduit par le signe pourcent (@code{%})
+et ne doit en aucun cas se trouver dans une routine Scheme. En Scheme,
+les commentaires s'introduisent par un point-virgule (@code{;}).
+
+
+@node Error message FT_Get_Glyph_Name
+@unnumberedsubsec Message d'erreur @code{FT_Get_Glyph_Name}
+
+Ce message d'erreur, qu'il apparaisse sur le terminal ou en fin de
+fichier journal, survient lorsqu'un fichier source contient des
+caractères non ASCII et qu'il n'a pas été enregistré avec un encodage
+UTF-8. Pour plus de détails, reportez-vous au chapitre
+@rnotationnamed{Special characters, Caractères spéciaux}.
+
+
+@node Warning staff affinities should only decrease
+@unnumberedsubsec @emph{staff-affinities} devraient aller en ordre décroissant
+
+Cet avertissement est émis lorsque la partition ne comporte pas de
+portée, comme par exemple une feuille de chant avec un contexte
+@code{ChordName} et un contexte @code{Lyrics}. Ce message disparaîtra
+dès lors que vous autoriserez l'un de ces contextes à se comporter comme
+une portée, à l'aide de l'instruction
+
+@example
+\override VerticalAxisGroup.staff-affinity = ##f
+@end example
+
+@noindent
+que vous insérerez dès sa création. Pour plus d'information,
+reportez-vous à la rubrique @rnotationnamed{Spacing of non-staff lines,
+Espacement des lignes rattachées à des portées}.
+
+
+@node Error message unexpected new
+@unnumberedsubsec Message d'erreur @code{unexpected \new}
+
+Un bloc @code{\score} ne peut contenir qu'@strong{une seule} expression
+musicale. Si, par contre, il comporte plusieurs @code{\new Staff},
+@code{\new StaffGroup} ou autres contextes introduits par une commande
+@code{\new} qui ne seraient pas bornés par des accolades
+@code{@{ @dots{} @}} ou des doubles chevrons @code{<< @dots{} >>} comme
+ici :
+
+@example
+\score @{
+  % Invalide ! Génère l'erreur : syntax error, unexpected \new
+  % en français : erreur de syntaxe : \new inattendu
+  \new Staff @{ @dots{} @}
+  \new Staff @{ @dots{} @}
+@}
+@end example
+
+@noindent
+vous obtiendrez ce message d'erreur.
+
+Cette erreur sera évitée dès lors que toutes les instances de
+@code{\new} sont bornées par des accolades ou des doubles chevrons.
+
+Des accolades placeront ces clauses @code{\new} en séquence :
+
+@lilypond[quote,verbatim]
+\score {
+  {
+    \new Staff { a' a' a' a' }
+    \new Staff { g' g' g' g' }
+  }
+}
+@end lilypond
+
+@noindent
+alors que des doubles chevrons les placeront en parallèle ; autrement
+dit, LilyPond les traitera simultanément :
+
+@lilypond[quote,verbatim]
+\score {
+  <<
+    \new Staff { a' a' a' a' }
+    \new Staff { g' g' g' g' }
+  >>
+}
+@end lilypond
+
+
+@node Warning this voice needs a voiceXx or shiftXx setting
+@unnumberedsubsec Cette voix requiert un @code{\voiceXx} ou un réglage @code{\shiftXx}
+
+Lorsque des notes affectées à des voix différentes et ayant la même
+orientation de hampe interviennent au même instant musical et qu'aucun
+décalage spécifique à la voix n'a été spécifié, LilyPond émet
+@code{Avertissement : Cette voix requiert un voiceXx ou un réglage
+shiftXx} (@emph{warning: this voice needs a \voiceXx or \shiftXx
+setting}). Cet avertissement est émis même lorsque ces notes n'ont pas
+de hampe visible, comme par exemple des rondes, si les hampes des durées
+inférieures à ces mêmes hauteurs avaient la même orientation.
+
+N'oublions pas que l'orientation des hampes dépend de la position des
+notes sur la portée à moins que cette orientation n'ait été spécifiée,
+par exemple à l'aide d'un @code{\voiceOne} ou autre clause. En pareil
+cas, l'avertissement ne sera émis que lorsque les hampes auront la même
+orientation, autrement dit lorsque les notes seront dans la même moitié
+de la portée.
+
+Le fait de placer les notes dans des voix auxquelles sont attachés
+orientation de hampe et décalage, comme @code{\voiceOne} ou autre, peut
+permettre d'éviter ces avertissements.
+
+Les notes se trouvant dans des voix au numéro plus élévé --
+@code{\voiceThree} ou @code{\voiceFour} -- sont automatiquement décalées
+pour éviter que les empilements se chevauchent. Ceci aura pour résultat
+de visuellement décaler les notes affublées de hampe sans toutefois
+bouger les rondes, hormis dans le cas d'un réel chevauchement ou lorsque
+ces voix se croisent (@code{\voiceThree} au dessus de@code{\voiceOne}).
+
+@morerefs
+Manuel d'initiation :
+@rlearningnamed{Explicitly instantiating voices,
+Instanciation explicite des voix},
+@rlearningnamed{Real music example, Exemple concret}.
+
+Manuel de notation :
+@rnotationnamed{Single-staff polyphony, Polyphonie sur une portée},
+@rnotationnamed{Collision resolution, Résolution des collisions}.
+@endmorerefs

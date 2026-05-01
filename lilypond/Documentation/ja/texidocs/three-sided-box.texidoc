@@ -1,0 +1,6 @@
+%% Translation of GIT committish: f11513f36c131dab18338d6a3a729e24a927150d
+  texidocja = "
+この例は、テキスト (や他のマークアップ) の周りの 3 方向のみを囲う@c
+ボックスを作成するマークアップ コマンドを追加する方法を示しています。
+"
+  doctitleja = "3 方向ボックス"

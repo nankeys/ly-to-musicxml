@@ -1,0 +1,9 @@
+%% Translation of GIT committish: 9c7cce2e12f0730684dcf6fe737eed69170674a3
+  texidoces = "
+Se pueden trazar líneas verticales normales entre pentagramas para
+mostrar la relación entre notas; sin embargo, en caso de música
+monofónica, podemos hacer invisible el segundo pentagrama, y que
+las líneas sean más cortas, como en este fragmento de código.
+
+"
+  doctitlees = "Líneas de rejilla: destacar ritmos y la relación temporal entre notas"

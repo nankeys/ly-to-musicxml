@@ -1,0 +1,7 @@
+%% Translation of GIT committish: de1e42ce512f3690387cdd065109bddff1b7bd6d
+  texidocfr = "
+Un cluster indique à l'instrumentiste qu'il doit jouer toute une suite
+de sons.
+"
+
+  doctitlefr = "Clusters"

@@ -1,0 +1,8 @@
+%% Translation of GIT committish: de1e42ce512f3690387cdd065109bddff1b7bd6d
+  texidocfr = "
+LilyPond dispose de trois différents styles de barre pour indiquer une
+succession de reprises. Vous devez opter pour un style par défaut, à
+l'aide de la propriété de contexte @code{doubleRepeatBarType}.
+"
+
+  doctitlefr = "Succession de reprises et style de barre par défaut"

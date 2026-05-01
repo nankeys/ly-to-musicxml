@@ -1,0 +1,13 @@
+%% Translation of GIT committish: c043783aac6c35926d633aa2daf60ed4f2e7ca7a
+  texidocfr = "
+Les crochets indiquant un n-olet peuvent être prolongés jusqu'à un
+élément de rupture ou jusqu'à la note suivante.  LilyPond termine un
+crochet de n-olet sur la droite de sa dernière tête de note par défaut ;
+un crochet de pleine longueur s'étendra plus avant, soit jusqu'à la note
+suivante et en traversant tous les éléments non rythmiques, soit sur
+tout l'espace précédant le prochain élément de notation, que ce soit une
+clef, une métrique, une armure ou une autre note.  L'exemple suivant
+illustre la manière d'activer ces deux fonctionnalités.
+"
+
+  doctitlefr = "Modification de la longueur d'un crochet de n-olet"

@@ -1,0 +1,25 @@
+%% Translation of GIT committish: 2f3474d9af596d677ed5b7ce720ae4d0954a6b51
+  texidocit = "
+Il comando @code{\\key} comunemente usato imposta la proprietà
+@code{keyAlterations} del contesto @code{Staff}.
+Per creare armature di chiave non standard, tale proprietà va
+impostata esplicitamente.
+
+Il formato di questo comando è una lista:
+
+@code{\\set Staff.keyAlterations = #`(((ottava . grado) . alterazione) ((ottava
+. grado) . alterazione) ...)}
+
+dove, per ogni elemento della lista, @code{ottava} indica l'ottava (0 è
+l'ottava dal Do centrale al Si precedente), @code{grado} indica la nota
+all'interno dell'ottava (0 significa Do e 6 significa Si) e @code{alterazione}
+può essere @code{,SHARP ,FLAT ,DOUBLE-SHARP} etc.
+
+Altrimenti, usando il formato breve per ogni elemento della lista,
+@code{(grado . alterazione)}, ciò indica che la stessa alterazione deve
+essere presente in tutte le ottave. Per le scale microtonalidove un
+@qq{diesis} non è 100 centesimi, @code{alterazione} si riferisce alla
+proporzione di un duecentesimo di tono intero.
+
+"
+  doctitleit = "Armature di chiave non tradizionali"

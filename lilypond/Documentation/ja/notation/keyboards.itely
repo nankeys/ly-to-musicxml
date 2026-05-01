@@ -1,0 +1,697 @@
+@c -*- coding: utf-8; mode: texinfo; documentlanguage: ja -*-
+@ignore
+    Translation of GIT committish: 0cc270b871321ae5aa8622cea8d8262aafd16641
+
+    When revising a translation, copy the HEAD committish of the
+    version that you are working on.  For details, see the Contributors'
+    Guide, node Updating translation committishes..
+@end ignore
+
+@c \version "2.21.0"
+
+@c Translators: Tomohiro Tatejima, Yoshiki Sawada
+@c Translation status: post-GDP
+
+
+@node Keyboard and other multi-staff instruments
+@section キーボードと他の複数譜の楽器
+
+@lilypondfile[quote]{snippets/keyboard-headword.ly}
+
+このセクションでは、キーボード楽器と複数の譜を用いる他の楽器
+-- ハープやビブラフォン等 --
+に固有の音楽記譜について説明します。@c
+キーボードを含む複数の譜を用いる楽器のグループ全体をまとめて
+@qq{キーボード} と呼びます。
+
+
+@node Common notation for keyboards
+@subsection キーボードで共通の記譜法
+
+このセクションでは多くのキーボードで生じる記譜の問題について説明します。
+
+
+@node References for keyboards
+@unnumberedsubsubsec キーボードのためのリファレンス
+
+@cindex piano staff (ピアノ譜)
+@cindex staff, piano (ピアノ譜)
+@cindex staff, keyboard instruments (キーボード譜)
+@cindex staff, keyed instruments (キーを持つ楽器の譜)
+@cindex keyboard instrument staff (キーボード譜)
+@cindex keyed instrument staff (キーを持つ楽器の譜)
+@cindex keyboard music, centering dynamics (キーボード譜で強弱記号を中央に配置する)
+@cindex dynamics, centered in keyboard music (キーボード譜で強弱記号を中央に配置する)
+@cindex piano music, centering dynamics (ピアノ譜で強弱記号を中央に配置する)
+@cindex centered dynamics in piano music (ピアノ譜で強弱記号を中央に配置する)
+
+@funindex PianoStaff
+
+通常、キーボードはピアノ譜で記譜します。@c
+これらは波括弧で括られた 2 つ以上の普通の譜です。@c
+他のキーを持つ楽器も同じ記譜法を用います。@c
+オルガン譜は通常、@code{PianoStaff} グループ内部にある 2 つの譜と、@c
+ペダル用の通常の譜によって記述されます。
+
+キーボードの譜はそれぞれの独立性が高いですが、@c
+ボイスが 2 つの譜を跨ぐこともあります。@c
+このセクションではキーボードに特有の記譜テクニックについて説明します。
+
+キーボードに共通する問題のいくつかは他の場所でカバーします:
+
+@itemize
+
+@item 通常、キーボードは複数のボイスを持ち、@c
+ボイスの数はしょっちゅう変わります。@c
+このことは @ref{Collision resolution} で説明しています。
+
+@item @ref{Writing music in parallel} で説明しているように、@c
+キーボードは並列に記述することができます。
+
+@item 強弱指示を 2 つの @code{Staff} コンテキストの間にある
+@code{Dynamics} コンテキストの中に配置して、@c
+強弱記号を 2 つの譜の間に配置することができます。@c
+@ref{Dynamics} を参照してください。
+
+@item 運指は @ref{Fingering instructions} で説明しています。
+
+@item オルガン ペダルの指示はアーティキュレーションとして挿入します。@c
+@ref{List of articulations} を参照してください。
+
+@item @ref{Grid lines} で垂直のグリッド ラインを表示させることができます。
+
+@item キーボードはしばしばアルペジオでのタイや、@c
+@notation{レセ ヴィブレ} タイを持ちます。@c
+@ref{Ties} で説明しています。
+
+@item 複数のボイスや譜を跨ぐアルペジオの配置は、@c
+@ref{Arpeggio} でカバーしています。
+
+@item トレモロ記号は @ref{Tremolo repeats} で説明しています。
+
+@item キーボードで必要となる可能性がある調整のいくつかを
+@rlearningnamed{Real music example, 実際の音楽からの例} で示しています。
+
+@item ボイスを跨ぐタイを作り出すために隠れた音符を使うことがあります。@c
+@rlearningnamed{Other uses for tweaks, 調整のその他の使用方法} で示しています。
+
+@end itemize
+
+@morerefs
+学習マニュアル:
+@rlearning{Real music example},
+@rlearning{Other uses for tweaks}
+
+記譜法リファレンス:
+@ref{Grouping staves},
+@ref{Instrument names},
+@ref{Collision resolution},
+@ref{Writing music in parallel},
+@ref{Fingering instructions},
+@ref{List of articulations},
+@ref{Grid lines},
+@ref{Ties},
+@ref{Arpeggio},
+@ref{Tremolo repeats}
+
+内部リファレンス:
+@rinternals{PianoStaff}
+
+コード断片集:
+@rlsr{Keyboard and other multi-staff instruments}
+
+
+@node Changing staff manually
+@unnumberedsubsubsec 譜を手動で変更する
+
+@cindex changing staff manually (譜を手動で変更する)
+@cindex manual staff change (手動の譜の変更)
+@cindex staff change, manual (手動の譜の変更)
+@cindex cross-staff note (譜を跨ぐ音符)
+@cindex note, cross-staff (譜を跨ぐ音符)
+@cindex cross-staff beam (譜を跨ぐ連桁)
+@cindex beam, cross-staff  (譜を跨ぐ連桁)
+
+@funindex \change
+
+以下のコマンドを用いて、ボイスの譜を手動で切り換えることができます:
+
+@example
+\change Staff = @var{staffname}
+@end example
+
+@noindent
+文字列 @var{staffname} は譜の名前です。@c
+このコマンドはボイスをカレント譜から @var{staffname} という譜に切り換えます。@c
+@var{staffname} の一般的な値は @code{"up"} と @code{"down"}、@c
+あるいは @code{"RH"} と @code{"LH"} です。
+
+@cindex empty chord (空の和音)
+@cindex chord, empty (空の和音)
+@funindex <>
+
+ボイスの切り換え先となる譜は、切り換え時点で存在している必要があります。@c
+必要があれば、譜を @qq{残しておく} べきです。@c
+@ref{Keeping contexts alive} を参照してください。@c
+または、空の和音 @code{<>} を使用するなどして明示的にインスタンス化します。@c
+@ref{Chorded notes}を参照してください。
+
+@lilypond[verbatim, quote]
+\new PianoStaff <<
+  \new Staff = "up" {
+    % enforce creation of all contexts at this point of time
+    <>
+    \change Staff = "down" c2
+    \change Staff = "up" c'2
+  }
+  \new Staff = "down" {
+    \clef bass
+    % keep staff alive
+    s1
+  }
+>>
+@end lilypond
+
+譜を跨ぐ音符には自動的に連桁が付けられます:
+
+@c KEEP LY
+@lilypond[verbatim,quote]
+\new PianoStaff <<
+  \new Staff = "up" {
+    <e' c'>8
+    \change Staff = "down"
+    g8 fis g
+    \change Staff = "up"
+    <g'' c''>8
+    \change Staff = "down"
+    e8 dis e
+    \change Staff = "up"
+  }
+  \new Staff = "down" {
+    \clef bass
+    % 譜を残しておきます
+    s1
+  }
+>>
+@end lilypond
+
+連桁を調整する必要がある場合、符幹の向きの変更を最初に行ってください。@c
+連桁の位置は最も近い譜の中央から算出します。@c
+連桁の調整の簡単な例が @rlearningnamed{Fixing overlapping notation, 表記の重なりを修正する} にあります。
+
+@cindex cross-staff collision (譜を跨ぐボイスによる衝突)
+@cindex collision, cross-staff voices (譜を跨ぐボイスによる衝突)
+
+ボイスが譜を跨ぐ時に、記譜要素の重なりが発生することがあります:
+
+@c KEEP LY
+@lilypond[verbatim,quote]
+\new PianoStaff <<
+  \new Staff = "up" {
+    \voiceOne
+    % 譜を跨ぐボイスの中にある運指記号のためのスペースを作ります
+    \once\override DynamicLineSpanner.staff-padding = #4
+    e''2\p\< d''\>
+    c''1\!
+  }
+  \new Staff = "down" <<
+    {
+      \clef bass
+      s4. e,8\rest g,2\rest
+      c1
+    } \\ {
+      c8\( g c'
+      \change Staff = "up"
+      e' g' b'-3 a' g'\)
+      f'1
+    }
+  >>
+>>
+@end lilypond
+
+符幹とスラーは譜の間にある強弱記号と重なります。@c
+なぜなら、異なる譜にある音符を結ぶ連桁、スラー、他のスパナに対して、@c
+自動衝突解決は抑制されるからです。@c
+同様に、@c
+譜を跨ぐスパナによって配置に影響を受ける@c
+符幹やアーティキュレーションに対しても、@c
+自動衝突解決は抑制されます。@c
+そのような場合、必要に応じて、手動で衝突を解決する必要があります
+-- 解決手段は @rlearningnamed{Fixing overlapping notation, 表記の重なりを修正する} を参照してください。
+
+@morerefs
+学習マニュアル:
+@rlearning{Fixing overlapping notation}
+
+記譜法リファレンス:
+@ref{Stems},
+@ref{Automatic beams},
+@ref{Keeping contexts alive}
+
+コード断片集:
+@rlsr{Keyboard and other multi-staff instruments}
+
+内部リファレンス:
+@rinternals{Beam},
+@rinternals{ContextChange}
+
+@knownissues
+譜の変更の直前に終了する自動連桁に対して、@c
+連桁衝突回避は機能しません。@c
+衝突回避を行うには、手動連桁を使用してください。
+
+
+@node Changing staff automatically
+@unnumberedsubsubsec 譜を自動で変更する
+
+@cindex changing staff automatically (譜を自動で変更する)
+@cindex automatic staff change (譜の自動変更)
+@cindex staff change, automatic (譜の自動変更)
+
+@funindex \autoChange
+@funindex PianoStaff
+
+譜の上端と下端の間で、ボイスを自動的に切り換えることができます。@c
+構文は以下の通りです:
+
+@example
+\autoChange @dots{}@var{music}@dots{}
+@end example
+
+@noindent
+これはカレントの譜グループ (普通は、@code{PianoStaff}) 内部に
+@code{"up"} と @code{"down"} という 2 つの譜を作成します。@c
+デフォルトで下の譜は低音部となります。@c
+自動変更は基準ピッチ (ミドル C が切り換えポイントです) で譜を切り換え、@c
+次の切り換えまで休符でスキップしていきます。
+
+@lilypond[quote,verbatim]
+\new PianoStaff {
+  \autoChange {
+    g4 a b c'
+    d'4 r a g
+  }
+}
+@end lilypond
+
+@noindent
+切り替えポイントを他のピッチにすることができます。@c
+譜を明示的に生成しない場合も、他の音部記号を用いることができます。
+
+@lilypond[quote,verbatim]
+music = {
+  g8 b a c' b8 d' c'8 e'
+  d'8 r f' g' a'2
+}
+
+\autoChange d' \music
+\autoChange b \with { \clef soprano } \music
+\autoChange d' \with { \clef alto } \with { \clef tenor } \music
+@end lilypond
+
+@cindex relative music, and @code{\autoChange} (相対モードと @code{\autoChange})
+@cindex @code{\autoChange} and relative music (@code{\autoChange} と相対モード)
+
+@funindex \relative
+
+@code{\autoChange} の外側にある @code{\relative} セクションは、@c
+@code{\autoChange} の内部にある音符のピッチに影響を与えません。@c
+そのため、必要に応じて @code{\autoChange} の内部に @code{\relative} を@c
+配置します。
+
+個々の譜に個別の制御を行う必要がある場合、@c
+手動で @code{"up"} と @code{"down"} という名前の譜を作成して、@c
+制御を行います。@c
+@code{\autoChange} コマンドは、作成された譜間で、@c
+ボイスを切り換えます。
+
+@warning{譜を手動で作成する場合、譜の名前を @code{"up"} と @code{"down"}
+にする @emph{必要があります}。}
+
+例えば、下の譜に調号を配置するには、譜を手動で作成する必要があります:
+
+@lilypond[quote,verbatim]
+\new PianoStaff <<
+  \new Staff = "up" {
+    \new Voice = "melOne" {
+      \key g \major
+      \autoChange \relative {
+        g8 b a c b d c e
+        d8 r fis, g a2
+      }
+    }
+  }
+  \new Staff = "down" {
+    \key g \major
+    \clef bass
+  }
+>>
+@end lilypond
+
+@morerefs
+記譜法リファレンス:
+@ref{Changing staff manually}
+
+コード断片集:
+@rlsr{Keyboard and other multi-staff instruments}
+
+
+@knownissues
+@cindex chord, splitting across staves with @code{\autoChange} (@code{\autoChange} で譜を跨ぐ和音)
+
+譜の切り換えが最適な場所で行われない場合もあります。@c
+高品位の出力を得るには、譜の切り換えを手動で指定する必要があります。
+
+和音は譜を跨って配置されません。@c
+和音構造の中にある最初の音符に基づく譜に割り当てられます。
+
+
+@node Staff-change lines
+@unnumberedsubsubsec 譜変更線
+
+@cindex staff-change line (譜変更線)
+@cindex cross-staff line (譜跨ぎ線)
+@cindex line, staff-change follower (譜変更フォロー線)
+@cindex line, cross-staff (譜跨ぎ線)
+@cindex line, staff-change (譜変更線)
+@cindex follow voice (フォロー ボイス)
+@cindex voice, following (フォロー ボイス)
+@cindex staff switching (譜の切り換え)
+
+@funindex followVoice
+@funindex \showStaffSwitch
+@funindex \hideStaffSwitch
+
+ボイスが他の譜に切り替わる時に、音符を繋げる線を自動的に譜刻することができます:
+
+@lilypond[quote,verbatim]
+\new PianoStaff <<
+  \new Staff = "one" {
+    \showStaffSwitch
+    c'1
+    \change Staff = "two"
+    b2 a
+  }
+  \new Staff = "two" {
+    \clef bass
+    s1*2
+  }
+>>
+@end lilypond
+
+譜の切り替え線が和音を繋ぐ場合、ソース ファイルにある和音の@qq{最後の音符}に@c
+始端や終端が向けられます。これを利用して、線の縦方向の始端位置や終端位置を@c
+すばやく調整することができます:
+
+@lilypond[quote,verbatim]
+\new PianoStaff <<
+  \new Staff = "one" {
+    <c' e' g'>1
+    \showStaffSwitch
+    \change Staff = "two"
+    <a c' f>1
+    \hideStaffSwitch
+    \change Staff = "one"
+    <e' g' c'>1
+    \showStaffSwitch
+    \change Staff = "two"
+    <f a c'>1
+  }
+  \new Staff = "two" {
+    \clef bass
+    s1*4
+  }
+>>
+@end lilypond
+
+@predefined
+@code{\showStaffSwitch},
+@code{\hideStaffSwitch}
+@endpredefined
+
+@morerefs
+コード断片集:
+@rlsr{Keyboard and other multi-staff instruments}
+
+内部リファレンス:
+@rinternals{Note_head_line_engraver},
+@rinternals{VoiceFollower}
+
+@snippets
+
+@anchor{Cross-staff stems}
+@cindex cross-staff note (譜を跨ぐ音符)
+@cindex note, cross-staff (譜を跨ぐ音符)
+@cindex cross-staff stem (譜を跨ぐ符幹)
+@cindex stem, cross-staff (譜を跨ぐ符幹)
+@cindex chord, cross-staff (譜を跨ぐ和音)
+@cindex cross-staff chord (譜を跨ぐ和音)
+@funindex \crossStaff
+@funindex \autoBeamOff
+@funindex Span_stem_engraver
+
+@lilypondfile[verbatim,quote,texidoc,doctitle]
+{snippets/cross-staff-stems.ly}
+
+現時点でこのエングラーバは、名前をダブル クォートで囲っても指定することができません。@c
+その代わり、名前の前にハッシュ記号 (@code{#}) を置くことで指定しなければなりません。
+
+@cindex cross-staff chord bracket (譜を跨ぐアルペジオのブラケット)
+@cindex chord bracket, cross-staff (譜を跨ぐアルペジオのブラケット)
+@cindex bracket, cross-staff (譜を跨ぐブラケット)
+@funindex \nonArpeggiato
+@lilypondfile[verbatim,quote,texidoc,doctitle]
+{snippets/indicating-cross-staff-chords-with-a-bracket.ly}
+
+@morerefs
+コード断片集:
+@rlsr{Keyboard and other multi-staff instruments}
+
+内部リファレンス:
+@rinternals{Stem}
+
+
+@node Piano
+@subsection ピアノ
+
+このセクションでは、ピアノに関係する記譜法を説明します。
+
+
+@node Piano pedals
+@unnumberedsubsubsec ピアノ ペダル
+
+@cindex piano pedal (ピアノ ペダル)
+@cindex pedal, piano (ピアノ ペダル)
+@cindex sustain pedal (サステイン ペダル)
+@cindex pedal, sustain (サステイン ペダル)
+@cindex sostenuto pedal (ソステヌート ペダル)
+@cindex pedal, sostenuto (ソステヌート ペダル)
+@cindex una corda (ウナ コルダ)
+@cindex tre corde (トレ コルデ)
+@cindex sos.
+@cindex U.C.
+
+@funindex \sustainOn
+@funindex \sustainOff
+@funindex \sostenutoOn
+@funindex \sostenutoOff
+@funindex \unaCorda
+@funindex \treCorde
+
+一般的に、ピアノは音を変化させるために 3 本のペダルを持ちます:
+@notation{サステイン}, @notation{ソステヌート} (@notation{sos.}),
+それに @notation{ウナ コルダ} (@notation{una corda}, @notation{U.C.}) です。@c
+サステイン ペダルは、ビブラフォンやチェレスタにもあります。
+
+@lilypond[quote,verbatim]
+\relative {
+  c''4\sustainOn d e g
+  <c, f a>1\sustainOff
+  c4\sostenutoOn e g c,
+  <bes d f>1\sostenutoOff
+  c4\unaCorda d e g
+  <d fis a>1\treCorde
+}
+@end lilypond
+
+@cindex pedal indication style (ペダル指示スタイル)
+@cindex pedal indication, text (ペダル指示テキスト)
+@cindex pedal indication, bracket (ペダル指示の囲み)
+@cindex pedal indication, mixed (混合ペダル指示)
+@cindex pedal sustain style (ペダル サステイン スタイル)
+@cindex sustain pedal style (サステイン ペダル スタイル)
+
+@funindex pedalSustainStyle
+@funindex mixed
+@funindex @sortas{bracketA} bracket
+@funindex text
+
+ペダル指示には 3 つのスタイルがあります:
+テキスト、囲み、それにテキストと囲みの混合です。@c
+デフォルトで、@c
+サステイン ペダルとウナ コルダ ペダルの指示はテキスト スタイルですが、@c
+ソステヌート ペダル指示は混合スタイルです。
+
+@lilypond[quote,verbatim]
+\relative {
+  c''4\sustainOn g c2\sustainOff
+  \set Staff.pedalSustainStyle = #'mixed
+  c4\sustainOn g c d
+  d\sustainOff\sustainOn g, c2\sustainOff
+  \set Staff.pedalSustainStyle = #'bracket
+  c4\sustainOn g c d
+  d\sustainOff\sustainOn g, c2
+  \bar "|."
+}
+@end lilypond
+
+ペダル コマンドの配置は、@c
+ピアノ演奏中の物理的なサステイン ペダルの動きに一致します。@c
+最後の小節線でのペダル指示は、@c
+最後のペダル オフ コマンドを省略することで挿入されます。
+
+ペダル指示を @code{Dynamics} コンテキストに配置させることができます。
+
+@morerefs
+記譜法リファレンス:
+@ref{Ties}
+
+コード断片集:
+@rlsr{Keyboard and other multi-staff instruments}
+
+内部リファレンス:
+@rinternals{SustainPedal},
+@rinternals{SustainPedalLineSpanner},
+@rinternals{SustainEvent},
+@rinternals{SostenutoPedal},
+@rinternals{SostenutoPedalLineSpanner},
+@rinternals{SostenutoEvent},
+@rinternals{UnaCordaPedal},
+@rinternals{UnaCordaPedalLineSpanner},
+@rinternals{UnaCordaEvent},
+@rinternals{PianoPedalBracket},
+@rinternals{Piano_pedal_engraver}
+
+
+@node Accordion
+@subsection アコーディオン
+
+@cindex accordion (アコーディオン)
+
+このセクションでは、アコーディオンに特有の記譜法について説明します。
+
+
+@node Discant symbols
+@unnumberedsubsubsec ディスカント記号
+
+@cindex accordion discant symbol (アコーディオンのディスカント記号)
+@cindex discant symbol, accordion (アコーディオンのディスカント記号)
+@cindex accordion shift symbol (アコーディオン シフト記号)
+@cindex shift symbol, accordion (アコーディオンのシフト記号)
+@cindex accordion register symbol (アコーディオンのレジスター記号)
+@cindex register symbol, accordion (アコーディオンのレジスター記号)
+
+アコーディオン演奏はしばしば、@c
+指定されたピッチよりも 1 オクターブ上または下のピッチとユニゾンになる@c
+リードのセットで構成されます。@c
+各アコーディオン メーカは、@c
+さまざまなリードの組み合わせを選択する @notation{シフト} に@c
+異なる名前を付けています:
+@notation{oboe}, @notation{musette}, あるいは @notation{bandonium} などです。@c
+そのため、演奏指示を単純にするための記号システムを用います。
+
+使用可能なアコーディオン レジスターの一覧は@c
+@ref{Accordion registers}にあります。
+
+@snippets
+
+@lilypondfile[verbatim,quote,texidoc,doctitle]
+{snippets/accordion-register-symbols.ly}
+
+@morerefs
+コード断片集:
+@rlsr{Keyboard and other multi-staff instruments}
+
+
+@node Harp
+@subsection ハープ
+
+このセクションでは、ハープに特有の記譜法について説明します。
+
+
+@node References for harps
+@unnumberedsubsubsec ハープのためのリファレンス
+
+@cindex harp (ハープ)
+@cindex bisbigliando (ビズビッリャンド)
+
+ハープ音楽に共通する特性のいくつかが、他の場所でカバーされています:
+
+@itemize
+
+@item グリッサンドは最も特徴的なハープのテクニックです
+-- @ref{Glissando}。
+
+@item @notation{ビズビッリャンド} (@notation{bisbigliando}) は@c
+トレモロとして記述されます
+-- @ref{Tremolo repeats}。
+
+@item ナチュラル ハーモニクスは @ref{Harmonics} でカバーされています。
+
+@item アルペジオの向きと非アルペジオについては、@c
+@ref{Arpeggio} を参照してください。
+
+@end itemize
+
+@morerefs
+記譜法リファレンス:
+@ref{Tremolo repeats},
+@ref{Glissando},
+@ref{Arpeggio},
+@ref{Harmonics}
+
+
+@node Harp pedals
+@unnumberedsubsubsec ハープ ペダル
+
+@cindex harp pedal (ハープ ペダル)
+@cindex harp pedal diagram (ハープ ペダル ダイアグラム)
+@cindex pedal, harp (ハープ ペダル)
+@cindex pedal diagram, harp (ハープ ペダル ダイアグラム)
+
+ハープはオクターブ毎に 7 本の弦を持ち、@c
+それらはナチュラル ピッチ、フラット ピッチ、あるいはシャープ ピッチの@c
+音を出すことができます。@c
+レバー ハープは各弦を個別に調整することができますが、@c
+ペダル ハープは 1 つのペダルで同じピッチ名を持つすべての弦を制御します。@c
+演奏者の左から右に向かって、左のペダル D, C, それに B、@c
+右のペダルは E, F, G, それに A です。@c
+ペダルのポジションをテキスト記号で指示することがあります:
+
+@lilypond[quote,verbatim,fragment]
+\textLengthOn
+cis''1_\markup \concat \vcenter {
+  [D \flat C \sharp B|E \sharp F \sharp G A \flat] }
+c''!1_\markup \concat \vcenter {
+  [ C \natural ] }
+@end lilypond
+
+あるいはペダル ダイアグラムで指示することもあります:
+
+@lilypond[quote,verbatim,fragment]
+\textLengthOn
+cis''1_\markup { \harp-pedal "^v-|vv-^" }
+c''!1_\markup { \harp-pedal "^o--|vv-^" }
+@end lilypond
+
+@code{\harp-pedal} コマンドは文字列を受け取ります。@c
+@code{^} はペダル ポジションを上 (フラット ピッチ)、@c
+@code{-} はペダル ポジションを真ん中 (ナチュラル ピッチ)、@c
+@code{v} はペダル ポジションを下 (シャープ ピッチ)、@c
+@code{|} 区切り線です。@c
+接頭辞 @code{o} は、その後のペダル記号を丸で囲みます。
+
+@morerefs
+記譜法リファレンス:
+@ref{Text scripts},
+@ref{Instrument-specific markup}

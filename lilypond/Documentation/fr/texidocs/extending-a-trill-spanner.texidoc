@@ -1,0 +1,11 @@
+%% Translation of GIT committish: de1e42ce512f3690387cdd065109bddff1b7bd6d
+  texidocfr = "
+La propriété @code{minimum-length} d'une extension de trille -- objet
+@code{TrillSpanner} -- n'est effective qu'après un appel explicite à la
+procédure @code{set-spacing-rods}.
+
+Pour ce faire, la propriété @code{set-spacing-rods} doit être définie à
+@code{ly:spanner::set-spacing-rods}.
+"
+
+  doctitlefr = "Allongement d'une marque de trille (@code{TrillSpanner})"

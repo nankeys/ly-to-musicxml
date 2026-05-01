@@ -1,0 +1,8 @@
+%% Translation of GIT committish: cd3e2b0177d366d0a25b4c7628b26455e52175cd
+  texidoces = "
+Si LilyPond no cree que haya sitio suficiente para un guión separador
+de sílabas, lo omitirá.  Se puede sobreescribir este comportamiento
+con la propiedad @code{minimum-distance} de @code{LyricHyphen}.
+
+"
+  doctitlees = "Forzar la visibilidad de los guiones separadores de sílabas"

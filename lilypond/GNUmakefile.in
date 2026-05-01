@@ -1,0 +1,459 @@
+# -*-Makefile-*-
+
+depth = .
+
+# The starting elements of `SUBDIRS` are defined in a particular order:
+# First directories with Python scripts, then C++ code, and eventually
+# Scheme code in directory `scm`.  At this point the `lilypond` binary can
+# be executed.
+#
+# `scm/GNUmakefile`, however, performs two tasks in direct succession,
+# namely setting up Scheme files for running `lilypond`, then byte-compiling
+# all `.scm` files with the just created binary.  In other words, it is last
+# directory doing preparatory work and at the same time the first directory
+# that needs a functioning `lilypond` binary.  This works as long as there
+# is only one directory with this requirement.
+SUBDIRS = python scripts \
+	flower lily \
+	mf ly \
+	ps scm \
+	po \
+	elisp vim \
+	input \
+	$(documentation-dir)
+
+
+## this convoluted construction is necessary, since we don't know the
+## value of DOCUMENTATION here.
+documentation-dir=$(if $(findstring no,$(DOCUMENTATION)),,Documentation)
+
+README_FILES = README.md COPYING COPYING.FDL DEDICATION ROADMAP \
+  LICENSE LICENSE.DOCUMENTATION LICENSE.OFL
+TOPDOC_FILES = AUTHORS INSTALL NEWS
+TOPDOC_TXT_FILES = $(foreach T,$(TOPDOC_FILES),Documentation/$(outdir)/topdocs/$(T).txt)
+
+RELEASE_FILES = RELEASE-COMMIT
+RELEASE_OUT_FILES = $(RELEASE_FILES:%=$(outdir)/%)
+INSTALLATION_DIR=$(local_lilypond_datadir)
+INSTALLATION_FILES=$(config_make) VERSION
+GENERATED_BUILD_FILES=configure aclocal.m4 autogen.sh
+
+TEMPLATES = install lilypond
+
+include $(depth)/make/lilypond.make
+
+.PHONY: test info website
+
+dist: $(GENERATED_BUILD_FILES) top-doc refresh-release-files
+	$(call ly_progress,Packing,$(DIST_NAME).tar.gz)
+	@if ! test -e  $(top-src-dir)/.git ; \
+	  then echo "***   dist needs a git repository" \
+	    exit 1 ;  \
+	  fi
+	@cd $(top-src-dir) && if ! git diff --quiet HEAD ; \
+	  then echo "***   dist must been rolled on a clean git tree;"; \
+	    echo "uncommitted changes detected, aborting."; \
+	    exit 1 ;  \
+	  fi
+	rm -rf $(distdir)
+	mkdir -p  $(distdir)
+	$(LN) $(RELEASE_OUT_FILES) $(TOPDOC_TXT_FILES) $(distdir)
+	$(LN) $(GENERATED_BUILD_FILES:%=$(src-dir)/%) $(distdir)
+	(cd $(top-src-dir) && git ls-files) | \
+		rsync -a --files-from=- --link-dest=$(top-src-dir) $(top-src-dir) $(distdir)
+	chmod -R a+r $(distdir)
+	chmod  a+x `find $(distdir) -type d -print`
+	(cd $(outdir); \
+		$(TAR) --sort=name --mtime="$$(git --git-dir=$(top-src-dir)/.git log -1 --format=%cD)" \
+		-cf - --owner=0 --group=0 $(DIST_NAME) | gzip -9 > $(DIST_NAME).tar.gz)
+	rm -rf $(distdir)
+
+top-doc:
+	$(MAKE) -C Documentation $(foreach T,$(TOPDOC_FILES),$(outdir)/topdocs/$(T).txt)
+
+all: $(outdir)/VERSION
+
+$(outdir)/VERSION: $(config_make) VERSION
+	$(call ly_progress,Making,$@,)
+	-mkdir -p $(outdir)
+	echo $(TOPLEVEL_VERSION) > $@
+
+$(outdir)/RELEASE-COMMIT:
+	$(call ly_progress,Making,$@,)
+	git --git-dir=$(top-src-dir)/.git show --no-patch HEAD > $@
+
+refresh-release-files:
+	@if ! test -e  $(top-src-dir)/.git ; \
+	  then echo "***   dist needs a git repository" \
+	    exit 1 ;  \
+	  fi
+	rm -f $(RELEASE_OUT_FILES)
+	$(MAKE) $(RELEASE_OUT_FILES)
+
+
+# Guile bytecode
+ifeq ($(strip $(CROSS)),no)
+  bytecode: all
+	  $(MAKE) -C scm bytecode
+  install-bytecode: install
+	  $(MAKE) -C scm install-bytecode
+else
+  bytecode \
+  install-bytecode:
+	  $(error Scheme byte-compilation disabled while cross-compiling)
+endif
+
+
+# PO files
+
+po:
+	if test -r $(po-srcdir); then \
+	  rm -f $(po-outdir)/$(package).po; \
+	  mkdir -p $(po-outdir); \
+	  touch $(po-outdir)/$(package).po; \
+	fi
+	$(LOOP)
+
+po-update: po
+	$(MAKE) -C $(po-outdir)/.. po-update
+
+po-replace: po
+	$(MAKE) -C $(po-outdir)/.. po-replace
+
+info:
+	$(MAKE) out=www -C Documentation info
+
+install-info:
+	$(MAKE) COPY_INFO_IMAGES=yes out=www -C Documentation install-info
+
+install-info-noimages:
+	$(MAKE) COPY_INFO_IMAGES=no out=www -C Documentation install-info
+
+uninstall-info:
+	$(MAKE) out=www -C Documentation uninstall-info
+
+install-help2man:
+	$(MAKE) -C scripts man install-help2man
+	$(MAKE) -C lily man install-help2man
+
+install-doc:
+	$(MAKE) out=www install-info-noimages install-WWW
+
+uninstall-doc: uninstall-info uninstall-WWW
+
+local-install:
+	$(INSTALLPY) -d $(DESTDIR)$(local_lilypond_datadir)
+
+final-install:
+	@true
+
+# All web targets, except info image symlinks and info docs are
+# installed in non-recursing target from TOP-SRC-DIR
+install-WWW: $(outdir)/offline-root/index.html
+	$(INSTALLPY) -m 755 -d $(DESTDIR)$(webdir)
+	rsync -rl --exclude='*.signature' $(dir $<) $(DESTDIR)$(webdir)
+
+uninstall-WWW:
+	rm -rf $(DESTDIR)$(package_docdir)
+	$(MAKE) out=www -C Documentation uninstall
+
+# For online docs with content negotiation, issue `make doc WEB_TARGETS=online'
+# For both online and offline docs, issue `make doc WEB_TARGETS="offline online"'
+WEB_TARGETS = offline
+
+WEB_ROOT_FILES = $(WEB_TARGETS:%=$(outdir)/%-root/index.html)
+
+WWW-post: $(WEB_ROOT_FILES)
+
+$(outdir)/%-root/index.html: doc-build
+	$(call ly_progress,Making,$@,)
+	rm -rf $(dir $@)/
+	for d in . abc2ly midi musicxml other ; do \
+	  mkdir -p $(dir $@)/input/regression/$${d}; \
+	  rsync -a --link-dest=$(build-dir)/input/regression/$${d}/out-www \
+		input/regression/$${d}/out-www/ \
+		$(dir $@)/input/regression/$${d} ; \
+	done
+	find $(dir $@)/input/regression/ \
+		-type f \
+		-not -name '*.png' \
+		-not -name '*.ly' \
+		-not -name '*.html' \
+		-not -name '*.xml' \
+		-not -name '*.mxl' \
+		-not -name 'collated-files.pdf' \
+		-delete
+	mkdir -p $(dir $@)/Documentation/
+	rsync -a --link-dest=$(build-dir)/Documentation/out-www/webdoc \
+	      Documentation/out-www/webdoc/ \
+	      $(dir $@)/Documentation
+	rsync -a --link-dest=$(build-dir)/Documentation/$(outdir)/topdocs \
+	      $(TOPDOC_TXT_FILES) \
+	      $(dir $@)
+	# No link because the files come from the source directory.
+	cp $(addprefix $(src-dir)/,$(README_FILES)) $(dir $@)
+	$(PYTHON) $(buildscript-dir)/www_post.py --name $(PACKAGE_NAME) --version $(TOPLEVEL_VERSION) \
+		$(if $(CPU_COUNT),--job-count=$(CPU_COUNT),) --target "$*" $(dir $@)
+	find $(outdir)/$*-root -type l -delete
+	cd $(outdir)/$*-root && \
+	  find . \
+	       -name "*.html" \
+	       -execdir $(buildscript-dir)/fix-docsize.sh {} +
+	find $(dir $@)/Documentation \
+	     -maxdepth 1 \
+	     -name "*html" | \
+		xargs $(PERL) -i -p \
+			-e 's#(href)="\.\./Documentation/#\1="#g'
+	find $(dir $@)/Documentation \
+	     -mindepth 2 -maxdepth 2 \
+	     -name "*html" | \
+		xargs $(PERL) -i -p \
+			-e 's#(href)="\.\./\.\./Documentation/#\1="../#g'
+	# Fix up links to CSS files.
+	find $(dir $@)/input/regression \
+	     -maxdepth 1 \
+	     -name "*html" | \
+		xargs $(PERL) -i -p \
+			-e 's#(href)="css/#\1="../../Documentation/css/#g'
+	find $(dir $@)/input/regression \
+	     -mindepth 2 -maxdepth 2 \
+	     -name "*html" | \
+		xargs $(PERL) -i -p \
+			-e 's#(href)="css/#\1="../../../Documentation/css/#g'
+
+doc-build: top-doc
+	$(MAKE) out=www -C Documentation/ doc
+	$(MAKE) out=www -C input/regression/ doc
+
+website: $(outdir)/website-root/index.html
+
+$(outdir)/website-root/index.html: website-build
+	$(call ly_progress,Making,$@,)
+	rm -rf $(dir $@)/
+	mkdir -p $(dir $@)/
+	rsync -a Documentation/out-web/website/web/ $(dir $@)
+	$(foreach d,css misc pictures ly-examples,\
+	  rsync -a Documentation/out-web/website/$(d) $(dir $@) &&) true
+	$(PYTHON) $(buildscript-dir)/www_post.py --name $(PACKAGE_NAME) --version $(TOPLEVEL_VERSION) \
+		$(if $(CPU_COUNT),--job-count=$(CPU_COUNT),) --target offline $(dir $@)
+	$(call ly_progress,Fix up,links,to subdirectories)
+	$(PERL) \
+	  -i -p \
+	  -e 's#(href|src)="\.\./(misc|pictures|ly-examples|css|doc)#\1="\2#g' \
+	  $(dir $@)/*html
+	$(call ly_progress,Simplify,links,to self)
+	$(PERL) -i -pe 's#(href)="\.\./web/#\1="#g' $(dir $@)/*html
+
+website-build:
+	$(MAKE) out=web WEB_VERSION=yes -C Documentation/ website
+
+# For those who cannot for the life in them remember to type
+# WEB_TARGETS=..., just bloody make all doc stuff, already.
+all-doc:
+	$(MAKE) WEB_TARGETS='online offline' doc
+
+tree-prefix = $(outdir)
+tree-bin = $(tree-prefix)/bin
+tree-lib = $(tree-prefix)/lib
+tree-share = $(tree-prefix)/share
+
+# Don't put version numbers here. During development
+# they make no sense, and cause EPS files to become invalid.
+
+tree-lib-prefix = $(tree-lib)/lilypond/current
+tree-share-prefix = $(tree-share)/lilypond/current
+
+src-ext = c cc yy ll hh icc py scm tex ps texi itexi tely itely sh
+
+default: $(config_h) link-tree doc-messages
+
+link-tree: $(tree-prefix)/lilypond-force
+
+# Preparing LilyPond tree for build-dir exec
+$(tree-prefix)/lilypond-force: GNUmakefile GNUmakefile.in $(outdir)/VERSION
+	$(call ly_progress,Making,$@,)
+	rm -rf $(tree-bin) $(tree-lib) $(tree-share)
+	mkdir -p $(tree-bin)
+	mkdir -p $(tree-lib-prefix)
+	mkdir -p $(tree-share-prefix)
+	mkdir -p $(tree-share-prefix)/fonts
+	mkdir -p $(tree-share-prefix)/scm
+	cd $(tree-bin) && \
+		ln -sf ../../lily/$(outconfbase)/lilypond . && \
+		for i in abc2ly convert-ly etf2ly lilymidi lilypond-book lilypond-invoke-editor midi2ly musicxml2ly; \
+			do ln -sf ../../scripts/$(outconfbase)/$$i . ; done
+	mkdir -p $(tree-lib-prefix)/ccache && \
+		ln -s ../../../../../scm/$(outconfbase)/ $(tree-lib-prefix)/ccache/lily
+	cd $(tree-share-prefix)/fonts && \
+		for i in 00-lilypond-fonts.conf 99-lilypond-fonts.conf \
+                         emmentaler-font.conf; do \
+			ln -s $(top-src-dir)/mf/$$i .; done
+	# Just link the entire directory, even if it puts the "wrong" files into the
+	# "wrong" directory, such as *.otf into svg/.
+	cd $(tree-share-prefix)/fonts && \
+		for i in otf svg; do \
+			ln -s ../../../../../mf/$(outconfbase) $$i; done
+	cd $(tree-share-prefix) && for i in ly python; do \
+		ln -s $(top-src-dir)/$$i; done
+	cd $(tree-share-prefix) && \
+		ln -s ../../../../ps/$(outconfbase) ps
+	cd $(tree-share-prefix)/scm && \
+		ln -s ../../../../../scm/$(outconfbase) lily
+	touch $@
+
+TAGS.make: dummy
+	$(call ly_progress,Making,$@,)
+	etags -o $@ $(find $(top-src-dir) -name 'GNUmakefile*' -o -name '*.make')
+
+$(config_h): config.hh.in
+#
+# this is to prevent people from getting
+# undefined symbols  when we add them to config.h.in,
+# and they blindly run "cvs update; make".
+#
+	@echo
+	@echo ' *** $(config_h) is out of date'
+	@echo ' *** Remove it and rerun autogen:'
+	@echo '         rm $(config_h); ./autogen.sh'
+	@echo
+	@false
+
+grand-replace:
+	cd $(top-src-dir) && $(PYTHON) $(buildscript-dir)/grand-replace.py
+
+
+################################################################
+# testing
+
+BASELINE_STAMP:=$(top-build-dir)/out-baseline/.test-baseline-done
+RESULT_DIR=$(top-build-dir)/out/test-results
+
+test-pre: link-tree
+	$(call make_subdirs,python scripts flower lily mf,all)
+
+test: test-pre
+	$(MAKE) -C python local-test
+	$(MAKE) -C scripts/build local-test
+	$(MAKE) -C ly local-test
+	@echo 'To begin investigating regression-test crashes, try this:'
+	@echo
+	@echo '    grep -L systems.texi out/lybook-testdb/*/*log | sed s/log/ly/g | xargs grep -H sourcefilename'
+	@echo
+	@echo 'Matching lines may provide original test source file names.'
+	@echo 'The .ly files in which they appear are preprocessed test input.'
+	@echo 'The corresponding .log files may have errors or warnings.'
+	@echo
+	@echo 'If the above is not helpful, try sifting through this:'
+	@echo
+	@echo '    find out/lybook-testdb -name "*.log" | xargs grep -H "\(error\|warning\)"'
+	@echo
+	$(MAKE) -C input/regression out=test lysdoc-test
+	$(buildscript-dir)/print-gittxt.sh $(top-src-dir) > input/regression/out-test/tree.gittxt
+	$(MAKE) -C input/regression/abc2ly out=test lysdoc-test
+	$(MAKE) -C input/regression/include-path-modification \
+		out=test lysdoc-test
+	$(MAKE) -C input/regression/lilypond-book out=test local-test
+	$(MAKE) -C input/regression/midi out=test lysdoc-test
+	$(MAKE) -C input/regression/musicxml out=test lysdoc-test
+	$(MAKE) -C input/regression/other out=test lysdoc-test
+
+test-baseline-pre:
+	cd $(top-src-dir) && \
+		if test -d .git ; then \
+			if ! git diff --exit-code > /dev/null ; then \
+				echo "*** commit before base lining" 1>&2; \
+				exit 1; \
+			fi \
+		fi
+	$(MAKE) test-clean
+	$(MAKE) test
+
+test-baseline: test-baseline-pre
+	rm -f $(BASELINE_STAMP)
+#       Make a copy of the fonts that all subdir baselines can share.
+	$(call ly_progress,Synching,out-baseline/share/lilypond/current/fonts,from out)
+	mkdir -p $(top-build-dir)/out-baseline/share/lilypond/current
+	rsync -L -a -q --delete --exclude source \
+		$(top-build-dir)/out/share/lilypond/current/fonts \
+		$(top-build-dir)/out-baseline/share/lilypond/current
+	$(MAKE) out=test -C input/regression local-test-baseline
+	$(MAKE) out=test -C input/regression/abc2ly local-test-baseline
+	$(MAKE) out=test -C input/regression/midi local-test-baseline
+	$(MAKE) out=test -C input/regression/musicxml local-test-baseline
+	$(MAKE) out=test -C input/regression/other local-test-baseline
+	$(MAKE) test-snippets-clean
+	touch $(BASELINE_STAMP)
+
+local-check-pre:
+	[ -f $(BASELINE_STAMP) ] || \
+	  ( echo "*** no baseline for comparison" 1>&2 && false )
+	$(MAKE) test
+
+local-check: local-check-pre
+	rm -rf $(RESULT_DIR)
+	mkdir -p $(RESULT_DIR)
+	$(PYTHON) $(buildscript-dir)/output-distance.py $(if $(VERBOSE),-v) \
+		$(if $(CPU_COUNT),--job-count=$(CPU_COUNT),) \
+		--local-datadir --output-dir $(RESULT_DIR) \
+		input/regression/out-test-baseline input/regression/out-test \
+		input/regression/abc2ly/out-test-baseline input/regression/abc2ly/out-test \
+		input/regression/midi/out-test-baseline input/regression/midi/out-test \
+		input/regression/musicxml/out-test-baseline input/regression/musicxml/out-test \
+		input/regression/other/out-test-baseline input/regression/other/out-test
+	@find input ly -name '*.ly' -print |grep -v 'out.*/' | xargs grep '\\version' -L | grep -v "standard input" |sed 's/^/**** Missing version: /g'
+
+test-clean: test-snippets-clean
+	rm -rf $(RESULT_DIR)
+	$(MAKE) -C input/regression out=test clean
+
+doc-clean: snippets-clean
+
+snippets-clean:
+	rm -rf out/lybook-db
+
+test-snippets-clean:
+	rm -rf out/lybook-testdb
+
+distclean: clean doc-clean test-clean
+	$(MAKE) local-distclean
+
+local-distclean:
+	rm -f config.hh config.make GNUmakefile \
+		config.cache config.status config.log
+	rm -rf autom4te.cache
+	rm -rf $(outdir)
+
+$(package-icon):
+	$(MAKE) -C Documentation/logo icon
+
+install:
+	$(LOOP)
+ifeq ($(strip $(SRCMAKE)),)
+	$(MAKE) final-install
+endif
+
+local-help:
+	@echo "  config          rerun configure"
+	@echo "  dist            roll tarball: $(depth)/$(outdir)/$(distname).tar.gz"
+	@echo "  distclean       make clean, doc-clean, test-clean and"
+	@echo "                   also remove configure output"
+	@echo "  po              make new translation Portable Object database"
+	@echo "  po-replace      do po-update and replace catalogs with msgmerged versions"
+	@echo "  po-update       update translation Portable Object database"
+	@echo
+	@echo "  install-doc     install website documentation in"
+	@echo "                    (webdir=$(webdir))"
+	@echo "                    and Info documentation with images"
+	@echo "  uninstall-doc   remove installed documentation with images"
+	@echo "  info            build Info documentation with images"
+	@echo "  install-info    install Info documentation with images"
+	@echo
+	@echo "Some more targets are available for testing changes:"
+	@echo "  test"
+	@echo "  test-baseline"
+	@echo "  check"
+	@echo "  test-clean"
+	@echo
+	@echo "  For more information on these targets, see"
+	@echo "    \`Verify regression tests' in the Contributor's Guide."
+	@echo

@@ -1,0 +1,18 @@
+\documentclass[a4paper, 12pt]{article}
+
+\begin{document}
+
+\section{Using \texttt{lilypond-book}'s \texttt{fragment} option}
+
+If a snippet is not a fully valid LilyPond file, you have
+to use the \verb|fragment| option:
+
+\begin{lilypond}[fragment]
+c d e
+\end{lilypond}
+
+There is also a shorthand version \verb|\lilypond[fragment]{c' e' g'}|:
+
+\lilypond[fragment]{c' e' g'}
+
+\end{document}

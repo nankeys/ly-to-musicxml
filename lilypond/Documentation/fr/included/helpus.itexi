@@ -1,0 +1,120 @@
+@c -*- coding: utf-8; mode: texinfo; documentlanguage: fr -*-
+@c This file is part of web/community.itexi and
+@c contributor/introduction.itely
+
+@ignore
+    Translation of GIT committish: de1e42ce512f3690387cdd065109bddff1b7bd6d
+
+    When revising a translation, copy the HEAD committish of the
+    version that you are working on.  For details, see the Contributors'
+    Guide, node Updating translation committishes..
+@end ignore
+
+@macro helpusNeed
+@subheading Nous avons besoin de vous !
+
+Nous vous remercions dès à présent pour l'intérêt que vous éprouvez à
+nous aider et apprécions grandement votre implication.  Votre
+contribution viendra en aide à beaucoup d'utilisateurs dans leur quête
+de partitions de qualité.
+
+Prendre en charge même des tâches simples peut avoir un impact
+conséquent : cela permet aux développeurs plus expérimentés de
+consacrer leur temps à des travaux plus ardus.
+
+Pour un projet aux multiples facettes tel que LilyPond, il n'est parfois
+pas évident de savoir sous quel angle l'aborder.  En plus des pistes
+ci-dessous proposées, n'hésitez pas à envoyer un courriel sur la liste
+@uref{https://lists.gnu.org/mailman/listinfo/lilypond-devel, @code{lilypond-devel@@gnu.org}}
+afin d'obtenir de l'aide.
+
+@end macro
+
+
+@macro helpusSimple
+@subheading Tâches simples
+
+Aucun besoin de fouiller dans le code ni de compiler.
+
+@itemize
+@item
+La liste de diffusion : répondre aux questions des autres utilisateurs.
+Ceci peut consister à les aider dans leur navigation dans la
+documentation en ligne ; il peut s'avérer approprié en tel cas de les
+diriger sur une URL agnostique en matière de version, telles que
+@uref{https://lilypond.org/doc/latest/Documentation/notation/, @samp{/latest/}}
+ou
+@uref{https://lilypond.org/doc/stable/Documentation/notation/, @samp{/stable/}},
+qui font l'objet d'une redirection automatique.
+
+
+@item
+Les rapports de bogue : aider les utilisateurs à rédiger correctement et
+traduire leurs @rwebnamed{Bug reports, signalements de bogue},
+puis aider l'équipe des correcteurs à traiter ces
+@rcontribnamed{Issues, problèmes}.
+
+@item
+Documentation : il est possible de proposer des modifications, en
+suivant les recommandations s'appliquant aux
+@rcontribnamed{Documentation suggestions, suggestions en matière de
+documentation}.
+
+@item
+LilyPond Wiki : ajouter ou corriger des extraits. Voir
+@rcontribnamed{Adding and editing snippets, Ajout et édition
+d'extraits}.
+
+@item
+Discussions, relectures et tests : les développeurs demandent
+régulièrement des retours sur des ajouts à la documentation, d'éventuels
+changements de syntaxe ou de nouvelles fonctionnalités à tester.
+Vous aussi, prenez part à ces discussions !
+
+@end itemize
+
+@end macro
+
+@macro helpusAdvanced
+@subheading Tâches ardues
+
+Ces travaux demandent en général de disposer du code source et d'être en
+mesure de compiler LilyPond.
+
+@warning{Nous engageons les contributeurs utilisant Windows ou
+macOS à utiliser une machine virtuelle pour faire tourner
+@emph{Lilydev} -- voir @rcontribnamed{Quick start, Démarrage rapide} --
+plutôt que leur propre environnement de développement.}
+
+Les contributeurs utilisant Linux ou FreeBSD peuvent eux aussi utiliser
+Lilydev.  Nous leur conseillons cependant, s'ils préfèrent leur propre
+environnement de développement, la lecture des rubriques
+@rcontribnamed{Working with source code, Travailler sur le code source}
+et @rcontribnamed{Compiling, Compiler}.
+
+Nous vous recommandons de lire tout d'abord la rubrique
+@rcontrib{Summary for experienced developers}.
+
+@itemize
+@item
+Documentation : voir
+@rcontribnamed{Documentation work,Travailler sur la documentation}.
+
+@item
+Site web : le site web est compilé à partir du même code source
+que le reste de la documentation.  Reportez-vous aux informations sur la
+documentation, ainsi qu'au chapitre
+@rcontribnamed{Website work,Travailler sur le site internet}.
+
+@item
+Traductions : voir
+@rcontribnamed{Translating the documentation,Traduire la documentation}
+et @rcontribnamed{Translating the website,Traduire le site internet}.
+
+@item
+Correction de bogue et ajout de nouvelles fonctionnalités :
+voir @rcontrib{Programming work}.
+
+@end itemize
+
+@end macro

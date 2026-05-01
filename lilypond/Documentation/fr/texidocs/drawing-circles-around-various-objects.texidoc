@@ -1,0 +1,9 @@
+%% Translation of GIT committish: de1e42ce512f3690387cdd065109bddff1b7bd6d
+  texidocfr = "
+La commande @code{\\circle} permet de dessiner un cercle autour d'objets
+@code{\\markup}. D'autres objets nécessitent de faire appel à des
+techniques spécifiques. Cet exemple illustre deux manières de procéder :
+pour les repères, et pour les numéros de mesure.
+"
+
+  doctitlefr = "Encercler divers objets"

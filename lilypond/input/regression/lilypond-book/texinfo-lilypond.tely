@@ -1,0 +1,25 @@
+\input texinfo @c -*- coding: utf-8; mode: texinfo; -*-
+
+@settitle Test @@lilypond command in Texinfo
+
+
+@node Test lilypond command in Texinfo
+@section Test @code{@@lilypond} command in Texinfo
+
+One line, with option:
+@lilypond[fragment]{ c' }
+
+Multiple lines, with option:
+@lilypond[fragment]{
+  d'
+}
+
+One line, no option (with nested braces):
+@lilypond{ \score { e' } }
+
+Multiple lines, no option (with nested braces)
+@lilypond{
+  \score { f' }
+}
+
+@bye

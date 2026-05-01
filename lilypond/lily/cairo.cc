@@ -1,0 +1,1725 @@
+/*
+  This file is part of LilyPond, the GNU music typesetter.
+
+  Copyright (C) 2021--2026 Knut Petersen <knupero@gmail.com>
+
+  LilyPond is free software: you can redistribute it and/or modify
+  it under the terms of the GNU General Public License as published by
+  the Free Software Foundation, either version 3 of the License, or
+  (at your option) any later version.
+
+  LilyPond is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+
+  You should have received a copy of the GNU General Public License
+  along with LilyPond.  If not, see <http://www.gnu.org/licenses/>.
+*/
+
+// Defines _GNU_SOURCE, which is needed to enable POSIX features like
+// M_PI on Cygwin.
+#include "config.hh"
+
+#include "cpu-timer.hh"
+#include "dimensions.hh"
+#include "freetype.hh"
+#include "grob.hh"
+#include "international.hh"
+#include "lily-guile.hh"
+#include "lily-imports.hh"
+#include "lily-version.hh"
+#include "ly-module.hh"
+#include "ly-scm-list.hh"
+#include "main.hh"
+#include "modified-font-metric.hh"
+#include "open-type-font.hh"
+#include "output-def.hh"
+#include "pango-font.hh"
+#include "paper-book.hh"
+#include "point-and-click.hh"
+#include "prob.hh"
+#include "program-option.hh"
+#include "source-file.hh"
+#include "std-vector.hh"
+#include "stencil-interpret.hh"
+#include "stream-event.hh"
+#include "string-convert.hh"
+#include "text-interface.hh"
+#include "warn.hh"
+
+#include <cairo-ft.h>
+#include <cairo-pdf.h>
+#include <cairo-ps.h>
+#include <cairo-svg.h>
+#include <cairo.h>
+#include <glib.h>
+
+#include <png.h>
+
+#include <algorithm>
+#include <functional>
+#include <memory>
+#include <string>
+#include <unordered_map>
+#include <utility>
+#include <vector>
+
+enum Cairo_output_format
+{
+  UNKNOWN = 0,
+  PDF,
+  SVG,
+  PNG,
+  EPS,
+  PS,
+};
+
+static std::unordered_map<std::string, Cairo_output_format> output_formats = {
+  {"svg", SVG}, {"pdf", PDF}, {"eps", EPS}, {"ps", PS}, {"png", PNG},
+};
+
+std::string
+format_name (Cairo_output_format f)
+{
+  for (auto entry : output_formats)
+    {
+      if (entry.second == f)
+        {
+          return entry.first;
+        }
+    }
+
+  abort ();
+}
+
+Cairo_output_format
+parse_format (std::string const &f)
+{
+  return output_formats[f];
+}
+
+/* abstract Cairo surface + context, to abstract away the difference
+   between PNG output and the other formats */
+class Cairo_surface
+{
+protected:
+  cairo_surface_t *surface_;
+  cairo_t *context_;
+
+  // Size in staff space.
+  Offset original_extent_;
+
+public:
+  Cairo_surface ()
+  {
+    surface_ = nullptr;
+    surface_ = nullptr;
+  }
+  void set_original_extent (Offset ext) { original_extent_ = ext; }
+  Offset original_extent () { return original_extent_; }
+
+  cairo_surface_t *cairo_surface () { return surface_; }
+  cairo_t *context () { return context_; }
+  void check_errors ()
+  {
+    // Cairo can still gobble I/O errors for PDF (prior to commmit
+    // 2fbd53a6b3, 2021/07/23) and SVG (prior to commmit 4c6b604bd5, 2021/07/24).
+    if (context_)
+      {
+        auto status = cairo_status (context_);
+        if (status != CAIRO_STATUS_SUCCESS)
+          warning (
+            _f ("Cairo context status '%s'", cairo_status_to_string (status)));
+      }
+
+    if (surface_)
+      {
+        auto status = cairo_surface_status (surface_);
+        if (status != CAIRO_STATUS_SUCCESS)
+          warning (
+            _f ("Cairo surface status '%s'", cairo_status_to_string (status)));
+      }
+  }
+  virtual void finish ()
+  {
+    cairo_surface_flush (surface_);
+    cairo_surface_finish (surface_);
+  }
+  virtual ~Cairo_surface ()
+  {
+    if (surface_)
+      cairo_surface_destroy (surface_);
+    if (context_)
+      cairo_destroy (context_);
+  }
+};
+
+class Vanilla_surface : public Cairo_surface
+{
+public:
+  Vanilla_surface (Cairo_output_format format, std::string filename,
+                   Real paper_width, Real paper_height)
+  {
+    switch (format)
+      {
+      case SVG:
+        surface_ = cairo_svg_surface_create (filename.c_str (), paper_width,
+                                             paper_height);
+        break;
+      case PDF:
+        surface_ = cairo_pdf_surface_create (filename.c_str (), paper_width,
+                                             paper_height);
+        // The default PDF version of Cairo's output may change with releases.
+        // As of Cairo 1.17.7, the default is PDF 1.7. This results in a warning
+        // when embedding the produced PDF with XeTeX, which currently defaults
+        // to PDF 1.5.  Set a fixed version of 1.4, which is also the basis of
+        // the standard PDF/A and has all features we need.
+        cairo_pdf_surface_restrict_to_version (surface_,
+                                               CAIRO_PDF_VERSION_1_4);
+        break;
+      case PS:
+      case EPS:
+        surface_ = cairo_ps_surface_create (filename.c_str (), paper_width,
+                                            paper_height);
+        cairo_ps_surface_set_eps (surface_, format == EPS);
+        if (format == EPS)
+          {
+            std::string bbox = String_convert::form_string (
+              "0 0 %d %d", static_cast<int> (round (paper_width)),
+              static_cast<int> (round (paper_height)));
+
+            cairo_ps_surface_dsc_comment (surface_,
+                                          ("%%BoundingBox: " + bbox).c_str ());
+            cairo_ps_surface_dsc_begin_page_setup (surface_);
+            cairo_ps_surface_dsc_comment (
+              surface_, ("%%PageBoundingBox: " + bbox).c_str ());
+          }
+
+        break;
+      default:
+        abort ();
+      }
+    context_ = cairo_create (surface_);
+  }
+};
+
+static void
+png_error (png_structp, png_const_charp err_msg)
+{
+  if (err_msg)
+    error (_f ("libpng error: '%s'", err_msg));
+  else
+    error (_f ("libpng error, no details given."));
+}
+
+class Png_surface : public Cairo_surface
+{
+  unsigned int height_;
+  unsigned int width_;
+  std::string filename_;
+
+public:
+  Png_surface (std::string filename, Real paper_width, Real paper_height)
+  {
+    filename_ = filename;
+    int png_dpi = from_scm<int> (ly_get_option (ly_symbol2scm ("resolution")));
+    height_
+      = std::max (static_cast<int> (round (paper_height / 72.0 * png_dpi)), 1);
+    width_
+      = std::max (static_cast<int> (round (paper_width / 72.0 * png_dpi)), 1);
+    surface_
+      = cairo_image_surface_create (CAIRO_FORMAT_ARGB32, width_, height_);
+    context_ = cairo_create (surface_);
+    cairo_scale (context_, png_dpi / 72.0, png_dpi / 72.0);
+
+    cairo_save (context_);
+    // TODO - make transparency/background tunable. White
+    // background is easier for visual inspection
+    cairo_set_source_rgba (context_, 1, 1, 1, 1);
+    cairo_paint (context_);
+    cairo_restore (context_);
+  }
+
+protected:
+  void finish () override
+  {
+    cairo_surface_flush (surface_);
+    write ();
+    cairo_surface_finish (surface_);
+  }
+
+  void write ()
+  {
+    unsigned char *data = cairo_image_surface_get_data (surface_);
+    png_structp png = png_create_write_struct (PNG_LIBPNG_VER_STRING, nullptr,
+                                               png_error, png_error);
+    if (!png)
+      error ("png_create_write_struct() failed");
+
+    png_image image = {};
+    image.version = PNG_IMAGE_VERSION;
+    image.width = width_;
+    image.height = height_;
+    image.format = PNG_FORMAT_RGBA;
+
+    if (!png_image_write_to_file (&image, filename_.c_str (), 0, data, 0,
+                                  NULL))
+      {
+        error (_f ("error writing %s", filename_.c_str ()));
+      }
+    png_destroy_write_struct (&png, NULL);
+  }
+};
+
+struct Pair_hash
+{
+  template <class T1, class T2>
+  std::size_t operator() (const std::pair<T1, T2> &pair) const
+  {
+    return std::hash<T1> () (pair.first) ^ std::hash<T2> () (pair.second);
+  }
+};
+
+class Cairo_outputter : public Stencil_sink
+{
+  // (filename, index) => FT_Face unowned
+  std::unordered_map<std::pair<std::string, int>, FT_Face, Pair_hash>
+    ft_faces_;
+  FT_Face ft_font (std::string const &file, int index);
+
+  // Keys unowned, values owned.
+  std::unordered_map<FT_Face, cairo_font_face_t *> cairo_fonts_;
+  cairo_font_face_t *cairo_font_for_ft_font (FT_Face face);
+
+  Cairo_output_format format_;
+
+  bool use_left_margin_;
+  Real left_margin_;
+
+  bool use_page_links_;
+
+  // Transform staff-space units to Cairo bigpoints
+  Real scale_factor_;
+
+  Cairo_surface *surface_;
+  cairo_t *context () const { return surface_->context (); }
+  std::string outfile_basename_;
+  std::string filename_;
+
+  SCM point_and_click_;
+
+  SCM output (SCM scm) override;
+
+  // drawing routines:
+  void show_named_glyph (SCM scaledname, SCM glyphname);
+  void print_glyphs (SCM size, SCM glyphs, SCM filename, SCM index, SCM text,
+                     SCM clusters);
+  void path (SCM thickness, SCM exps, SCM cap, SCM join, SCM filled);
+  void moveto (SCM varx, SCM vary);
+  void setrgbacolor (SCM varr, SCM varg, SCM varb, SCM vara);
+
+  void resetrgbacolor ();
+  void draw_maybe_filled_path (bool filled, Real blot);
+  void draw_line (SCM blotdiam, SCM xa, SCM ya, SCM xb, SCM yb);
+  void draw_dashed_line (SCM blotdiam, SCM paton, SCM patoff, SCM vardx,
+                         SCM vardy, SCM phase);
+
+  void draw_round_box (SCM left, SCM right, SCM bottom, SCM top, SCM blotdiam);
+
+  void draw_polygon (SCM points, SCM linewidth, SCM filled);
+
+  void draw_circle (SCM radius, SCM thickness, SCM filled);
+
+  void draw_ellipse (SCM xradius, SCM yradius, SCM thickness, SCM filled);
+
+  void draw_partial_ellipse (SCM xradius, SCM yradius, SCM startangle,
+                             SCM endangle, SCM thickness, SCM connected,
+                             SCM filled);
+
+  void set_rotation (SCM angle, SCM varx, SCM vary);
+  void reset_rotation ();
+  std::string pdf_rect (Real llx, Real lly, Real w, Real h,
+                        bool relative_to_current) const;
+  void cairo_link (std::string const &attr);
+  void paint_image_surface (cairo_surface_t *surface, Real width, Real height,
+                            Real scale, bool paint_background, Real rgba[4]);
+  void eps_file (std::string const &content, std::vector<int> bbox,
+                 Real scale);
+  void eps_file (SCM, SCM, SCM);
+  void png_file (SCM, SCM, SCM);
+  void embedded_ps (SCM);
+  void url_link (SCM target, SCM varx, SCM vary);
+  void url_link (std::string const &target, Real llx, Real lly, Real w, Real h,
+                 bool relative);
+  void textedit_link (Real llx, Real lly, Real w, Real h,
+                      std::string const &origin);
+  void grob_cause (SCM, SCM);
+  void page_link (SCM target, SCM varx, SCM vary);
+  void set_scale (SCM varx, SCM vary);
+  void reset_scale ();
+  void metadata (std::string const &key, std::string const &val);
+
+public:
+  Cairo_outputter (Cairo_output_format format, std::string const &basename,
+                   Output_def *paper, bool use_left_margin,
+                   bool use_page_links);
+  ~Cairo_outputter ();
+  void create_surface (Stencil const *);
+  void finish_page ();
+  void handle_metadata (SCM header);
+  void handle_outline (Output_def *paper);
+  void close ();
+};
+
+cairo_font_face_t *
+Cairo_outputter::cairo_font_for_ft_font (FT_Face face)
+{
+  cairo_font_face_t *cairo_font_face = cairo_fonts_[face];
+  if (!cairo_font_face)
+    {
+      static const cairo_user_data_key_t ukey = {};
+      cairo_font_face = cairo_ft_font_face_create_for_ft_face (face, 0);
+      cairo_fonts_[face] = cairo_font_face;
+
+      if (cairo_font_face_set_user_data (
+            cairo_font_face, &ukey, face,
+            [] (auto p) { FT_Done_Face (static_cast<FT_Face> (p)); }))
+        {
+          programming_error ("cairo_font_face_set_user_data failed");
+        }
+    }
+
+  return cairo_font_face;
+}
+
+FT_Face
+Cairo_outputter::ft_font (std::string const &file, int index)
+{
+  std::pair<std::string, int> key = {file, index};
+  auto it = ft_faces_.find (key);
+  if (it != ft_faces_.end ())
+    return it->second;
+
+  FT_Face f = open_ft_face (file, index);
+  ft_faces_[key] = f;
+  return f;
+}
+
+void
+Cairo_outputter::show_named_glyph (SCM scaled_font, SCM glyphname)
+{
+  auto *const mfm = LY_ASSERT_SMOB (Modified_font_metric, scaled_font, 1);
+  const auto g = from_scm<std::string> (glyphname);
+
+  Font_metric *orig = mfm->original_font ();
+  auto otf = dynamic_cast<Open_type_font *> (orig);
+  assert (otf);
+
+  Real font_scale_factor_ = mfm->magnification () * otf->design_size ();
+
+  // Reload the FT_Face, to avoid Cairo settings affecting rendering
+  // of subsequent files.
+  FT_Face ft_face = ft_font (otf->filename (), 0);
+
+  cairo_set_font_face (context (), cairo_font_for_ft_font (ft_face));
+  cairo_matrix_t m = {
+    /* .xx = */ font_scale_factor_,
+    /* .yx = */ 0,
+    /* .xy = */ 0,
+    /* .yy = */ -font_scale_factor_,
+    /* .x0 = */ 0,
+    /* .y0 = */ 0,
+  };
+  cairo_set_font_matrix (context (), &m);
+
+  Real cx, cy;
+  cairo_get_current_point (context (), &cx, &cy);
+  cairo_glyph_t oneglyph = {
+    FT_Get_Name_Index (ft_face, const_cast<FT_String *> (g.c_str ())), cx, cy};
+
+  cairo_show_glyphs (context (), &oneglyph, 1);
+}
+
+// See function `glyph-string` in file `output-ps.scm` for documentation of the
+// arguments.
+void
+Cairo_outputter::print_glyphs (SCM size, SCM glyphs, SCM filename,
+                               SCM face_index, SCM text, SCM clusters)
+{
+  Real sumw = 0.0;
+
+  Real startx, starty;
+  cairo_get_current_point (context (), &startx, &starty);
+
+  FT_Face ft_face
+    = ft_font (from_scm<std::string> (filename), from_scm<int> (face_index));
+  cairo_set_font_face (context (), cairo_font_for_ft_font (ft_face));
+
+  // TODO - why do we need to scale with scale_factor here?
+  Real scale = from_scm<Real> (size) / (bigpoint_constant * scale_factor_);
+  cairo_matrix_t m = {
+    /* .xx = */ scale,
+    /* .yx = */ 0,
+    /* .xy = */ 0,
+    /* .yy = */ -scale,
+    /* .x0 = */ 0,
+    /* .y0 = */ 0,
+  };
+  cairo_set_font_matrix (context (), &m);
+
+  std::vector<cairo_glyph_t> cairo_glyphs;
+  for (SCM g = glyphs; scm_is_pair (g); g = scm_cdr (g))
+    {
+      SCM whxyggn = scm_car (g);
+      auto w = from_scm<Real> (scm_car (whxyggn));
+      auto x = from_scm<Real> (scm_caddr (whxyggn));
+      auto y = from_scm<Real> (scm_cadddr (whxyggn));
+      auto glyph_idx = from_scm<int> (scm_cadddr (scm_cdr (whxyggn)));
+
+      cairo_glyphs.push_back (cairo_glyph_t ({
+        /* .index = */ static_cast<long unsigned int> (glyph_idx),
+        /* .x = */ startx + (x + sumw),
+        /* .y = */ starty - y,
+      }));
+      sumw = sumw + w;
+    }
+
+  const auto text_str = from_scm<std::string> (text);
+  if (scm_is_false (clusters))
+    {
+      cairo_show_glyphs (context (), cairo_glyphs.data (),
+                         int (cairo_glyphs.size ()));
+    }
+  else
+    {
+      std::vector<cairo_text_cluster_t> cluster_array;
+      for (SCM c = clusters; scm_is_pair (c); c = scm_cdr (c))
+        {
+          cairo_text_cluster_t entry = {
+            /* .num_bytes = */ from_scm<int> (scm_caar (c)),
+            /* .num_glyphs = */ from_scm<int> (scm_cdar (c)),
+          };
+
+          cluster_array.push_back (entry);
+        }
+      auto flags = static_cast<cairo_text_cluster_flags_t> (0);
+      cairo_show_text_glyphs (
+        context (), text_str.c_str (), static_cast<int> (text_str.size ()),
+        cairo_glyphs.data (), static_cast<int> (cairo_glyphs.size ()),
+        cluster_array.data (), static_cast<int> (cluster_array.size ()),
+        flags);
+    }
+}
+
+void
+Cairo_outputter::path (SCM thickness, SCM exps, SCM cap, SCM join, SCM filled)
+{
+  // Set linewidth
+  Real blot = from_scm<Real> (thickness);
+
+  cairo_set_line_width (context (), blot);
+
+  if (scm_is_eq (cap, ly_symbol2scm ("butt")))
+    cairo_set_line_cap (context (), CAIRO_LINE_CAP_BUTT);
+  else if (scm_is_eq (cap, ly_symbol2scm ("square")))
+    cairo_set_line_cap (context (), CAIRO_LINE_CAP_SQUARE);
+  else
+    {
+      if (!SCM_UNBNDP (cap) && !scm_is_eq (cap, ly_symbol2scm ("round")))
+        warning (_f ("unknown line-cap-style: %s",
+                     ly_scm_write_string (cap).c_str ()));
+
+      cairo_set_line_cap (context (), CAIRO_LINE_CAP_ROUND);
+    }
+
+  if (scm_is_eq (join, ly_symbol2scm ("miter")))
+    cairo_set_line_join (context (), CAIRO_LINE_JOIN_MITER);
+  else if (scm_is_eq (join, ly_symbol2scm ("bevel")))
+    cairo_set_line_join (context (), CAIRO_LINE_JOIN_BEVEL);
+  else
+    {
+      if (!SCM_UNBNDP (join) && !scm_is_eq (join, ly_symbol2scm ("round")))
+        warning (_f ("unknown line-cap-style: %s",
+                     ly_scm_write_string (cap).c_str ()));
+      cairo_set_line_join (context (), CAIRO_LINE_JOIN_ROUND);
+    }
+
+  // save to be able to undo cairo_translate
+  cairo_save (context ());
+
+  // translate: current point is new cairo origin
+  Real cpx, cpy;
+  cairo_get_current_point (context (), &cpx, &cpy);
+
+  cairo_translate (context (), cpx, cpy);
+  // evaluate drawing primitives given in exps
+  while (scm_is_pair (exps))
+    {
+      SCM head = scm_car (exps);
+      if (scm_is_eq (head, ly_symbol2scm ("moveto")))
+        {
+          cairo_move_to (context (), from_scm<Real> (scm_cadr (exps)),
+                         from_scm<Real> (scm_caddr (exps)));
+          exps = scm_cdddr (exps);
+        }
+      else if (scm_is_eq (head, ly_symbol2scm ("rmoveto")))
+        {
+          cairo_rel_move_to (context (), from_scm<Real> (scm_cadr (exps)),
+                             from_scm<Real> (scm_caddr (exps)));
+          exps = scm_cdddr (exps);
+        }
+      else if (scm_is_eq (head, ly_symbol2scm ("lineto")))
+        {
+          cairo_line_to (context (), from_scm<Real> (scm_cadr (exps)),
+                         from_scm<Real> (scm_caddr (exps)));
+          exps = scm_cdddr (exps);
+        }
+      else if (scm_is_eq (head, ly_symbol2scm ("rlineto")))
+        {
+          cairo_rel_line_to (context (), from_scm<Real> (scm_cadr (exps)),
+                             from_scm<Real> (scm_caddr (exps)));
+          exps = scm_cdddr (exps);
+        }
+      else if (scm_is_eq (head, ly_symbol2scm ("curveto")))
+        {
+          cairo_curve_to (context (), from_scm<Real> (scm_cadr (exps)),
+                          from_scm<Real> (scm_caddr (exps)),
+                          from_scm<Real> (scm_cadddr (exps)),
+                          from_scm<Real> (scm_cadddr (scm_cdr (exps))),
+                          from_scm<Real> (scm_cadddr (scm_cddr (exps))),
+                          from_scm<Real> (scm_cadddr (scm_cdddr (exps))));
+          exps = scm_cddddr (scm_cdddr (exps));
+        }
+      else if (scm_is_eq (head, ly_symbol2scm ("rcurveto")))
+        {
+          cairo_rel_curve_to (context (), from_scm<Real> (scm_cadr (exps)),
+                              from_scm<Real> (scm_caddr (exps)),
+                              from_scm<Real> (scm_cadddr (exps)),
+                              from_scm<Real> (scm_cadddr (scm_cdr (exps))),
+                              from_scm<Real> (scm_cadddr (scm_cddr (exps))),
+                              from_scm<Real> (scm_cadddr (scm_cdddr (exps))));
+          exps = scm_cddddr (scm_cdddr (exps));
+        }
+      else if (scm_is_eq (head, ly_symbol2scm ("closepath")))
+        {
+          cairo_close_path (context ());
+          exps = scm_cdr (exps);
+        }
+      else
+        {
+          programming_error ("unexpected path operator: "
+                             + ly_scm_write_string (head));
+        }
+    }
+
+  // stroke / fill according to user wishes
+  bool fill = false;
+  if (!SCM_UNBNDP (filled))
+    {
+      LY_ASSERT_TYPE (scm_is_bool, filled, 5);
+      fill = from_scm<bool> (filled);
+    }
+
+  draw_maybe_filled_path (fill, blot);
+
+  // undo context()->translate
+  cairo_restore (context ());
+}
+
+void
+Cairo_outputter::finish_page ()
+{
+  cairo_show_page (context ());
+  surface_->check_errors ();
+}
+
+void
+Cairo_outputter::create_surface (Stencil const *stencil)
+{
+  filename_ = outfile_basename_ + "." + format_name (format_);
+
+  message (_f ("Layout output to `%s'...\n", filename_.c_str ()));
+
+  Box b = stencil->extent_box ();
+  for (const auto a : {X_AXIS, Y_AXIS})
+    for (const auto d : {LEFT, RIGHT})
+      if (std::isinf (b[a][d]))
+        b[a][d] = 0.0;
+
+  if (use_left_margin_)
+    b[X_AXIS].add_point (left_margin_);
+
+  // Round up the size to an integral number of bigpoints (see also framework-ps.scm)
+  Box scaled_box = b;
+  scaled_box.scale (scale_factor_);
+  for (const auto a : {X_AXIS, Y_AXIS})
+    scaled_box[a][LEFT] = std::floor (scaled_box[a][LEFT]);
+  for (const auto a : {X_AXIS, Y_AXIS})
+    scaled_box[a][RIGHT] = std::ceil (
+      std::max (scaled_box[a][RIGHT],
+                // Make sure that the box is at least 1 staff-space
+                // in either direction.
+                scaled_box[a][LEFT] + scale_factor_));
+
+  b = scaled_box;
+  b.scale (1 / scale_factor_);
+  if (format_ == PNG)
+    {
+      surface_ = new Png_surface (filename_, scaled_box[X_AXIS].length (),
+                                  scaled_box[Y_AXIS].length ());
+    }
+  else
+    {
+      surface_ = new Vanilla_surface (format_, filename_,
+                                      scaled_box[X_AXIS].length (),
+                                      scaled_box[Y_AXIS].length ());
+    }
+
+  surface_->set_original_extent (Offset (stencil->extent (X_AXIS).length (),
+                                         stencil->extent (Y_AXIS).length ()));
+  cairo_scale (context (), scale_factor_, -scale_factor_);
+  cairo_translate (context (), -b[X_AXIS][LEFT], -b[Y_AXIS][UP]);
+}
+
+void
+Cairo_outputter::moveto (SCM varx, SCM vary)
+{
+  Real x = from_scm<Real> (varx);
+  Real y = from_scm<Real> (vary);
+  cairo_move_to (context (), x, y);
+}
+
+void
+Cairo_outputter::setrgbacolor (SCM varr, SCM varg, SCM varb, SCM vara)
+{
+  Real r = from_scm<Real> (varr);
+  Real g = from_scm<Real> (varg);
+  Real b = from_scm<Real> (varb);
+  Real a = from_scm<Real> (vara);
+
+  cairo_save (context ());
+  cairo_set_source_rgba (context (), r, g, b, a);
+}
+
+void
+Cairo_outputter::resetrgbacolor ()
+{
+  cairo_restore (context ());
+}
+
+void
+Cairo_outputter::draw_line (SCM blotdiam, SCM xa, SCM ya, SCM xb, SCM yb)
+{
+  Real d = from_scm<Real> (blotdiam);
+  Real x = from_scm<Real> (xa);
+  Real y = from_scm<Real> (ya);
+  Real dx = from_scm<Real> (xb) - x;
+  Real dy = from_scm<Real> (yb) - y;
+
+  cairo_set_line_width (context (), d);
+  cairo_set_line_cap (context (), CAIRO_LINE_CAP_ROUND);
+  cairo_rel_move_to (context (), x, y);
+  cairo_rel_line_to (context (), dx, dy);
+  cairo_stroke (context ());
+}
+
+void
+Cairo_outputter::draw_dashed_line (SCM blotdiam, SCM paton, SCM patoff,
+                                   SCM vardx, SCM vardy, SCM phase)
+{
+  Real dx = from_scm<Real> (vardx);
+  Real dy = from_scm<Real> (vardy);
+  Real on = from_scm<Real> (paton);
+  Real off = from_scm<Real> (patoff);
+  Real pat[] = {on, off};
+
+  cairo_save (context ());
+  cairo_set_dash (context (), pat, 2, from_scm<Real> (phase));
+  cairo_set_line_width (context (), from_scm<Real> (blotdiam));
+  cairo_set_line_cap (context (), CAIRO_LINE_CAP_ROUND);
+  cairo_rel_line_to (context (), dx, dy);
+  cairo_stroke (context ());
+  cairo_restore (context ());
+}
+
+static Real
+deg_to_rad (Real a)
+{
+  return a * M_PI / 180.0;
+}
+
+void
+Cairo_outputter::draw_round_box (SCM left, SCM right, SCM bottom, SCM top,
+                                 SCM blotdiam)
+{
+  Real r = (from_scm<Real> (blotdiam)) / 2;
+  Real x = r - (from_scm<Real> (left));
+  Real y = r - (from_scm<Real> (bottom));
+  Real w = (from_scm<Real> (right)) - r - x;
+  Real h = (from_scm<Real> (top)) - r - y;
+  // FIXME correct but inefficient code (pdfs are bigger than necessary)
+  //       possible optimizations: see ps code in music-drawing-routines.ps
+  if (r == 0)
+    {
+      cairo_rel_move_to (context (), x, y);
+      cairo_rel_line_to (context (), 0, h);
+      cairo_rel_line_to (context (), w, 0);
+      cairo_rel_line_to (context (), 0, -h);
+      cairo_rel_line_to (context (), -w, 0);
+      cairo_close_path (context ());
+      cairo_fill (context ());
+    }
+  else
+    {
+      cairo_rel_move_to (context (), x, y);
+
+      Real cx, cy;
+      cairo_get_current_point (context (), &cx, &cy);
+
+      cairo_new_sub_path (context ());
+      cairo_arc (context (), cx + w, cy, r, -M_PI / 2, 0);
+      cairo_arc (context (), cx + w, cy + h, r, 0.0, M_PI / 2);
+      cairo_arc (context (), cx, cy + h, r, M_PI / 2, M_PI);
+      cairo_arc (context (), cx, cy, r, M_PI, M_PI * 1.5);
+      cairo_close_path (context ());
+      cairo_fill (context ());
+    }
+}
+
+void
+Cairo_outputter::draw_polygon (SCM points, SCM linewidth, SCM filled)
+{
+  Real cx, cy;
+  cairo_get_current_point (context (), &cx, &cy);
+
+  cairo_set_line_cap (context (), CAIRO_LINE_CAP_BUTT);
+  cairo_set_line_join (context (), CAIRO_LINE_JOIN_ROUND);
+  bool first = true;
+  for (; scm_is_pair (points); points = scm_cddr (points))
+    {
+      Real x = from_scm<Real> (scm_car (points));
+      Real y = from_scm<Real> (scm_cadr (points));
+      if (first)
+        cairo_move_to (context (), x + cx, y + cy);
+      else
+        cairo_line_to (context (), x + cx, y + cy);
+      first = false;
+    }
+
+  cairo_close_path (context ());
+  draw_maybe_filled_path (from_scm<bool> (filled), from_scm<Real> (linewidth));
+}
+
+void
+Cairo_outputter::draw_maybe_filled_path (bool filled, Real blot)
+{
+  if (blot != 0.0)
+    cairo_set_line_width (context (), blot);
+  if (filled)
+    {
+      if (blot != 0.0)
+        cairo_stroke_preserve (context ());
+      cairo_fill (context ());
+    }
+  else
+    cairo_stroke (context ());
+}
+
+void
+Cairo_outputter::draw_circle (SCM radius, SCM thickness, SCM filled)
+{
+  Real rad = from_scm<Real> (radius);
+  Real cx, cy;
+  cairo_get_current_point (context (), &cx, &cy);
+
+  cairo_new_sub_path (context ());
+  cairo_arc (context (), cx, cy, rad, 0.0, 2 * M_PI);
+  draw_maybe_filled_path (from_scm<bool> (filled), from_scm<Real> (thickness));
+}
+
+void
+Cairo_outputter::draw_ellipse (SCM xradius, SCM yradius, SCM thickness,
+                               SCM filled)
+{
+  Real xrad = from_scm<Real> (xradius);
+  Real yrad = from_scm<Real> (yradius);
+  Real cx, cy;
+  cairo_get_current_point (context (), &cx, &cy);
+
+  cairo_save (context ());
+  cairo_translate (context (), cx, cy);
+  cairo_scale (context (), 1, yrad / xrad);
+  cairo_new_path (context ());
+  cairo_arc (context (), 0, 0, xrad, 0, 2 * M_PI);
+  cairo_restore (context ());
+  draw_maybe_filled_path (from_scm<bool> (filled), from_scm<Real> (thickness));
+}
+
+void
+Cairo_outputter::draw_partial_ellipse (SCM xradius, SCM yradius,
+                                       SCM startangle, SCM endangle,
+                                       SCM thickness, SCM connected,
+                                       SCM filled)
+{
+  Real xrad = from_scm<Real> (xradius);
+  Real yrad = from_scm<Real> (yradius);
+  Real cx, cy;
+  cairo_get_current_point (context (), &cx, &cy);
+
+  cairo_save (context ());
+  cairo_translate (context (), cx, cy);
+  cairo_scale (context (), 1, yrad / xrad);
+  cairo_new_path (context ());
+  cairo_arc (context (), 0, 0, xrad, deg_to_rad (-from_scm<Real> (endangle)),
+             deg_to_rad (-from_scm<Real> (startangle)));
+  if (from_scm<bool> (connected))
+    cairo_close_path (context ());
+
+  cairo_restore (context ());
+  draw_maybe_filled_path (from_scm<bool> (filled), from_scm<Real> (thickness));
+}
+
+void
+Cairo_outputter::set_rotation (SCM angle, SCM varx, SCM vary)
+{
+  Real ang = from_scm<Real> (angle);
+  Real x = from_scm<Real> (varx);
+  Real y = from_scm<Real> (vary);
+
+  cairo_save (context ());
+  cairo_translate (context (), x, y);
+  cairo_rotate (context (), deg_to_rad (ang));
+  cairo_translate (context (), -x, -y);
+}
+
+void
+Cairo_outputter::reset_rotation ()
+{
+  cairo_restore (context ());
+}
+
+void
+Cairo_outputter::paint_image_surface (cairo_surface_t *surface, Real width,
+                                      Real height, Real scale,
+                                      bool paint_background, Real rgba[4])
+{
+  Real x = 0.0;
+  Real y = 0.0;
+  cairo_get_current_point (context (), &x, &y);
+
+  if (paint_background)
+    {
+      cairo_save (context ());
+      cairo_set_source_rgba (context (), rgba[0], rgba[1], rgba[2], rgba[3]);
+      cairo_rectangle (context (), x, y, width * scale, height * scale);
+      cairo_fill (context ());
+      cairo_restore (context ());
+    }
+
+  /* Must save & restore: the source image introduces a clip path that
+     will trim subsequent elements otherwise
+  */
+  cairo_save (context ());
+
+  cairo_pattern_t *pattern = cairo_pattern_create_for_surface (surface);
+
+  cairo_matrix_t matrix = {};
+
+  cairo_matrix_init_identity (&matrix);
+
+  // Undo Cairo's -1 Y-scaling
+  cairo_matrix_scale (&matrix, 1 / scale, -1 / scale);
+  cairo_matrix_translate (&matrix, -x, -y - scale * height);
+  cairo_pattern_set_matrix (pattern, &matrix);
+
+  cairo_set_source (context (), pattern);
+
+  cairo_paint (context ());
+  cairo_restore (context ());
+  cairo_pattern_destroy (pattern);
+}
+
+void
+Cairo_outputter::eps_file (std::string const &content, std::vector<int> bbox,
+                           Real scale)
+{
+  if (format_ != PS && format_ != EPS)
+    {
+      static bool warned = false;
+      if (!warned)
+        warning (_ ("embedding EPS only supported for PS/EPS output.\n"
+                    "Use Ghostscript to create other output formats."));
+      warned = true;
+      return;
+    }
+
+  /* Since we don't create real image data, it should be possible to
+     make a 1x1 image. However, the pattern does not necessarily
+     have a 1:1 aspect ratio. Avoid scaling magic by creating the
+     image exactly to bbox size.
+  */
+  int width = bbox[2] - bbox[0];
+  int height = bbox[3] - bbox[1];
+  cairo_surface_t *image
+    = cairo_image_surface_create (CAIRO_FORMAT_ARGB32, width, height);
+
+  assert (cairo_surface_status (image) == CAIRO_STATUS_SUCCESS);
+
+  {
+    auto duped_content = std::unique_ptr<unsigned char[]> (
+      new unsigned char[content.length ()]);
+    std::uninitialized_copy (content.begin (), content.end (),
+                             duped_content.get ());
+
+    const auto status = cairo_surface_set_mime_data (
+      image, CAIRO_MIME_TYPE_EPS, duped_content.get (), content.length (),
+      [] (auto p) { delete[] static_cast<unsigned char *> (p); },
+      duped_content.release ());
+    assert (status == CAIRO_STATUS_SUCCESS);
+  }
+
+  std::string bbox_str = String_convert::form_string (
+    "bbox=[%d %d %d %d]", bbox[0], bbox[1], bbox[2], bbox[3]);
+
+  {
+    auto duped_bbox = std::unique_ptr<unsigned char[]> (
+      new unsigned char[bbox_str.length ()]);
+    std::uninitialized_copy (bbox_str.begin (), bbox_str.end (),
+                             duped_bbox.get ());
+
+    const auto status = cairo_surface_set_mime_data (
+      image, CAIRO_MIME_TYPE_EPS_PARAMS, duped_bbox.get (), bbox_str.length (),
+      [] (auto p) { delete[] static_cast<unsigned char *> (p); },
+      duped_bbox.release ());
+    assert (status == CAIRO_STATUS_SUCCESS);
+  }
+  paint_image_surface (image, width, height, scale, false, nullptr);
+  cairo_surface_destroy (image);
+}
+
+void
+Cairo_outputter::eps_file (SCM content, SCM bbox_scm, SCM scale)
+{
+  std::vector<int> bbox;
+  for (SCM b = bbox_scm; scm_is_pair (b); b = scm_cdr (b))
+    bbox.push_back (from_scm<int> (scm_car (b)));
+
+  assert (bbox.size () == 4);
+  eps_file (from_scm<std::string> (content), bbox, from_scm<Real> (scale));
+}
+
+void
+Cairo_outputter::embedded_ps (SCM arg)
+{
+  if (format_ != PS && format_ != EPS)
+    {
+      static bool warned = false;
+      if (!warned)
+        warning (_ ("embedded-ps only supported for PS/EPS. "
+                    "Use Ghostscript to create output in other formats"));
+      warned = true;
+      return;
+    }
+  const auto command = from_scm<std::string> (arg);
+
+  Offset sz = surface_->original_extent ();
+  Real x, y;
+  cairo_get_current_point (context (), &x, &y);
+
+  /*
+    Pretend we're embedding an EPS file that coincides with the page
+    boundary from where we are drawing.
+  */
+  std::vector<int> bbox
+    = {0, 0, static_cast<int> (sz[X_AXIS]), static_cast<int> (sz[Y_AXIS])};
+  cairo_save (context ());
+  cairo_move_to (context (), 0, -sz[Y_AXIS]);
+
+  std::string eps_command
+    = "%!PS-Adobe-3.0 EPSF-3.0\n" + std::string ("%%BoundingBox: ")
+      + String_convert::form_string ("%d %d %d %d\n"
+                                     "%f %f moveto\n",
+                                     bbox[0], bbox[1], bbox[2], bbox[3], x,
+                                     sz[Y_AXIS] + y)
+      + command;
+  eps_file (eps_command, bbox, 1.0);
+  cairo_restore (context ());
+}
+
+// Returns nullptr in case of error.  The caller should handle this gracefully.
+cairo_surface_t *
+read_png_to_surface (const std::string &fn)
+{
+  cairo_surface_t *surface = cairo_image_surface_create_from_png (fn.c_str ());
+  cairo_status_t status = cairo_surface_status (surface);
+  if (status)
+    {
+      warning (_f ("error while reading PNG image: %s",
+                   cairo_status_to_string (status)));
+      cairo_surface_destroy (surface);
+      return nullptr;
+    }
+  return surface;
+}
+
+void
+Cairo_outputter::png_file (SCM file_name, SCM factor, SCM background_color)
+{
+  LY_ASSERT_TYPE (scm_is_string, file_name, 0);
+  const auto fn = from_scm<std::string> (file_name);
+  LY_ASSERT_TYPE (is_scm<Real>, factor, 0);
+  Real f = from_scm<Real> (factor);
+  cairo_surface_t *surface = read_png_to_surface (fn);
+  // In case the image cannot be read, \image should have detected this in the
+  // call to ly:png-dimensions and prevented the creation of an image stencil.
+  assert (surface);
+  // TODO: when the PS backend is dropped, \image will be able to emit the image
+  // stencil on top of a box stencil, and we won't have to handle the background
+  // color here.
+  bool paint_background;
+  Real rgba[4] {0, 0, 0, 0};
+  if (scm_is_false (background_color))
+    {
+      paint_background = false;
+    }
+  else
+    {
+      paint_background = true;
+      for (vsize i = 0; i < 4; i++)
+        {
+          LY_ASSERT_TYPE (scm_is_pair, background_color, 0);
+          LY_ASSERT_TYPE (is_scm<Real>, scm_car (background_color), 0);
+          rgba[i] = from_scm<Real> (scm_car (background_color));
+          background_color = scm_cdr (background_color);
+        }
+    }
+  Real width = cairo_image_surface_get_width (surface);
+  Real height = cairo_image_surface_get_height (surface);
+  paint_image_surface (surface, width, height, f, paint_background, rgba);
+  cairo_surface_destroy (surface);
+}
+
+void
+Cairo_outputter::textedit_link (Real llx, Real lly, Real w, Real h,
+                                std::string const &origin)
+{
+  /* stencil-interpret.cc passes the current offset as 1st grob-cause,
+     so no need to get current offset. */
+  url_link (origin, llx, lly, w, h, false);
+}
+
+void
+Cairo_outputter::url_link (SCM target, SCM x_interval, SCM y_interval)
+{
+  const auto url = from_scm<std::string> (target);
+  auto x = from_scm<Interval> (x_interval);
+  auto y = from_scm<Interval> (y_interval);
+
+  url_link (from_scm<std::string> (target), x[LEFT], y[LEFT], x.length (),
+            y.length (), true);
+}
+
+std::string
+Cairo_outputter::pdf_rect (Real llx, Real lly, Real w, Real h,
+                           bool relative_to_current) const
+{
+  Real cx = 0.0, cy = 0.0;
+  if (relative_to_current)
+    cairo_get_current_point (context (), &cx, &cy);
+  return String_convert::form_string (
+    "rect=[ %f %f %f %f ] ", (cx + llx) * scale_factor_,
+    -(cy + lly + h) * scale_factor_, w * scale_factor_, h * scale_factor_);
+}
+
+void
+Cairo_outputter::url_link (std::string const &target, Real llx, Real lly,
+                           Real w, Real h, bool relative_to_current)
+{
+  if (std::isinf (llx) || std::isinf (lly) || std::isinf (w) || std::isinf (h))
+    return;
+
+  std::string attr = String_convert::form_string (
+    "%s uri='%s'", pdf_rect (llx, lly, w, h, relative_to_current).c_str (),
+    target.c_str ());
+
+  cairo_link (attr);
+}
+
+void
+Cairo_outputter::grob_cause (SCM offset, SCM grob_scm)
+{
+  if (!scm_is_true (point_and_click_))
+    return;
+
+  Grob *grob = unsmob<Grob> (grob_scm);
+  if (!grob)
+    return;
+
+  SCM cause = get_property (grob, "cause");
+  Stream_event *ev = unsmob<Stream_event> (cause);
+  if (!ev)
+    return;
+
+  if (scm_is_symbol (point_and_click_))
+    {
+      if (!ev->internal_in_event_class (point_and_click_))
+        return;
+    }
+
+  bool is_list = false, found_sym = false;
+  for (SCM p = point_and_click_; !found_sym && scm_is_pair (p);
+       p = scm_cdr (p))
+    {
+      is_list = true;
+      if (ev->internal_in_event_class (scm_car (p)))
+        found_sym = true;
+    }
+
+  if (is_list && !found_sym)
+    return;
+
+  auto const origin = format_point_and_click_url (ev);
+  if (origin.empty ())
+    return;
+
+  Offset off (from_scm<Offset> (offset));
+  Interval x (grob->extent (grob, X_AXIS));
+  Interval y (grob->extent (grob, Y_AXIS));
+  if (x.is_empty () || y.is_empty ())
+    return;
+
+  textedit_link (off[X_AXIS] + x[LEFT], off[Y_AXIS] + y[DOWN], x.length (),
+                 y.length (), origin);
+}
+
+//
+// PDF page links were introduced with cairo stable 1.16.0.
+// Although not documented, it was known that page links with 'page' being
+// a forward reference to a not already processed page were broken from
+// introduction of the code up to cairo commit 099d71fb9f2 (2021/07/24).
+// See: https://gitlab.freedesktop.org/cairo/cairo/-/issues/336 and the
+// thread https://lists.cairographics.org/archives/cairo/2021-July/029282.html
+//
+// FIXME Should print a warning message?
+//
+void
+Cairo_outputter::page_link (SCM target, SCM varx, SCM vary)
+{
+  if (!use_page_links_)
+    return;
+
+  if (!is_scm<int> (target))
+    return;
+
+  int page = from_scm<int> (target);
+  Real x = from_scm<Real> (scm_car (varx));
+  Real y = from_scm<Real> (scm_car (vary));
+  Real w = from_scm<Real> (scm_cdr (varx)) - x;
+  Real h = from_scm<Real> (scm_cdr (vary)) - y;
+  std::string attr = String_convert::form_string (
+    "%s page=%d pos=[0.0 0.0]", pdf_rect (x, y, w, h, true).c_str (), page);
+
+  cairo_link (attr);
+}
+
+void
+Cairo_outputter::cairo_link (std::string const &attr)
+{
+  cairo_tag_begin (context (), CAIRO_TAG_LINK, attr.c_str ());
+  cairo_tag_end (context (), CAIRO_TAG_LINK);
+}
+
+void
+Cairo_outputter::set_scale (SCM varx, SCM vary)
+{
+  Real x = from_scm<Real> (varx);
+  Real y = from_scm<Real> (vary);
+
+  cairo_save (context ());
+  cairo_scale (context (), x, y);
+}
+
+void
+Cairo_outputter::reset_scale ()
+{
+  cairo_restore (context ());
+}
+
+static std::unordered_map<std::string, cairo_pdf_metadata_t> metadata_keys = {
+  {"author", CAIRO_PDF_METADATA_AUTHOR},
+  {"creator", CAIRO_PDF_METADATA_CREATOR},
+  {"keywords", CAIRO_PDF_METADATA_KEYWORDS},
+  {"subject", CAIRO_PDF_METADATA_SUBJECT},
+  {"title", CAIRO_PDF_METADATA_TITLE},
+  {"modDate", CAIRO_PDF_METADATA_MOD_DATE},
+  {"creationDate", CAIRO_PDF_METADATA_CREATE_DATE},
+};
+
+void
+Cairo_outputter::metadata (std::string const &key, std::string const &val)
+{
+  if (format_ == PDF)
+    {
+      auto it = metadata_keys.find (key);
+      assert (it != metadata_keys.end ());
+      cairo_pdf_surface_set_metadata (surface_->cairo_surface (), it->second,
+                                      val.c_str ());
+    }
+}
+
+void
+Cairo_outputter::close ()
+{
+  if (surface_)
+    {
+      surface_->finish ();
+      surface_->check_errors ();
+    }
+}
+
+Cairo_outputter::~Cairo_outputter ()
+{
+  delete surface_;
+
+  for (auto f : cairo_fonts_)
+    {
+      cairo_font_face_destroy (f.second);
+    }
+}
+
+Cairo_outputter::Cairo_outputter (Cairo_output_format format,
+                                  std::string const &basename,
+                                  Output_def *paper, bool use_left_margin,
+                                  bool use_page_links)
+  : use_left_margin_ (use_left_margin),
+    use_page_links_ (use_page_links)
+{
+  left_margin_ = 0.0;
+  if (use_left_margin_)
+    {
+      SCM padding = ly_get_option (ly_symbol2scm ("eps-box-padding"));
+      if (scm_is_number (padding))
+        {
+          left_margin_ = -paper->get_dimension (ly_symbol2scm ("mm"))
+                         * from_scm<Real> (padding);
+        }
+      else
+        {
+          use_left_margin_ = false;
+        }
+    }
+
+  point_and_click_ = ly_get_option (ly_symbol2scm ("point-and-click"));
+  format_ = format;
+  outfile_basename_ = basename;
+
+  scale_factor_ = paper->get_dimension (ly_symbol2scm ("output-scale"))
+                  / bigpoint_constant;
+}
+
+void
+Cairo_outputter::handle_metadata (SCM module)
+{
+  metadata ("creator", "LilyPond " + version_string ());
+  if (get_program_option ("deterministic"))
+    // Weird; Cairo suppresses the date altogether.
+    metadata ("creationDate", "D:19961006211000+02'00'");
+
+  if (!ly_is_module (module))
+    return;
+
+  for (auto const &it : metadata_keys)
+    {
+      std::string k = it.first;
+      std::string pdf_k = "pdf" + k;
+      SCM var = scm_module_variable (module, ly_symbol2scm (pdf_k));
+      if (!scm_is_true (var))
+        var = scm_module_variable (module, ly_symbol2scm (k));
+
+      SCM val = SCM_BOOL_F;
+      if (scm_is_true (var))
+        val = scm_variable_ref (var);
+
+      if (Text_interface::is_markup (val))
+        {
+          SCM kwd = ly_keyword2scm ("props");
+          SCM props = Lily::headers_property_alist_chain (ly_list (module));
+          val = Lily::markup_to_string (val, kwd, props);
+        }
+
+      if (scm_is_string (val))
+        metadata (k, from_scm<std::string> (val));
+    }
+}
+
+void
+Cairo_outputter::handle_outline (Output_def *paper)
+{
+  if (format_ != PDF)
+    return;
+
+  if (scm_is_false (ly_get_option (ly_symbol2scm ("outline-bookmarks"))))
+    return;
+
+  SCM toc_alist = paper->lookup_variable (ly_symbol2scm ("label-alist-table"));
+  if (SCM_UNBNDP (toc_alist))
+    toc_alist = SCM_EOL;
+
+  SCM page_numbers
+    = paper->lookup_variable (ly_symbol2scm ("label-absolute-page-table"));
+  for (SCM entry : as_ly_scm_list (page_numbers))
+    {
+      if (!scm_is_pair (entry))
+        {
+          programming_error ("non-pair in label-absolute-page-table");
+          return;
+        }
+    }
+
+  // This is OK because the entries are GC-protected through their presence in
+  // page_numbers.
+  std::vector<SCM> page_numbers_vec
+    = from_scm_list<std::vector<SCM>> (page_numbers);
+
+  // Entries for the same page are in the right order.  Entries for different
+  // pages are in reverse order.  By doing a stable sort, we reorder pages while
+  // keeping entries in the right order within the same page.
+  std::stable_sort (page_numbers_vec.begin (), page_numbers_vec.end (),
+                    [&] (SCM entry1, SCM entry2) {
+                      return from_scm<int> (scm_cdr (entry1))
+                             < from_scm<int> (scm_cdr (entry2));
+                    });
+
+  // If a label straddles at a page break, we want to choose the occurrence at
+  // the beginning of the new page.  label-page-table is in the right order for
+  // that, but it will contain two occurrences for the label in question, so
+  // make sure we skip the first one.
+  SCM label_to_chosen_index_table = scm_c_make_hash_table (0);
+  vsize i = 0;
+  for (SCM entry : page_numbers_vec)
+    {
+      SCM id_sym = scm_car (entry);
+      scm_hashv_set_x (label_to_chosen_index_table, id_sym, to_scm (i));
+      i++;
+    }
+  i = 0;
+
+  // Maps TOC IDs (symbols) to bookmark IDs (integers) returned by Cairo.
+  SCM bookmark_cairo_id_table = scm_c_make_hash_table (0);
+
+  for (SCM entry : page_numbers_vec)
+    {
+      SCM id_sym = scm_car (entry);
+
+      // Skip this occurrence if there is a later one.
+      vsize chosen_index = from_scm<vsize> (
+        scm_hashv_ref (label_to_chosen_index_table, id_sym, SCM_BOOL_F));
+
+      if (chosen_index == i)
+        {
+          int page_number = from_scm<int> (scm_cdr (entry));
+
+          SCM alist = ly_assoc_get (id_sym, toc_alist, SCM_EOL);
+          const auto toc_text = from_scm<std::string> (Lily::markup_to_string (
+            ly_assoc_get (ly_symbol2scm ("text"), alist, SCM_BOOL_F)));
+
+          SCM parent
+            = ly_assoc_get (ly_symbol2scm ("parent"), alist, SCM_BOOL_F);
+          int parent_cairo_id
+            = scm_is_false (parent)
+                ? CAIRO_PDF_OUTLINE_ROOT
+                : from_scm<int> (scm_hashq_ref (bookmark_cairo_id_table,
+                                                parent, SCM_BOOL_F));
+
+          std::string attributes = String_convert::form_string (
+            "page=%d pos=[0.0 0.0]", page_number);
+
+          int new_item_id = cairo_pdf_surface_add_outline (
+            surface_->cairo_surface (), parent_cairo_id, toc_text.c_str (),
+            attributes.c_str (), static_cast<cairo_pdf_outline_flags_t> (0));
+
+          scm_hashq_set_x (bookmark_cairo_id_table, id_sym,
+                           to_scm (new_item_id));
+        }
+
+      i++;
+    }
+
+  scm_remember_upto_here (page_numbers);
+}
+
+SCM
+Cairo_outputter::output (SCM expr)
+{
+  SCM head = scm_car (expr);
+  expr = scm_cdr (expr);
+
+  const int N = 9;
+  SCM arg[N] = {};
+  int argc = 0;
+  while (scm_is_pair (expr) && argc < N)
+    {
+      arg[argc++] = scm_car (expr);
+      expr = scm_cdr (expr);
+    }
+  while (argc < N)
+    arg[argc++] = SCM_UNDEFINED;
+
+  if (scm_is_eq (head, ly_symbol2scm ("circle")))
+    draw_circle (arg[0], arg[1], arg[2]);
+  else if (scm_is_eq (head, ly_symbol2scm ("dashed-line")))
+    draw_dashed_line (arg[0], arg[1], arg[2], arg[3], arg[4], arg[5]);
+  else if (scm_is_eq (head, ly_symbol2scm ("draw-line")))
+    draw_line (arg[0], arg[1], arg[2], arg[3], arg[4]);
+  else if (scm_is_eq (head, ly_symbol2scm ("partial-ellipse")))
+    draw_partial_ellipse (arg[0], arg[1], arg[2], arg[3], arg[4], arg[5],
+                          arg[6]);
+  else if (scm_is_eq (head, ly_symbol2scm ("ellipse")))
+    draw_ellipse (arg[0], arg[1], arg[2], arg[3]);
+  else if (scm_is_eq (head, ly_symbol2scm ("glyph-string")))
+    print_glyphs (arg[2], arg[4], arg[5], arg[6], arg[7], arg[8]);
+  else if (scm_is_eq (head, ly_symbol2scm ("grob-cause")))
+    grob_cause (arg[0], arg[1]);
+  else if (scm_is_eq (head, ly_symbol2scm ("settranslation")))
+    moveto (arg[0], arg[1]);
+  else if (scm_is_eq (head, ly_symbol2scm ("named-glyph")))
+    show_named_glyph (arg[0], arg[1]);
+  else if (scm_is_eq (head, ly_symbol2scm ("polygon")))
+    draw_polygon (arg[0], arg[1], arg[2]);
+  else if (scm_is_eq (head, ly_symbol2scm ("round-filled-box")))
+    draw_round_box (arg[0], arg[1], arg[2], arg[3], arg[4]);
+  else if (scm_is_eq (head, ly_symbol2scm ("setcolor")))
+    setrgbacolor (arg[0], arg[1], arg[2], arg[3]);
+  else if (scm_is_eq (head, ly_symbol2scm ("resetcolor")))
+    resetrgbacolor ();
+  else if (scm_is_eq (head, ly_symbol2scm ("setrotation")))
+    set_rotation (arg[0], arg[1], arg[2]);
+  else if (scm_is_eq (head, ly_symbol2scm ("resetrotation")))
+    reset_rotation ();
+  else if (scm_is_eq (head, ly_symbol2scm ("url-link")))
+    url_link (arg[0], arg[1], arg[2]);
+  else if (scm_is_eq (head, ly_symbol2scm ("page-link")))
+    page_link (arg[0], arg[1], arg[2]);
+  else if (scm_is_eq (head, ly_symbol2scm ("path")))
+    path (arg[0], arg[1], arg[2], arg[3], arg[4]);
+  else if (scm_is_eq (head, ly_symbol2scm ("setscale")))
+    set_scale (arg[0], arg[1]);
+  else if (scm_is_eq (head, ly_symbol2scm ("resetscale")))
+    reset_scale ();
+  else if (scm_is_eq (head, ly_symbol2scm ("utf-8-string")))
+    return SCM_BOOL_F;
+  else if (scm_is_eq (head, ly_symbol2scm ("eps-file")))
+    eps_file (arg[1], arg[2], arg[3]);
+  else if (scm_is_eq (head, ly_symbol2scm ("png-file")))
+    png_file (arg[0], arg[3], arg[4]); // ignore width, height
+  else if (scm_is_eq (head, ly_symbol2scm ("embedded-ps")))
+    embedded_ps (arg[0]);
+
+  return SCM_UNSPECIFIED;
+}
+
+static std::vector<Cairo_output_format>
+parse_formats (const char *funcname, int format_arg, SCM formats)
+{
+  std::vector<Cairo_output_format> result;
+  for (SCM fmt_scm = formats; scm_is_pair (fmt_scm);
+       fmt_scm = scm_cdr (fmt_scm))
+    {
+      if (!scm_is_string (scm_car (fmt_scm)))
+        scm_wrong_type_arg_msg (funcname, format_arg, formats,
+                                "list of string");
+
+      const auto fmt = from_scm<std::string> (scm_car (fmt_scm));
+      Cairo_output_format f = parse_format (fmt);
+      if (f == UNKNOWN)
+        {
+          warning (_f ("unknown output format %s", fmt.c_str ()));
+          continue;
+        }
+
+      result.push_back (f);
+    }
+  return result;
+}
+
+void
+output_stencil_format (std::string const &basename, const Stencil *stc,
+                       Output_def *odef, Cairo_output_format fmt,
+                       bool use_left_margin, bool use_page_links)
+{
+  Cairo_outputter outputter (fmt, basename, odef, use_left_margin,
+                             use_page_links);
+
+  outputter.create_surface (stc);
+  interpret_stencil_expression (stc->expr (), &outputter, Offset (0, 0));
+  outputter.close ();
+}
+
+LY_DEFINE (ly_cairo_output_stencils, "ly:cairo-output-stencils", 5, 0, 0,
+           (SCM basename, SCM stencils, SCM header, SCM paper, SCM formats),
+           R"(
+dump book through cairo backend
+           )")
+{
+  if (scm_is_null (stencils))
+    return SCM_UNSPECIFIED;
+
+  auto *const odef = LY_ASSERT_SMOB (Output_def, paper, 4);
+
+  long int page_count = scm_ilength (stencils);
+  for (auto const format :
+       parse_formats ("ly:cairo-output-stencils", 5, formats))
+    {
+      const auto base = from_scm<std::string> (basename);
+      if (format == EPS || format == PNG || format == SVG)
+        {
+          int page = 1;
+          for (SCM p = stencils; scm_is_pair (p); p = scm_cdr (p), page++)
+            {
+              std::string suffix;
+              if (format == PNG)
+                {
+                  if (page_count > 1)
+                    suffix = "-page" + std::to_string (page);
+                }
+              else if (format == SVG)
+                {
+                  if (page_count > 1)
+                    suffix = "-" + std::to_string (page);
+                }
+              else
+                suffix = "-" + std::to_string (page);
+
+              // Page links make no sense in output formats where pages are
+              // separate files.
+              output_stencil_format (base + suffix,
+                                     unsmob<const Stencil> (scm_car (p)), odef,
+                                     format, /* no left margin */ false,
+                                     /* no page links */ false);
+            }
+          continue;
+        }
+
+      Cairo_outputter outputter (format, base, odef,
+                                 /* no left margin */ false,
+                                 /* page links */ true);
+      outputter.create_surface (unsmob<const Stencil> (scm_car (stencils)));
+      outputter.handle_metadata (header);
+      outputter.handle_outline (odef);
+
+      for (SCM p = stencils; scm_is_pair (p); p = scm_cdr (p))
+        {
+          const Stencil *stencil = unsmob<const Stencil> (scm_car (p));
+          interpret_stencil_expression (stencil->expr (), &outputter,
+                                        Offset (0, 0));
+          outputter.finish_page ();
+        }
+
+      outputter.close ();
+    }
+  return SCM_UNSPECIFIED;
+}
+
+LY_DEFINE (ly_cairo_output_stencil, "ly:cairo-output-stencil", 4, 0, 0,
+           (SCM basename, SCM stencil, SCM paper, SCM formats),
+           R"(
+dump a single stencil through the Cairo backend
+           )")
+{
+  auto *const odef = LY_ASSERT_SMOB (Output_def, paper, 3);
+  bool seen_eps = false;
+  for (auto f : parse_formats ("ly:cairo-output-stencil", 4, formats))
+    {
+      if (f == PS)
+        f = EPS;
+
+      if (seen_eps && f == EPS)
+        continue;
+
+      if (f == EPS)
+        seen_eps = true;
+
+      const Stencil *stc = unsmob<const Stencil> (stencil);
+
+      // ly:cairo-output-stencil is used for -dclip-systems / -dcrop / -dpreview
+      // / -dseparate-page-formats / -dtall-page-formats, which all change the
+      // relationship between document pages and output file pages.  Therefore,
+      // we disable page links in this case (e.g., when using
+      // -dseparate-page-formats, they would have to refer to another file).
+      output_stencil_format (from_scm<std::string> (basename), stc, odef, f,
+                             /* use left margin */ true,
+                             /* no page links */ false);
+    }
+  return SCM_UNSPECIFIED;
+}
+
+LY_DEFINE (ly_png_dimensions, "ly:png-dimensions", 1, 0, 0, (SCM file_name),
+           R"(
+Read the PNG image under @var{file-name} and return its dimensions
+as a pair of integers, or @code{#f} if there was an error (a warning
+is printed in this case).
+           )")
+{
+  LY_ASSERT_TYPE (scm_is_string, file_name, 1);
+  const auto fn = from_scm<std::string> (file_name);
+  cairo_surface_t *surface = read_png_to_surface (fn);
+  if (!surface)
+    return SCM_BOOL_F;
+  int width = cairo_image_surface_get_width (surface);
+  int height = cairo_image_surface_get_height (surface);
+  cairo_surface_destroy (surface);
+  return scm_cons (to_scm (width), to_scm (height));
+}
+
+cairo_status_t
+write_to_bytevector (void *closure, const unsigned char *data,
+                     unsigned int length)
+{
+  SCM port = *static_cast<SCM *> (closure);
+  scm_c_write (port, data, static_cast<vsize> (length));
+  return CAIRO_STATUS_SUCCESS;
+}
+
+LY_DEFINE (ly_png_2_eps_dump, "ly:png->eps-dump", 6, 0, 0,
+           (SCM file_name, SCM port, SCM r, SCM g, SCM b, SCM a),
+           R"(
+Read the PNG image under @var{file-name} and convert it to EPS data,
+dumping the output onto @var{port}.  @var{r}, @var{g}, @var{b} and
+@var{a} are the components of the background color.
+           )")
+{
+  LY_ASSERT_TYPE (scm_is_string, file_name, 1);
+  LY_ASSERT_TYPE (ly_is_port, port, 2);
+  const auto fn = from_scm<std::string> (file_name);
+  LY_ASSERT_TYPE (is_scm<Real>, r, 1);
+  Real r_real = from_scm<Real> (r);
+  LY_ASSERT_TYPE (is_scm<Real>, g, 2);
+  Real g_real = from_scm<Real> (g);
+  LY_ASSERT_TYPE (is_scm<Real>, b, 3);
+  Real b_real = from_scm<Real> (b);
+  LY_ASSERT_TYPE (is_scm<Real>, a, 4);
+  Real a_real = from_scm<Real> (a);
+  cairo_surface_t *png_surface = read_png_to_surface (fn);
+  // If this function is called, a stencil was constructed in the first place,
+  // implying that ly:png-dimensions didn't signal an error (or \image would
+  // have bailed out).
+  assert (png_surface);
+  cairo_surface_t *eps_surface = cairo_ps_surface_create_for_stream (
+    write_to_bytevector, &port, cairo_image_surface_get_width (png_surface),
+    cairo_image_surface_get_height (png_surface));
+  cairo_ps_surface_set_eps (eps_surface, true);
+  cairo_t *cr = cairo_create (eps_surface);
+  // Draw background first.
+  cairo_save (cr);
+  cairo_set_source_rgba (cr, r_real, g_real, b_real, a_real);
+  cairo_paint (cr);
+  cairo_restore (cr);
+  cairo_set_source_surface (cr, png_surface, 0.0, 0.0);
+  cairo_paint (cr);
+  cairo_destroy (cr);
+  cairo_surface_destroy (eps_surface);
+  cairo_surface_destroy (png_surface);
+  scm_remember_upto_here_1 (port);
+  return SCM_UNSPECIFIED;
+}

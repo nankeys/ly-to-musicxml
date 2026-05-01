@@ -1,0 +1,15 @@
+%% Translation of GIT committish: c043783aac6c35926d633aa2daf60ed4f2e7ca7a
+  texidocfr = "
+La fonction @code{add-link}, telle que définie ci-dessous, permet
+d'ajouter un lien au stencil d'un objet graphique.  Elle s'emploie
+au sein d'un @code{\\override} ou d'un @code{\\tweak}.
+
+À noter que le fonctionnemment du @code{point-and-click} est perturbé
+sur les objets ainsi liés.
+
+Cette fonction n'est opérationnelle que pour une sortie PDF.
+
+La coloration des objets liés s'obtient par une commande séparée.
+"
+
+  doctitlefr = "Ajout de liens à des objets"

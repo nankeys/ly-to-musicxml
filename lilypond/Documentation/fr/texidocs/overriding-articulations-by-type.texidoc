@@ -1,0 +1,11 @@
+%% Translation of GIT committish: 1abe87de51b9b00a391da1be4cf4b5ebe4021ca9
+  texidocfr = "
+On peut parfois vouloir modifier un seul type d'articulation. Bien que
+ce soit tout à fait faisable avec un @code{\\tweak}, cela devient vite
+fastidieux d'affiner chaque occurrence d'un même signe dans toute une
+partition. Le code ci-dessous illustre la manière de modifier des
+articulations grâce à une liste de réglages personnalisés. Ceci peut
+servir à créer des feuilles de style.
+"
+
+  doctitlefr = "Personnalisation de certains types d'articulation"

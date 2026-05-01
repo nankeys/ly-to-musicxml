@@ -1,0 +1,38 @@
+@c -*- coding: utf-8; mode: texinfo; documentlanguage: ja -*-
+@c This file is part of notation.tely
+@ignore
+    Translation of GIT committish: fabcd22c8f88ea9a87241597f1e48c0a9adbfc6e
+
+    When revising a translation, copy the HEAD committish of the
+    version that you are working on.  See TRANSLATION for details.
+@end ignore
+
+@c \version "2.16.0"
+
+@c Translators: Yoshiki Sawada
+@c Translation status: post-GDP
+
+@node Musical notation
+@chapter 音楽記譜法
+
+この章では音楽表記を作成する方法について説明します。
+
+@menu
+* Pitches::             音符のピッチを記述、表示する
+* Rhythms::             音符の演奏時間を記述、表示する
+* Expressive marks::           音符に表現を付け加える
+* Repeats::           音楽の繰り返し
+* Simultaneous notes::   同時に複数の音符を演奏する
+* Staff notation::         譜を表示する
+* Editorial annotations::       可読性を良くするための特別な表記
+* Text::           楽譜にテキストを追加する
+@end menu
+
+@include ja/notation/pitches.itely
+@include ja/notation/rhythms.itely
+@include ja/notation/expressive.itely
+@include ja/notation/repeats.itely
+@include ja/notation/simultaneous.itely
+@include ja/notation/staff.itely
+@include ja/notation/editorial.itely
+@include ja/notation/text.itely

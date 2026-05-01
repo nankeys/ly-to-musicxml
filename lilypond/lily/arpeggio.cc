@@ -1,0 +1,378 @@
+/*
+  This file is part of LilyPond, the GNU music typesetter.
+
+  Copyright (C) 2000--2026 Jan Nieuwenhuizen <janneke@gnu.org>
+
+  LilyPond is free software: you can redistribute it and/or modify
+  it under the terms of the GNU General Public License as published by
+  the Free Software Foundation, either version 3 of the License, or
+  (at your option) any later version.
+
+  LilyPond is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+
+  You should have received a copy of the GNU General Public License
+  along with LilyPond.  If not, see <http://www.gnu.org/licenses/>.
+*/
+
+#include "arpeggio.hh"
+
+#include "bezier.hh"
+#include "font-interface.hh"
+#include "grob.hh"
+#include "international.hh"
+#include "lookup.hh"
+#include "output-def.hh"
+#include "pointer-group-interface.hh"
+#include "staff-symbol-referencer.hh"
+#include "staff-symbol.hh"
+#include "stem.hh"
+#include "warn.hh"
+
+static Stencil
+get_squiggle (Grob *me)
+{
+  Font_metric *fm = Font_interface::get_default_font (me);
+  Stencil squiggle = fm->find_by_name ("scripts.arpeggio");
+
+  return squiggle;
+}
+
+Grob *
+Arpeggio::get_common_y (Grob *me)
+{
+  Grob *common = me;
+
+  extract_grob_set (me, "stems", stems);
+  for (vsize i = 0; i < stems.size (); i++)
+    {
+      Grob *stem = stems[i];
+      common = common->common_refpoint (
+        Staff_symbol_referencer::get_staff_symbol (stem), Y_AXIS);
+    }
+
+  return common;
+}
+
+MAKE_SCHEME_CALLBACK (Arpeggio, calc_cross_staff,
+                      "ly:arpeggio::calc-cross-staff", 1);
+SCM
+Arpeggio::calc_cross_staff (SCM grob)
+{
+  auto *const me = LY_ASSERT_SMOB (Grob, grob, 1);
+
+  extract_grob_set (me, "stems", stems);
+  Grob *vag = 0;
+
+  for (vsize i = 0; i < stems.size (); i++)
+    {
+      if (!i)
+        vag = Grob::get_vertical_axis_group (stems[i]);
+      else
+        {
+          if (vag != Grob::get_vertical_axis_group (stems[i]))
+            return SCM_BOOL_T;
+        }
+    }
+
+  return SCM_BOOL_F;
+}
+
+MAKE_SCHEME_CALLBACK (Arpeggio, calc_positions, "ly:arpeggio::calc-positions",
+                      1);
+SCM
+Arpeggio::calc_positions (SCM grob)
+{
+  auto *const me = LY_ASSERT_SMOB (Grob, grob, 1);
+  Grob *common = get_common_y (me);
+
+  /*
+    TODO:
+
+    Using stems here is not very convenient; should store noteheads
+    instead, and also put them into the support. Now we will mess up
+    in vicinity of a collision.
+  */
+  Interval heads;
+  Real my_y = me->relative_coordinate (common, Y_AXIS);
+
+  extract_grob_set (me, "stems", stems);
+  for (vsize i = 0; i < stems.size (); i++)
+    {
+      Grob *stem = stems[i];
+      Grob *ss = Staff_symbol_referencer::get_staff_symbol (stem);
+      Interval iv = Stem::head_positions (stem);
+      iv *= Staff_symbol_referencer::staff_space (me) / 2.0;
+      Real staff_y = ss ? ss->relative_coordinate (common, Y_AXIS) : 0.0;
+      heads.unite (iv + staff_y - my_y);
+    }
+
+  heads *= 1 / Staff_symbol_referencer::staff_space (me);
+
+  return to_scm (heads);
+}
+
+MAKE_SCHEME_CALLBACK (Arpeggio, print, "ly:arpeggio::print", 1);
+SCM
+Arpeggio::print (SCM smob)
+{
+  auto *const me = LY_ASSERT_SMOB (Grob, smob, 1);
+  Real ss = Staff_symbol_referencer::staff_space (me);
+  Interval heads = from_scm (get_property (me, "positions"), Interval ()) * ss;
+
+  if (heads.is_empty ())
+    {
+      if (from_scm<bool> (get_property (me, "transparent")))
+        {
+          /*
+            This is part of a cross-staff/-voice span-arpeggio,
+            so we need to ensure `heads' is large enough to encompass
+            a single trill-element since the span-arpeggio depends on
+            its children to prevent collisions.
+          */
+          heads.unite (get_squiggle (me).extent (Y_AXIS));
+        }
+      else
+        {
+          me->warning (_ ("no heads for arpeggio found?"));
+          me->suicide ();
+          return SCM_EOL;
+        }
+    }
+
+  // Adjust lower position to include note head in interval.
+  heads[DOWN] -= 0.5;
+
+  // Make sure that we have at least two wiggles (or a wiggle plus an arrow
+  // head)
+  if (heads.length () < 1.5 * ss)
+    heads.widen (0.5 * ss);
+
+  SCM ad = get_property (me, "arpeggio-direction");
+  Direction dir = CENTER;
+  if (is_scm<Direction> (ad))
+    dir = from_scm<Direction> (ad);
+
+  Stencil mol;
+  Stencil squiggle (get_squiggle (me));
+
+  /*
+    Compensate for rounding error which may occur when a chord
+    reaches the center line, resulting in an extra squiggle
+    being added to the arpeggio stencil.  This value is appreciably
+    larger than the rounding error, which is in the region of 1e-16
+    for a global-staff-size of 20, but small enough that it does not
+    interfere with smaller staff sizes.
+  */
+  const Real epsilon = 1e-3;
+
+  Stencil arrow;
+  if (dir)
+    {
+      Font_metric *fm = Font_interface::get_default_font (me);
+      arrow
+        = fm->find_by_name ("scripts.arpeggio.arrow." + std::to_string (dir));
+      heads[dir] -= dir * arrow.extent (Y_AXIS).length ();
+    }
+
+  while (mol.extent (Y_AXIS).length () + epsilon < heads.length ())
+    mol.add_at_edge (Y_AXIS, UP, squiggle, 0.0);
+
+  mol.translate_axis (heads[LEFT], Y_AXIS);
+  if (dir)
+    mol.add_at_edge (Y_AXIS, dir, arrow, 0);
+
+  return mol.smobbed_copy ();
+}
+
+// Make a bracket with the given Y extent.
+Stencil
+Chord_bracket::print (Grob *me, Interval y_extent)
+{
+  const auto thickness
+    = me->layout ()->get_dimension (ly_symbol2scm ("line-thickness"))
+      * from_scm (get_property (me, "thickness"), 1.0);
+  const auto side = from_scm (get_property (me, "direction"), LEFT);
+  const auto width = from_scm (get_property (me, "protrusion"), 0.4);
+  return Lookup::bracket (Y_AXIS, y_extent, thickness, width * -side,
+                          thickness);
+}
+
+/* Draws a vertical bracket to the left of a chord
+   Chris Jackson <chris@fluffhouse.org.uk> */
+MAKE_SCHEME_CALLBACK (Chord_bracket, print, "ly:chord-bracket::print", 1);
+SCM
+Chord_bracket::print (SCM smob)
+{
+  auto *const me = LY_ASSERT_SMOB (Grob, smob, 1);
+  auto y_extent = from_scm (get_property (me, "positions"), Interval ());
+  y_extent.widen (0.75); // candidate for a grob property
+  y_extent *= Staff_symbol_referencer::staff_space (me);
+  return print (me, y_extent).smobbed_copy ();
+}
+
+MAKE_SCHEME_CALLBACK (Chord_bracket, width, "ly:chord-bracket::width", 1);
+SCM
+Chord_bracket::width (SCM smob)
+{
+  auto *const me = LY_ASSERT_SMOB (Grob, smob, 1);
+  // dummy Y extent avoids triggering vertical alignment before line breaking
+  constexpr auto y_extent = Interval (0, 1);
+  const auto x_extent = print (me, y_extent).extent (X_AXIS);
+  return to_scm (x_extent);
+}
+
+Stencil
+Chord_slur::print (Grob *me, Interval positions)
+{
+  SCM dash_definition = get_property (me, "dash-definition");
+  Real ss = Staff_symbol_referencer::staff_space (me);
+  Interval heads = positions * Staff_symbol_referencer::staff_space (me);
+
+  Real lt = me->layout ()->get_dimension (ly_symbol2scm ("line-thickness"))
+            * from_scm<double> (get_property (me, "line-thickness"), 1.0);
+  Real th = me->layout ()->get_dimension (ly_symbol2scm ("line-thickness"))
+            * from_scm<double> (get_property (me, "thickness"), 1.0);
+  const auto side = from_scm (get_property (me, "direction"), LEFT);
+
+  // Adjust lower position to include note head in interval.
+  heads[DOWN] -= 0.5;
+
+  // Avoid too short chord slurs for small intervals.
+  if (heads.length () < 1.5 * ss)
+    heads.widen (0.5 * ss);
+  else if (heads.length () < 2 * ss)
+    heads.widen (0.25 * ss);
+
+  Real sp = 0.5 * ss;
+  Real dy = heads.length () - sp;
+
+  Real height_limit = 1.5;
+  Real ratio = .33;
+  Bezier curve = slur_shape (dy, height_limit, ratio * -side);
+  curve.rotate (90.0);
+
+  Stencil mol (Lookup::slur (curve, th, lt, dash_definition));
+  mol.translate_axis (heads[LEFT] + 1.5 * sp / 2.0, Y_AXIS);
+  return mol;
+}
+
+MAKE_SCHEME_CALLBACK (Chord_slur, print, "ly:chord-slur::print", 1);
+SCM
+Chord_slur::print (SCM smob)
+{
+  auto *const me = LY_ASSERT_SMOB (Grob, smob, 1);
+  const auto positions
+    = from_scm (get_property (me, "positions"), Interval ());
+  return print (me, positions).smobbed_copy ();
+}
+
+MAKE_SCHEME_CALLBACK (Chord_slur, width, "ly:chord-slur::width", 1);
+SCM
+Chord_slur::width (SCM smob)
+{
+  auto *const me = LY_ASSERT_SMOB (Grob, smob, 1);
+
+  // A surrogate slur appears instead of this one, but does not control
+  // horizontal spacing itself.
+  auto *const surrogate
+    = unsmob<Grob> (get_object (me, "vertically-spanning-surrogate"));
+
+  // Get the width from this grob's stencil if we're not in a cross-staff
+  // situation.  Making a cross-staff stencil here would trigger vertical
+  // alignment before line breaking.
+  if (!surrogate && !from_scm<bool> (get_property (me, "cross-staff")))
+    {
+      return Grob::stencil_width (smob);
+    }
+
+  // If a surrogate slur isn't cross-staff (it might be just cross-voice), then
+  // it should have no trouble calculating its actual width.
+  if (surrogate && !from_scm<bool> (get_property (surrogate, "cross-staff")))
+    {
+      return Grob::stencil_width (to_scm (surrogate));
+    }
+
+  // We're in a cross-staff situation.  If this slur is cross-staff, we can't
+  // make its stencil to get its actual width, and if this slur is not
+  // cross-staff, its extent is probably not a good estimate of the extent of
+  // the surrogate.  Using a dummy height avoids triggering vertical alignment
+  // before line breaking.  We use a large value to aim for the worst case,
+  // expecting the stencil code to limit the curvature of the slur.
+  constexpr auto positions = Interval (0, 100);
+  const auto x_extent = print (me, positions).extent (X_AXIS);
+  return to_scm (x_extent);
+}
+
+/*
+  We have to do a callback, because print () triggers a
+  vertical alignment if it is cross-staff.
+*/
+MAKE_SCHEME_CALLBACK (Arpeggio, width, "ly:arpeggio::width", 1);
+SCM
+Arpeggio::width (SCM smob)
+{
+  auto *const me = LY_ASSERT_SMOB (Grob, smob, 1);
+  return to_scm (get_squiggle (me).extent (X_AXIS));
+}
+
+MAKE_SCHEME_CALLBACK (Arpeggio, pure_height, "ly:arpeggio::pure-height", 3);
+SCM
+Arpeggio::pure_height (SCM smob, SCM, SCM)
+{
+  auto *const me = LY_ASSERT_SMOB (Grob, smob, 1);
+  if (from_scm<bool> (get_property (me, "cross-staff")))
+    return to_scm (Interval ());
+
+  return Grob::stencil_height (smob);
+}
+
+ADD_INTERFACE (Arpeggio,
+               R"(
+Functions and settings for drawing an arpeggio symbol.
+               )",
+
+               /* properties */
+               R"(
+arpeggio-direction
+dash-definition
+line-thickness
+positions
+protrusion
+script-priority
+stems
+thickness
+               )");
+
+ADD_INTERFACE (Chord_bracket,
+               R"(
+Functions and settings for drawing a vertical bracket, such as for
+non-arpeggiato, non-divisi, or optional material.
+               )",
+
+               /* properties */
+               R"(
+line-thickness
+positions
+protrusion
+script-priority
+stems
+thickness
+               )");
+
+ADD_INTERFACE (Chord_slur,
+               R"(
+Functions and settings for drawing a vertical slur.
+               )",
+
+               /* properties */
+               R"(
+dash-definition
+line-thickness
+positions
+script-priority
+stems
+thickness
+               )");

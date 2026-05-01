@@ -1,0 +1,680 @@
+@c -*- coding: utf-8; mode: texinfo; documentlanguage: fr -*-
+
+@ignore
+    Translation of GIT committish: 83e85e2166044e2ea2286c3fc9c05e645e7f6f4d
+
+    When revising a translation, copy the HEAD committish of the
+    version that you are working on.  For details, see the Contributors'
+    Guide, node Updating translation committishes..
+@end ignore
+
+@c \version "2.19.2"
+
+@c Translators: Valentin Villenave, Jean-Charles Malahieude
+@c Translation checkers: John Mandereau
+
+@need 1500
+@node Percussion
+@chapter Percussions
+
+
+@node Common notation for percussion
+@section Vue d'ensemble des percussions
+
+La notation rythmique sert avant tout aux parties de percussions ou de
+batterie, mais on peut aussi s'en servir à des fins pédagogiques, pour
+montrer le rythme d'une mélodie.
+
+
+@node References for percussion
+@subsection Références en matière de notation pour percussions
+
+@c TODO add more references.
+
+@itemize
+
+@item Certains instruments à percussion se notent sur une portée
+rythmique. Vous trouverez des informations détaillées à ce sujet aux
+rubriques @ref{Showing melody rhythms} et @ref{Instantiating new
+staves}.
+
+@item Le rendu MIDI des percussions fait l'objet d'une rubrique
+dédiée : @ref{Creating MIDI output}.
+
+@end itemize
+
+@morerefs
+Manuel de notation :
+@ref{Creating MIDI output},
+@ref{Showing melody rhythms},
+@ref{Instantiating new staves}.
+
+Morceaux choisis :
+@rlsr{Percussion}.
+@endmorerefs
+
+
+@node Basic percussion notation
+@subsection Notation de base pour percussions
+
+@cindex percussions
+@cindex batterie
+
+@funindex \drummode
+@funindex \drums
+
+Les parties de percussions peuvent être saisies avec le mode
+@code{\drummode}, qui est l'équivalent du mode standard utilisé pour les
+notes à hauteur déterminée. Le moyen plus simple pour saisir une partie
+de percussion est d'utiliser la commande @code{\drums}, qui crée un
+contexte spécifique :
+
+@lilypond[quote,verbatim]
+\drums {
+  hihat4 hh bassdrum bd
+}
+@end lilypond
+
+Il s'agit en fait d'un raccourci pour
+
+@lilypond[quote,verbatim]
+\new DrumStaff \drummode {
+  hihat4 hh bassdrum bd
+  }
+@end lilypond
+
+Chaque instrument de percussion peut avoir, dans le fichier LilyPond, un
+nom complet et un nom raccourci. Ces noms sont inventoriés à l'annexe
+@ref{Creating MIDI output}.
+
+@cindex clef, percussion
+@cindex percussion, clef
+
+Notez bien que l'utilisation de hauteurs (comme un @code{cis4}) dans un
+contexte @code{DrumStaff} déclenchera immanquablement une erreur. Un
+contexte @code{DrumStaff} fait automatiquement appel à une clef
+spécifique ; vous pouvez la spécifier explicitement ou utiliser une
+autre clef.
+
+@lilypond[quote,ragged-right,verbatim]
+\drums {
+  \clef percussion
+  bd4 4 4 4
+  \clef treble
+  hh4 4 4 4
+}
+@end lilypond
+
+Certains instruments à percussion connaissent quelques problèmes quant à
+leur prise en charge au niveau de la génération de fichiers MIDI ; de
+plus amples informations sont disponibles à la rubrique @ref{Creating
+MIDI output}.
+
+@morerefs
+Manuel de notation :
+@ref{Creating MIDI output},
+@ref{Percussion notes}.
+
+Fichiers d'initialisation :
+@file{ly/drumpitch-init.ly}
+
+Morceaux choisis :
+@rlsr{Percussion}.
+@endmorerefs
+
+
+@node Drum rolls
+@subsection Roulements de tambour
+
+Les roulements de tambour s'indiquent par une triple barre en travers
+des hampes. Qu'il s'agisse d'une noire ou d'une durée plus longue, cette
+triple barre s'affiche explicitement. Dans le cas de croches, seules
+deux barres traversent les hampes (la troisième faisant office de
+ligature). Si ce roulement s'applique à des notes plus courtes que la
+croche, LilyPond fait apparaître une seule barre en travers des hampes
+en supplément du nombre de barres de ligature. Ces différents graphismes
+s'obtiennent à l'aide d'une notation de trémolo, en suivant les
+préceptes mentionnés à la rubrique @ref{Tremolo repeats}.
+
+@lilypond[quote,verbatim]
+\drums {
+  \time 2/4
+  sn16 8 16 8 8:32 ~
+  8 8 4:32 ~
+  4 8 16 16
+  4 r4
+}
+@end lilypond
+
+Les coups de baguette peuvent s'indiquer à l'aide de @emph{markups}
+@code{"D"} et @code{"G"} au-dessus ou en dessous des notes comme indiqué
+à la rubrique @ref{Direction and placement}. Vous devrez peut-être jouer
+sur la propriété @code{staff-padding} pour obtenir une ligne de base
+satisfaisante.
+
+@c KEEP LY
+@lilypond[quote,verbatim]
+\drums {
+  \repeat unfold 2 {
+    sn16^"G" 16^"D" 16^"G" 16^"G" 16^"D" 16^"G" 16^"D" 16^"D"
+    \stemUp
+    sn16_"G" 16_"D" 16_"G" 16_"G" 16_"D" 16_"G" 16_"D" 16_"D"
+  }
+}
+@end lilypond
+
+@morerefs
+Manuel de notation :
+@ref{Direction and placement},
+@ref{Tremolo repeats}.
+
+Morceaux choisis :
+@rlsr{Percussion}.
+@endmorerefs
+
+
+@node Pitched percussion
+@subsection Hauteurs en percussions
+
+Certains instruments à percussion émettent des hauteurs, comme le
+xylophone, le vibraphone ou les timbales ; ils utilisent donc des
+portées classiques. Cette possibilité est abordée dans d'autres parties
+du manuel.
+
+@morerefs
+Manuel de notation :
+@ref{Using MIDI instruments}.
+
+Morceaux choisis :
+@rlsr{Percussion}.
+@endmorerefs
+
+
+@node Percussion staves
+@subsection Portées de percussion
+
+@cindex percussions
+@cindex batterie
+
+Une partie de percussions utilisant plusieurs instruments requiert en
+général une portée de plusieurs lignes, où chaque hauteur sur la portée
+représente un instrument à percussion. La gravure d'une telle musique
+requiert que les notes soient situées dans des contextes
+@code{DrumStaff} et @code{DrumVoice}.
+
+@lilypond[quote,verbatim]
+up = \drummode {
+  crashcymbal4 hihat8 halfopenhihat hh hh hh openhihat
+}
+down = \drummode {
+  bassdrum4 snare8 bd r bd sn4
+}
+\new DrumStaff <<
+  \new DrumVoice { \voiceOne \up }
+  \new DrumVoice { \voiceTwo \down }
+>>
+@end lilypond
+
+L'exemple ci-dessus montre une notation polyphonique détaillée. La
+notation polyphonique abrégée peut être employée -- voir la rubrique
+@rlearningnamed{I'm hearing voices, J'entends des voix} -- comme ici :
+
+@lilypond[quote,verbatim]
+\new DrumStaff <<
+  \drummode {
+    bd4 sn4 bd4 sn4
+    << {
+      \repeat unfold 16 hh16
+    } \\ {
+      bd4 sn4 bd4 sn4
+    } >>
+  }
+>>
+@end lilypond
+
+On peut choisir d'autres mises en forme si l'on définit la propriété
+@code{drumStyleTable} dans le contexte @code{DrumVoice}. Quelques
+variables prédéfinies sont disponibles :
+
+@table @code
+@item drums-style
+La notation par défaut : une batterie standard, sur une portée de cinq
+lignes.
+
+@lilypond[quote,line-width=12.0\cm]
+nam = \lyricmode {
+  cymc cyms cymr
+   hh hhc hho hhho hhp hhs
+  cb hc bd sn ss
+  tomh tommh tomml toml tomfh tomfl }
+mus = \drummode {
+  cymc cyms cymr \break
+  hh hhc hho hhho hhp hhs \break
+  cb hc bd sn ss \break
+  tomh tommh tomml toml tomfh tomfl }
+\score {
+  << \new DrumStaff \with {
+       \remove Bar_engraver
+       \remove Time_signature_engraver
+       \hide Stem
+       \override Stem.Y-extent = ##f
+     } \mus
+     \new Lyrics \nam
+  >>
+  \layout {
+    \context {
+      \Score
+      \override LyricText.font-family = #'typewriter
+      \override LyricText.font-features = #'("-liga")
+      \override BarNumber.transparent = ##t
+    }
+  }
+}
+@end lilypond
+
+Le plan de la batterie peut inclure jusqu'à six toms différents. Bien
+sûr, vous n'êtes pas obligé de tous les utiliser si la musique en
+prévoit moins ; par exemple, les trois toms des lignes du milieu sont
+@code{tommh}, @code{tomml}, et @code{tomfh}.
+
+
+@item agostini-drums-style
+Inventée par le percussionniste français Dante Agostini en 1965, cette
+notation s'est répandue au-delà de l'hexagone.
+
+@lilypond[quote,line-width=10.0\cm]
+nam = \lyricmode {
+  cymc cyms cymr
+  hh hhc hho hhho hhp hhs
+  cb hc bd sn ss
+  tomh tommh tomml toml tomfh tomfl }
+mus = \drummode {
+  cymc cyms cymr \break
+  hh hhc hho hhho hhp hhs \break
+  cb hc bd sn ss \break
+  tomh tommh tomml toml tomfh tomfl }
+\score {
+  << \new DrumStaff \with {
+       \remove Bar_engraver
+       \remove Time_signature_engraver
+       \hide Stem
+       \override Stem.Y-extent = ##f
+       drumStyleTable = #agostini-drums-style
+     } \mus
+     \new Lyrics \nam
+  >>
+  \layout {
+    \context {
+      \Score
+      \override LyricText.font-family = #'typewriter
+      \override LyricText.font-features = #'("-liga")
+      \override BarNumber.transparent = ##t
+    }
+  }
+}
+@end lilypond
+
+@item weinberg-drums-style
+Cette notation est basée sur les travaux de Norman Weinberg, publiés
+dans son @emph{Guidelines for Drumset Notation}.
+
+@lilypond[quote,line-width=12.0\cm]
+nam = \lyricmode {
+  cymc cymr cymra cymch
+  hh hhc hho hhho hhp hhs
+  cb bd bda ss sn rb
+  tomh tommh tomml toml tomfh tomfl }
+mus = \drummode {
+  cymc cymr cymra cymch \break
+  hh hhc hho hhho hhp hhs \break
+  cb bd bda ss sn rb \break
+  tomh tommh tomml toml tomfh tomfl }
+\score {
+  << \new DrumStaff \with {
+       \remove Bar_engraver
+       \remove Time_signature_engraver
+       \hide Stem
+       \override Stem.Y-extent = ##f
+       drumStyleTable = #weinberg-drums-style
+     } \mus
+     \new Lyrics \nam
+  >>
+  \layout {
+    \context {
+      \Score
+      \override LyricText.font-family = #'typewriter
+      \override LyricText.font-features = #'("-liga")
+      \override BarNumber.transparent = ##t
+    }
+  }
+}
+@end lilypond
+
+@item timbales-style
+Ce style permet de saisir une partie de timbales, sur une portée à deux
+lignes.
+
+@lilypond[quote,ragged-right]
+nam = \lyricmode { timh ssh timl ssl cb }
+mus = \drummode { timh ssh timl ssl cb s16 }
+
+<<
+  \new DrumStaff \with {
+    \remove Bar_engraver
+    \remove Time_signature_engraver
+    \hide Stem
+    \override Stem.Y-extent = ##f
+    \override StaffSymbol.line-count = 2
+    \override StaffSymbol.staff-space = 2
+    \override VerticalAxisGroup.minimum-Y-extent = #'(-3.0 . 4.0)
+    drumStyleTable = #timbales-style
+  } \mus
+  \new Lyrics {
+    \override LyricText.font-family = #'typewriter
+    \nam
+  }
+>>
+@end lilypond
+
+@item congas-style
+Ce style produit une portée à deux lignes pour une partie de congas.
+
+@lilypond[quote,ragged-right]
+nam = \lyricmode { cgh cgho cghm ssh cgl cglo cglm ssl }
+mus = \drummode { cgh cgho cghm ssh cgl cglo cglm ssl s16 }
+
+<<
+  \new DrumStaff \with {
+    \remove Bar_engraver
+    \remove Time_signature_engraver
+    drumStyleTable = #congas-style
+    \override StaffSymbol.line-count = 2
+
+    %% this sucks; it will lengthen stems.
+    \override StaffSymbol.staff-space = 2
+    \hide Stem
+    \override Stem.Y-extent = ##f
+  } \mus
+  \new Lyrics {
+    \override LyricText.font-family = #'typewriter
+    \nam
+  }
+>>
+@end lilypond
+
+@item bongos-style
+Ce style produit une portée à deux lignes pour une partie de bongos.
+
+@lilypond[quote,ragged-right]
+nam = \lyricmode { boh boho bohm ssh bol bolo bolm ssl }
+mus = \drummode { boh boho bohm ssh bol bolo bolm ssl s16 }
+
+<<
+  \new DrumStaff \with {
+    \remove Bar_engraver
+    \remove Time_signature_engraver
+    \override StaffSymbol.line-count = 2
+    drumStyleTable = #bongos-style
+
+    %% this sucks; it will lengthen stems.
+    \override StaffSymbol.staff-space = 2
+    \hide Stem
+    \override Stem.Y-extent = ##f
+  } \mus
+  \new Lyrics {
+    \override LyricText.font-family = #'typewriter
+    \nam
+  }
+>>
+@end lilypond
+
+@item percussion-style
+Ce style permet de saisir toute sorte de percussions sur des portées
+d'une ligne.
+
+@lilypond[quote,ragged-right]
+namI = \lyricmode { tri trio trim gui guis guil cb cl tamb cab mar hc }
+musI = \drummode { tri trio trim gui guis guil cb cl tamb cab mar hc s16 }
+
+<<
+  \new DrumStaff \with{
+    \remove Bar_engraver
+    drumStyleTable = #percussion-style
+    \override StaffSymbol.line-count = 1
+    \remove Time_signature_engraver
+    \hide Stem
+    \override Stem.Y-extent = ##f
+  } \musI
+  \new Lyrics {
+    \override LyricText.font-family = #'typewriter
+    \namI
+  }
+>>
+
+namII = \lyricmode { cb4 cl tamb cab mar hc }
+musII = \drummode { cb4 cl tamb cab mar hc s16 }
+
+<<
+  \new DrumStaff \with{
+    \remove Bar_engraver
+    drumStyleTable = #percussion-style
+    \override StaffSymbol.line-count = 1
+    \remove Time_signature_engraver
+    \hide Stem
+    \override Stem.Y-extent = ##f
+  } \musII
+  \new Lyrics {
+    \override LyricText.font-family = #'typewriter
+    \namII
+  }
+>>
+@end lilypond
+@end table
+
+Il est par ailleurs possible de définir son propre style, comme indiqué
+dans @ref{Custom percussion staves}.
+
+@morerefs
+Manuel d'initiation :
+@rlearningnamed{I'm hearing voices, J'entends des voix}.
+
+Manuel de notation :
+@ref{Custom percussion staves}.
+
+Fichiers d'initialisation :
+@file{ly/drumpitch-init.ly}.
+
+Morceaux choisis :
+@rlsr{Percussion}.
+@endmorerefs
+
+
+@node Custom percussion staves
+@subsection Personnalisation de portées de percussion
+
+@cindex percussions, personnalisation
+@funindex drumStyleTable
+
+LilyPond offre la possibilité de construire son propre style de
+percussion grâce à une définition de la propriété @code{drumStyleTable}.
+Les notations existantes peuvent se redéfinir au travers d'une liste
+associative dans laquelle chaque entrée doit comporter quatre éléments :
+un nom, le style de tête de note (ou @samp{()} pour adopter la valeur
+par défaut), un éventuel signe d'articulation (ou @code{#f} dans le cas
+contraire) et, enfin, le positionnement de la tête de note sur la
+portée. Cette liste devra alors être convertie en table de hachage à
+l'aide de la fonction @code{alist->hash-table}.
+
+L''entrée pour une articulation peut être soit un nom symbolique de
+script, soit une paire, auquel cas le premier élément est le nom
+symbolique du script et le second un indicateur de positionnement de ce
+script.
+
+[Dans l'exemple ci-dessous, notez bien l'utilisation de l'apostrophe
+inversée (@samp{`}) au début de l'expression Scheme au lieu de
+l'apostrophe normale (@samp{'}), ce qui permet de traiter correctement
+la virgule (@samp{,}) pour l'évaluation de l'élément qui précède.]
+
+@funindex \halfopen
+@funindex \stopped
+
+@lilypond[quote,verbatim]
+#(define mydrums `(
+         (bassdrum        ()        #f               -1)
+         (snare           ()        #f               0)
+         (hihat           cross     #f               1)
+         (halfopenhihat   cross     halfopen         1)
+         (pedalhihat      xcircle   stopped          2)
+         (splashhihat     xcircle   (open . ,DOWN)   2)
+         (lowtom          diamond   #f               3)))
+
+up = \drummode { hh8 hh hhho hhho hhp4 hhs }
+down = \drummode { bd4 sn bd toml8 toml }
+
+\new DrumStaff \with { drumStyleTable = #(alist->hash-table mydrums) }
+  <<
+  \new DrumVoice { \voiceOne \up }
+  \new DrumVoice { \voiceTwo \down }
+>>
+@end lilypond
+
+@funindex drumPitchNames
+
+De nouveaux noms peuvent venir s'ajouter à ces notations personnalisées
+grâce à la variable @code{drumPitchNames} qui peut être redéfinie en
+tant que liste associative (ou augmentée par ajout d'une nouvelle liste
+aux valeurs existantes comme indiqué ci-dessous). Ceci permet par
+ailleurs de définir des alias : raccourcis pour la saisie de certaines
+notations.
+
+@lilypond[quote,verbatim]
+drumPitchNames =
+  #(append
+    '((leftsnap . sidestick)
+      (rightsnap . ridecymbal))
+    drumPitchNames)
+
+drumPitchNames.ls = #'sidestick
+drumPitchNames.rs = #'ridecymbal
+
+\drums {
+  leftsnap4. rightsnap8 leftsnap4 rightsnap
+  ls8 rs ls rs ls4 rs
+}
+@end lilypond
+
+@funindex midiDrumPitches
+@funindex drumPitchTable
+
+De la même manière, la propriété @code{drumPitchTable} associe une
+hauteur spécifique (autrement dit un son instrumental différent tel que
+fourni par les fontes sonores MIDI disponibles) à chaque notation. Cette
+propriété requiert d'être définie sous forme de table de hachage,
+convertie elle aussi à partir d'une liste associative (enregistrée par
+défaut en tant que variable @code{midiDrumPitches}). La redéfinition de
+ces associations s'effectue comme indiqué ci-dessus, soit en créant
+l'intégralité d'une liste associative, soit certains de ses membres.
+L'exemple ci-dessous démontre la manière de créer un jeu entier de
+notation, avec sa propre syntaxe de saisie, sa notation personnalisée et
+les instruments MIDI correspondants.
+
+@lilypond[quote,verbatim]
+drumPitchNames.dbass     = #'dbass
+drumPitchNames.dba       = #'dbass  % 'db is in use already
+drumPitchNames.dbassmute = #'dbassmute
+drumPitchNames.dbm       = #'dbassmute
+drumPitchNames.do        = #'dopen
+drumPitchNames.dopenmute = #'dopenmute
+drumPitchNames.dom       = #'dopenmute
+drumPitchNames.dslap     = #'dslap
+drumPitchNames.ds        = #'dslap
+drumPitchNames.dslapmute = #'dslapmute
+drumPitchNames.dsm       = #'dslapmute
+
+#(define djembe-style
+  '((dbass       ()   #f        -2)
+    (dbassmute   ()   stopped   -2)
+    (dopen       ()   #f        0)
+    (dopenmute   ()   stopped   0)
+    (dslap       ()   #f        2)
+    (dslapmute   ()   stopped   2)))
+
+midiDrumPitches.dbass     = g
+midiDrumPitches.dbassmute = fis
+midiDrumPitches.dopen     = a
+midiDrumPitches.dopenmute = gis
+midiDrumPitches.dslap     = b
+midiDrumPitches.dslapmute = ais
+
+test = \drummode { dba4 do ds dbm dom dsm }
+
+\score {
+  \new DrumStaff \with {
+    \override StaffSymbol.line-count = 3
+    instrumentName = "Djembé "
+    drumStyleTable = #(alist->hash-table djembe-style)
+    drumPitchTable = #(alist->hash-table midiDrumPitches)
+  } {
+    \time 3/4
+    \test
+  }
+  \layout {}
+  \midi {}
+}
+@end lilypond
+
+@morerefs
+Fichiers d'initialisation :
+@file{ly/drumpitch-init.ly}.
+
+Morceaux choisis :
+@rlsr{Percussion}.
+
+Référence des propriétés internes :
+@rinternals{DrumStaff},
+@rinternals{DrumVoice}.
+@endmorerefs
+
+
+@node Ghost notes
+@subsection Notes fantômes
+
+@cindex fantôme, note, percussion
+@cindex silencieuse, note, percussion
+@cindex fausse note, percussion
+@cindex percussion, note fantôme
+@cindex percussion, note silencieuse
+@cindex percussion, fausse note
+
+Des notes fantômes, qu'on appelle aussi en anglais @emph{dead, muted,
+silenced ou false} notes, peuvent être créées pour les parties de
+percussion, grâce à la commande @code{\parenthesize} décrite à la
+rubrique @ref{Parentheses}.
+
+@lilypond[quote,ragged-right,verbatim]
+\new DrumStaff
+<<
+  \context DrumVoice  = "1" { s1 }
+  \context DrumVoice  = "2" { s1 }
+  \drummode {
+    <<
+      {
+        hh8[ 8] <hh sn> hh16
+        \parenthesize sn hh
+        \parenthesize sn hh8 <hh sn> hh
+      } \\
+      {
+        bd4 r4 bd8 8 r8 bd
+      }
+    >>
+  }
+>>
+@end lilypond
+
+@morerefs
+Manuel de notation :
+@ref{Parentheses}.
+
+Morceaux choisis :
+@rlsr{Percussion}.
+@endmorerefs

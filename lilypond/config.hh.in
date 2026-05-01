@@ -1,0 +1,59 @@
+/* @AUTOGENERATE@ */
+
+/* datadir */
+#define CONFIG_DATADIR "@CONFIG_DATADIR@"
+#define CONFIG_LIBDIR "@CONFIG_LIBDIR@"
+
+#define PACKAGE_DATADIR CONFIG_DATADIR "/lilypond"
+#define PACKAGE_LIBDIR CONFIG_LIBDIR "/lilypond"
+
+/* default lilypond locale dir */
+#define LOCALEDIR "@LOCALEDIR@"
+
+/* compile with expensive run-time checks */
+#define CHECKING 0
+
+/* define to use the Ghostscript API */
+#define GS_API 0
+
+/* define if you have chroot */
+#define HAVE_CHROOT 0
+
+/* define if you have gettext */
+#define HAVE_GETTEXT 0
+
+/* define if you have grp header */
+#define HAVE_GRP_H 0
+
+/* define if you have pwd header */
+#define HAVE_PWD_H 0
+
+/* define path separator */
+#define PATHSEP '@PATHSEP@'
+
+/* define if you have sys/stat.h */
+#define HAVE_SYS_STAT_H 0
+
+/* define if cxxabi.h has workable demangler */
+#define HAVE_CXA_DEMANGLE 0
+
+/* define if enable extensions on GNU/Linux */
+#undef _GNU_SOURCE
+
+/* define if enable general extensions on Solaris */
+#undef __EXTENSIONS__
+
+/* define if enable threading extensions on Solaris */
+#undef _POSIX_PTHREAD_SEMANTICS
+
+/* define if enable extensions for the HP NonStop platform */
+#undef _TANDEM_SOURCE
+
+/* define if enable extensions for AIX 3, and for Interix */
+#undef _ALL_SOURCE
+
+/* define if enable Posix functions for Minix */
+#undef _POSIX_SOURCE
+
+/* define if enable additional Posix functions for Minix */
+#undef _POSIX_1_SOURCE

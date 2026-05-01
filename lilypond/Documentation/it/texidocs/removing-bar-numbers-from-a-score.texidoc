@@ -1,0 +1,7 @@
+%% Translation of GIT committish: 2f3474d9af596d677ed5b7ce720ae4d0954a6b51
+  texidocit = "
+I numeri di battuta possono essere tolti rimuovendo l'incisore
+@code{Bar_number_engraver} dal contesto @code{Score}.
+
+"
+  doctitleit = "Togliere i numeri di battuta da uno spartito"

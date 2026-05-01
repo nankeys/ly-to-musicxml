@@ -1,0 +1,63 @@
+%% Translation of GIT committish: 70abecb938c2bb752967bd56b7402dd8129838a5
+  texidoces = "
+Al trabajar con los callbacks de un grob, puede ser de mucha ayuda
+entender el árbol genealógico de un grob.  La mayor parte de los
+grobs tienen padres que influyen en el posicionamiento del grob.
+los padres X e Y influyen en las posiciones horizontal y vertical
+del grob, respectivamente.  Además, cada pade puede tener padres a
+su vez.
+
+Por desgracia, existen varios aspectos de la genealogía de un grob
+que pueden llevar a confusión:
+
+@itemize
+@item
+Los tipos de padre que tiene un grob pueden depender del contexto.
+@item
+Para ciertos grobs, los padres X e Y son el mismo.
+@item
+Un @emph{ancestro} concreto puede estar relacionado con un grob de
+más de una manera.
+@item
+El concepto de @emph{generaciones} es engañoso.
+@end itemize
+
+Por ejemplo, el grob @code{System} puede ser tanto un padre (sobre
+el lado Y) como un abuelo (dos veces en el lado X) de un grob
+@code{VerticalAlignment}.
+
+El macro definido en este fragmento de código imprime en la consola una representación textual de la genealogía de un grob.  Por ejemplo, la llamada
+
+@example
+@{
+  \\once \\override NoteHead.before-line-breaking = #display-ancestry
+  c
+@}
+@end example
+
+genera la siguiente salida.
+
+@example
+------------------------------------
+@end example
+
+@example
+NoteHead
+X,Y: NoteColumn
+     X: PaperColumn
+        X,Y: System
+     Y: VerticalAxisGroup
+        X: NonMusicalPaperColumn
+           X,Y: System
+        Y: VerticalAlignment
+           X: NonMusicalPaperColumn
+              X,Y: System
+           Y: System
+@end example
+
+Como consecuencia, tenemos que ejecutar el código del fragmento de
+código por nosotros mismos, porque el archivo de salida no muestra
+los datos que nos interesan.
+
+"
+  doctitlees = "Imprimir el árbol genealógico de un grob"

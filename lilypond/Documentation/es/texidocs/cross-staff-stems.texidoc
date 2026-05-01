@@ -1,0 +1,16 @@
+%% Translation of GIT committish: 4f16fa98fd258f08e64203c793028ea3e363b1c0
+  texidoces = "
+Este fragmento de código muestra el uso del grabador
+@code{Span_stem_engraver} y de @code{\crossStaff} para conectar
+automáticamente plicas de un pentagrama a otro.
+
+No es necesario especificar las longitudes de las plicas porque la
+distancia variable entre las cabezas de las notas y los
+pentagramas se calcula automáticamente.  Sin embargo, es
+importante aplicar @code{\\crossStaff} a la voz o pentagrama
+correctos (esto es, en el lado opuesto de donde está o estaría
+posicionada la barra de corcheas) para conseguir el efecto deseado
+"
+  doctitlees = "Plicas de pentagrama cruzado"
+
+  

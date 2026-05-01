@@ -1,0 +1,9 @@
+%% Translation of GIT committish: 1bf2403e1cd7038a1e7ea62da560af601e3694fc
+  texidoces = "
+Los reguladores pueden imprimirse en uno cualquiera de los estilos
+de @code{line-interface}: @code{dashed-line} (discontinuo),
+@code{dotted-line} (punteado), @code{line} (línea continua),
+@code{trill} (trino) o @code{zigzag} (zig-zag).
+
+"
+  doctitlees = "Reguladores con distintos estilos de línea"

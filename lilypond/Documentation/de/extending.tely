@@ -1,0 +1,69 @@
+\input texinfo @c -*- coding: utf-8; mode: texinfo; documentlanguage: de -*-
+@ignore
+    Translation of GIT committish: ebe492ca408fb0d9abf80b94c56197eef8dc2f09
+
+    When revising a translation, copy the HEAD committish of the
+    version that you are working on.  For details, see the Contributors'
+    Guide, node Updating translation committishes.
+@end ignore
+
+@settitle LilyPond erweitern
+@documentencoding UTF-8
+@documentlanguage de
+@afourpaper
+
+@c Translators: Till Paala
+
+@macro manualIntro
+Diese Datei erklärt, wie man die Funktionalität von
+LilyPond Version @version{} erweitern kann.
+@end macro
+
+@c `Extending' was born 2003-04-23 with git commit c08f6e8...
+@macro copyrightDeclare
+Copyright @copyright{} 2003--2026 bei den Autoren.
+@end macro
+
+@set FDL
+@include de/macros.itexi
+
+
+@lilyTitlePage{Extending}
+
+
+@c TOC -- non-tex
+@ifnottex
+
+@menu
+* Scheme tutorial::                Programmieren innerhalb von LilyPond.
+* Interfaces for programmers::     Wie man mit Scheme kommunizieren kann.
+* LilyPond Scheme interfaces::     Information in die Noten senden und aus den Noten erhalten.
+
+Anhänge
+
+* GNU Free Documentation License:: Die Lizenz dieses Dokuments.
+* Index of commands and concepts::
+@end menu
+
+@docMain
+@end ifnottex
+
+
+@contents
+
+@iftex
+@allowcodebreaks false
+@end iftex
+
+
+@include de/extending/scheme-tutorial.itely
+@include de/extending/programming-interface.itely
+
+@include en/fdl.itexi
+
+@node Index of commands and concepts
+@appendix Register
+
+@printindex cp
+
+@bye

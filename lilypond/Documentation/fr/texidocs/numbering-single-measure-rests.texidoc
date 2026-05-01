@@ -1,0 +1,8 @@
+%% Translation of GIT committish: de1e42ce512f3690387cdd065109bddff1b7bd6d
+  texidocfr = "
+Les silences multimesures affichent leur longueur sauf s'il n'y a qu'une
+seule mesure. Ceci peut se modifier en réglant
+@code{restNumberThreshold}.
+"
+
+  doctitlefr = "Dénombrer une unique mesure de silence"

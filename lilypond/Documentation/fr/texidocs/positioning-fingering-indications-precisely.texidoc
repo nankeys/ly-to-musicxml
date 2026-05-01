@@ -1,0 +1,10 @@
+%% Translation of GIT committish: 606ac3c3b22c41d84aa5fa938d42da5125ac572a
+  texidocfr = "
+Les options par défaut en matière de positionnement des doigtés d'un
+accord donnent généralement de bons résultats. Il se peut néanmoins
+qu'un ajustement soit nécessaire dans certains cas particuliers,
+notamment en présence d'un intervalle de seconde. L'astuce ici présentée
+permet d'obtenir un meilleur rendu.
+"
+
+  doctitlefr = "Positionnement précis des indications de doigté"

@@ -1,0 +1,288 @@
+@c -*- coding: utf-8; mode: texinfo; documentlanguage: fr -*-
+
+@ignore
+    Translation of GIT committish: 83e85e2166044e2ea2286c3fc9c05e645e7f6f4d
+
+    When revising a translation, copy the HEAD committish of the
+    version that you are working on.  For details, see the Contributors'
+    Guide, node Updating translation committishes..
+@end ignore
+
+@c \version "2.16.0"
+
+@c Translators: Jean-Charles Malahieude
+@c Translation checkers:
+
+
+@node Contemporary music
+@chapter Musique contemporaine
+
+L'aube du
+@ifnothtml
+XX@sup{e}
+@end ifnothtml
+@ifhtml
+@html
+XX<sup>e</sup>
+@end html
+@end ifhtml
+ siècle a vu bourgeonner nombre de techniques et de styles de
+composition. Qu'il s'agisse des nouveaux développements autour de
+l'harmonie et du rythme, de l'expansion du spectre des hauteurs et de
+l'évolution de nombreuses techniques instrumentales, tous ces différents
+phénomènes ont participé à l'évolution de la notation musicale. Les
+paragraphes qui suivent sont là pour vous proposer des références et
+informations quant à ces nouvelles techniques de notation.
+
+
+@node Pitch and harmony in contemporary music
+@section Hauteur et harmonie en musique contemporaine
+
+Intéressons-nous tout d'abord à ce qui relève de la notation des
+hauteurs et à l'harmonie en musique contemporaine.
+
+
+@node References for pitch and harmony in contemporary music
+@subsection Généralités en matière de hauteur et d'harmonie
+
+@itemize
+@item La notation habituelle des quarts de tons est abordée à la
+rubrique @ref{Note names in other languages}.
+
+@item Les tonalités inhabituelles sont abordées à la rubrique
+@ref{Key signature}.
+
+@item Les pratiques contemporaines en matière d'altération sont
+abordées à la rubrique @ref{Automatic accidentals}.
+
+@end itemize
+
+
+@node Microtonal notation
+@subsection Notation microtonale
+
+@ignore
+    Discussion of microtones other than quarter-tones,
+    alternative notations (arrows, slash-flats), etc.
+@end ignore
+
+
+@node Contemporary key signatures and harmony
+@subsection Armures contemporaines et harmonie
+
+@ignore
+    Discussion of contemporary key signatures:
+    non-standard, polytonality, etc.
+@end ignore
+
+
+@node Contemporary approaches to rhythm
+@section Approches du rythme en musique contemporaine
+
+Abordons à présent certaines particularités de la notation du rythme en
+musique contemporaine.
+
+
+@node References for contemporary approaches to rhythm
+@subsection Généralités sur le rythme en musique contemporaine
+
+@itemize
+@item Les métrique complexes sont abordées à la rubrique
+@ref{Time signature}.
+
+@item Les bases de la polymétrie sont abordées à la rubrique
+@ref{Polymetric notation}.
+
+@item Certaines particularités en matière de ligature sont abordées à la
+rubrique @ref{Feathered beams}.
+
+@item Les lignes de mensuration (barres de mesures uniquement entre les
+portées) sont abordées à la rubrique @ref{Grouping staves}.
+
+@end itemize
+
+
+@node Tuplets in contemporary music
+@subsection N-olets et musique contemporaine
+
+@ignore
+    Extended discussion of modern tuplets, including
+    non-standard ratios, nested tuplets and customizing
+    the appearance of tuplets (ratios, note values etc.)
+    Also how to provide an ossia RhythmicStaff to help
+    players break down a complicated tuplet.
+@end ignore
+
+
+@node Contemporary time signatures
+@subsection Métriques contemporaines
+
+@ignore
+    Extended discussion of complex time signatures
+    including Graham P.'s work; non-standard time
+    signatures such as 7/10, 5/6; alternative
+    notations such as Orff-esque 4/note, placing a
+    single time signature across multiple staves, or
+    placing time signatures at the top of StaffGroups
+    or systems rather than in the stave.
+@end ignore
+
+
+@node Extended polymetric notation
+@subsection Notation polymétrique étendue
+
+@ignore
+    Extended examples e.g. different instruments
+    or ensembles with independent tempi
+@end ignore
+
+
+@node Beams in contemporary music
+@subsection Ligatures et musique contemporaine
+
+@ignore
+    Beaming practices, stemlets, Boulez-esque displaying
+    of beamed notes with flags
+@end ignore
+
+
+@node Bar lines in contemporary music
+@subsection Barres de mesure et musique contemporaine
+
+@ignore
+    Mensurstriche bar lines, tick barlines, etc.
+@end ignore
+
+
+@node Graphical notation
+@section Notation graphique
+
+@cindex durée, ligne de
+@cindex note, prolongation
+@cindex ligne, indication de durée
+@cindex prologation de note
+
+@funindex \-
+
+Les éléments rythmiques peuvent se prolonger par une ligne de durée
+représentée par un objet graphique @code{DurationLine}. Cette ligne peut
+adopter différents styles : @code{'beam}, @code{'line},
+@code{'dashed-line}, @code{'dotted-line}, @code{'zigzag}, @code{'trill}
+ou @code{'none}. La ligne peut se terminer par un crochet (uniquement
+pour le style @code{'beam}) ou une flèche.
+
+@lilypond[quote,verbatim]
+\layout {
+  \context {
+    \Voice
+    \consists Duration_line_engraver
+    \omit Stem
+    \omit Flag
+    \omit Beam
+    \override NoteHead.duration-log = 2
+  }
+}
+
+{
+  a'1\- s2 r
+  \once \override DurationLine.style = #'line
+  a'1\- s2 r
+  \once \override DurationLine.style = #'dashed-line
+  \once \override DurationLine.dash-period = 2
+  a'1\- s2 r
+  \once \override DurationLine.style = #'dotted-line
+  \once \override DurationLine.dash-period = 1
+  \once \override DurationLine.bound-details.right.padding = 1
+  a'1\- s2 r
+  \once \override DurationLine.thickness = 2
+  \once \override DurationLine.style = #'zigzag
+  a'1\- s2 r
+  \once \override DurationLine.style = #'trill
+  a'1\- s2 r
+  \once \override DurationLine.style = #'none
+  a'1\- s2 r
+  \once \override DurationLine.bound-details.right.end-style = #'arrow
+  a'1\- s2 r
+  \override DurationLine.bound-details.right.end-style = #'hook
+  a'1\- s2 r
+  \override DurationLine.details.hook-direction = #DOWN
+  a'1\- s2 r
+  \bar "|."
+}
+@end lilypond
+
+@code{DurationLine} peut éviter les éléments de @code{BreakAlignGroup}
+en cours de ligne.
+
+@lilypond[quote,verbatim]
+\layout {
+  \context {
+    \Voice
+    \consists "Duration_line_engraver"
+  }
+}
+
+<<
+  \new Staff {
+    g'1\- s \clef "alto" g'
+  }
+  \new Staff {
+    \override DurationLine.bound-details
+                          .right.end-on-break-align-group = ##t
+    g'1\- s \clef "alto" g' \bar "|."
+  }
+>>
+@end lilypond
+
+
+@node Contemporary scoring techniques
+@section Techniques de partition contemporaine
+
+
+@node New instrumental techniques
+@section Nouvelles techniques instrumentales
+
+
+@node Further reading and scores of interest
+@section Informations complémentaires et exemples pertinents
+
+Vous trouverez ici une sélection d'ouvrages de référence, d'exemples et
+autres ressources qui vous permettront d'étudier plus avant la notation
+contemporaine.
+
+
+@node Books and articles on contemporary musical notation
+@subsection Ouvrages et articles sur la notation en musique contemporaine
+
+@itemize
+@item
+@emph{Music Notation in the Twentieth Century: A Practical Guidebook}
+par Kurt Stone [W. W. Norton, 1980]
+
+@item
+@emph{Music Notation: A Manual of Modern Practice} par Gardner Read
+[Taplinger, 1979]
+
+@item
+@emph{Instrumentation and Orchestration} par Alfred Blatter [Schirmer,
+2de ed. 1997]
+
+@end itemize
+
+
+@node Scores and musical examples
+@subsection Partitions et exemples
+
+@ignore
+    Rough list of composers whose work could be included
+    (in alphabetical order, perhaps with suggested work):
+
+        Pierre Boulez (Le Marteau Sans Maître?)
+        John Cage (Freeman Etudes?)
+        George Crumb (Black Angels?)
+        Brian Ferneyhough (Transit?  Time & Motion Studies?)
+        Ben Johnston (extended just intonation example)
+        György Ligeti (several, including Hamburg Concerto)
+        Krzysztof Penderecki (Threnody to the Victims of Hiroshima?)
+        Karlheinz Stockhausen (Gruppen?)
+@end ignore

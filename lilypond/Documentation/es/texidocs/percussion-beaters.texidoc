@@ -1,0 +1,10 @@
+%% Translation of GIT committish: 70abecb938c2bb752967bd56b7402dd8129838a5
+  texidoces = "
+No están contemplados de forma nativa los símbolos gráficos para
+instrumentos de percusión; sin embargo es posible incluir dichos
+símbolos, ya sea como un archivo EPS externo o como código PostScript
+incrustado dentro de un elemento de marcado, como se muestra en este
+ejemplo.
+
+"
+  doctitlees = "Símbolos de golpes de percusión"

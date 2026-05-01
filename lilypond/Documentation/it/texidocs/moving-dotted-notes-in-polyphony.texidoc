@@ -1,0 +1,10 @@
+%% Translation of GIT committish: 2f3474d9af596d677ed5b7ce720ae4d0954a6b51
+  texidocit = "
+Quando una nota puntata della voce più alta viene spostata per evitare una
+collisione con una nota di un'altra voce, il comportamento predefinito è
+spostare la nota più alta a destra.  Tale comportamento può essere
+modificato tramite la proprietà @code{prefer-dotted-right} di
+@code{NoteCollision}.
+
+"
+  doctitleit = "Spostare le note puntate in polifonia"

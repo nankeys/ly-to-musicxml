@@ -1,0 +1,13 @@
+%% Translation of GIT committish: de1e42ce512f3690387cdd065109bddff1b7bd6d
+  texidocfr = "
+Il est possible de changer globalement l'apparence des notes
+d'ornement dans un morceau, au moyen des fonctions
+@code{add-grace-property} et @code{remove-grace-property}.
+
+Ici, par exemple, on ôte la définition de l'orientation (propriété
+@code{direction}) des objets @code{Stem} pour toutes les petites notes,
+afin que les hampes ne soient pas toujours orientées vers le haut, et on
+leur préfère des têtes en forme de croix.
+"
+
+  doctitlefr = "Mise en forme des notes d'ornement"

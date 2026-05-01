@@ -1,0 +1,963 @@
+@c -*- coding: utf-8; mode: texinfo; documentlanguage: zh -*-
+@c This file is part of web.texi
+@ignore
+    Translation of GIT committish: dc1b4b0caccf13b024f69e26033d38ecff02db3e
+
+    When revising a translation, copy the HEAD committish of the
+    version that you are working on.  See TRANSLATION for details.
+@end ignore
+
+@c Translators: Ben Luo, Anthony Fok, Gu Yu
+
+@include en/included/authors.itexi
+@include en/included/gsoc.itexi
+@include en/included/helpus.itexi
+
+@node Community
+@unnumbered 社区
+
+@divClass{link-headings}
+
+@divClass{column-center-top}
+@subheading 与社区互动
+
+@itemize
+
+@item
+@ref{Contact}: 获取帮助，讨论并保持联系！
+
+@item
+@ref{Tiny examples}: 当讨论 LilyPond 时，@emph{极力} 推荐使用它们。
+
+@item
+@ref{Bug reports}: 出了些问题。
+
+@end itemize
+@divEnd
+
+@divClass{column-left-bottom}
+@subheading 使 LilyPond 更好
+
+@itemize
+
+@item
+@ref{Help us}: 我们请求你的帮助。
+
+@item
+@ref{Sponsoring}: 经济贡献。
+
+@item
+@ref{Development}: 对于贡献者和测试者。
+
+@item
+@ref{Google Summer of Code}: Google Summer of Code (GSoC) 的想法。
+
+@item
+@ref{Authors}: 让 LilyPond 发展到今天的人们。
+
+@end itemize
+@divEnd
+
+@divClass{column-right-bottom}
+@subheading 其他
+
+@itemize
+
+@item
+@ref{Publications}: 我们所写的，以及关于我们的文字。
+
+@item
+@ref{News}: 来自 LilyPond 项目的新闻
+
+@item
+@ref{Attic}: 过去版本的公告和更新日志、旧闻等等。
+
+@end itemize
+@divEnd
+
+@divEnd
+
+@menu
+* Contact::
+* Tiny examples::
+* Bug reports::
+* Help us::
+* Sponsoring::
+* Development::
+* Google Summer of Code::
+* Authors::
+* Publications::
+* News::
+* Attic::
+@end menu
+
+
+@node Contact
+@unnumberedsec 联系
+
+
+@divClass{column-left-top}
+@subheading 用户讨论和帮助
+
+@subsubheading 用户邮件列表: @code{lilypond-user@@gnu.org}
+
+该邮件列表是用户们互相讨论和帮助的主要场所。
+
+@quotation
+@uref{https://lists.gnu.org/mailman/listinfo/lilypond-user,
+lilypond-user 订阅和信息}
+
+@uref{https://lists.gnu.org/archive/html/lilypond-user/,
+user 存档@tie{}1}
+@uref{http://www.mail-archive.com/lilypond-user@@gnu.org/,
+存档@tie{}2}
+@end quotation
+
+@warning{问问题时，请使用 @ref{Tiny examples}！}
+
+@subsubheading 其他语言
+
+@quotation
+@uref{https://lists.gnu.org/mailman/listinfo/lilypond-user-fr,
+法语邮件列表}
+
+@uref{https://lilypondforum.de/,
+德语论坛}
+
+@uref{https://lists.gnu.org/mailman/listinfo/lilypond-it,
+意大利语邮件列表}
+
+@uref{https://groups.google.com/group/lilypond-brasil,
+葡萄牙语群组}
+
+@uref{https://lists.gnu.org/mailman/listinfo/lilypond-es,
+西班牙语邮件列表}
+@end quotation
+@divEnd
+
+
+@divClass{column-right-top}
+@subheading LilyPond 片段仓库
+
+LilyPond 片段仓库是用户提交的例子的总集，
+它可以被自由地复制，并在你自己的作品中使用。
+你可以查看别人怎么写的，也可以添加你自己的片段！
+
+@example
+@uref{https://lsr.di.unimi.it}
+@end example
+
+部分来自 LSR 的指导性例子也在我们的官方文档中包含
+，参见 @ref{Snippets}.
+@divEnd
+
+
+@divClass{column-right-bottom}
+@subheading 开发者讨论和翻译
+
+@subsubheading 开发者邮件列表: @code{lilypond-devel@@gnu.org}
+
+大多数的开发者讨论在此邮件列表进行。也可以向这里发送补丁。
+
+@quotation
+@uref{https://lists.gnu.org/mailman/listinfo/lilypond-devel,
+lilypond-devel 订阅和信息}
+
+@uref{https://lists.gnu.org/archive/html/lilypond-devel/,
+devel 存档@tie{}1}
+@uref{http://www.mail-archive.com/lilypond-devel@@gnu.org/,
+存档@tie{}2}
+@end quotation
+
+
+@subsubheading 错误邮件列表: @code{bug-lilypond@@gnu.org}
+
+错误报告和讨论应当发送至此。不要将补丁发送到此邮件列表。
+
+@quotation
+@uref{https://lists.gnu.org/mailman/listinfo/bug-lilypond,
+bug-lilypond 订阅和信息}
+
+@uref{https://lists.gnu.org/archive/html/bug-lilypond/,
+bug 存档@tie{}1}
+@uref{http://www.mail-archive.com/bug-lilypond@@gnu.org/,
+存档@tie{}2}
+@end quotation
+
+@warning{在向错误列表提交信息之前，请阅读我们的 @ref{Bug reports} 指南。}
+
+@divEnd
+
+
+@divClass{column-left-top}
+@subheading 发行公告
+
+@subsubheading 发行邮件列表: @code{info-lilypond@@gnu.org}
+
+此邮件列表是低容量、只读的列表，它只接收关于新发行版的通知。
+
+@quotation
+@uref{https://lists.gnu.org/mailman/listinfo/info-lilypond,
+info-lilypond 订阅和信息}
+
+@uref{https://lists.gnu.org/archive/html/info-lilypond/,
+info 存档 1}
+@uref{http://www.mail-archive.com/info-lilypond@@gnu.org/,
+存档 2}
+@end quotation
+@divEnd
+
+@divClass{column-left-top}
+@subheading IRC
+
+我们的 IRC 频道提供不同级别的支持。
+
+@example
+@uref{irc://irc.libera.chat/lilypond, #lilypond@@irc.libera.chat}
+@end example
+
+此通道没有公开存档，所以建议将任何可能帮到其它人的问题投递到邮件列表。
+
+@html
+<form action="https://web.libera.chat"
+      method="get"
+      name="f_lily_irc"
+  <label>irc name:
+    <input name="nick" type="text" size="15" value="">
+  </label>
+  <input name="Channel" type="hidden" value="lilypond">
+  <input type="submit" value="Join #lilypond IRC Chat">
+</form>
+
+<script language="JavaScript" type="text/javascript">
+  var username = "web";
+  var lang = window.navigator.userLanguage ? window.navigator.userLanguage
+  : window.navigator.language;
+  username += '-' + lang.substr(0, 2);
+  username += '-' + navigator.appName.substr(0, 2);
+  username += navigator.appCodeName.replace (" ", "").substr(0, 2);
+  username += navigator.platform.replace (" ", "").replace("nux", "").replace("n32", "");
+  document.forms["f_lily_irc"].nick.value = username;
+</script>
+@end html
+@divEnd
+
+@c Currently inactive and inaccessible
+
+@ignore
+
+@divClass{column-right-top}
+@subheading The LilyPond Blog
+
+Read our community blog, @q{Scores of Beauty}:
+
+@example
+@uref{https://lilypondblog.org}
+@end example
+
+@divEnd
+
+@end ignore
+
+
+@node Tiny examples
+@unnumberedsec 小例子
+
+@divClass{column-center-top}
+@subheading 什么是 @qq{小例子}?
+
+一个小例子 (tiny example) 是一个 @strong{任何} 内容都不再能移除的例子。
+@divEnd
+
+@divClass{column-left-bottom}
+@subheading 为什么要创建小例子？
+
+@divClass{keep-bullets}
+@itemize
+
+@item
+例子越小，越能快速地让那些潜在的帮助者明白你的意图并帮助你。
+
+@item
+一个小例子演示了你如何自己尝试努力解决这个问题。如果人们
+发送大量的输入，那看上去我们是否帮助他们并不那么重要。
+
+@item
+创建小例子可以帮助你理解当前发生了什么。在创建小例子时，
+可以避免创建许多“假”的问题报告；如果你在小例子中不能复现 
+@qq{bug} ，则问题可能是对 LilyPond 的不充分理解导致的，
+而非一个真正的错误！
+
+@end itemize
+@divEnd
+
+@divEnd
+
+
+@divClass{column-right-bottom}
+@subheading 如何创建小例子？
+
+@divClass{keep-bullets}
+@itemize
+
+@item
+包含 @code{\version} 号。
+
+@item
+让它尽可能地小！关于空白（spacing）或页面布局的例子可能需要大量
+小节的音乐，但更多的问题可以在一个小节内复现。
+
+@item
+当尝试创建小例子时，尝试将你文件中 @w{(@code{%}
+或者 @code{%@{ @dots{} %@}})} 的部分注释掉。如果注释掉这些内容后，
+你仍然能够演示你的核心意图，则将这些内容从文件中移除。
+
+@item
+避免使用复杂的音符、调号或者拍号，除非错误是关于它们的外观的。
+
+@item
+不要使用 @code{\override} 或 @code{\set} 指令，除非错误时关于这些指令的
+
+@item
+可选地，附加一份图片来展示你期望的图形输出。
+
+@end itemize
+@divEnd
+
+@divEnd
+
+@divClass{column-center-bottom}
+@subheading 例子应当有多小？
+
+下面代码展示的是一个小例子吗？
+
+@example
+\version "2.14.1"
+\include "english.ly"
+
+\score @{
+  \new Staff @{
+    \key d \major
+    \numericTimeSignature
+    \time 2/4
+    <cs' d'' b''>16 <cs' d'' b''>8.
+    %% Here: the tie on the D's looks funny
+    %% Too tall? Left-hand endpoint is not aligned with the B tie?
+    ~
+    <cs' d'' b''>8 [ <b d'' a''> ]
+  @}
+@}
+@end example
+
+显然，它并不是特别大，但真正的最小例子是这样的：
+
+@example
+\version "2.14.1"
+@{
+  % middle tie looks funny here:
+  <c' d'' b''>8. ~ <c' d'' b''>8
+@}
+@end example
+
+极少数的小例子会超过 10 行代码——
+大部分情形下， 4 行代码就足以演示问题！
+
+@divEnd
+
+
+@node Bug reports
+@unnumberedsec 错误报告
+
+
+@divClass{heading-center}
+如果你的输入引发了崩溃或者错误的输出，则这是一个错误。
+@divEnd
+
+@divClass{column-center-top}
+@subheading 第 1 步：检查是否已知错误
+
+我们已经知晓了这个错误。请检查这里：
+
+@example
+@uref{https://gitlab.com/lilypond/lilypond/-/issues}
+@end example
+
+@warning{请 @strong{不要} 直接向错误记录器提交错误报告。
+一旦一个议题（issue）被添加至错误记录器后，可以向该报告
+增加更多信息。}
+
+@divEnd
+
+
+@divClass{column-left-bottom}
+@subheading 第 2 步：创建错误报告
+
+如果你发现一个未被列出的错误，
+请帮助我们创建一个错误报告。
+
+@warning{我们只接受 @ref{Tiny examples} 形式的报告。
+我们的资源有限，所以任何非最小的例子都会被拒绝。几乎所有
+的错误都可以在 4 个或者更少的音符内演示！}
+
+这是一个好的错误报告的例子：
+
+@example
+% Accidentals should be printed for only
+% the first note in a tie, but this version
+% prints flats on both notes.
+\version "2.10.1"
+
+\relative c'' @{
+ bes1 ~
+ bes1
+@}
+@end example
+
+@divEnd
+
+@divClass{column-right-bottom}
+@subheading 第 3 步：发送错误报告
+
+一旦你确认这个议题不是已知的，且创建了错误报告，
+那么请将它发送给我们！
+
+不幸的是目前 bug-lilypond 列表在不订阅的情形下不再提供
+投递接口；参阅
+@example
+@uref{https://lists.gnu.org/mailman/listinfo/bug-lilypond}
+@end example
+获得更多信息。
+@divEnd
+
+@divClass{column-center-bottom}
+@subheading 第 4 步：等待回应
+
+当你的错误报告发送到邮件列表后，我们的错误组（Bug Squard）
+会检查它；他们可能会向你询问更多信息。当报告添加至错误追
+踪器时，你会收到通知。请预留 4 天时间，因为我们从事这项工
+作的志愿者数量有限。
+
+当一个错误被添加至追踪器，你可以在其下评论来添加更多关于
+它的信息。
+为了保证该追踪器议题上的任何活动都能通知到你，你可能需要
+订阅它：点击议题标题旁边的邮箱按钮。
+
+@divEnd
+
+@divClass{column-center-bottom}
+@subheading 可选的帮助：展示所期望的行为
+
+当一个议题已经添加到追踪器，如果我们能看到期望输出，那将
+非常有用。你可以添加输入代码和/或期望的输出的演示（可以由
+其它工具创建）！
+
+@divEnd
+
+
+@node Help us
+@unnumberedsec 帮助我们
+
+@divClass{column-center-top}
+@helpusNeed
+
+@divEnd
+
+@divClass{column-left-top}
+@divClass{keep-bullets}
+@helpusSimple
+
+@divEnd
+@divEnd
+
+@divClass{column-right-top}
+@helpusAdvanced
+
+@divEnd
+
+
+@node Sponsoring
+@unnumberedsec 赞助
+
+@divClass{keep-bullets}
+@divClass{column-left-top}
+@subheading 悬赏
+
+在过去，
+
+@itemize
+@item 有些用户付费获取新的功能
+@item 有些开发者被雇佣开发新功能
+@end itemize
+
+LilyPond 项目不会费力气这样组织；我们既不赞成也不阻止这样
+的协议。 私人之间的任何合同都是这些人的事，与我们无关。
+
+@divEnd
+
+@divClass{column-right-top}
+@subheading 原则
+
+任何想提供金钱以换取工作的用户都应牢记以下几点：
+
+@itemize
+@item
+LilyPond 开发者可能在 lilypond 邮件列表不停地宣传它们的服务。
+
+@item
+私人之间的任何协议都应包括开展业务时的正常预防措施：
+由谁支付，支付多少，以何种方式支付，以及根据哪套条件。
+我们建议，在这些问题上的任何模糊性或不确定性都应该
+在任何工作开始之前得到解决。
+
+@end itemize
+
+@divEnd
+@divEnd
+
+
+@node Development
+@unnumberedsec 开发
+
+@divClass{heading-center}
+@heading LilyPond @versionDevel 的开发
+
+
+@c we normally don't allow named references, but in this case
+@c it's good to emphasize the "stable" part.  -gp
+@warning{这是 @emph{不稳定的开发} 版本.  如果你
+如果您对如何使用或安装 LilyPond 有丝毫的疑问，我们
+敦促您使用 @ref{Download, 稳定版下载}，并阅读
+@ref{Manuals, 稳定版手册}。}
+
+@divEnd
+
+@divClass{column-center-top}
+@subheading Release numbers 发行号
+
+有两套 LilyPond 的发行版集合：稳定版和不稳定的开发版。
+稳定版的 @q{次} 版本号是偶数（如 2.8、2.10、2.12），
+开发版的 @q{次} 版本号是奇数（如 2.15、2.17、2.19）。
+
+@divEnd
+
+
+@divClass{column-left-top}
+@subheading 下载
+
+关于 git 和编译方法，参见贡献者指南。
+
+@quotation
+@uref{https://git.sv.gnu.org/gitweb/?p=lilypond.git, LilyPond git 仓库}
+@end quotation
+
+文档编写者和测试人员可能想要下载最新的二进制文件：
+
+@quotation
+
+@downloadDevelLinux
+
+@downloadDevelDarwinArm
+
+@downloadDevelDarwin
+
+@uref{https://ports.macports.org/port/lilypond-devel/summary,
+MacPorts package}
+
+@downloadDevelMingw
+
+@downloadDevelSource-zh
+
+@end quotation
+
+@divEnd
+
+
+@divClass{column-right-top}
+@subheading 贡献者指南
+
+LilyPond 的开发是一个相当复杂的问题。为了帮助新的贡献者，
+且同时保持整个系统（近乎）稳定，我们编纂了开发任务手册。
+
+@docLinksBare{Contributor's Guide, contributor,
+  @rcontribnamed{Top,Contributor's Guide},
+  @manualStubDevelContributorSplit-zh,
+  @manualStubDevelContributorBig-zh,
+  @manualStubDevelContributorPdf-zh}
+
+@divEnd
+
+
+@divClass{column-center-top}
+@subheading 回归测试
+
+@divClass{keep-bullets}
+
+@ifclear web_version
+
+@itemize
+@item
+@uref{../../input/regression/collated-files.html, Regression tests}:
+This release's regtests.
+(@uref{../../input/regression/collated-files.pdf, pdf version})
+
+@item
+@uref{../../input/regression/musicxml/collated-files.html, MusicXML tests}:
+This release's musicXML tests.
+(@uref{../../input/regression/musicxml/collated-files.pdf, pdf version})
+
+@item
+@uref{../../input/regression/abc2ly/collated-files.html, abc2ly tests}:
+This release's abc2ly tests.
+(@uref{../../input/regression/abc2ly/collated-files.pdf, pdf version})
+@end itemize
+
+@end ifclear
+
+@ifset web_version
+@subsubheading 开发中版本
+
+@itemize
+@item @regtestDevel-zh (@regtestDevelPdf-zh{})
+
+@item @regtestDevelXml-zh (@regtestDevelXmlPdf-zh{})
+
+@item @regtestDevelAbc-zh (@regtestDevelAbcPdf-zh{})
+@end itemize
+
+@subsubheading 稳定版
+
+@itemize
+@item @regtestStable-zh (@regtestStablePdf-zh{})
+
+@item @regtestStableXml-zh (@regtestStableXmlPdf-zh{})
+
+@item @regtestStableAbc-zh (@regtestStableAbcPdf-zh{})
+@end itemize
+@end ifset
+
+@divEnd
+@divEnd
+
+
+
+@divClass{column-center-bottom}
+@subheading 手册
+
+@ifclear web_version
+@warning{这些手册是为 LilyPond @version{} 编写的。最新
+的手册可在 @url{https://lilypond.org} 找到}
+@end ifclear
+
+@divClass{normal-table}
+@multitable @columnfractions .3 .3 .3
+@headitem Introduction
+
+@item
+@docLinkSplit{Learning,learning,@manualDevelLearningSplit-zh}
+@tab
+@docLinkBig{Learning,learning,@manualDevelLearningBig-zh}
+@tab
+@docLinkPdf{Learning,learning,@manualStubDevelLearningPdf-zh}
+
+@item
+@docLinkSplit{Glossary,music-glossary,@manualStubDevelGlossarySplit-zh}
+@tab
+@docLinkBig{Glossary,music-glossary,@manualStubDevelGlossaryBig-zh}
+@tab
+@docLinkPdf{Glossary,music-glossary,@manualStubDevelGlossaryPdf-zh}
+
+@item
+@docLinkSplit{Essay,essay,@manualStubDevelEssaySplit-zh}
+@tab
+@docLinkBig{Essay,essay,@manualStubDevelEssayBig-zh}
+@tab
+@docLinkPdf{Essay,essay,@manualStubDevelEssayPdf-zh}
+@end multitable
+
+@multitable @columnfractions .3 .3 .3
+@headitem Regular
+
+@item
+@docLinkSplit{Notation,notation,@manualStubDevelNotationSplit-zh}
+@tab
+@docLinkBig{Notation,notation,@manualStubDevelNotationBig-zh}
+@tab
+@docLinkPdf{Notation,notation,@manualStubDevelNotationPdf-zh}
+
+@item
+@docLinkSplit{Usage,usage,@manualStubDevelUsageSplit-zh}
+@tab
+@docLinkBig{Usage,usage,@manualStubDevelUsageBig-zh}
+@tab
+@docLinkPdf{Usage,usage,@manualStubDevelUsagePdf-zh}
+
+@item
+@docLinkSplit{Snippets,snippets,@manualStubDevelSnippetsSplit-zh}
+@tab
+@docLinkBig{Snippets,snippets,@manualStubDevelSnippetsBig-zh}
+@tab
+@docLinkPdf{Snippets,snippets,@manualStubDevelSnippetsPdf-zh}
+@end multitable
+
+@multitable @columnfractions .3 .3 .3
+@headitem Infrequent
+
+@item
+@docLinkSplit{Web,web,@manualDevelWebSplit-zh}
+@tab
+@docLinkBig{Web,web,@manualDevelWebBig-zh}
+@tab
+@docLinkPdf{Web,web,@manualStubDevelWebPdf-zh}
+
+@item
+@docLinkSplit{Changes,changes,@manualStubDevelChangesSplit-zh}
+@tab
+@docLinkBig{Changes,changes,@manualStubDevelChangesBig-zh}
+@tab
+@docLinkPdf{Changes,changes,@manualStubDevelChangesPdf-zh}
+
+@item
+@docLinkSplit{Extending,extending,@manualStubDevelExtendingSplit-zh}
+@tab
+@docLinkBig{Extending,extending,@manualStubDevelExtendingBig-zh}
+@tab
+@docLinkPdf{Extending,extending,@manualStubDevelExtendingPdf-zh}
+
+@item
+@docLinkSplit{Internals,internals,@manualStubDevelInternalsSplit-zh}
+@tab
+@docLinkBig{Internals,internals,@manualStubDevelInternalsBig-zh}
+@tab
+@docLinkPdf{Internals,internals,@manualStubDevelInternalsPdf-zh}
+@end multitable
+
+@ifset web_version
+@multitable @columnfractions .3
+@headitem Downloadable
+
+@item
+@doctarballDevel-zh
+@end multitable
+@end ifset
+
+
+@divEnd
+@divEnd
+
+
+
+
+@node Google Summer of Code
+@unnumberedsec Google Summer of Code
+
+@gsocCurrent
+
+
+@node Authors
+@unnumberedsec 作者
+
+@divClass{column-left-top}
+@subheading 目前的开发小组
+
+@divClass{keep-bullets}
+@developersCurrent
+@divEnd
+@divEnd
+
+@divClass{column-right-top}
+@subheading 以前的开发小组
+
+@divClass{keep-bullets}
+@developersPrevious
+@divEnd
+@divEnd
+
+
+@divClass{column-center-top}
+@subheading 目前的贡献者
+
+@divClass{keep-bullets}
+@subsubheading 编程
+
+@coreCurrent
+
+@subsubheading 字体
+
+@fontCurrent
+
+@subsubheading 文档
+
+@docCurrent
+
+@subsubheading 翻译
+
+@translationsCurrent
+
+@divEnd
+@divEnd
+
+
+@divClass{column-center-bottom}
+@subheading 以往的贡献者
+
+@divClass{keep-bullets}
+@subsubheading 编程
+
+@corePrevious
+
+@subsubheading 字体
+
+@fontPrevious
+
+@subsubheading 文档
+
+@docPrevious
+
+@subsubheading 错误组 (Bug squad)
+
+@bugsquadPrevious
+
+@subsubheading 支持
+
+@supportPrevious
+
+@subsubheading 翻译
+
+@translationsPrevious
+
+@divEnd
+@divEnd
+
+
+
+@node Publications
+@unnumberedsec 出版物
+
+@divClass{column-center-top}
+@subheading 我们写的有关 LilyPond 的文章
+
+@divClass{keep-bullets}
+
+@include we-wrote.itexi
+
+@divEnd
+@divEnd
+
+@divClass{column-center-bottom}
+@subheading 大家怎么用 LilyPond 的
+
+@divClass{keep-bullets}
+
+@include others-did.itexi
+
+@divEnd
+@divEnd
+
+@contactUsAbout{学术论文}
+
+
+@node News
+@unnumberedsec 新闻
+
+@include en/web/news-new.itexi
+
+@divClass{column-center-bottom}
+@subheading 旧闻
+旧闻可在 @ref{Attic} 中找到，其中还有旧的公告和更新日志。
+@divEnd
+
+
+@node Attic
+@unnumberedsec Attic
+
+@divClass{column-center-top}
+@subheading 公告
+
+按版本排序的公告和新闻：
+@uref{https://lilypond.org/doc/v2.22/Documentation/web/news,v2.22},
+@uref{https://lilypond.org/doc/v2.20/Documentation/web/news,v2.20},
+@uref{https://lilypond.org/doc/v2.18/Documentation/web/index#Lilypond-2_002e18_002e0-released_0021-December-29_002c-2013,v2.18},
+@uref{https://lilypond.org/doc/v2.16/Documentation/web/index#Lilypond-2_002e16_002e0-released_0021-August-24_002c-2012,v2.16},
+@uref{https://lilypond.org/doc/v2.14/Documentation/web/index#LilyPond-2_002e14_002e0-released_0021-June-6_002c-2011,v2.14},
+@miscLink{announce-v2.12,v2.12},
+@miscLink{announce-v2.10,v2.10},
+@miscLink{announce-v2.8,v2.8},
+@miscLink{announce-v2.6,v2.6},
+@miscLink{announce-v2.4,v2.4},
+@miscLink{announce-v2.2,v2.2},
+@miscLink{announce-v2.0,v2.0},
+@miscLink{ANNOUNCE-1.2,v1.2},
+@miscLink{ANNOUNCE-1.0,v1.0},
+@miscLink{ANNOUNCE-0.1,v0.1}
+
+按版本排序的描述性变化列表：
+@uref{https://lilypond.org/doc/v2.22/Documentation/changes/,v2.22},
+@uref{https://lilypond.org/doc/v2.20/Documentation/changes/,v2.20},
+@uref{https://lilypond.org/doc/v2.18/Documentation/changes/,v2.18},
+@uref{https://lilypond.org/doc/v2.16/Documentation/changes/,v2.16},
+@uref{https://lilypond.org/doc/v2.14/Documentation/changes/,v2.14},
+@uref{https://lilypond.org/doc/v2.12/Documentation/topdocs/NEWS,v2.12},
+@uref{https://lilypond.org/doc/v2.10/Documentation/topdocs/NEWS,v2.10},
+@uref{https://lilypond.org/doc/v2.8/Documentation/topdocs/NEWS,v2.8},
+@uref{https://lilypond.org/doc/v2.6/Documentation/topdocs/NEWS,v2.6},
+@uref{https://lilypond.org/doc/v2.4/Documentation/topdocs/out-www/NEWS,v2.4},
+@uref{https://lilypond.org/doc/v2.2/Documentation/topdocs/out-www/NEWS,v2.2},
+@uref{https://lilypond.org/doc/v2.0/Documentation/topdocs/out-www/NEWS,v2.0},
+@uref{https://lilypond.org/doc/v1.8/Documentation/topdocs/out-www/NEWS,v1.8},
+@uref{https://lilypond.org/doc/v1.6/Documentation/out-www/NEWS,v1.6},
+@miscLink{NEWS-1.4,v1.4},
+@miscLink{NEWS-1.2,v1.2}
+
+@divEnd
+
+@divClass{column-center-middle-color3}
+@subheading 鸣谢
+
+感谢开发者、贡献者、错误寻找者和建议者：
+@uref{https://lilypond.org/doc/v2.20/Documentation/web/authors,v2.22},
+@uref{https://lilypond.org/doc/v2.20/Documentation/web/authors,v2.20},
+@miscLink{THANKS-2.18,v2.18},
+@miscLink{THANKS-2.16,v2.16},
+@miscLink{THANKS-2.14,v2.14},
+@miscLink{THANKS-2.12,v2.12},
+@miscLink{THANKS-2.10,v2.10},
+@miscLink{THANKS-2.8,v2.8},
+@miscLink{THANKS-2.6,v2.6},
+@miscLink{THANKS-2.4,v2.4},
+@miscLink{THANKS-2.2,v2.2},
+@miscLink{THANKS-2.0,v2.0},
+@miscLink{THANKS-1.8,v1.8}
+
+@divEnd
+
+@divClass{column-center-middle-color3}
+@subheading 更新日志
+
+按版本排序的开发者更新日志：
+@miscLink{ChangeLog-2.10,v2.10},
+@miscLink{ChangeLog-2.3,v2.3},
+@miscLink{ChangeLog-2.1,v2.1},
+@miscLink{ChangeLog-1.5,v1.5 (1)},
+@miscLink{CHANGES-1.5,v1.5 (2)},
+@miscLink{CHANGES-1.4,v1.4},
+@miscLink{CHANGES-1.3,v1.3},
+@miscLink{CHANGES-1.2,v1.2},
+@miscLink{CHANGES-1.1,v1.1},
+@miscLink{CHANGES-1.0,v1.0},
+@miscLink{CHANGES-0.1,v0.1},
+@miscLink{CHANGES-0.0,v0.0}
+
+@divEnd
+
+@divClass{column-center-middle-color2 bigger-subsubheadings}
+@gsocInactive
+@divEnd
+
+@divClass{column-center-middle-color2}
+@subheading 旧闻
+
+较早的旧闻可追溯到 2003 年 7 月。 较新的旧闻可以在
+@ref{News} 页面中找到。
+@divEnd
+
+@include en/web/news-old.itexi

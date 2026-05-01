@@ -1,0 +1,9 @@
+%% Translation of GIT committish: cd3e2b0177d366d0a25b4c7628b26455e52175cd
+  texidoces = "
+La instrucción @code{\\circle} traza circunferencias alrededor de
+los objetos de marcado creados con @code{\\markup}.  Para otros
+objetos pueden requerirse trucos específicos, como se muestra aquí
+para el caso de las letras de ensayo y los números de compás.
+
+"
+  doctitlees = "Rodear diversos objetos con una circunferencia"

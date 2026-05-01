@@ -1,0 +1,9 @@
+%% Translation of GIT committish: f11513f36c131dab18338d6a3a729e24a927150d
+  texidocja = "
+楽器名の水平方向の位置は @code{Staff.InstrumentName.self-alignment-X}
+プロパティを変更することで調整することができます。@c
+@code{\\layout} 変数は @code{indent} と @code{short-indent} を定義しており、@c
+それぞれ最初のシステムとその後のシステムで、楽器名に割くスペースの量を@c
+変更することができます。
+"
+  doctitleja = "楽器名を揃える"

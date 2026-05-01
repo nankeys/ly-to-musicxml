@@ -1,0 +1,10 @@
+%% Translation of GIT committish: 2f3474d9af596d677ed5b7ce720ae4d0954a6b51
+  texidocit = "
+Si può aggiungere del testo alle parentesi analitiche tramite la proprietà
+@code{text} del grob @code{HorizontalBracketText}.  L'aggiunta di vari frammenti
+di testo alle parentesi che iniziano nello stesso momento musicale richiede
+l'uso del comando @code{\\tweak}.
+Dopo un'interruzione di linea il testo viene messo tra parentesi.
+
+"
+  doctitleit = "Parentesi analitiche con etichette"

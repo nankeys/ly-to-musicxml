@@ -1,0 +1,7 @@
+%% Translation of GIT committish: 0cc270b871321ae5aa8622cea8d8262aafd16641
+  texidocja = "
+フレット図のプロパティは @code{fret-diagram-details} からセットできます。@c
+マークアップのフレット図では、オーバライドは @code{Voice.TextScript}
+オブジェクトや、マークアップに直接適用されます。
+"
+  doctitleja = "マークアップのフレット図をカスタマイズする"

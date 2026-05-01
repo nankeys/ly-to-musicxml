@@ -1,0 +1,6 @@
+%% Translation of GIT committish: 0cc270b871321ae5aa8622cea8d8262aafd16641
+  texidocja = "
+LilyPond はカスタマイズされた調号をサポートしています。この例では、@c
+フラットを広範囲に表示する D マイナーを作成しています。
+"
+  doctitleja = "カスタマイズされた調号を作成する"

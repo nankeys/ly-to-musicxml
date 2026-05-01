@@ -1,0 +1,24 @@
+\documentclass{article}
+
+\begin{document}
+
+Including a LilyPond file with options (\texttt{quote} and \texttt{noindent}):
+
+\lilypondfile[quote,noindent]{include2.ly}
+
+From a subdirectory:
+
+\lilypondfile[quote,noindent]{include/example.ly}
+
+Within a \texttt{lilypond} block:
+
+\begin{lilypond}[quote,noindent]
+  \include "include/myvar.ily"
+  \relative c'' { \myVar }
+\end{lilypond}
+
+Include a file that includes a file:
+
+\lilypondfile[quote,noindent]{include.ly}
+
+\end{document}

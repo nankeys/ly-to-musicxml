@@ -1,0 +1,10 @@
+%% Translation of GIT committish: c043783aac6c35926d633aa2daf60ed4f2e7ca7a
+  texidocfr = "
+La basse chiffrée utilise fréquemment des lignes pour indiquer la
+prolongation jusqu'à un certain point. LilyPond tente alors de placer le
+plus de prolongateurs possible. L'interruption d'un prolongateur
+particulier s'obtient en affectant d'un @code{\\!} le chiffre qui doit
+être réimprimé.
+"
+
+  doctitlefr = "Interruption manuelle des prolongations de certains chiffrages"

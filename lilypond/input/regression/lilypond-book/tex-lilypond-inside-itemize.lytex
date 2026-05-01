@@ -1,0 +1,21 @@
+\documentclass[a4paper, 12pt]{article}
+
+\begin{document}
+
+\section{LilyPond snippets inside lists}
+
+Itemize environment:
+\begin{itemize}
+\item
+\lilypond[staffsize=11,fragment]{ c'} do
+\item
+\lilypond[staffsize=11,fragment]{d'} re
+\item
+\lilypond[staffsize=11,fragment]{e'} mi
+\item
+\lilypond[staffsize=11,fragment]{f'} fa
+\item
+\lilypond[staffsize=11,fragment]{g'} sol
+\end{itemize}
+
+\end{document}

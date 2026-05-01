@@ -1,0 +1,9 @@
+%% Translation of GIT committish: 1bf2403e1cd7038a1e7ea62da560af601e3694fc
+  texidoces = "
+Si la nota que da fin a un regulador cae sobre la primera parte de
+un compás, el regulador se detiene en la línea divisoria
+inmediatamente precedente.  Se puede controlar este comportamiento
+sobreescribiendo la propiedad @code{to-barline}.
+
+"
+  doctitlees = "Establecer el comportamiento de los reguladores en las barras de compás"

@@ -1,0 +1,10 @@
+%% Translation of GIT committish: 70abecb938c2bb752967bd56b7402dd8129838a5
+  texidoces = "
+Se pueden modificar las propiedades de los diagramas de posiciones
+estableciendo el valor de la propiedad
+@code{fret-diagram-details}.  Para los diagramas de posiciones de
+marcado, se pueden aplicar overrides (sobreescrituras) al objeto
+@code{Voice.TextScript} o directamente al elemento de marcado.
+
+"
+  doctitlees = "Personalizar diagramas de posiciones de marcado"

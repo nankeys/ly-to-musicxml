@@ -1,0 +1,16 @@
+[build-system]
+requires = ["hatchling>=1.27"]
+build-backend = "hatchling.build"
+
+[project]
+name = "ly-to-musicxml"
+version = "0.1.0"
+description = "Compiler-assisted LilyPond to MusicXML conversion"
+readme = "README.md"
+requires-python = ">=3.10"
+
+[project.scripts]
+ly-to-musicxml = "ly_to_musicxml.cli:main"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/ly_to_musicxml"]

@@ -1,0 +1,27 @@
+@c -*- coding: utf-8; mode: texinfo; documentlanguage: fr -*-
+
+@ignore
+    Translation of GIT committish: 467b57a5e9a012d9ecbca354dfe137cedfbc7b86
+
+    When revising a translation, copy the HEAD committish of the
+    version that you are working on.  For details, see the Contributors'
+    Guide, node Updating translation committishes..
+@end ignore
+
+@c \version "2.16.0"
+
+@c Translators: Jean-Charles Malahieude
+@c Translation checkers:
+
+@part Notation spécialisée
+
+@include fr/notation/vocal.itely
+@include fr/notation/keyboards.itely
+@include fr/notation/unfretted-strings.itely
+@include fr/notation/fretted-strings.itely
+@include fr/notation/percussion.itely
+@include fr/notation/wind.itely
+@include fr/notation/chords.itely
+@include fr/notation/contemporary.itely
+@include fr/notation/ancient.itely
+@include fr/notation/world.itely

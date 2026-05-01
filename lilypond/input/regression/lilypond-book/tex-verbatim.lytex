@@ -1,0 +1,56 @@
+\documentclass[a4paper, 11pt]{article}
+
+\parindent 0pt
+\parskip 1ex
+
+\begin{document}
+
+\section{\texttt{\textbackslash verb} and \textsl{verbatim}}
+
+This file should not contain (and produce) any LilyPond images!
+
+Snippets inside a verbatim environment or a comment are not run through LilyPond
+but left unchanged.  We check the \textsl{lilypond} environment and the commands
+\verb|\lilypond| and \verb|\lilypondfile|.
+
+\bigskip
+
+The \textsl{verbatim} environment does not confuse \texttt{lilypond-book}.
+
+\begin{verbatim}
+\begin{lilypond}
+  c d e
+\end{lilypond}
+\end{verbatim}
+
+\begin{verbatim}
+\lilypond[fragment]{c d e}
+\end{verbatim}
+
+\begin{verbatim}
+\lilypondfile[quote,noindent]{screech-and-boink.ly}
+\end{verbatim}
+
+\bigskip
+
+The \verb|\verb| command doesn't cause problems either.
+
+\verb|\begin{lilypond}[fragment]c d e\end{lilypond}|
+
+\verb/\lilypond[fragment]{c d e}/
+
+\verb+\lilypondfile[quote,noindent]{screech-and-boink.ly}+
+
+\bigskip
+
+Neither does a \textsl{verbatim} environment inside \verb|\verb|
+
+\verb|\begin{verbatim}\begin{lilypond}c d e\end{lilypond}\end{verbatim}|
+
+or \verb|\verb| inside \textsl{verbatim}.
+
+\begin{verbatim}
+\verb|\lilypondfile{screech-and-boink.ly}|
+\end{verbatim}
+
+\end{document}

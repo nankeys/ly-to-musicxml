@@ -1,0 +1,7 @@
+%% Translation of GIT committish: 4f16fa98fd258f08e64203c793028ea3e363b1c0
+  texidoces = "
+Es posible imprimir texto de derecha a izquierda en un elemento de
+marcado, como se muestra aquí.
+
+"
+  doctitlees = "Impresión de texto de derecha a izquierda"

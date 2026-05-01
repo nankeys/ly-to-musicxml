@@ -1,0 +1,30 @@
+@c -*- coding: utf-8; mode: texinfo; documentlanguage: ja -*-
+@ignore
+    Translation of GIT committish: fdc83c8d7ca8322fc49cae1f3231d6de4874bb5d
+
+    When revising a translation, copy the HEAD committish of the
+    version that you are working on.  For details, see the Contributors'
+    Guide, node Updating translation committishes..
+@end ignore
+
+@c \version "2.16.0"
+
+@c Translators: Tomohiro Tatejima, Yoshiki Sawada
+@c Translation status: post-GDP
+
+@node Specialist notation
+@chapter 専門的な記譜法
+
+この章では、特定のタイプの楽器やスタイル向けの音楽記譜を作成するための方法@c
+について説明します。
+
+@include ja/notation/vocal.itely
+@include ja/notation/keyboards.itely
+@include ja/notation/unfretted-strings.itely
+@include ja/notation/fretted-strings.itely
+@include ja/notation/percussion.itely
+@include ja/notation/wind.itely
+@include ja/notation/chords.itely
+@include ja/notation/contemporary.itely
+@include ja/notation/ancient.itely
+@include ja/notation/world.itely

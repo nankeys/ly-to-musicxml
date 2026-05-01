@@ -1,0 +1,117 @@
+@c -*- coding: utf-8; mode: texinfo; documentlanguage: es -*-
+@c This file is part of web/community.itexi and
+@c contributor/introduction.itely
+
+@ignore
+    Translation of GIT committish: 9a2f072694412a33f4ae756af409e4c51fed1a03
+
+    When revising a translation, copy the HEAD committish of the
+    version that you are working on.  For details, see the Contributors'
+    Guide, node Updating translation committishes..
+@end ignore
+
+@macro helpusNeed
+@subheading ¡Le necesitamos!
+
+Gracias por su interés en ayudarnos. ¡Nos encantaría ver que se apunta
+a ello! Su contribución ayudará a un gran grupo de usuarios a componer
+tipográficamente música de una manera bella y hermosa.
+
+Incluso el trabajo sobre pequeñas tareas puede tener un gran impacto:
+ocuparse de ellas permite a los desarrolladores con experiencia
+trabajar sobre las tareas avanzadas, en lugar de emplear su tiempo en
+esos trabajos sencillos.
+
+Para un proyecto polifacético como LilyPond, a veces es difícil saber
+por dónde empezar.  Además de las vías que se proponen más abajo,
+puede enviar un correo electrónico a la lista de correo
+@uref{https://lists.gnu.org/mailman/listinfo/lilypond-devel, @code{lilypond-devel@@gnu.org}},
+y nosotros le ayudaremos a iniciarse.
+
+@end macro
+
+
+@macro helpusSimple
+@subheading Tareas sencillas
+
+¡No se requiere @strong{ningún conocimiento de programación}!
+
+@itemize
+@item
+Apoyo en la lista de distribución de correo: responda a las
+preguntas de sus colegas usuarios (esto podría incluir ayudarles a
+navegar por la documentación en línea; en tales casos podría ser
+oportuno indicarles rutas neutras o agnósticas respecto a la
+versión, tales como
+@uref{https://lilypond.org/doc/latest/Documentation/notation/,
+@samp{/latest/}} o
+@uref{https://lilypond.org/doc/stable/Documentation/notation/,
+@samp{/stable/}}, que se redireccionan automáticamente).
+
+@item
+Informar de fallos: ayude a los usuarios a crear @ref{Bug reports,Informes de
+fallos} adecuados, y/o apúntese al Escuadrón de Fallos para
+la organización de los @rcontribnamed{Issues,Problemas}.
+
+@item
+Documentación: se pueden proponer cambios pequeños siguiendo las
+indicaciones de @rcontribnamed{Documentation suggestions,Sugerencias
+para la documentación}.
+
+@item
+El Wiki de LilyPond: elabore y arregle fragmentos de código
+siguiendo las directrices que aparecen en
+@rcontribnamed{Adding and editing snippets,Añadir y editar fragmentos de código}.
+
+@item
+Discusión, revisión y pruebas: los desarrolladores suelen solicitar un
+retorno sobre documentación nueva, potenciales cambios de sintaxis y
+prueba de nuevas funcionalidades.  ¡Contribuya a estas discusiones!
+
+@end itemize
+
+@end macro
+
+
+@macro helpusAdvanced
+@subheading Tareas de nivel avanzado
+
+En general, estos trabajos requieren que usted tenga el
+código fuente y sea capaz de compilar LilyPond.
+
+@warning{Sugerimos a los colaboradores nuevos que sean usuarios de Windows
+o de macOS que @strong{no} traten de montar un entorno de desarrollo
+por ellos mismos; en su lugar, utilice Lilydev como se explica en
+@rcontribnamed{Quick start,Inicio rápido}.}
+
+Los colaboradores que utilicen Linux o FreeBSD también pueden usar
+Lilydev, pero si prefieren tener su propio entorno de desarrollo,
+deberían leer
+@rcontribnamed{Working with source code,Trabajar con el código fuente}
+y @rcontribnamed{Compiling,Compilación}.
+
+Comience leyendo el @rcontribnamed{Summary for experienced developers,Resumen para desarrolladores con experiencia}.
+
+@itemize
+@item
+Documentación: para cambios grandes, consulte
+@rcontribnamed{Documentation work,Trabajar en la documentación}.
+
+@item
+Página web: nuestra página se construye a partir del código fuente
+normal de la documentación.  Consulte la información sobre la
+documentación, y también @rcontribnamed{Website work,Trabajar en la
+página web}.
+
+@item
+Traducciones: consulte @rcontribnamed{Translating the
+documentation,Traducir la documentación} y @rcontribnamed{Translating
+the website,Traducir la página web}.
+
+@item
+Corrección de fallos o funcionalidades nuevas: lea
+@rcontribnamed{Programming work,Trabajos de programación}.
+
+@end itemize
+
+@end macro

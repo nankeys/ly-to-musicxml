@@ -1,0 +1,15 @@
+# The top-level .gitignore has *.patch, so we have to reverse this here.
+!*.patch
+
+__pycache__
+dependencies/
+downloads/
+lilypond/
+mingw/
+package/
+
+*.tar.gz
+*.zip
+
+*.ly
+*.pdf

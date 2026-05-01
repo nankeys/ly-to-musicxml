@@ -1,0 +1,8 @@
+%% Translation of GIT committish: 2f3474d9af596d677ed5b7ce720ae4d0954a6b51
+  texidocit = "
+Quando il motore tipografico non riesce a risolvere una situazione, si può
+usare la sintassi che sovrascrive le decisioni tipografiche.  L'unità di
+misura usata è lo spazio del rigo.
+
+"
+  doctitleit = "Forzare lo spostamento orizzonatale delle note"

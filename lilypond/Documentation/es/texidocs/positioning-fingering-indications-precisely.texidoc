@@ -1,0 +1,10 @@
+%% Translation of GIT committish: 6744168afc10012e17916282ef5e4353cf1f4e3b
+  texidoces = "
+El posicionado semiautomático de las digitaciones dentro de un
+acorde funciona bien en casi todas las situaciones.  Si una de las
+indicaciones precisa colocarse de forma más exacta, pueden usarse
+los trucos siguientes.  Esto es especialmente útil para corregir
+el posicionado cuando están presentes intervalos de segunda.
+
+"
+  doctitlees = "Posicionamiento preciso de indicaciones de digitación"

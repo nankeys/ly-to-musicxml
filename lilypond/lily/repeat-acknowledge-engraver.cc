@@ -1,0 +1,145 @@
+/*
+  This file is part of LilyPond, the GNU music typesetter.
+
+  Copyright (C) 2000--2026 Han-Wen Nienhuys <hanwen@xs4all.nl>
+
+  LilyPond is free software: you can redistribute it and/or modify
+  it under the terms of the GNU General Public License as published by
+  the Free Software Foundation, either version 3 of the License, or
+  (at your option) any later version.
+
+  LilyPond is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+
+  You should have received a copy of the GNU General Public License
+  along with LilyPond.  If not, see <http://www.gnu.org/licenses/>.
+*/
+
+#include "engraver.hh"
+
+#include "context.hh"
+#include "ly-scm-list.hh"
+#include "translator-group.hh"
+
+#include "translator.icc"
+
+class Repeat_acknowledge_engraver final : public Engraver
+{
+public:
+  TRANSLATOR_DECLARATIONS (Repeat_acknowledge_engraver);
+
+protected:
+  void add_repeat_command (SCM new_cmd);
+  void listen_volta_repeat_end (Stream_event *);
+  void listen_volta_repeat_start (Stream_event *);
+  void start_translation_timestep ();
+  void stop_translation_timestep ();
+  void initialize () override;
+
+private:
+  bool heard_volta_repeat_end_ = false;
+  bool heard_volta_repeat_start_ = false;
+};
+
+void
+Repeat_acknowledge_engraver::initialize ()
+{
+  set_property (context (), "repeatCommands", SCM_EOL);
+}
+
+Repeat_acknowledge_engraver::Repeat_acknowledge_engraver (Context *c)
+  : Engraver (c)
+{
+}
+
+void
+Repeat_acknowledge_engraver::add_repeat_command (SCM new_cmd)
+{
+  SCM sym = ly_symbol2scm ("repeatCommands");
+  auto [where, cmds] = where_defined (context (), sym);
+  if (where && ly_cheap_is_list (cmds))
+    {
+      cmds = scm_cons (new_cmd, cmds);
+      set_property (where, sym, cmds);
+    }
+}
+
+void
+Repeat_acknowledge_engraver::start_translation_timestep ()
+{
+  auto *tr = std::get<0> (where_defined (context (), "repeatCommands"));
+  if (!tr)
+    tr = context ();
+
+  set_property (tr, "repeatCommands", SCM_EOL);
+}
+
+void
+Repeat_acknowledge_engraver::listen_volta_repeat_end (Stream_event *ev)
+{
+  if (!heard_volta_repeat_end_)
+    {
+      const auto count = from_scm (get_property (ev, "return-count"), 0L);
+      if (count >= 0)
+        {
+          heard_volta_repeat_end_ = true;
+          add_repeat_command (
+            ly_list (ly_symbol2scm ("end-repeat"), to_scm (count)));
+        }
+    }
+}
+
+void
+Repeat_acknowledge_engraver::listen_volta_repeat_start (Stream_event *ev)
+{
+  if (!heard_volta_repeat_start_)
+    {
+      const auto count = from_scm (get_property (ev, "repeat-count"), 0L);
+      if (count >= 1)
+        {
+          heard_volta_repeat_start_ = true;
+          add_repeat_command (
+            ly_list (ly_symbol2scm ("start-repeat"), to_scm (count)));
+        }
+    }
+}
+
+void
+Repeat_acknowledge_engraver::stop_translation_timestep ()
+{
+  heard_volta_repeat_end_ = false;
+  heard_volta_repeat_start_ = false;
+}
+
+void
+Repeat_acknowledge_engraver::boot ()
+{
+  ADD_LISTENER (volta_repeat_end);
+  ADD_LISTENER (volta_repeat_start);
+}
+
+ADD_TRANSLATOR (Repeat_acknowledge_engraver,
+                /* doc */
+                R"(
+This engraver augments @code{repeatCommands} with @code{start-repeat} and
+@code{end-repeat} entries based on received events.  This is internal behavior
+that allows simplifying other engravers that must support both @code{\repeat
+volta} and manual repeats.
+
+This engraver also resets @code{repeatCommands} at the beginning of each time
+step.  This is user-facing behavior: it allows setting a value for the current
+time step simply with @code{\set} rather than requiring @code{\once \set}.
+                )",
+
+                /* create */
+                "",
+
+                /* read */
+                "",
+
+                /* write */
+                R"(
+repeatCommands
+                )");

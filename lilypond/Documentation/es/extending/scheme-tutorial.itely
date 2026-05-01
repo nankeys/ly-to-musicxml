@@ -1,0 +1,2131 @@
+@c -*- coding: utf-8; mode: texinfo; documentlanguage: es -*-
+
+@ignore
+    Translation of GIT committish: a92c99af98b89533e89c0981a3de0a44ebda3e64
+
+    When revising a translation, copy the HEAD committish of the
+    version that you are working on.  For details, see the Contributors'
+    Guide, node Updating translation committishes..
+@end ignore
+
+@c \version "2.19.22"
+
+@node Scheme tutorial
+@appendix Tutorial de Scheme
+
+@cindex Scheme
+@cindex Guile
+@cindex Scheme, código en línea
+@cindex acceder a Scheme
+@cindex evaluar Scheme
+@cindex LISP
+
+LilyPond utiliza el lenguaje de programación Scheme, tanto como
+parte de la sintaxis del código de entrada, como para servir de
+mecanismo interno que une los módulos del programa entre sí.  Esta
+sección es una panorámica muy breve sobre cómo introducir datos en
+Scheme.  Si quiere saber más sobre Scheme, consulte
+@uref{https://@/www@/.schemers@/.org}.
+
+LilyPond utiliza la implementación GNU Guile de Scheme, que está
+basada en el estándar @qq{R5RS} del lenguaje.  Si está aprendiendo
+Scheme para usarlo con LilyPond, no se recomienda trabajar con una
+implementación distinta (o que se refiera a un estándar
+diferente).  Hay información sobre Guile en
+@uref{https://www.gnu.org/software/guile/}.  El estándar de Scheme
+@qq{R5RS} se encuentra en
+@uref{https://www.schemers.org/Documents/Standards/R5RS/}.
+
+
+@node Introduction to Scheme
+@section Introducción a Scheme
+
+Comenzaremos con una introducción a Scheme.  Para esta breve
+introducción utilizaremos el intérprete Guile para explorar la
+manera en que el lenguaje funciona.  Una vez nos hayamos
+familiarizado con Scheme, mostraremos cómo se puede integrar el
+lenguaje en los archivos de LilyPond.
+
+
+@node Scheme sandbox
+@subsection Cajón de arena de Scheme
+
+@cindex Scheme, cajó de arena
+@cindex arena, cajón de, Scheme
+
+La instalación de LilyPond incluye también la de la implementación
+Guile de Scheme.  Está disponible un cajón de arena de Scheme
+listo para funcionar con todo LilyPond cargado, con esta llamada
+de la línea de órdenes:
+
+@example
+lilypond scheme-sandbox
+@end example
+
+@noindent
+Una vez está funcionando el cajón de arena, obtendrá el indicador
+del sistema de Guile
+
+@example
+lily-guile@@()>
+@end example
+
+@noindent
+para introducir expresiones de Scheme.  Sin embargo, en los
+ejemplos siguentes utilizaremos la cadena más corta @code{guile>}
+para referirnos al indicador del sistema.
+
+El archivo que contiene el código del cajó de arena
+(@file{ly/scheme-sandbox.ly}) trata de activar la biblioteca
+readline de GNU para una más cómoda edición sobre la línea de
+órdenes (por ejemplo, usando las teclas del cursor flecha
+arriba y flecha abajo para acceder a instrucciones tecleadas con
+anterioridad).  Por el momento, esto solamente funciona con un
+ejecutable binario de LilyPond que esté enlazado dinámicamente con
+Guile, lo que no es el caso para los binarios distribuidos
+@q{oficialmente}.  Existen dos posibles formas de solventar este
+problema, como se muestra a continuación.
+
+@itemize
+
+@item
+Usar @uref{https://github.com/hanslub42/rlwrap, @command{rlwrap}},
+un envoltorio poco pesado alrededor de la biblioteca readline.
+Este programa está disponible para sistemas operativos de la
+familia Unix; lo llamamos con
+
+@example
+rlwrap lilypond scheme-sandbox
+@end example
+
+@item
+Usar el editor Emacs en combinación con el
+@uref{https://github.com/shevvek/lilypond-ts-mode, Modo
+Tree-sitter de LilyPond}.  Esto también funciona bajo Windows.
+@end itemize
+
+
+@node Scheme variables
+@subsection Variables de Scheme
+
+Las variables de Scheme pueden tener cualquier valor válido de
+Scheme, incluso un procedimiento de Scheme.
+
+Las variables de Scheme se crean con @code{define}:
+
+@lisp
+guile> (define a 2)
+guile>
+@end lisp
+
+Las variables de Scheme se pueden evaluar en el indicador del
+sistema de guile, simplemente tecleando el nombre de la variable:
+
+@lisp
+guile> a
+2
+guile>
+@end lisp
+
+Las variables de Scheme se pueden imprimir en la pantalla
+utilizando la función display:
+
+@lisp
+guile> (display a)
+2guile>
+@end lisp
+
+@noindent
+Observe que el valor @code{2} y el indicador del sistema
+@code{guile} se muestran en la misma línea.  Esto se puede evitar
+llamando al procedimiento de nueva línea o imprimiendo un carácter
+de nueva línea.
+
+@lisp
+guile> (display a)(newline)
+2
+guile> (display a)(display "\n")
+2
+guile>
+@end lisp
+
+Una vez que se ha creado una variable, su valor se puede modificar
+con @code{set!}:
+
+@lisp
+guile> (set! a 12345)
+guile> a
+12345
+guile>
+@end lisp
+
+@node Scheme simple data types
+@subsection Tipos de datos simples de Scheme
+
+El concepto más básico de un lenguaje son sus tipos de datos:
+números, cadenas de caracteres, listas, etc.  He aquí una lista de
+los tipos de datos que son de relevancia respecto de la entrada de
+LilyPond.
+
+@table @asis
+@item Booleanos
+Los valores Booleanos son Verdadero y Falso.  Verdadero en Scheme es
+@code{#t} y Falso es @code{#f}.
+@funindex #t
+@funindex #f
+
+@item Números
+Los números se escriben de la forma normal, @code{1} es el número
+(entero) uno, mientras que @w{@code{-1.5}} es un número en coma
+flotante (un número no entero).
+
+@item Cadenas
+Las cadenas se encierran entre comillas:
+
+@example
+"esto es una cadena"
+@end example
+
+Las cadenas pueden abarcar varias líneas:
+
+@example
+"esto
+es
+una cadena"
+@end example
+
+@noindent
+y los caracteres de nueva línea al final de cada línea se
+incluirán dentro de la cadena.
+
+Los caracteres de nueva línea también se pueden añadir mediante la
+inclusión de @code{\n} en la cadena.
+
+@example
+"esto\nes una\ncadena de varias líneas"
+@end example
+
+
+Las comillas dobles y barras invertidas se añaden a las cadenas
+precediéndolas de una barra invertida.  La cadena @code{\a dijo
+"b"} se introduce como
+
+@example
+"\\a dijo \"b\""
+@end example
+
+@end table
+
+Existen más tipos de datos de Scheme que no se estudian aquí.
+Para ver un listado completo, consulte la guía de referencia de
+Guile,
+@uref{https://www.gnu.org/software/guile/manual/html_node/Data-Types.html}.
+
+@node Scheme compound data types
+@subsection Tipos de datos compuestos de Scheme
+
+También existen tipos de datos compuestos en Scheme.  Entre los
+tipos más usados en la programación de LilyPond se encuentran las
+parejas, las listas, las listas-A y las tablas de hash.
+
+
+@node Pairs
+@unnumberedsubsubsec Parejas
+
+El tipo fundacional de datos compuestos de Scheme es la
+@code{pareja}.  Como se espera por su nombre, una pareja son dos
+valores unidos en uno solo.  El operador que se usa para formar
+una pareja se llama @code{cons}.
+
+@lisp
+guile> (cons 4 5)
+(4 . 5)
+guile>
+@end lisp
+
+Observe que la pareja se imprime como dos elementos rodeados por
+paréntesis y separados por un espacio, un punto (@code{.}) y otro
+espacio.  El punto @emph{no es} un punto decimal, sino más bien un
+indicador de pareja.
+
+Las parejas también se pueden introducir como valores literales
+precediéndolos de un carácter de comilla simple o apóstrofo.
+
+@lisp
+guile> '(4 . 5)
+(4 . 5)
+guile>
+@end lisp
+
+Los dos elementos de una pareja pueden ser cualquier valor válido
+de Scheme:
+
+@lisp
+guile> (cons #t #f)
+(#t . #f)
+guile> '("bla-bla" . 3.1415926535)
+("bla-bla" . 3.1415926535)
+guile>
+@end lisp
+
+Se puede accede al primero y segundo elementos de la pareja
+mediante los procedimientos de Scheme @code{car} y @code{cdr},
+respectivamente.
+
+@lisp
+guile> (define mipareja (cons 123 "Hola")
+@dots{} )
+guile> (car mipareja)
+123
+guile> (cdr mipareja)
+"Hola"
+guile>
+@end lisp
+
+@noindent
+
+Nota: @code{cdr} se pronuncia "could-er", según Sussman y Abelson,
+véase
+@uref{https://mitpress.mit.edu/sites/default/files/sicp/full-text/book/book-Z-H-14.html#footnote_Temp_133}
+
+@node Lists
+@unnumberedsubsubsec Listas
+
+Una estructura de datos muy común en Scheme es la
+@emph{lista}. Formalmente, una lista @q{bien hecha} se define como
+la lista vacía, representada como @code{'()} y con longitud cero,
+o bien como una pareja cuyo @code{cdr} es a su vez una lista más
+corta.
+
+Existen muchas formas de crear listas.  Quizá la más común es con
+el procedimiento @code{list}:
+
+@lisp
+guile> (list 1 2 3 "abc" 17.5)
+(1 2 3 "abc" 17.5)
+@end lisp
+
+La representación de una lista como elementos individuales
+separados por espacios y encerrada entre paréntesis es realmente
+una forma compacta de las parejas con punto que constituyen la
+lista, donde el punto e inmediatamente un paréntesis de apertura
+se suprimen junto al paréntesis de cierre correspondiente.  Sin
+esta compactación, la salida habría sido
+@lisp
+(1 . (2 . (3 . ("abc" . (17.5 . ())))))
+@end lisp
+
+De igual forma que con la salida, una lista puede escribirse
+(después de haber añadido un apóstrofo para evitar su
+interpretación como una llamada de función) como una lista literal
+encerrando sus elementos entre paréntesis:
+
+@lisp
+guile> '(17 23 "fulano" "mengano" "zutano")
+(17 23 "fulano" "mengano" "zutano")
+@end lisp
+
+Las listas son una parte fundamental de Scheme.  De hecho, Scheme
+se considera un dialecto de Lisp, donde @q{lisp} es una
+abreviatura de @q{List Processing} (proceso de listas).  Todas las
+expresiones de Scheme son listas.
+
+
+@node Association lists (alists)
+@unnumberedsubsubsec Listas asociativas (listas-A)
+
+Un tipo especial de listas son las @emph{listas asociativas} o
+@emph{listas-A}.  Se puede usar una lista-A para almacenar datos
+para su fácil recuperación posterior.
+
+Las listas-A son listas cuyos elementos son parejas.  El
+@code{car} de cada elemento se llama @emph{clave}, y el @code{cdr}
+de cada elemento se llama @emph{valor}.  El procedimiento de
+Scheme @code{assoc} se usa para recuperar un elemento de la
+lista-A, y @code{cdr} se usa para recuperar el valor:
+
+@lisp
+guile> (define mi-lista-a '((1  . "A") (2 . "B") (3 . "C")))
+guile> mi-lista-a
+((1 . "A") (2 . "B") (3 . "C"))
+guile> (assoc 2 mi-lista-a)
+(2 . "B")
+guile> (cdr (assoc 2 mi-lista-a))
+"B"
+guile>
+@end lisp
+
+Las listas-A se usan mucho en LilyPond para almacenar propiedades
+y otros datos.
+
+
+@node Hash tables
+@unnumberedsubsubsec Tablas de hash
+
+Estructuras de datos que se utilizan en LilyPond de forma
+ocasional.  Una tabla de hash es similar a una matriz, pero los
+índices de la matriz pueden ser cualquier tipo de valor de Scheme,
+no sólo enteros.
+
+Las tablas de hash son más eficientes que las listas-A si hay una
+gran cantidad de datos que almacenar y los datos cambian con muy
+poca frecuencia.
+
+La sintaxis para crear tablas de hash es un poco compleja, pero
+veremos ejemplos de ello en el código fuente de LilyPond.
+
+@lisp
+guile> (define h (make-hash-table 10))
+guile> h
+#<hash-table 0/31>
+guile> (hashq-set! h 'key1 "val1")
+"val1"
+guile> (hashq-set! h 'key2 "val2")
+"val2"
+guile> (hashq-set! h 3 "val3")
+"val3"
+@end lisp
+
+Los valores se recuperan de las tablas de hash mediante
+@code{hashq-ref}.
+
+@lisp
+guile> (hashq-ref h 3)
+"val3"
+guile> (hashq-ref h 'key2)
+"val2"
+guile>
+@end lisp
+
+Las claves y los valores se recuperan como una pareja con
+@code{hashq-get-handle}.  Ésta es la forma preferida, porque
+devuelve @code{#f} si no se encuentra la clave.
+
+@lisp
+guile> (hashq-get-handle h 'key1)
+(key1 . "val1")
+guile> (hashq-get-handle h 'frob)
+#f
+guile>
+@end lisp
+
+@node Calculations in Scheme
+@subsection Cálculos en Scheme
+
+@ignore
+Todo el tiempo hemos estado usando listas.  Un cálculo, como @code{(+
+1 2)} también es una lista (que contiene el símbolo @code{+} y los
+números 1 y@tie{}2).  Normalmente, las listas se interpretan como
+cálculos, y el intérprete de Scheme sustituye el resultado del
+cálculo.  Para escribir una lista, detenemos la evaluación.  Esto se
+hace precediendo la lista por un apóstrofo @code{'}.  Así, para los
+cálculos no usamos ningún apóstrofo.
+
+Dentro de una lista o pareja precedida de apóstrofo, no hay necesidad
+de escribir ningún apóstrofo más.  Lo siguiente es una pareja de
+símbolos, una lista de símbolos y una lista de listas respectivamente:
+
+@example
+#'(stem . head)
+#'(staff clef key-signature)
+#'((1) (2))
+@end example
+@end ignore
+
+Scheme se puede usar para hacer cálculos.  Utiliza sintaxis
+@emph{prefija}.  Sumar 1 y@tie{}2 se escribe como @code{(+ 1 2)} y
+no como el tradicional @math{1+2}.
+
+@lisp
+guile> (+ 1 2)
+3
+@end lisp
+
+Los cálculos se pueden anidar; el resultado de una función se
+puede usar para otro cálculo.
+
+@lisp
+guile> (+ 1 (* 3 4))
+13
+@end lisp
+
+Estos cálculos son ejemplos de evaluaciones; una expresión como
+@code{(* 3 4)} se sustituye por su valor @code{12}.
+
+Los cálculos de Scheme son sensibles a las diferencias entre
+enteros y no enteros.  Los cálculos enteros son exactos, mientras
+que los no enteros se calculan con los límites de precisión
+adecuados:
+
+@lisp
+guile> (/ 7 3)
+7/3
+guile> (/ 7.0 3.0)
+2.33333333333333
+@end lisp
+
+Cuando el intérprete de Scheme encuentra una expresión que es una
+lista, el primer elemento de la lista se trata como un
+procedimiento a evaluar con los argumentos del resto de la lista.
+Por tanto, todos los operadores en Scheme son operadores prefijos.
+
+Si el primer elemento de una expresión de Scheme que es una lista
+que se pasa al intérprete @emph{no es} un operador o un
+procedimiento, se produce un error:
+
+@lisp
+guile> (1 2 3)
+
+Backtrace:
+In current input:
+  52: 0* [1 2 3]
+
+<unnamed port>:52:1: In expression (1 2 3):
+<unnamed port>:52:1: Wrong type to apply: 1
+ABORT: (misc-error)
+guile>
+@end lisp
+
+Aquí podemos ver que el intérprete estaba intentando tratar el 1
+como un operador o procedimiento, y no pudo hacerlo.  De aquí que
+el error sea "Wrong type to apply: 1".
+
+Así pues, para crear una lista debemos usar el operador de lista,
+o podemos precederla de un apóstrofo para que el intérprete no
+trate de evaluarla.
+
+@lisp
+guile> (list 1 2 3)
+(1 2 3)
+guile> '(1 2 3)
+(1 2 3)
+guile>
+@end lisp
+
+Esto es un error que puede aparecer cuando trabaje con Scheme
+dentro de LilyPond.
+
+@ignore
+La misma asignación se puede hacer también completamente en Scheme,
+
+@example
+#(define veintiCuatro (* 2 doce))
+@end example
+
+@c this next section is confusing -- need to rewrite
+
+El @emph{nombre} de una variable también es una expresión, similar a
+un número o una cadena.  Se introduce como
+
+@example
+#'veintiCuatro
+@end example
+
+@funindex #'symbol
+@cindex comillas en Scheme
+
+El apóstrofo @code{'} evita que el intérprete de Scheme sustituya
+@code{veintiCuatro} por @code{24}.  En vez de esto, obtenemos el
+nombre @code{veintiCuatro}.
+@end ignore
+
+
+@node Scheme procedures
+@subsection Procedimientos de Scheme
+
+Los procedimientos de Scheme son expresiones de Scheme ejecutables
+que devuelven un valor resultante de su ejecución.  También pueden
+manipular variables definidas fuera del procedimiento.
+
+
+@node Defining procedures
+@unnumberedsubsubsec Definir procedimientos
+
+Los procedimientos se definen en Scheme con @code{define}:
+
+@example
+(define (nombre-de-la-función arg1 arg2 @dots{} argn)
+ expresión-de-scheme-que-devuelve-un-valor)
+@end example
+
+Por ejemplo, podemos definir un procedimiento para calcular la
+media:
+
+@lisp
+guile> (define (media x y) (/ (+ x y) 2))
+guile> media
+#<procedure media (x y)>
+@end lisp
+
+Una vez se ha definido un procedimiento, se llama poniendo el
+nombre del procedimiento dentro de una lista.  Por ejemplo,
+podemos calcular la media de 3 y 12:
+
+@lisp
+guile> (media 3 12)
+15/2
+@end lisp
+
+
+@node Predicates
+@unnumberedsubsubsec Predicados
+
+Los procedimientos de Scheme que devuelven valores booleanos se
+suelen llamar @emph{predicados}.  Por convenio (pero no por
+necesidad), los nombres de predicados acaban en un signo de
+interrogación:
+
+@lisp
+guile> (define (menor-que-diez? x) (< x 10))
+guile> (menor-que-diez? 9)
+#t
+guile> (menor-que-diez? 15)
+#f
+@end lisp
+
+
+@node Return values
+@unnumberedsubsubsec Valores de retorno
+
+Los procedimientos de Scheme siempre devuelven un valor de
+retorno, que es el valor de la última expresión ejecutada en el
+procedimiento.  El valor de retorno puede ser cualquier valor de
+Scheme válido, incluso una estructura de datos compleja o un
+procedimiento.
+
+A veces, el usuario quiere tener varias expresiones de Scheme
+dentro de un procedimiento.  Existen dos formas en que se pueden
+combinar distintas expresiones.  La primera es el procedimiento
+@code{begin}, que permite evaluar varias expresiones, y devuelve
+el valor de la última expresión.
+
+@lisp
+guile> (begin (+ 1 2) (- 5 8) (* 2 2))
+4
+@end lisp
+
+La segunda forma de combinar varias expresiones es dentro de un
+bloque @code{let}.  Dentro de un bloque let, se crean una serie de
+ligaduras o asignaciones, y después se evalúa una secuencia de
+expresiones que pueden incluir esas ligaduras o asignaciones.  El
+valor de retorno del bloque let es el valor de retorno de la
+última sentencia del bloque let:
+
+@lisp
+guile> (let ((x 2) (y 3) (z 4)) (display (+ x y)) (display (- z 4))
+@dots{} (+ (* x y) (/ z x)))
+508
+@end lisp
+
+
+@need 1500
+@node Scheme conditionals
+@subsection Condicionales de Scheme
+
+
+@node if
+@unnumberedsubsubsec if
+
+Scheme tiene un procedimiento @code{if}:
+
+@example
+(if expresión-de-prueba expresión-de-cierto expresión-de-falso)
+@end example
+
+@var{expresión-de-prueba} es una expresión que devuelve un valor
+booleano.  Si @var{expresión-de-prueba} devuelve @code{#t}, el
+procedimiento @code{if} devuelve el valor de la
+@var{expresión-de-cierto}, en caso contrario devuelve el valor de
+la @var{expresión-de-falso}.
+
+@lisp
+guile> (define a 3)
+guile> (define b 5)
+guile> (if (> a b) "a es mayor que b" "a no es mayor que b")
+"a no es mayor que b"
+@end lisp
+
+
+@node cond
+@unnumberedsubsubsec cond
+
+Otro procedimiento condicional en Scheme es @code{cond}:
+
+@example
+(cond (expresión-de-prueba-1 secuencia-de-expresiones-resultante-1)
+      (expresión-de-prueba-2 secuencia-de-expresiones-resultante-2)
+      @dots{}
+      (expresión-de-prueba-n secuencia-de-expresiones-resultante-n))
+@end example
+
+Por ejemplo:
+
+@lisp
+guile> (define a 6)
+guile> (define b 8)
+guile> (cond ((< a b) "a es menor que b")
+...          ((= a b) "a es igual a b")
+...          ((> a b) "a es mayor que b"))
+"a es menor que b"
+@end lisp
+
+
+@need 1500
+@node Scheme in LilyPond
+@section Scheme dentro de LilyPond
+
+
+@node LilyPond Scheme syntax
+@subsection Sintaxis del Scheme de LilyPond
+@funindex $
+@funindex #
+
+El intérprete Guile forma parte de LilyPond, lo que significa que
+se puede incluir Scheme dentro de los archivos de entrada de
+LilyPond.  Existen varios métodos para incluir Scheme dentro de
+LilyPond.
+
+La manera más sencilla es utilizar el símbolo de
+almohadilla@tie{}@code{#} antes de una expresión de Scheme.
+
+@c FIXME: the following is way too technical
+
+Ahora bien, el código de entrada de LilyPond se estructura en
+elementos y expresiones, de forma parecida a cómo el lenguaje
+humano se estructura en palabras y frases.  LilyPond tiene un
+analizador léxico que reconoce elementos indivisibles (números
+literales, cadenas de texto, elementos de Scheme, nombres de nota,
+etc.), y un analizador que entiende la sintaxis, la Gramática de
+LilyPond.  Una vez que sabe que se
+aplica una regla sintáctica concreta, ejecuta las acciones
+asociadas con ella.
+
+El método del símbolo de almohadilla@tie{}@code{#} para incrustar
+Scheme se adapta de forma natural a este sistema.  Una vez que el
+analizador léxico ve un símbolo de almohadilla, llama al lector de
+Scheme para que lea una expresión de Scheme completa (que puede
+ser un identificador, una expresión encerrada entre paréntesis, o
+algunas otras cosas).  Después de que se ha leído la expresión de
+Scheme, se almacena como el valor de un elemento @code{SCM_TOKEN}
+de la gramática.  Después de que el analizador sintáctico ya sabe
+cómo hacer uso de este elemento, llama a Guila para que evalúe la
+expresión de Scheme.  Dado que el analizador sintáctico suele
+requerir un poco de lectura por delante por parte del analizador
+léxico para tomar sus decisiones de análisis sintáctico, esta
+separación de lectura y evaluación entre los analizadores léxico y
+sintáctico es justamente lo que se necesita para mantener
+sincronizadas las ejecuciones de expresiones de LilyPond y de
+Scheme.  Por este motivo se debe usar el símbolo de
+almohadilla@tie{}@code{#} para llamar a Scheme siempre que sea
+posible.
+
+Otra forma de llamar al intérprete de Scheme desde LilyPond es el
+uso del símbolo de dólar@tie{}@code{$} en lugar de la almohadilla
+para introducir las expresiondes de Scheme.  En este caso,
+LilyPond evalúa el código justo después de que el analizador
+léxico lo ha leído.  Comprueba el tipo resultante de la expresión
+de Scheme y después selecciona un tipo de elemento (uno de los
+varios elementos @code{xxx_IDENTIFIER} dentro de la sintaxis) para
+él.  Crea una @emph{copia} del valor y la usa como valor del
+elemento.  Si el valor de la expresión es vacío (El valor de Guile
+de @code{*unspecified*}), no se pasa nada en absoluto al
+analizador sintáctico.
+
+Éste es, de hecho, el mismo mecanismo exactamente que LilyPond
+emplea cuando llamamos a cualquier variable o función musical por
+su nombre, como @code{\nombre}, con la única diferencia de que el
+nombre viene determinado por el analizador léxico de LilyPond sin
+consultar al lector de Scheme, y así solamente se aceptan los
+nombres de variable consistentes con el modo actual de LilyPond.
+
+La acción inmediata de @code{$} puede llevar a alguna que otra
+sorpresa, véase @ref{Importing Scheme in LilyPond}.
+La utilización de @code{#} donde el analizador sintáctico lo
+contempla es normalmente preferible.  Dentro de las expresiones
+musicales, aquellas que se crean utilizando @code{#} @emph{se
+interprentan} como música.  Sin embargo, @emph{no se copian} antes
+de ser utilizadas.  Si forman parte de alguna estructura que aún
+podría tener algún uso, quizá tenga que utilizar explícitamente
+@code{ly:music-deep-copy}.
+
+@funindex $@@
+@funindex #@@
+También existen los operadores de @q{división de listas}
+@code{$@@} y @code{#@@} que insertan todos los elementos de una
+lista dentro del contexto circundante.
+
+Ahora echemos un vistazo a algo de código de Scheme real.  Los
+procedimientos de Scheme se pueden definir dentro de los archivos
+de entrada de LilyPond:
+
+@example
+#(define (media a b c) (/ (+ a b c) 3))
+@end example
+
+Observe que los comentarios de LilyPond (@code{%} y @code{%@{
+%@}}) no se pueden utilizar dentro del código de Scheme, ni
+siquiera dentro de un archivo de entrada de LilyPond, porque es el
+intérprete Guile, y no el analizador léxico de LilyPond, el que
+está leyendo la expresión de Scheme.  Los comentarios en el Scheme
+de Guile se introducen como sigue:
+
+@example
+; esto es un comentario de una línea
+
+#!
+  Esto es un comentario de bloque (no anidable) estilo Guile
+  Pero se usan rara vez por parte de los Schemers
+  y nunca dentro del código fuente de LilyPond
+!#
+@end example
+
+Durante el resto de esta sección, supondremos que los datos se
+introducen en un archivo de música, por lo que añadiremos una
+almohadilla@tie{}@code{#} al principio de cada una de las
+expresiones de Scheme.
+
+Todas las expresiones de Scheme del nivel jerárquico superior
+dentro de un archivo de entrada de LilyPond se pueden combinar en
+una sola expresión de Scheme mediante la utilización del operador
+@code{begin}:
+
+@example
+#(begin
+  (define fulanito 0)
+  (define menganito 1))
+@end example
+
+
+@node LilyPond variables
+@subsection Variables de LilyPond
+
+Las variables de LilyPond se almacenan internamente en la forma de
+variables de Scheme.  Así,
+
+@example
+doce = 12
+@end example
+
+@noindent
+equivale a
+
+@example
+#(define doce 12)
+@end example
+
+Esto significa que las variables de LilyPond están disponibles
+para su uso dentro de expresiones de Scheme.  Por ejemplo,
+podríamos usar
+
+@example
+veintiCuatro = (* 2 doce)
+@end example
+
+@noindent
+lo que daría lugar a que el número @emph{24} se almacenase dentro
+de la variable @code{veintiCuatro} de LilyPond (y de Scheme).
+
+El lenguaje Scheme permite la modificación de expresiones
+complejas in situ y LilyPond hace uso de esta @q{modificación in
+situ} al usar funciones musicales.  Pero cuando las expresiones
+musicales se almacenan dentro de variables en lugar de ser
+introducidas directamente, lo que habitualmente se espera cuando
+se pasan a funciones musicales sería que el valor original quedase
+intacto.  Así pues, cuando se referencia una variable musical con
+la barra invertida (como @code{\veintiCuatro}), LilyPond crea una
+copia del valor musical de tal variable para utilizarla dentro de
+la expresión musical circundante, en lugar de usar el valor de la
+variable directamente.
+
+Por ello, las expresiones musicales de Scheme escritas con la
+sintasis de almohadilla @code{#} deberían utilizarse para
+cualquier material creado @q{partiendo de cero} (o que se ha
+copiado explícitamente) en lugar de utilizarse para referenciar
+música directamente.
+
+@morerefs
+Manual de extensión:
+@ref{LilyPond Scheme syntax}.
+@endmorerefs
+
+
+@node Debugging Scheme code
+@subsection Depuración del código de Scheme
+
+@cindex depuración, código de Scheme
+@cindex Scheme, depuración
+@cindex código fuente, ubicación en mensajes de error para código de Scheme
+@cindex error, mensaje, en código de Scheme
+@cindex línea, número, para mensaje de error en Scheme
+
+Cuando se están depurando programas de Scheme grandes, es de gran
+ayuda que si ocurre un error, podamos saber exactamente en qué
+línea del programa se ha producido dicho error.  Para habilitar
+que se muestren las ubicaciones del código fuente para los errores
+dentro del código de Scheme, LilyPond debe ejecutarse con la
+opción de línea de órdenes @option{-dcompile-@/scheme-@/code}.
+Como alternativa, tiene el mismo efecto escribir
+@code{#(ly:set-@/option 'compile-@/scheme-@/code)} en el inicio
+del archivo de entrada de LilyPond.
+
+Es más, para obtener aún más información acerca del error, puede
+usar la opción @option{-ddebug-@/eval} o escribir
+@code{#(debug-@/enable 'backtrace)} dentro del archivo.  Bajo este
+modo, si se produce un error, se imprime una prolija información
+de traza o @qq{backtrace}, que contiene información acerca de
+todas las llamadas de función que dieron lugar al evento
+problemático.
+
+@knownissues
+A causa de una limitación en la implementación de Guile, por el
+momento la opción @option{-dcompile-@/scheme-@/code} hace
+imposible compilar archivos de LilyPond que contengan más de unas
+pocas de miles de expresiones de Scheme.
+
+
+@node Input variables and Scheme
+@subsection Variables de entrada y Scheme
+
+El formato de entrada contempla la noción de variables: en el
+siguiente ejemplo, se asigna una expresión musical a una variable
+con el nombre @code{traLaLa}.
+
+@example
+traLaLa = @{ c'4 d'4 @}
+@end example
+
+@noindent
+
+También hay una forma de ámbito: en el ejemplo siguiente, el
+bloque @code{\layout} también contiene una variable
+@code{traLaLa}, que es independiente de la @code{\traLaLa}
+externa.
+
+@example
+traLaLa = @{ c'4 d'4 @}
+\layout @{ traLaLa = 1.0 @}
+@end example
+
+@c
+En efecto, cada archivo de entrada constituye un ámbito, y cada
+bloque @code{\header}, @code{\midi} y @code{\layout} son ámbitos
+anidados dentro del ámbito de nivel superior.
+
+Tanto las variables como los ámbitos están implementados en el
+sistema de módulos de Guile.  A cada ámbito se adjunta un módulo
+anónimo de Scheme.  Una asignación de la forma:
+
+@example
+traLaLa = @{ c'4 d'4 @}
+@end example
+
+@noindent
+se convierte internamente en una definición de Scheme:
+
+@example
+(define traLaLa @var{Valor Scheme de '@code{@dots{}}'})
+@end example
+
+Esto significa que las variables de LilyPond y las variables de
+Scheme se pueden mezclar con libertad.  En el ejemplo siguiente,
+se almacena un fragmento de música en la variable @code{traLaLa},
+y se duplica usando Scheme.  El resultado se importa dentro de un
+bloque @code{\score} por medio de una segunda variable
+@code{twice}:
+
+@lilypond[verbatim]
+traLaLa = { c'4 d'4 }
+
+#(define newLa (map ly:music-deep-copy
+  (list traLaLa traLaLa)))
+#(define twice
+  (make-sequential-music newLa))
+
+\twice
+@end lilypond
+
+@c Due to parser lookahead
+
+En realidad, éste es un ejemplo bastante interesante.  La
+asignación solo tiene lugar después de que el analizador
+sintáctico se ha asegurado de que no sigue nada parecido a
+@code{\addlyrics}, de manera que necesita comprobar lo que viene a
+continuación.  Lee el símbolo @code{#} y la expresión de Scheme
+siguiente @emph{sin} evaluarla, de forma que puede proceder a la
+asignación, y @emph{posteriormente} ejecutar el código de Scheme
+sin problema.
+
+@node Importing Scheme in LilyPond
+@subsection Importación de Scheme dentro de LilyPond
+@funindex $
+@funindex #
+
+El ejemplo anterior muestra cómo @q{exportar} expresiones
+musicales desde la entrada al intérprete de Scheme.  Lo contrario
+también es posible.  Colocándolo después de @code{$}, un valor de
+Scheme se interpreta como si hubiera sido introducido en la
+sintaxis de LilyPond.  En lugar de definir @code{\twice}, el
+ejemplo anterior podría también haberse escrito como
+
+@example
+@dots{}
+$(make-sequential-music newLa)
+@end example
+
+Podemos utilizar @code{$} con una expresión de Scheme en cualquier
+lugar en el que usaríamos @code{\@var{nombre}} después de haber
+asignado la expresión de Scheme a una variable @var{nombre}.  Esta
+sustitución se produce dentro del @q{analizador léxico}, de manera
+que LilyPond no llega a darse cuenta de la diferencia.
+
+Sin embargo, existe un inconveniente, el de la medida del tiempo.
+Si hubiésemos estado usando @code{$} en vez de @code{#} para
+definir @code{newLa} en el ejemplo anterior, la siguiente
+definición de Scheme habría fracasado porque @code{traLaLa} no
+habría sido definida aún.  Para ver una explicación de este
+problema de momento temporal, véase @ref{LilyPond Scheme syntax}.
+
+@funindex $@@
+@funindex #@@
+Un conveniente aspecto posterior pueden ser los operadores de
+@q{división de listas} @code{$@@} y @code{#@@} para la inserción
+de los elementos de una lista dentro del contexto circundante.
+Utilizándolos, la última parte del ejemplo se podría haber escrito
+como
+
+@example
+@dots{}
+@{ #@@newLa @}
+@end example
+
+Aquí, cada elemento de la lista que está almacenado en
+@code{newLa} se toma en secuencia y se inserta en la lista, como
+si hubiésemos escrito
+
+@example
+@{ #(first newLa) #(second newLa) @}
+@end example
+
+Ahora bien, en todas esas formas, el código de Scheme se evalúa en
+el momento en que el código de entrada aún se está procesando, ya
+sea en el analizador léxico o en el analizador sintáctico.  Si
+necesitamos que se ejecute en un momento posterior, debemos
+consultar @ref{Void Scheme functions}, o almacenarlo dentro
+de un procedimiento:
+
+@example
+#(define (nopc)
+  (ly:set-option 'point-and-click #f))
+
+@dots{}
+#(nopc)
+@{ c'4 @}
+@end example
+
+
+@node Object properties
+@subsection Propiedades de los objetos
+
+Las propiedades de los objetos se almacenan en LilyPond en forma
+de cadenas de listas-A, que son listas de listas-A.  Las
+propiedades se establecen añadiendo valores al principio de la
+lista de propiedades.  Las propiedades se leen extrayendo valores
+de las listas-A.
+
+El establecimiento de un valor nuevo para una propiedad requiere
+la asignación de un valor a la lista-A con una clave y un valor.
+La sintaxis de LilyPond para hacer esto es la siguiente:
+
+@example
+\override Stem.thickness = #2.6
+@end example
+
+Esta instrucción ajusta el aspecto de las plicas.  Se añade una
+entrada de lista-A @code{'(thickness . 2.6)} a la lista de
+propiedades de un objeto @code{Stem}.  @code{thickness} se mide a
+partir del grosor de las líneas del pentagrama, y así estas plicas
+serán @code{2.6} veces el grosor de las líneas del pentagrama.
+Esto hace que las plicas sean casi el doble de gruesas de lo
+normal.  Para distinguir entre las variables que se definen en los
+archivos de entrada (como @code{veintiCuatro} en el ejemplo
+anterior) y las variables de los objetos internos, llamaremos a
+las últimas @q{propiedades} y a las primeras @q{variables.}  Así,
+el objeto plica tiene una propiedad @code{thickness} (grosor),
+mientras que @code{veintiCuatro} es una variable.
+
+@cindex propiedades frente a variables
+@cindex variables frente a propiedades
+
+@c  todo -- here we're getting interesting.  We're now introducing
+@c  LilyPond variable types.  I think this deserves a section all
+@c  its own
+
+
+@need 1500
+@node LilyPond compound variables
+@subsection Variables de LilyPond compuestas
+
+
+@node Offsets
+@unnumberedsubsubsec Desplazamientos
+
+Los desplazamientos bidimensionales (coordenadas X e Y) se
+almacenan como @emph{parejas}.  El @code{car} del desplazamiento
+es la coordenada@tie{}X, y el @code{cdr} es la coordenada@tie{}Y.
+
+@example
+\override TextScript.extra-offset = #'(1 . 2)
+@end example
+
+Esto asigna la pareja @code{(1 . 2)} a la propiedad
+@code{extra-offset} del objeto TextScript.  Estos números se miden
+en espacios de pentagrama, y así esta instrucción mueve el objeto
+un espacio de pentagrama a la derecha, y dos espacios hacia
+arriba.
+
+Los procedimientos para trabajar con desplazamientos están en
+@file{scm/lily-library.scm}.
+
+@node Fractions
+@unnumberedsubsubsec Fracciones
+
+Las fracciones tal y como se utilizan por parte de LilyPond se
+almacenan, de nuevo, como @emph{parejas}, esta vez de enteros sin
+signo.  Mientras que Scheme es capaz de representar números
+racionaes como un tipo nativo, musicalmente @samp{2/4} y
+@samp{1/2} no son lo mismo, y necesitamos poder distinguir entre
+ellos.  De igual forma, no existe el concepto de @q{fracciones}
+negativas en LilyPond.  Así pues, @code{2/4} en LilyPond significa
+@code{(2 . 4)} en Scheme, y @code{#2/4} en LilyPond significa
+@code{1/2} en Scheme.
+
+
+@node Extents
+@unnumberedsubsubsec Dimensiones
+
+Las parejas se usan también para almacenar intervalos, que
+representan un rango de números desde el mínimo (el @code{car})
+hasta el máximo (el @code{cdr}).  Los intervalos se usan para
+almacenar las dimensiones en X y en Y de los objetos imprimibles.
+Para dimensiones en X, el @code{car} es la coordenada X de la
+parte izquierda, y el @code{cdr} es la coordenada X de la parte
+derecha.  Para las dimensiones en Y, el @code{car} es la
+coordenada inferior, y el @code{cdr} es la coordenada superior.
+
+Los procedimientos para trabajar con intervalos están en
+@file{scm/lily-library.scm}.  Se deben usar estos procedimientos
+siempre que sea posible, para asegurar la consistencia del código.
+
+
+@node Property alists
+@unnumberedsubsubsec Listas-A de propiedades
+
+Una lista-A de propiedades es una estructura de datos de LilyPond
+que es una lista-A cuyas claves son propiedades y cuyos valores
+son expresiones de Scheme que dan el valor deseado de la
+propiedad.
+
+Las propiedades de LilyPond son símbolos de Scheme, como por
+ejemplo @code{'thickness}.
+
+
+@node Alist chains
+@unnumberedsubsubsec Cadenas de listas-A
+
+Una cadena de listas-A es una lista que contiene listas-A de
+propiedades.
+
+El conjunto de todas las propiedades que se aplican a un grob se
+almacena por lo general como una cadena de listas-A.  Para poder
+encontrar el valor de una propiedad determinada que debería tener
+un grob, se busca por todas las listas-A de la cadena, una a una,
+tratando de encontrar una entrada que contenga la clave de la
+propiedad.  Se devuelve la primera entrada de lista-A que se
+encuentre, y el valor es el valor de la propiedad.
+
+El procedimiento de Scheme @code{chain-assoc-get} se usa
+normalmente para obtener los valores de propiedades.
+
+@node LilyPond's box model
+@subsection El modelo de caja de LilyPond
+
+El modelo caja @q{clásico} para el texto (como el que se utiliza,
+por ejemplo, en @TeX{}), incluye las tres dimensiones @dfn{ancho},
+@dfn{alto}, and @dfn{profundo}: los glifos se ubican sobre una
+línea de base horizontal; la altura de un glifo es el tamaño
+vertical por encima de esta línea, la profundidad es el tamaño por
+debajo de esta línea, y el ancho comprende el tamaño horizontal
+del glifo.  LilyPond añade una cuarta dimensión, el
+@dfn{breapth},@footnote{Este nombre artificial se derivó de la
+palaba inglesa @q{breadth}, que siginifica aproximadamente lo
+mismo que @q{width} (ancho).} para extender el tamaño horizonal
+por la parte izquierda del @q{punto de referencia} del glifo,
+denotado con @q{(0,@tie{}0)} en la imagen que aparece a
+continuación.  La principal razón de ser de esta extensión es que
+muchos glifos como los calderones son horizontalmente simétricos
+(y también están unidos de forma simétrica centrados sobre una
+cabeza de nota), y el mejor punto de referencia para tales glifos
+es, por tanto, el punto medio horizontal.  Otros glifos como la
+alteración accidental de un cuarto de tono, que se muestra a la
+izquierda en la imagen, pueden tener también una cantidad
+considerable de @q{breapth}.
+
+@lilypond[quote]
+#(define-markup-command (point layout props x y xoff yoff)
+   (number? number? number? number?)
+   (interpret-markup
+    layout props
+    (make-overlay-markup
+     (list
+      (make-translate-markup
+       (cons x y)
+       (make-draw-circle-markup 0.4 0 #t))
+      (make-translate-markup
+       (cons (+ x xoff) (+ y yoff))
+       (make-concat-markup
+        (list "(" (number->string x) ", " (number->string y) ")")))))))
+
+\markup \scale #'(0.8 . 0.8) {
+  \overlay {
+    \scale #'(18 . 16) \with-color #(x11-color "gray80")
+      \musicglyph "accidentals.flatflat.slash"
+
+    \override #'((filled . #f)
+                 (thickness . 2))
+      \polygon #'((-9 . -10) (-9 . 29) (26 . 29) (26 . -10))
+
+    \translate #'(-15 . 0) \draw-line #'(47 . 0)
+    \translate #'(32 . 0) \arrow-head #X #RIGHT ##t
+    \translate #'(31 . -2) \italic "x"
+    \translate #'(0 . -15) \draw-line #'(0 . 50)
+    \translate #'(0 . 35) \arrow-head #Y #UP ##t
+    \translate #'(-2 . 34) \italic "y"
+
+    \point #0 #0 #0.5 #0.8
+    \point #-9 #-10 #0.5 #0.8
+    \point #26 #29 #-3 #1
+
+    \translate #'(-13.5 . -5.5) \rotate #90 \italic "depth"
+    \translate #'(-13.5 . 13) \rotate #90 \italic "height"
+    \translate #'(-8.5 . -12.2) \italic "breapth"
+    \translate #'(9 . -12.2) \italic "width"
+  }
+
+  \hspace #1
+
+  \overlay {
+    \scale #'(16 . 16) \with-color #(x11-color "gray80")
+      \musicglyph "custodes.mensural.u0"
+
+    \override #'((filled . #f)
+                 (thickness . 2))
+      \polygon #'((0 . -5.8) (0 . 32) (21 . 32) (21 . -5.8))
+
+    \translate #'(-6 . 0) \draw-line #'(50 . 0)
+    \translate #'(44 . 0) \arrow-head #X #RIGHT ##t
+    \translate #'(43 . -2) \italic "x"
+    \translate #'(0 . -11) \draw-line #'(0 . 49)
+    \translate #'(0 . 39) \arrow-head #Y #UP ##t
+    \translate #'(-2 . 38) \italic "y"
+
+    \point #0 #0 #0.5 #0.8
+    \point #0 #-5.8 #0.5 #0.8
+    \point #21 #32 #-3 #1
+
+    \translate #'(-4.5 . -3.7) \rotate #90 \italic "depth"
+    \translate #'(-4.5 . 15) \rotate #90 \italic "height"
+    \translate #'(7 . -8) \italic "width"
+  }
+}
+@end lilypond
+
+Como se muestra en el glifo de @q{custos} a la derecha de la
+imagen, la caja que se define para un glifo puede ser muy distinta
+de lo que realmente se imprime: LilyPond coloca el lado derecho
+del glifo del custos al final del pentagrama, haciendo que la
+larga línea de extensión se salga por el lado derecho, metiéndose
+dentro del margen.
+
+Este modelo de caja no se usa solo para los glifos musicales de
+LilyPond sino también para los elementos de marcado de cualquier
+tipo.  Tanto las dimensiones horizontales como las verticales se
+especifican con un @q{extent} o ámbito; usando la notación de
+Scheme, el glifo de la izquierda en la imagen anterior tiene unas
+dimensiones horizontales de @code{#'(-9 . 26)} y unas dimensiones
+verticales de @code{#'(-10 . 29)}.
+
+LilyPond también utiliza algunas extensiones sobre el modelo de
+caja para cubrir casos especiales.
+
+@itemize
+@item
+Si no queremos que una caja tome parte en el algoritmo de
+espaciado musical de LilyPond a lo largo de un determinado eje,
+tenemos que establecer las dimensiones de este eje al valor (que
+en otro contexto no tiene ningún sentido) @code{#'(+inf.0
+. -inf.0)} (desde infinito positivo hasta infinito negativo),
+también disponible como el símbolo @code{empty-interval}.
+
+@item
+Dentro de los elementos de marcado, el @dfn{espaciado} (que
+normalmente causa algún movimiento horizontal o vertical del
+siguiente objeto del marcado) también está configurado
+internamente como una caja: las dimensiones a lo largo del eje
+ortogonal están fijadas al valor @code{empty-interval} como un
+marcador, y un valor de espaciado@tie{}@var{s} está representado
+como las dimensiones @code{#'(0 . @var{s})}.  A diferencia de las
+cajas @q{normales}, el espaciado también puede ser negativo: por
+ejemplo, las dimensiones horizontales de la instrucción de marcado
+@code{\hspace #-4} son @code{#'(0 . -4)}.
+@end itemize
+
+
+@node Internal music representation
+@subsection Representación interna de la música
+
+Internamente, la música se representa como una lista de Scheme.
+La lista contiene varios elementos que afectan a la salida
+impresa.  El análisis sintáctico es el proceso de convertir la
+música de la representación de entrada de LilyPond a la
+representación interna de Scheme.
+
+Cuando se analiza una expresión musical, se convierte en un
+conjunto de objetos musicales de Scheme.  La propiedad definitoria
+de un objeto musical es que ocupa un tiempo.  El tiempo que ocupa
+se llama @emph{duración}.  Las duraciones se expresan como un
+número racional que mide la longitud del objeto musical en
+redondas.
+
+Un objeto musical tiene tres clases de tipos:
+@itemize
+@item
+nombre musical: Cada expresión musical tiene un nombre.  Por
+ejemplo, una nota lleva a un @rinternals{NoteEvent}, y
+@code{\simultaneous} lleva a una @rinternals{SimultaneousMusic}.
+Hay una lista de todas las expresiones disponibles en el manual de
+Referencia de funcionamiento interno, bajo el epígrafe
+@rinternals{Music expressions}.
+
+@item
+@q{type} (tipo) o interface: Cada nombre musical tiene varios
+@q{tipos} o interfaces, por ejemplo, una nota es un @code{event},
+pero también es un @code{note-event}, un @code{rhythmic-event}, y
+un @code{melodic-event}.  Todas las clases de música están
+listadas en el manual de Referencia de funcionamiento interno,
+bajo el epígrafe @rinternals{Music classes}.
+
+@item
+objeto de C++: Cada objeto musical está representado por un objeto
+de la clase @code{Music} de C++.
+@end itemize
+
+La información real de una expresión musical se almacena en
+propiedades.  Por ejemplo, un @rinternals{NoteEvent} tiene
+propiedades @code{pitch} y @code{duration} que almacenan la altura
+y la duración de esa nota.  Hay una lista de todas la propiedades
+disponibles en el manual de Referencia de funcionamiento interno,
+bajo el epígrafe @rinternals{Music properties}.
+
+Una expresión musical compuesta es un objeto musical que contiene
+otros objetos musicales dentro de sus propiedades.  Se puede
+almacenar una lista de objetos dentro de la propiedad
+@code{elements} de un objeto musical, o un único objeto musical
+@q{hijo} dentro de la propiedad @code{element}.  Por ejemplo,
+@rinternals{SequentialMusic} tiene su hijo dentro de
+@code{elements}, y @rinternals{GraceMusic} tiene su argumento
+único dentro de @code{element}.  El cuerpo de una repetición se
+almacena dentro de la propiedad @code{element} de
+@rinternals{VoltaRepeatedMusic}, y las alternativas dentro de
+@code{elements}.
+
+
+@node Building complicated functions
+@section Construir funciones complicadas
+
+Esta sección explica cómo reunir la información necesaria para
+crear funciones musicales complicadas.
+
+
+@node A first approach (example)
+@subsection Una primera aproximación (ejemplo)
+
+@enumerate
+@item @b{El problema}
+
+Usando la entrada siguiente, el signo de @q{espressivo} (es decir,
+los dos reguladores pequeños) deberían hacerse más anchos, pero no
+más altos.
+
+@lilypond[verbatim,quote]
+{ f'\espressivo }
+@end lilypond
+
+@item @b{Soluciones posibles}
+
+@enumerate A
+@item crear un sello nuevo
+@item escalar el sello por omisión en la dirección del eje X
+@end enumerate
+
+@item @b{Comentarios sobre esta solución}
+
+La solución@tie{}A es factible.  Sin embargo, dará como resultado
+un esfuerzo de codificación mayor.  Por otro lado, la
+solución@tie{}B es más económica, aunque tiene la desventaja de
+que no imprime resultados aceptables en todos los casos (si bien
+usted podría no saberlo hasta después de haberlo intentado).
+
+@result{} elija la solución@tie{}B.
+
+@item @b{Codificación}
+
+@itemize
+@item
+Si quiere manipular el sello por omisión tendrá que encontrar
+información sobre él.
+
+El signo de espressivo es un grob del tipo @code{Script}.  Si
+buscamos esto en el IR (@rinternals{Script}), encontramos
+
+@example
+‘stencil’ (stencil):
+     ‘ly:script-interface::print’
+@end example
+
+Vamos a comprobar si es correcto.  PAra asegurarnos de que
+afectamos al grob correcto, vamos a emplear colores.  Existe una
+función predefinida para ello, véase @rinternals{Scheme
+functions}.
+
+@funindex stencil-with-color
+
+@example
+-- Function: stencil-with-color stencil color
+    Return a modified version of the given stencil that is
+    colored with the given color.  See ‘normalize-color’ for
+    possible color formats.
+@end example
+
+@funindex normalize-color
+
+@example
+-- Function: normalize-color color
+    Convert a color given in any of the supported formats into
+    a list of 4 numbers: R, G, B, A.  Possible formats are:
+    such a list of 4 numbers; a list of 3 numbers (transparency
+    defaults to 1.0); a CSS string (named color, or “#RRGGBB”,
+    or “#RRGGBBAA”, or “#RGB”, or “#RGBA”).
+@end example
+
+Usando un color con nombre (@samp{red}, rojo), ello da como
+resultado el siguiente código.
+
+@lilypond[verbatim,quote]
+colorDefaultStencil =
+\once \override Script.stencil =
+  % `lambda` starts a procedure; its argument is `grob`.
+  #(lambda (grob)
+     ;; With `let`, local variables are defined.
+     (let ((stil (ly:script-interface::print grob)))
+       ;; The procedure returns the colored default stencil.
+       (stencil-with-color stil red)))
+
+{ \colorDefaultStencil f'\espressivo }
+@end lilypond
+
+Estupendo, funciona.
+
+@item
+Esta clase de operación ( tomar un sello o propiedad por omisión y
+devolver una versión modificada del mismo) es muy común, y
+LilyPond aporta una función especial para ello:
+@code{grob-transformer}.
+
+@funindex grob-transformer
+
+@example
+-- Function: grob-transformer property func
+    Create an override value good for applying FUNC to either
+    pure or unpure values.  FUNC is called with the
+    respective grob as first argument and the default value
+    (after resolving all callbacks) as the second.
+@end example
+
+Vamos a probarla (el concepto de @q{pure} frente a @q{unpure} se
+explica más tarde, @pxref{Unpure-pure containers}; podemos
+ignorarlo por el momento).
+
+@lilypond[verbatim,quote]
+colorDefaultStencil =
+\once \override Script.stencil =
+  #(grob-transformer 'stencil
+     (lambda (grob orig)
+       (stencil-with-color orig red)))
+
+{ \colorDefaultStencil f'\espressivo }
+@end lilypond
+
+¡Éxito total!
+
+@item
+Para obtener un sello a diferente escala tenemos que usar
+
+@funindex ly:stencil-scale
+
+@example
+-- Function: ly:stencil-scale stil x y
+    Scale stencil STIL using the horizontal and vertical
+    scaling factors X and optional Y (defaulting to X).
+    Negative values flip or mirror STIL without changing its
+    origin; this may result in collisions unless it is
+    repositioned.
+@end example
+
+@noindent
+tomado del mismo capítulo en el manual de Referencia del
+Funcionamiento Interno.
+
+Resultado:
+
+@lilypond[verbatim,quote]
+scaleColorDefaultStencil =
+\once \override Script.stencil =
+  #(grob-transformer 'stencil
+     (lambda (grob orig)
+       (stencil-with-color
+        (ly:stencil-scale
+         orig
+         ;; 1 is the neutral element with ly:stencil-scale,
+         ;; i.e., scaling with '1 1' (for x- and y-axis)
+         ;; returns a visibly unchanged stencil.
+         2 1)
+        red)))
+
+{ \scaleColorDefaultStencil f'\espressivo }
+@end lilypond
+
+Aparte del color, parece ser la salida deseada.
+
+@item
+Sin embargo existen algunos problemas, como se puede ver en el
+ejemplo siguiente:
+
+@example
+@{ \scaleColorDefaultStencil f'_\espressivo ^\fermata @}
+@end example
+
+@lilypond[quote]
+scaleColorDefaultStencil =
+\once \override Script.stencil =
+  #(grob-transformer 'stencil
+     (lambda (grob orig)
+       (stencil-with-color
+        (ly:stencil-scale orig 2 1)
+        red)))
+
+{ \scaleColorDefaultStencil f'_\espressivo ^\fermata }
+@end lilypond
+
+@itemize @minus
+@item
+El calderón está a escala también.
+@item
+Es fastidioso tener que teclear la instrucción antes de la nota o
+notas y el @code{\espressivo} después de la nota.
+@end itemize
+
+La solución para ambos: ¡use @code{\tweak}!
+
+@lilypond[verbatim,quote]
+{
+  f'-\tweak stencil
+      #(grob-transformer 'stencil
+         (lambda (grob orig)
+           (stencil-with-color
+            (ly:stencil-scale orig 2 1)
+            red)))
+      _\espressivo
+    ^\fermata
+}
+@end lilypond
+
+Esto hace lo que queríamos aunque no es agradable teclear tanto;
+vamos a definir una variable y usarla para el trucaje.  Con algo
+de copiar y pegar obtenemos lo siguiente.
+
+@lilypond[verbatim,quote]
+#(define longer-script
+   (grob-transformer 'stencil
+     (lambda (grob orig)
+       (stencil-with-color
+        (ly:stencil-scale orig 2 1)
+        red))))
+
+{
+  f'-\tweak stencil #longer-script _\espressivo
+    ^\fermata
+}
+@end lilypond
+
+FUnciona correctamente, aunque los valores de escalado están
+codificados de forma rígida, y escribir repetidamente
+@code{-\tweak stencil #longer-script} aún resulta
+incómodo.
+
+Para corregirlo, vamos a introducir primero una serie de variables
+dentro de la función @code{longer-script} para los valores de
+escalado en x@tie{}e@tie{}y.
+
+@example
+#(define (longer-script x y)
+   (grob-transformer 'stencil
+     (lambda (grob orig)
+       (stencil-with-color
+        (ly:stencil-scale orig x y)
+        red))))
+@end example
+
+En segundo lugar, para reducir la cantidad de tecleo, definimos
+una función de evento, @pxref{Event functions}.  Los elementos
+dentro del primer grupo de paréntesis (@samp{(x-val y-val)}) son
+las variables de función, los elementos dentro del segundo
+paréntesis agrupan los respectivos tipos de variables (comprobamos
+para número dos veces; consulte @rnotation{Predefined type
+predicates} para ver todas las comprobaciones posibles).
+
+@funindex #@{ @dots{} #@}
+
+@example
+scaleEspr =
+#(define-event-function (x-val y-val) (number? number?)
+  #@{
+    \tweak stencil #(longer-script x-val y-val)
+    \espressivo
+  #@})
+
+@{ f'_\scaleEspr 2 1
+     ^\fermata @}
+@end example
+
+@lilypond[quote]
+#(define (longer-script x y)
+   (grob-transformer 'stencil
+     (lambda (grob orig)
+       (stencil-with-color
+        (ly:stencil-scale orig x y)
+        red))))
+
+scaleEspr =
+#(define-event-function (x-val y-val) (number? number?)
+  #{
+    \tweak stencil #(longer-script x-val y-val)
+    \espressivo
+  #})
+
+{ f'_\scaleEspr 2 1
+    ^\fermata }
+@end lilypond
+
+Correcto, ¡funciona como se esperaba! Observe el uso de @code{#@{
+@dots{} #@}}: dentro de esta construcción de Scheme, podemos usar
+sintaxis de LilyPond, y los argumentos de la función (como
+@var{x-val}) se expanden adecuadamente.  @xref{LilyPond code
+blocks}.
+
+@end itemize
+
+@item @b{El código terminado}
+
+Para terminar, vamos a poner algo de orden.
+
+@itemize @minus
+@item
+Solo queremos realizar un escalado en la dirección del eje X, por
+lo que codificamos de forma rígida el escalado en el eje Y dentro
+de la función de evento.
+@item
+Eliminar el color.
+@end itemize
+
+Al final, todo esto conduce al siguiente código.
+
+@lilypond[verbatim,quote]
+#(define (longer-script x y)
+   (grob-transformer 'stencil
+     (lambda (grob orig)
+       (ly:stencil-scale orig x y))))
+
+longEspressivo =
+#(define-event-function (x-val) (number?)
+  #{
+    \tweak stencil #(longer-script x-val 1)
+    \espressivo
+  #})
+
+{ f'^\longEspressivo #2 _\fermata }
+@end lilypond
+
+@emph{Voilà!}
+
+La principal ventaja de usar @code{grob-transformer} es que ya no
+nos tenemos que preocupar por el nombre concreto de la función de
+sello.  En el siguiente ejemplo rotamos 90 grados el sello de una
+ligadura de expresión y una barra; el hecho de que las funciones
+de sello se llamen respectivamente @code{ly:slur::print} y
+@code{ly:beam::print}, no nos preocupa.
+
+@lilypond[verbatim,quote]
+#(define rotate-90
+   (grob-transformer 'stencil
+     (lambda (grob orig)
+       (ly:stencil-rotate orig 90 0 0))))
+
+{ f'8( g')
+  f'8-\tweak stencil #rotate-90 ( g')
+  f'8[ g']
+  f'8-\tweak stencil #rotate-90 [ g'] }
+@end lilypond
+
+
+@end enumerate
+
+
+@node Displaying music expressions
+@subsection Presentación de las expresiones musicales
+
+@cindex almacenamiento interno
+@cindex imprimir expresiones musicales
+@cindex representación interna, impresión de
+@cindex displayMusic
+@funindex \displayMusic
+
+Si se está escribiendo una función musical, puede ser muy
+instructivo examinar cómo se almacena internamente una expresión
+musical.  Esto se puede hacer con la función musical
+@code{\displayMusic}.
+
+@example
+@{
+  \displayMusic @{ c'4\f @}
+@}
+@end example
+
+@noindent
+imprime lo siguiente:
+
+@example
+(make-music
+  'SequentialMusic
+  'elements
+  (list (make-music
+          'NoteEvent
+          'articulations
+          (list (make-music
+                  'AbsoluteDynamicEvent
+                  'text
+                  "f"))
+          'duration
+          (ly:make-duration 2 0 1/1)
+          'pitch
+          (ly:make-pitch 0 0 0))))
+@end example
+
+De forma predeterminada, LilyPond imprime estos mensajes sobre la
+consola junto al resto de los mensajes.  Para separar estos
+mensajes y guardar el resultado de @code{\display@{LOQUESEA@}},
+puede especificar que se use un puerto de salida opcional:
+
+@example
+@{
+  \displayMusic #(open-output-file "display.txt") @{ c'4\f @}
+@}
+@end example
+
+Esto sobreescribe el archivo de salida anterior cada vez ques e
+llama; si necesitamos escribir más de una expresión, debemos usar
+una variable para el puerto y reutilizarla:
+@example
+@{
+  port = #(open-output-file "display.txt")
+  \displayMusic \port @{ c'4\f @}
+  \displayMusic \port @{ d'4 @}
+  #(close-output-port port)
+@}
+@end example
+
+El manual de Guile describe los puertos detalladamente.  Solo es
+realmente necesario cerrar el puerto si necesitamos leer el
+archivo antes de que LilyPond termine; en el primer ejemplo, no
+nos hemos molestado en hacerlo.
+
+Un poco de reformateo hace a la información anterior más fácil de
+leer:
+
+@example
+(make-music 'SequentialMusic
+  'elements (list
+	     (make-music 'NoteEvent
+               'articulations (list
+			       (make-music 'AbsoluteDynamicEvent
+				 'text
+				 "f"))
+	       'duration (ly:make-duration 2 0 1/1)
+	       'pitch    (ly:make-pitch 0 0 0))))
+@end example
+
+Una secuencia musical @code{@{ @dots{} @}} tiene el nombre
+@code{SequentialMusic}, y sus expresiones internas se almacenan
+coma una lista dentro de su propiedad @code{'elements}.  Una nota
+se representa como un objeto @code{NoteEvent} (que almacena las
+propiedades de duración y altura) con información adjunta (en este
+caso, un evento @code{AbsoluteDynamicEvent} con una propiedad
+@code{"f"} de texto) almacenada en su propiedad
+@code{articulations}.
+
+@funindex \void
+@code{\displayMusic} devuelve la música que imprime en la consola,
+y por ello se interpretará al tiempo que se imprime en la consola.
+Para evitar la interpretación, escriba @code{\void} antes de
+@code{\displayMusic}.
+
+@node Music properties
+@subsection Propiedades musicales
+
+@ignore
+TODO -- make sure we delineate between @emph{music} properties,
+@emph{context} properties, and @emph{layout} properties.  These
+are potentially confusing.
+@end ignore
+
+Veamos un ejemplo:
+
+@example
+someNote = c'
+\displayMusic \someNote
+===>
+(make-music
+  'NoteEvent
+  'duration
+  (ly:make-duration 2 0 1/1)
+  'pitch
+  (ly:make-pitch 0 0 0))
+@end example
+
+El objeto @code{NoteEvent} es la representación de
+@code{someNote}.  Sencillo.  ¿Y si ponemos el c' dentro de un
+acorde?
+
+@example
+someNote = <c'>
+\displayMusic \someNote
+===>
+(make-music
+  'EventChord
+  'elements
+  (list (make-music
+          'NoteEvent
+          'duration
+          (ly:make-duration 2 0 1/1)
+          'pitch
+          (ly:make-pitch 0 0 0))))
+@end example
+
+Ahora el objeto @code{NoteEvent} es el primer objeto de la
+propiedad @code{'elements} de @code{someNote}.
+
+La función @code{display-scheme-music} es la función que se usa
+por parte de @code{\displayMusic} para imprimir la representación
+de Scheme de una expresión musical.
+
+@example
+#(display-scheme-music (first (ly:music-property someNote 'elements)))
+===>
+(make-music
+  'NoteEvent
+  'duration
+  (ly:make-duration 2 0 1/1)
+  'pitch
+  (ly:make-pitch 0 0 0))
+@end example
+
+Después se accede a la altura de la nota a través de la propiedad
+@code{'pitch} del objeto @code{NoteEvent}:
+
+@example
+#(display-scheme-music
+   (ly:music-property (first (ly:music-property someNote 'elements))
+                      'pitch))
+===>
+(ly:make-pitch 0 0 0)
+@end example
+
+La altura de la nota se puede cambiar estableciendo el valor de
+esta propiedad @code{'pitch}.
+
+@funindex \displayLilyMusic
+
+@example
+#(set! (ly:music-property (first (ly:music-property someNote 'elements))
+                          'pitch)
+       (ly:make-pitch 0 1 0)) ;; establecer la altura a d'.
+\displayLilyMusic \someNote
+===>
+d'4
+@end example
+
+
+@node Doubling a note with slurs (example)
+@subsection Duplicar una nota con ligaduras (ejemplo)
+
+Supongamos que queremos crear una función que convierte una
+entrada como @code{a} en @code{@{ a( a) @}}.  Comenzamos
+examinando la representación interna de la música con la que
+queremos terminar.
+
+@example
+\displayMusic@{ a'( a') @}
+===>
+(make-music
+  'SequentialMusic
+  'elements
+  (list (make-music
+          'NoteEvent
+          'articulations
+          (list (make-music
+                  'SlurEvent
+                  'span-direction
+                  -1))
+          'duration
+          (ly:make-duration 2 0 1/1)
+          'pitch
+          (ly:make-pitch 0 5 0))
+        (make-music
+          'NoteEvent
+          'articulations
+          (list (make-music
+                  'SlurEvent
+                  'span-direction
+                  1))
+          'duration
+          (ly:make-duration 2 0 1/1)
+          'pitch
+          (ly:make-pitch 0 5 0))))
+@end example
+
+La mala noticia es que las expresiones @code{SlurEvent} se deben
+añadir @q{dentro} de la nota (dentro de la propiedad
+@code{articulations}).
+
+Ahora examinamos la entrada.
+
+@example
+\displayMusic a'
+===>
+(make-music
+  'NoteEvent
+  'duration
+  (ly:make-duration 2 0 1/1)
+  'pitch
+  (ly:make-pitch 0 5 0))))
+@end example
+
+Así pues, en nuestra función, tenemos que clonar esta expresión
+(de forma que tengamos dos notas para construir la secuencia),
+añadir @code{SlurEvent} a la propiedad @code{'articulations} de
+cada una de ellas, y por último hacer una secuencia
+@code{SequentialMusic} con los dos elementos @code{NoteEvent}.
+Para añadir a una propiedad, es útil saber que una propiedad no
+establecida se lee como @code{'()}, la lista vacía, así que no se
+requiere ninguna comprobación especial antes de que pongamos otro
+elemento delante de la propiedad @code{articulations}.
+
+
+@example
+doubleSlur = #(define-music-function (note) (ly:music?)
+         "Return: @{ note ( note ) @}.
+         `note` is supposed to be a single note."
+         (let ((note2 (ly:music-deep-copy note)))
+           (set! (ly:music-property note 'articulations)
+                 (cons (make-music 'SlurEvent 'span-direction -1)
+                       (ly:music-property note 'articulations)))
+           (set! (ly:music-property note2 'articulations)
+                 (cons (make-music 'SlurEvent 'span-direction 1)
+                       (ly:music-property note2 'articulations)))
+           (make-music 'SequentialMusic 'elements (list note note2))))
+@end example
+
+
+@node Adding articulation to notes (example)
+@subsection Añadir articulaciones a las notas (ejemplo)
+
+La manera fácil de añadir articulación a las notas es juxtaponer dos
+expresiones musicales.  Sin embargo,
+supongamos que queremos escribir una función musical que lo haga.
+
+Una @code{$variable} dentro de la notación @code{#@{@dots{}#@}} es
+como una @code{\variable} normal en la notación clásica de
+LilyPond.  Podríamos escribir
+
+@example
+@{ \music -. -> @}
+@end example
+
+@noindent
+pero a los efectos de este ejemplo, aprenderemos ahora cómo
+hacerlo en Scheme.  Empezamos examinando nuestra entrada y la
+salida deseada.
+
+@example
+%  input
+\displayMusic c4
+===>
+(make-music
+  'NoteEvent
+  'duration
+  (ly:make-duration 2 0 1/1)
+  'pitch
+  (ly:make-pitch -1 0 0))))
+=====
+%  desired output
+\displayMusic c4->
+===>
+(make-music
+  'NoteEvent
+  'articulations
+  (list (make-music
+          'ArticulationEvent
+          'articulation-type 'accent))
+  'duration
+  (ly:make-duration 2 0 1/1)
+  'pitch
+  (ly:make-pitch -1 0 0))
+@end example
+
+Vemos que una nota (@code{c4}) se representa como una expresión
+@code{NoteEvent}.  Para añadir una articulación de acento, se debe
+añadir una expresión @code{ArticulationEvent} a la propiedad
+@code{articulations} de la expresión @code{NoteEvent}.
+
+Para construir esta función, empezamos con
+
+@example
+(define (add-accent note-event)
+  "Add an accent ArticulationEvent to the articulations of `note-event`,
+  which is supposed to be a NoteEvent expression."
+  (set! (ly:music-property note-event 'articulations)
+        (cons (make-music 'ArticulationEvent
+                'articulation-type 'accent)
+              (ly:music-property note-event 'articulations)))
+  note-event)
+@end example
+
+La primera línea es la forma de definir una función en Scheme: el
+nombre de la función es @code{add-accent}, y tiene una variable
+llamada @code{note-event}.  En Scheme, el tipo de variable suele
+quedar claro a partir de su nombre (¡esto también es una buena
+práctica en otros lenguajes de programación!)
+
+@example
+"Add an accent@dots{}"
+@end example
+
+@noindent
+es una descripción de lo que hace la función.  No es estrictamente
+necesaria, pero de igual forma que los nombres claros de variable,
+es una buena práctica.
+
+Se preguntará por qué modificamos el evento de nota directamente
+en lugar de trabajar sobre una copia (se puede usar
+@code{ly:music-deep-copy} para ello).  La razón es un contrato
+silencioso: se permite que las funciones musicales modifiquen sus
+argumentos; o bien se generan partiendo de cero (como la entrada
+del usuario) o están ya copiadas (referenciar una variable de
+música con @samp{\name} o la música procedente de expresiones de
+Scheme inmediatas @samp{$(@dots{})} proporcionan una copia).  Dado
+que sería ineficiente crear copias innecesarias, el valor devuelto
+de una función musical @emph{no} se copia.  Así pues, para cumplir
+dicho contrato, no debemos usar ningún argumento más de una vez, y
+devolverlo cuenta como una vez.
+
+En un ejemplo anterior, hemos construido música mediante la
+repetición de un argumento musical dado.  En tal caso, al menos
+una repetidión tuvo que ser una copia de sí misma.  Si no lo
+fuese, podrían ocurrir cosas muy extrañas.  Por ejemplo, si usamos
+@code{\relative} o @code{\transpose} sobre la música resultante
+que contiene los mismos elementos varias veces, estarían sujetos
+varias veces a la relativización o al transporte.  Si los
+asignamos a una variable de música, se rompe el curso porque hacer
+referencia a @samp{\name} creará de nuevo una copia que no retiene
+la identidad de los elementos repetidos.
+
+Ahora bien, aun cuando la función anterior no es una función
+musical, se usará normalmente dentro de funciones musicales.  Así
+pues, tiene sentido obedecer el mismo convenio que usamos para las
+funciones musicales: la entrada puede modificarse para producir la
+salida, y el código que llama es responsable de crear las copias
+si aún necesita el propio argumento sin modificar.  Si observamos
+las propias funciones de LilyPond como @code{music-map}, veremos
+que se atienen a los mismos principios.
+
+¿En qué punto nos encontramos?  Ahora tenemos un @code{note-event}
+que podemos modificar, no a causa de la utilización de
+@code{ly:music-deep-copy} sino por una explicación muy
+desarrollada.  Añadimos el acento a su propiedad de lista
+@code{'articulations}.
+
+@example
+(set! place new-value)
+@end example
+
+Aquí, lo que queremos establecer (el @q{place}) es la propiedad
+@code{'articulations} de la expresión @code{note-event}.
+
+@example
+(ly:music-property note-event 'articulations)
+@end example
+
+@code{ly:music-property} es la función ustilizada para acceder a las
+propiedades musicales (las @code{'articulations}, @code{'duration},
+@code{'pitch}, etc, que vemos arriba en la salida de
+@code{\displayMusic}).  El nuevo valor es la antigua propiedad
+@code{'articulations}, con un elemento adicional: la expresión
+@code{ArticulationEvent}, que copiamos a partir de la salida de
+@code{\displayMusic},
+
+@example
+(cons (make-music 'ArticulationEvent
+        'articulation-type 'accent)
+      (ly:music-property result-event-chord 'articulations))
+@end example
+
+Se usa @code{cons} para añadir un elemento a la parte delantera de
+una lista sin modificar la lista original.  Esto es lo que
+queremos: la misma lista de antes, más la nueva expresión
+@code{ArticulationEvent}.  El orden dentro de la propiedad
+@code{'articulations} no tiene importancia aquí.
+
+Finalmente, una vez hemos añadido la articulación de acento a su
+propiedad @code{articulations}, podemos devolver
+@code{note-event}, de aquí la última línea de la función.
+
+Ahora transformamos la función @code{add-accent} en una función
+musical (es cuestión de un poco de aderezo sintáctico y una
+declaración del tipo de su argumento).
+
+@example
+addAccent = #(define-music-function (note-event) (ly:music?)
+  "Add an accent ArticulationEvent to the articulations of `note-event`,
+  which is supposed to be a NoteEvent expression."
+  (set! (ly:music-property note-event 'articulations)
+        (cons (make-music 'ArticulationEvent
+                'articulation-type 'accent)
+              (ly:music-property note-event 'articulations)))
+  note-event)
+@end example
+
+A continuación verificamos que esta función musical funciona
+correctamente:
+
+@example
+\displayMusic \addAccent c4
+@end example

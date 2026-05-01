@@ -1,0 +1,8 @@
+%% Translation of GIT committish: 606ac3c3b22c41d84aa5fa938d42da5125ac572a
+  texidocfr = "
+Un cercle peut venir entourer une note à l'aide d'une fonction Scheme
+dédiée qui, temporairement, viendra en modifier la propriété
+@code{stencil}.
+"
+
+  doctitlefr = "Encerclement de notes"

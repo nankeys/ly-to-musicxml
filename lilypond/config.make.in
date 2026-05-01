@@ -1,0 +1,103 @@
+# -*-Makefile-*-
+
+# @configure_input@
+
+# replace -I with -isystem to suppress warnings in library headers
+FLEXLEXER_CPPFLAGS := $(patsubst -I%,-isystem%,@FLEXLEXER_CPPFLAGS@)
+FREETYPE2_CFLAGS := $(patsubst -I%,-isystem%,@FREETYPE2_CFLAGS@)
+GLIB_CFLAGS := $(patsubst -I%,-isystem%,@GLIB_CFLAGS@ @GOBJECT_CFLAGS@)
+GUILE_CFLAGS := $(patsubst -I%,-isystem%,@GUILE_CFLAGS@)
+PANGO_FT2_CFLAGS := $(patsubst -I%,-isystem%,@PANGO_FT2_CFLAGS@)
+CAIRO_CFLAGS := $(patsubst -I%,-isystem%,@CAIRO_CFLAGS@)
+LIBPNG_CFLAGS := $(patsubst -I%,-isystem%,@LIBPNG_CFLAGS@)
+ZLIB_CFLAGS := $(patsubst -I%,-isystem%,@ZLIB_CFLAGS@)
+
+AR = @AR@
+BISON = @BISON@
+CC = @CC@
+CONFIG_CPPFLAGS = $(FLEXLEXER_CPPFLAGS) @CPPFLAGS@
+CONFIG_CXXFLAGS = \
+  @CXXFLAGS@ \
+  $(GUILE_CFLAGS) \
+  $(FREETYPE2_CFLAGS) \
+  $(PANGO_FT2_CFLAGS) \
+  $(CAIRO_CFLAGS) \
+  $(LIBPNG_CFLAGS) \
+  $(ZLIB_CFLAGS)
+CONFIG_DEFINES = @DEFINES@
+CONFIG_LDFLAGS = @LDFLAGS@
+CONFIG_LIBS = \
+  @LIBS@ \
+  @EXTRA_LIBS@ \
+  @GLIB_LIBS@ \
+  @GUILE_LIBS@ \
+  @PANGO_FT2_LIBS@ \
+  @FONTCONFIG_LIBS@ \
+  @FREETYPE2_LIBS@ \
+  @CAIRO_LIBS@ \
+  @LIBPNG_LIBS@ \
+  @ZLIB_LIBS@
+CROSS = @cross_compiling@
+CXX = @CXX@
+CXXABI_LIBS = @CXXABI_LIBS@
+DBLATEX = @DBLATEX@
+DEFINES = @DEFS@ @DEFINES@
+DOCUMENTATION = @DOCUMENTATION@
+EXTRACTPDFMARK = @EXTRACTPDFMARK@
+EXTRACTPDFMARK_OPTIONS = @EXTRACTPDFMARK_OPTIONS@
+FLEX = @FLEX@
+FONTFORGE = @FONTFORGE@
+GS_API = @GS_API@
+GS920 = @GS920@
+LINK_GXX_STATICALLY = @LINK_GXX_STATICALLY@
+LN = @LN@
+METAFONT = @METAFONT@ -progname=mf
+MISSING_OPTIONAL = @OPTIONAL@
+MISSING_REQUIRED = @REQUIRED@
+MSGFMT = @MSGFMT@
+PACKAGE = LILYPOND
+PACKAGE_NAME = @PACKAGE_NAME@
+PDFLATEX = @PDFLATEX@
+PDFTEX = @PDFTEX@
+PERL = @PERL@
+PLATFORM_WINDOWS = @PLATFORM_WINDOWS@
+PLTOTF = @PLTOTF@
+PYTHON = @PYTHON@ -W default -W ignore::ResourceWarning
+RANLIB = @RANLIB@
+TAR = @TAR@
+TARGET_PYTHON = @PYTHON@
+TEXI2ANY_PROGRAM = @TEXI2ANY@
+USE_EXTRACTPDFMARK=@USE_EXTRACTPDFMARK@
+WINDRES = @WINDRES@
+bindir = @bindir@
+configure-builddir = @abs_builddir@
+configure-srcdir = @abs_srcdir@
+datadir = @datadir@
+datarootdir = @datarootdir@
+docdir = $(datadir)/doc
+elispdir = $(datadir)/emacs/site-lisp
+exec_prefix = @exec_prefix@
+includedir = @includedir@
+infodir = @infodir@
+libdir = @libdir@
+lilypond_datadir = $(local_package_datadir)
+lilypond_docdir = $(package_docdir)
+local_lilypond_datadir = $(local_package_datadir)
+local_lilypond_docdir = $(local_package_docdir)
+local_lilypond_libdir = $(local_package_libdir)
+local_package_datadir = $(package_datadir)/$(TOPLEVEL_VERSION)
+local_package_docdir = $(package_docdir)/$(TOPLEVEL_VERSION)
+local_package_libdir = $(package_libdir)/$(TOPLEVEL_VERSION)
+localedir = @localedir@
+mandir = @mandir@
+package = lilypond
+package_datadir = $(datadir)/$(package)
+package_docdir = $(docdir)/$(package)
+package_infodir = $(infodir)/$(package)
+package_libdir = $(libdir)/$(package)
+prefix = @prefix@
+program_prefix = @program_prefix@
+program_suffix = @program_suffix@
+sharedstatedir = @sharedstatedir@
+vimdir = $(lilypond_datadir)/vim
+webdir = $(lilypond_docdir)/html

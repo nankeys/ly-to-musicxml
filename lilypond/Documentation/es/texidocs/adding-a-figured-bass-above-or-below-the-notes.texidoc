@@ -1,0 +1,13 @@
+%% Translation of GIT committish: af28c5f89c915fdf795739a1e2dd437c726d7f61
+  texidoces = "
+Al escribir un bajo cifrado, podemos situar las cifras encima o
+debajo de las notas del bajo mediante las instrucciones
+@code{\\bassFigureStaffAlignmentDown} y
+@code{\\bassFigureStaffAlignmentUp}.  Anteponemos @code{\\once} a
+la instrucción si queremos modificar solo la cifra siguiente.
+
+La instrucción @code{\\bassFigureStaffAlignmentNeutral} reinicia
+la dirección del bajo cifrado a su valor predeterminado.
+
+"
+  doctitlees = "Añadir un bajo cifrado encima o debajo de las notas"

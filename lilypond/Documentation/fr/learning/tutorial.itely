@@ -1,0 +1,722 @@
+@c -*- coding: utf-8; mode: texinfo; documentlanguage: fr -*-
+
+@ignore
+   Translation of GIT committish: c95d569e9013276fd0595366c79eebdf772bea77
+
+   When revising a translation, copy the HEAD committish of the
+   version that you are working on.  For details, see the Contributors'
+    Guide, node Updating translation committishes..
+@end ignore
+
+
+
+@c \version "2.19.21"
+
+@c Translators: Nicolas Grandclaude, Ludovic Sardain, Gauvain Pocentek
+@c Translation checkers: J.-C. Malahieude, Valentin Villenave, John Mandereau
+@c Translation status: post-GDP
+
+@node Tutorial
+@chapter Tutoriel
+
+Ce tutoriel est une introduction au langage musical utilisé par
+LilyPond, qui vous permettra de faire fonctionner le logiciel pour
+produire une partition.
+
+
+@node Compiling a file
+@section Compilation d'un fichier
+
+Nous allons ici parler de la « compilation », ou comment LilyPond
+traite le fichier source que vous avez écrit, pour en faire quelque
+chose d'imprimable.
+
+@cindex compilation
+@cindex exemple, premier
+@cindex premier exemple
+@cindex casse, sensibilité à la
+@cindex sensibilité à la casse
+
+Pour créer une partition avec LilyPond, on écrit un fichier texte,
+appelé fichier source, qui décrit la notation musicale. La
+@emph{compilation} de ce fichier source par LilyPond produit un fichier
+graphique imprimable, et si on le désire un fichier MIDI qui peut être
+joué par un séquenceur.
+
+Voici un premier exemple simple de fichier source LilyPond.
+
+@example
+\version "@w{@version{}}"
+@{
+  c' e' g' e'
+@}
+@end example
+
+@noindent
+La compilation de ce fichier donnera quelque chose de sembable à
+l'image ci-dessous.
+
+@c No 'verbatim' option here.
+@lilypond[quote]
+{
+  c' e' g' e'
+}
+@end lilypond
+
+@c DIV specific
+Il est aussi possible d'utiliser les noms de notes français « do re mi
+fa sol la si », en insérant au début du fichier la ligne
+@code{\language "italiano"}.
+@c END DIV
+
+@warning{Tout extrait de code LilyPond doit être entouré d'une
+@w{@strong{@{ paire d'accolades @}}}. De plus, pour éviter toute
+ambiguïté, il est préférable d'entourer les accolades par des espaces ou
+retours à la ligne. Bien que certains exemples de ce manuel ne
+comportent pas d'accolades, ne les oubliez pas dans vos partitions !
+Pour plus d'informations sur l'affichage des exemples de cette
+documentation, @pxref{How to read the manuals}.}
+
+@cindex casse, prise en compte de la
+@cindex prise en compte de la casse
+@cindex sensibilité à la casse
+
+De plus, LilyPond est @strong{sensible à la casse} : le code @w{@samp{@{
+c d e @}}} est valide, alors que @w{@samp{@{ C D E @}}} produit un
+message d'erreur.
+
+
+@node How to write input files
+@section Composition d'un fichier source
+
+Cette partie présente les bases de la syntaxe de LilyPond, dans le
+but de vous aider à rédiger vos premiers fichiers sources.
+
+
+@node Simple notation
+@subsection Notation simple
+
+@cindex simple, notation
+@cindex notation simple
+
+Il y a certains éléments graphiques de notation que LilyPond ajoute
+automatiquement. Dans l'exemple suivant, nous n'avons fourni que quatre
+hauteurs, mais LilyPond a ajouté une clef, un chiffre de mesure et du
+rythme.
+
+@lilypond[verbatim,quote]
+{
+  c' e' g' e'
+}
+@end lilypond
+
+@noindent
+Ces valeurs automatiques simplifient la saisie du code source dans bien
+des cas ; nous verrons plus loin comment les indiquer explicitement.
+
+
+@node Pitches
+@unnumberedsubsubsec Hauteurs
+
+@cindex hauteur
+@cindex mode relatif
+@cindex apostrophe
+@cindex virgule
+@cindex altérations et mode relatif
+@cindex mode relatif et altérations
+
+@funindex \relative
+@funindex '
+@funindex ,
+
+Glossaire musicologique :
+@rglosnamed{pitch,hauteur},
+@rglosnamed{interval,intervalle},
+@rglosnamed{scale,gamme},
+@rglosnamed{middle C,do central},
+@rglos{octave},
+@rglosnamed{accidental,altération}.
+
+LilyPond utilise des lettres minuscules pour indiquer les hauteurs. Dans
+les exemples des manuels de LilyPond est utilisée la nomenclature
+batave. Néanmoins, LilyPond prend en charge d'autres dénominations des
+hauteurs -- voir @rnotationnamed{Note names in other languages, Nom des
+notes dans d'autres langues}. Les lettres @code{c} à @code{b} indiquent
+des hauteurs dans l'octave basse -- celle sous le @notation{do médium}.
+Leur adjoindre un @samp{'} ou un @samp{,} indique une octave supérieure
+ou inférieure. Voici une gamme commençant sur le @notation{do médium}
+ainsi qu'un arpège :
+
+@lilypond[verbatim,quote]
+{ c' d' e' f' g' a' b' c''
+  g c' e' g' c'' e'' g'' c''' }
+@end lilypond
+
+Le moyen le plus simple d'entrer des notes est d'utiliser le mode
+d'octaves relatives, ou mode @code{\relative}. Dans ce mode, l'octave de
+chaque note est déterminée automatiquement de façon à ce qu'elle soit le
+plus proche possible de la note précédente, c'est-à-dire de façon à ce
+que l'intervalle avec la note précédente soit au plus d'une quarte.
+Commençons par saisir une partition très simple, à savoir une gamme.
+
+@lilypond[verbatim,quote]
+\relative {
+  c' d e f
+  g a b c
+}
+@end lilypond
+
+@noindent
+La note de départ est le @notation{do central}, indiqué par @code{c'}.
+Chacune des notes qui suivent est placée à l'octave la plus proche de la
+note précédente -- en d'autres termes, le premier @samp{c} est le do
+central, entre la clef de sol et la clef de fa, puis est suivi par le
+@notation{ré} le plus proche, et ainsi de suite. On peut bien sûr créer
+des mélodies avec de plus grands intervalles, toujours avec le mode
+@code{\relative} :
+
+@lilypond[verbatim,quote]
+\relative {
+  d' f a g
+  c b f d
+}
+@end lilypond
+
+@noindent
+La première note de cet exemple -- le @samp{d'} avec une seule
+apostrophe -- est le ré de l'octave commençant par le do central.
+
+L'ajout (ou la suppression) d'apostrophes ou de virgules à la première
+note permet de modifier l'octave de départ :
+
+@lilypond[verbatim,quote]
+\relative {
+  e'' c a c
+}
+@end lilypond
+
+Le mode d'octaves relatives peut être déroutant au début, mais c'est
+souvent la façon la plus économique de saisir les hauteurs en utilisant
+le clavier de l'ordinateur de façon classique. Détaillons dans un
+exemple le calcul des octaves relatives. En partant d'un si sur la
+troisième ligne de la clé de sol, un do, un ré ou un mi sans indication
+d'octave particulière seront placés juste au-dessus du si, c'est-à-dire
+au plus à une quarte ascendante du si, alors qu'un la, un sol ou un fa
+seront placés juste au-dessous du si, c'est-à-dire au plus à une quarte
+descendante du si.
+
+@lilypond[verbatim,quote]
+\relative {
+  b' c % c is 1 staff space up, so is the c above
+  b d  % d is 2 up or 5 down, so is the d above
+  b e  % e is 3 up or 4 down, so is the e above
+  b a  % a is 6 up or 1 down, so is the a below
+  b g  % g is 5 up or 2 down, so is the g below
+  b f  % f is 4 up or 3 down, so is the f below
+}
+@end lilypond
+
+Notez que le calcul des octaves relatives @strong{ne tient pas compte
+des altérations} des notes, dièse bémol ou bécarre.
+
+Pour obtenir des intervalles supérieurs à une quarte, on peut ajouter
+des apostrophes @samp{'} -- qui font chacune monter la hauteur d'une
+octave -- ou des virgules @samp{,} -- qui font chacune descendre la
+hauteur d'une octave -- au nom de la note.
+
+@lilypond[verbatim,quote]
+\relative {
+  a' a, c' f,
+  g g'' a,, f'
+}
+@end lilypond
+
+@noindent
+Pour déplacer une note deux octaves (ou davantage !) plus haut ou plus
+bas, il suffit de mettre deux (ou davantage) @samp{'} ou @samp{,} --
+attention cependant à bien mettre deux apostrophes @code{''}, et non un
+guillemet @samp{"} ! C'est de cette même manière que l'on peut modifier
+la valeur de départ de @w{@code{\relative c'}}.
+@c " - keeps quotes in order for context-sensitive editor -td
+
+
+@node Durations (rhythms)
+@unnumberedsubsubsec Durées et rythme
+
+@cindex note, durée
+@cindex durée
+@cindex rhythme
+@cindex ronde
+@cindex blanche
+@cindex noire
+@cindex note pointée
+@cindex spécification des durées
+
+Glossaire musicologique :
+@rglosnamed{beam,ligature},
+@rglosnamed{duration,durée},
+@rglosnamed{whole note,ronde},
+@rglosnamed{half note,blanche},
+@rglosnamed{quarter note,noire},
+@rglosnamed{dotted note,note pointée}.
+
+La @notation{durée} d'une note est indiquée par un nombre qui suit sa
+hauteur : @samp{1} pour une @notation{ronde}, @samp{2} pour une
+@notation{blanche}, @samp{4} pour une @notation{noire} et ainsi de
+suite. Les @notation{crochets} et @notation{liens} (ou ligatures) sont
+ajoutés automatiquement.
+
+Si aucune durée n'est indiquée pour une note, la dernière durée entrée
+est utilisée. En l'absence d'indication de durée, la première note est
+une noire.
+
+@lilypond[verbatim,quote]
+\relative {
+  a'1
+  a2 a4 a8 a
+  a16 a a a a32 a a a a64 a a a a a a a a2
+}
+@end lilypond
+
+Une @notation{note pointée} s'obtient en ajoutant un point (@samp{.}) à
+la valeur rythmique. Le point doit être précédé d'un nombre spécifiant
+la durée de base.
+
+@lilypond[verbatim,quote]
+\relative {
+  a' a a4. a8
+  a8. a16 a a8. a8 a4.
+}
+@end lilypond
+
+
+@node Rests
+@unnumberedsubsubsec Silences
+
+@cindex silence
+@cindex notation des silences
+
+Glossaire musicologique :
+@rglosnamed{rest,silence}.
+
+On saisit un @notation{silence} tout comme une note, mais avec la lettre
+@samp{r} (pour @emph{rest}).
+
+@lilypond[verbatim,quote]
+\relative {
+  a' r r2
+  r8 a r4 r4. r8
+}
+@end lilypond
+
+
+@node Time signature
+@unnumberedsubsubsec Métrique
+
+@cindex métrique
+@cindex chiffre de mesure
+
+@funindex \time
+
+Glossaire musicologique : @rglosnamed{time signature,métrique}.
+
+La @notation{métrique}, aussi appelée @notation{chiffre de mesure}, peut
+être définie à l'aide de la commande @code{\time} :
+
+@lilypond[verbatim,quote]
+\relative {
+  \time 3/4
+  a'4 a a
+  \time 6/8
+  a4. a
+  \time 4/4
+  a4 a a a
+}
+@end lilypond
+
+
+@node Tempo marks
+@unnumberedsubsubsec Indication de tempo
+
+@cindex tempo, indication
+@cindex indication du tempo
+@cindex métronome, indication
+@cindex indication métronomique
+
+@funindex \tempo
+
+Glossaire musicologique :
+@rglosnamed{tempo indication,indication de tempo},
+@rglosnamed{metronome,métronome}.
+
+La commande @code{\tempo} permet de stipuler aussi bien le @emph{tempo}
+que le métronome :
+
+@lilypond[verbatim,quote]
+\relative {
+  \time 3/4
+  \tempo "Andante"
+  a'4 a a
+  \time 6/8
+  \tempo 4. = 96
+  a4. a
+  \time 4/4
+  \tempo  "Presto" 4 = 120
+  a4 a a a
+}
+@end lilypond
+
+
+@node Clef
+@unnumberedsubsubsec Clefs
+
+@cindex clef
+@cindex clé
+@cindex sol, clef de
+@cindex ut, clef d'
+@cindex fa, clef de
+
+@funindex \clef
+
+Glossaire musicologique :
+@rglos{clef}.
+
+La @notation{clef} peut être définie à l'aide de la commande
+@code{\clef} :
+
+@lilypond[verbatim,quote]
+\relative {
+  \clef treble
+  c'1
+  \clef alto
+  c1
+  \clef tenor
+  c1
+  \clef bass
+  c1
+}
+@end lilypond
+
+
+@node All together
+@unnumberedsubsubsec Tout ensemble
+
+Voici un bref exemple qui rassemble tous les éléments que nous avons
+déjà vus :
+
+@lilypond[verbatim,quote]
+\relative {
+  \clef bass
+  \time 3/4
+  c,2 e8 c'
+  g'2.
+  f4 e d
+  c4 c, r
+}
+@end lilypond
+
+@morerefs
+Manuel de notation :
+@rnotationnamed{Writing pitches,@'Ecriture des hauteurs de note},
+@rnotationnamed{Writing rhythms,@'Ecriture du rythme},
+@rnotationnamed{Writing rests,@'Ecriture des silences},
+@rnotationnamed{Displaying rhythms, Gravure du rythme},
+@rnotationnamed{Displaying pitches, Gravure des hauteurs}.
+@endmorerefs
+
+
+@node Working on input files
+@subsection Travail sur les fichiers d'entrée
+
+@cindex accolade
+@cindex commentaire
+@cindex ligne de commentaire
+@cindex bloc de commentaire
+@cindex casse, prise en compte de
+@cindex prise en compte de la casse
+@cindex sensibilité à la casse
+@cindex espaces multiples, insensibilité
+@cindex insensibilité aux espaces multiples
+@cindex expression
+@cindex versionage
+@cindex version
+@cindex numéro de version
+
+@funindex \version
+@funindex @{ ... @}
+@funindexpre %
+@funindex %@{ ... %@}
+
+Le traitement des fichiers source de LilyPond est semblable à celui du
+code de nombreux langages de programmation. La casse est prise en
+compte, et les caractères considérés comme espaces ont généralement peu
+d'importance. Les expressions sont délimitées par des accolades
+@code{@{ @}}, et les commentaires par @samp{%} ou @w{@samp{%@{ @dots{}
+@}}} .
+
+Si cette phrase vous paraît incompréhensible, ne vous en faites pas !
+Expliquons tous ces termes :
+
+@itemize
+
+@item
+@strong{La version} :
+Tout fichier LilyPond devrait porter mention de la version. Cette
+mention prend la forme d'une ligne décrivant le numéro de la version
+utilisée lors de la confection du fichier en question, comme ici :
+
+@example
+\version "@version{}"
+@end example
+
+Il est d'usage de porter cette mention au tout début du fichier
+LilyPond.
+
+Mentionner la version est important pour, au moins, les deux raisons
+suivantes : cela permet dans un premier temps de faciliter les
+opérations de mise à jour automatisée au fil de l'évolution de la
+syntaxe de LilyPond. Ensuite, cela met en évidence le minimum requis
+pour pouvoir compiler votre fichier.
+
+Si vous ne le mentionnez pas, LilyPond vous rappellera à l'ordre durant
+la compilation.
+
+@item
+@strong{La casse} :
+LilyPond est sensible à la casse, c'est à dire qu'une lettre capitale
+n'a pas la même valeur qu'une lettre minuscule. Les notes, par exemple,
+doivent être entrées en minuscule : @w{@samp{@{ c d e @}}} est un code
+valide, alors que @w{@samp{@{ C D E @}}} produira un message d'erreur.
+
+@item
+@strong{Les espaces multiples} :
+LilyPond ne tient pas compte du nombre d'espaces, de tabulations ou de
+retours à la ligne.
+
+@example
+@{ c4 d e@}
+@end example
+
+@noindent
+a le même sens que
+
+@example
+@{ c4       d e @}
+@end example
+
+@noindent
+ou que
+
+@example
+@{ c4                       d
+                   e   @}
+@end example
+
+@noindent
+Bien sûr, ce dernier exemple est illisible. Une bonne habitude à prendre
+est d'indenter les blocs de code avec des doubles espaces :
+
+@example
+@{
+  c4 d e
+@}
+@end example
+
+L'espace est néanmoins @strong{nécessaire} pour séparer nombre
+d'éléments syntaxiques les uns des autres. En d'autres termes, s'il est
+toujours possible d'@emph{ajouter} des espaces, il faut prendre garde à
+ne pas trop en @emph{supprimer}. En effet, l'absence d'une espace peut
+avoir des conséquences et entraîner une erreur ; aussi nous vous
+invitons à toujours insérer une espace avant et après chaque élément
+syntaxique, comme avant et après une accolade.
+
+@item
+@strong{Expressions musicales} :
+Tout morceau saisi dans LilyPond doit être placé entre
+@strong{@{ accolades @}}. Ces caractères indiquent à LilyPond que ce
+bloc de texte représente une et une seule expression musicale, tout
+comme les parenthèses @code{()} en mathématiques. Pour éviter toute
+ambiguïté, il est préférable d'entourer ces accolades d'espaces ou de
+retours à la ligne.
+
+Un appel de fonction -- @samp{\relative @{ @dots{} @}} par exemple --
+compte également comme une seule expression musicale.
+
+@item
+@strong{Les commentaires} :
+Un commentaire est une indication pour tout lecteur humain d'un fichier
+source de musique ; il est ignoré lors de la compilation et n'a donc
+aucun effet sur la partition imprimée. On distingue deux types de
+commentaires. Le commentaire de fin de ligne, introduit par le symbole
+@samp{%} : tout ce qui suit ce symbole sur la même ligne sera ignoré.
+Par convention, un commentaire qui occupe une ligne entière se place
+juste @emph{au-dessus} de la ligne à laquelle il fait référence.
+
+@example
+a4 a a a
+% ce commentaire fait référence aux deux si ci-dessous
+b2 b
+@end example
+
+Le bloc de commentaire peut occuper plusieurs lignes, voire toute une
+section : tout ce qui se trouve entre @code{%@{} et @code{%@}} est
+ignoré. Les blocs de commentaires ne peuvent s'imbriquer, ce qui
+signifie que vous ne pouvez pas placer un commentaire-bloc à l'intérieur
+d'un autre commentaire-bloc. Si jamais vous essayez, vous verrez que la
+première occurrence de @code{%@}} terminera « les @emph{deux}
+commentaires-blocs ». Le fragment suivant met en évidence quelques
+usages possibles des commentaires :
+
+@example
+% voici les notes de "ah vous dirai-je maman"
+c4 c g' g a a g2
+
+%@{
+   Ces lignes et les notes qui suivent
+   seront ignorées, car elles se trouvent
+   dans un bloc de commentaire.
+
+   f f e e d d c2
+%@}
+@end example
+
+@end itemize
+
+
+@node Dealing with errors
+@section Gestion des erreurs
+
+@cindex dépannage
+
+Parfois, LilyPond ne produit pas le résultat escompté. Voici quelques
+pistes à suivre pour vous aider à éviter de telles déconvenues.
+
+Résoudre les problèmes rencontrés avec LilyPond est une gageure pour
+ceux qui ne connaissent que des interfaces graphiques puisque rien
+l'empêche de créer du code erroné. En pareil cas, il suffit souvent d'un
+peu de logique pour être en mesure d'identifier les causes du problème
+et le résoudre simplement. Le chapitre @rprogramnamed{Troubleshooting,
+Résolution de problèmes} liste quelques directives à ce propos.
+
+
+@cindex erreurs courantes
+@cindex courantes, erreurs
+
+Il peut arriver qu'un message d'erreur ne soit pas suffisamment
+explicite pour solutionner le problème. Quelques cas des plus courants
+sont répertoriés au chapitre @rprogramnamed{Common errors, Quelques
+erreurs des plus courantes}.
+
+
+@node How to read the manuals
+@section Bien lire le manuel
+
+Nous allons voir ici comment consulter la documentation le plus
+efficacement possible. Nous en profiterons pour vous présenter quelques
+particularités de la documentation en ligne.
+
+
+@node Omitted material
+@subsection Matériel incomplet
+
+@cindex bien lire le manuel
+@cindex manuel, lecture
+@cindex compulser le manuel
+@cindex exemple cliquable
+@cindex cliquable, exemple
+@cindex conseils de construction des fichiers
+@cindex squelette
+@cindex construction des fichiers, conseils
+@cindex fichiers, conseils de construction
+
+Comme nous l'avons vu dans @ref{Working on input files}, un code
+LilyPond doit être encadré par des accolades @{ @} ou bien par
+@w{@code{\relative @{ @dots{} @}}}. Cependant, dans la suite de ce
+manuel, certains exemples courts ne feront pas apparaître ces signes.
+
+Pour reproduire les exemples, vous pouvez copier et coller le code
+affiché, mais @strong{à condition} de le placer entre @code{@{} et
+@code{@}} comme ici :
+
+@example
+\relative c'' @{
+  @dots{}collez ici votre exemple@dots{}
+@}
+@end example
+
+Rappelez-vous aussi que tout fichier LilyPond devrait contenir une
+mention @code{\version}. La plupart des exemples de ce manuel étant des
+extraits, non des fichiers indépendants, ils sont dépourvus de cette
+ligne @code{\version}. C'est cependant une bonne habitude que de
+toujours inclure cette mention de version dans vos fichiers.
+
+
+@node Clickable examples
+@subsection Exemples cliquables
+
+Beaucoup de gens apprennent à utiliser les programmes en les essayant et
+en bidouillant avec. C'est également possible avec LilyPond. Si vous
+cliquez sur une image dans la version HTML de ce manuel, vous verrez
+exactement le code LilyPond utilisé pour générer cette image. Essayez
+sur cette image :
+
+@c no verbatim here
+@c KEEP LY
+@lilypond[quote,ragged-right]
+\relative {
+  c''-\markup { \bold \huge { Cliquez ici.  } }
+}
+@end lilypond
+
+@noindent
+En copiant-collant le code à partir du commentaire « ly snippet » vers
+un fichier test, vous aurez un modèle de base pour faire vos
+expériences. Pour obtenir une gravure à l'identique, copiez tout le code
+à partir de « Start cut-&-pastable section ».
+
+@c No longer in the text in English, but should we really
+@c remove this? --jm
+@ignore
+Si vous apprenez de cette façon, vous aurez probablement envie
+d'imprimer ou de garder un lien vers @rnotationnamed{Cheat sheet,
+Aide-mémoire}, tableau qui répertorie les commandes usuelles pour une
+consultation rapide.
+@end ignore
+
+
+@node Overview of manuals
+@subsection Vue d'ensemble des manuels
+
+La documentation de LilyPond est relativement abondante. Ceci peut
+dérouter les nouveaux utilisateurs qui ne savent pas par quoi commencer
+ou bien sont tentés de faire l'impasse sur des passages importants.
+
+@warning{Nous vous invitons à ne pas faire l'impasse sur les chapitres
+importants de notre documentation, au risque de vous retrouver
+complètement perdu lorsque vous aborderez d'autres parties.}
+
+@itemize
+
+@item
+@strong{Avant de vous lancer dans @emph{quoi que ce soit}}, lisez le
+@ref{Tutorial} contenu dans le manuel d'initiation ainsi que les
+@ref{Common notation}. Si vous y trouvez des termes que vous ne
+connaissez pas, n'hésitez pas à consulter le @rglosnamed{Top,
+Glossaire}.
+
+@item
+@strong{Avant de vous lancer dans la réalisation d'une partition
+complète}, lisez le chapitre @ref{Fundamental concepts} du manuel
+d'initiation. Vous pourrez alors vous reporter aux parties qui vous
+intéresseront dans le @rnotationnamed{Top, Manuel de notation}.
+
+@item
+@strong{Avant de modifier les réglages par défaut}, consultez le
+chapitre @ref{Tweaking output} du manuel d'initiation.
+
+@item
+@strong{Avant de vous lancer dans un projet d'envergure}, lisez le
+chapitre @rprogramnamed{Suggestions for writing files, Suggestions pour
+la saisie de fichiers LilyPond} du manuel d'utilisation.
+
+@end itemize

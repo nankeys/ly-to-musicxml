@@ -1,0 +1,19 @@
+%% Translation of GIT committish: 1bf2403e1cd7038a1e7ea62da560af601e3694fc
+  texidoces = "
+Para hacer invisibles partes de un regulador de crescendo, se usa
+el método de dibujar un rectángulo blanco encima de la parte
+respectiva del regulador, tapándola.  El rectángulo se define como
+un elemento de marcado de texto.
+
+La instrucción de marcado @code{with-dimensions} indica a LilyPond que
+considere solamente el extremo inferior del rectángulo cuando realice
+el espaciado de éste frente al regulador.  La propiedad
+@code{staff-padding} evita que el rectángulo quepa entre el regulador
+y el pentagrama.
+
+Asegúrse de que el regulador está en una capa más baja que el
+elemento de marcado de texto para trazar el rectángulo encima del
+regulador.
+
+"
+  doctitlees = "Regulador interrumpido"

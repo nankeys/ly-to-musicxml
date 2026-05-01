@@ -1,0 +1,81 @@
+\input texinfo @c -*- coding: utf-8; mode: texinfo; documentlanguage: ca -*-
+@ignore
+    Translation of GIT committish: 08560a1b8076630c4fc6cb9b902614d8b74fd6fc
+
+    When revising a translation, copy the HEAD committish of the
+    version that you are working on.  For details, see the Contributors'
+    Guide, node Updating translation committishes..
+@end ignore
+
+@c Translators: Walter Garcia-Fontes
+@c Translation checkers:
+
+
+@settitle Manual d'aprenentatge del GNU LilyPond
+@documentencoding UTF-8
+@documentlanguage ca
+@afourpaper
+
+@macro manualIntro
+Aquest fitxer ofereix una introducció al programa LilyPond versió
+@version{}.
+@end macro
+
+@c `Learning Manual' was born 1999-10-10 with git commit b9abaac...
+@macro copyrightDeclare
+Copyright @copyright{} 1999--2026 pels autors.
+@end macro
+
+@set FDL
+@include ca/macros.itexi
+
+
+@c Translators: Walter Garcia-Fontes
+
+@lilyTitlePage{Manual d'aprenentatge}
+
+@c TOC -- non-tex
+@ifnottex
+
+@menu
+* Installing::                     Installing LilyPond
+* Tutorial::                       Fonaments de la tipografia musical amb el LilyPond.
+* Common notation::                Escriptura de la notació molt comú.
+* Fundamental concepts::          Conceptes bàsics per llegir la resta dels manuals.
+* Tweaking output::       Introducció a la modificació de la sortida.
+
+Annexos
+
+* Templates::                     Plantilles a punt per usar.
+* GNU Free Documentation License:: Llicència d'aquest document.
+* Index of commands and concepts::
+@end menu
+
+@docMain
+@end ifnottex
+
+
+@c TOC - tex
+@contents
+
+@iftex
+@allowcodebreaks false
+@end iftex
+
+@c INCLUDES
+
+@include en/learning/installing.itely
+@include ca/learning/tutorial.itely
+@include ca/learning/common-notation.itely
+@include ca/learning/fundamental.itely
+@include ca/learning/tweaks.itely
+
+@include ca/learning/templates.itely
+@include en/fdl.itexi
+
+@node Index of commands and concepts
+@appendix Índex
+
+@printindex cp
+
+@bye

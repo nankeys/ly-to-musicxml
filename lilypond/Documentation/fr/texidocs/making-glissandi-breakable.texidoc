@@ -1,0 +1,14 @@
+%% Translation of GIT committish: de1e42ce512f3690387cdd065109bddff1b7bd6d
+  texidocfr = "
+Normalement, LilyPond refuse de sauter automatiquement à la ligne à
+l'endroit où un glissando se prolonge sur la mesure qui suit. Ce
+comportement est modifiable par l'affectation de la valeur @code{#t} à
+la propriété @code{Glissando.breakable}. L'activation de la propriété
+@code{after-line-breaking} permet la continuation de l'indication de
+glissando après le saut de ligne.
+
+La propriété @code{breakable} n'affecte pas les sauts manuels insérés
+par les commandes comme @code{\\break}.
+"
+
+  doctitlefr = "Saut de ligne et glissando"

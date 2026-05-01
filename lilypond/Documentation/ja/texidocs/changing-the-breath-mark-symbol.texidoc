@@ -1,0 +1,7 @@
+%% Translation of GIT committish: 0cc270b871321ae5aa8622cea8d8262aafd16641
+  texidocja = "
+ブレス記号のグリフは @code{BreathingSign} レイアウト オブジェクトの
+@code{text} プロパティをオーバライドすることで、任意のマークアップ
+テキストに変更することができます。
+"
+  doctitleja = "ブレス記号を変更する"

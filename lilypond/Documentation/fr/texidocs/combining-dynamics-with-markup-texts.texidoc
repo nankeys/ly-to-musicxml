@@ -1,0 +1,12 @@
+%% Translation of GIT committish: 606ac3c3b22c41d84aa5fa938d42da5125ac572a
+  texidocfr = "
+
+Certaines indications de nuance peuvent requérir un complément textuel,
+comme « più @emph{f} » ou « @emph{p} subito ». Elles se réalisent
+aisément à l'aide d'un bloc @code{\\markup}. Le résultat se comportera
+comme un objet @code{TextScript}.
+
+Voir aussi @code{Combinaison de nuance et de texte (2)}.
+"
+
+  doctitlefr = "Combinaison de nuance et de texte"

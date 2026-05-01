@@ -1,0 +1,58 @@
+#!/usr/bin/env bash
+#
+# This file is part of LilyPond, the GNU music typesetter.
+#
+# Copyright (C) 2010--2026 Graham Percival <graham@percival-music.ca>
+#
+# LilyPond is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# LilyPond is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with LilyPond.  If not, see <http://www.gnu.org/licenses/>.
+
+
+### are we in the top source dir?
+if [ ! -e scripts/convert-ly.py ]; then
+  echo "Must run from top source directory"
+  exit 1
+fi
+
+### get the build directory
+if [ -z $LILYPOND_BUILD_DIR ]; then
+  if [ -f ./build/out/bin/convert-ly ]; then
+    LILYPOND_BUILD_DIR=./build
+  elif [ -f ./out/bin/convert-ly ]; then
+    LILYPOND_BUILD_DIR=.
+  else
+    echo "Could not find convert-ly (tried ./build/out/bin/convert-ly and ./out/bin/convert-ly)." >&2
+    echo "Please set LILYPOND_BUILD_DIR variable. Aborting." >&2
+    exit 1
+  fi
+fi
+
+### update manuals
+find Documentation/ \
+     -path 'Documentation/snippets' -prune \
+     -o -name out -prune \
+     -o -name 'out-*' -prune \
+     -o -name '*.itely' -print \
+  | xargs $LILYPOND_BUILD_DIR/out/bin/convert-ly -e -d "$@"
+
+### update .ly files
+# Don't look into `.`, otherwise it will find stuff in `build/`!
+# Also exclude files that intentionally don't have (correct)
+# `\version` statements.
+find Documentation/ input/ ly/ \
+     -name out -prune \
+     -o -name 'out-*' -prune \
+     -o -name version-incomplete-bad.ly -prune \
+     -o -name included.ily -prune \
+     -o \( -name '*.ly' -o -name '*.ily' \) -print \
+  | xargs $LILYPOND_BUILD_DIR/out/bin/convert-ly -e -d "$@"

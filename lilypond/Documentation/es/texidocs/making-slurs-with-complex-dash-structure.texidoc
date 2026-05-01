@@ -1,0 +1,23 @@
+%% Translation of GIT committish: 61b32ff2340073b2d9600a20fdedf65d58be720b
+  texidoces = "
+Las ligaduras de expresión se pueden construir con patrones de
+discontinuidad complejos mediante la definición de la propiedad
+@code{dash-definition}, que es una lista de segmentos de la
+ligadura, que a su vez son listas de parámetros que definen el
+comportamiento de discontinuidad del segmento dado.
+
+Los segmentos de la ligadura se definen en términos del parámetro
+de bezier@tie{}@var{t}, cuyo rango va de@tie{}0 a la izquierda de
+la ligadura hasta@tie{}1 en el extremo derecho de la ligadura.
+Cada segmento tiene la forma @code{(@var{t-inicio} @var{t-final}
+@var{fracción-discontinuidad} @var{período-discontinuidad})}.  En
+el segmento que va desde @var{t-inicio} hasta @var{t-final}, el
+patrón se define por los valores de @var{fracción-discontinuidad}
+y @var{período-discontinuidad}.  La @var{fracción-discontinuidad}
+especifica el período en que el trazo es continuo y de color
+negro.  Si se establece al valor de@tie{}1 se obtiene un segmento
+de ligadura continuo.  Las unidades de
+@var{período-discontinuidad} son espacios de pentagrama.
+
+"
+  doctitlees = "Hacer ligaduras de expresión con estructura compleja de discontinuidad"

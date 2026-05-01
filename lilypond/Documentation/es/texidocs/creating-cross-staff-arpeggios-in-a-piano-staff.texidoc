@@ -1,0 +1,7 @@
+%% Translation of GIT committish: 1bf2403e1cd7038a1e7ea62da560af601e3694fc
+  texidoces = "
+Dentro de un @code{PianoStaff}, es posible hacer que un arpegio
+cruce entre los pentagramas ajustando la propiedad
+@code{PianoStaff.connectArpeggios}.
+"
+  doctitlees = "Crear arpegios que se cruzan entre pentagramas dentro de un sistema de piano"

@@ -1,0 +1,34 @@
+%% Translation of GIT committish: af28c5f89c915fdf795739a1e2dd437c726d7f61
+  texidoces = "
+Para la guitarra flamenca se utilizan ciertos elementos de
+notación especiales.
+
+@itemize
+@item
+Un símbolo para indicar un @emph{golpe} sobre la caja de la
+guitarra con la uña del dedo anular.
+@item
+Una flecha para indicar rasgueos y su dirección.
+@item
+Letras para las digitaciones (@qq{p}: pulgar, @qq{i}:
+índice, @qq{m}: medio, @qq{a}: anular y @qq{x}: meñique).
+@item
+@emph{Rasgueados} de 3 y 4 dedos: hacia arriba con todos los dedos
+y terminando con arriba y abajo con el dedo índice.
+@item
+@emph{Abanicos}: rasgueos en serie con el pulgar, hacia abajo y el
+meñique y el índice hacia arriba (hay también un @emph{abanico 2}
+en el que los dedos medio y anular se usan en lugar del meñique).
+@item
+@emph{Alza púa}: pulsaciones rápidas con el pulgar.
+@end itemize
+
+Casi todas las figuras utilizan flechas combinadas con
+digitaciones; con los abanicos y los rasgueados, las notas se
+imprimen con cabeza solo en el primer acorde.
+
+Este fragmento de código contiene código de tipo cabecera que se
+puede copiar como @code{flamenco.ly} e incluirse en los documentos
+fuente.
+"
+  doctitlees = "Notación del flamenco"

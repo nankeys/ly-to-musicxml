@@ -1,0 +1,9 @@
+%% Translation of GIT committish: 2f3474d9af596d677ed5b7ce720ae4d0954a6b51
+  texidocit = "
+In alcuni casi di musica polifonica complessa sono necessarie delle voci
+ulteriori per evitare le collisioni tra note.  Se servono più di
+quattro voci parallele,  si possono aggiungere altre voci definendo
+una variabile con la funzione Scheme function @code{context-spec-music}.
+
+"
+  doctitleit = "Voci ulteriori per evitare le collisioni"

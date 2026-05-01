@@ -1,0 +1,6 @@
+%% Translation of GIT committish: 0cc270b871321ae5aa8622cea8d8262aafd16641
+  texidocja = "
+新しいメトロノーム記号はマークアップ モードで作成できますが、@c
+MIDI 出力のテンポは変更されません。
+"
+  doctitleja = "マークアップ モードでメトロノーム記号を作成する"

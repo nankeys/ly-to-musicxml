@@ -1,0 +1,986 @@
+@c -*- coding: utf-8; mode: texinfo; documentlanguage: ja -*-
+@ignore
+    Translation of GIT committish: 0cc270b871321ae5aa8622cea8d8262aafd16641
+
+    When revising a translation, copy the HEAD committish of the
+    version that you are working on.  For details, see the Contributors'
+    Guide, node Updating translation committishes..
+@end ignore
+
+@c \version "2.25.35"
+
+
+@c Translators: Tomohiro Tatejima, Yoshiki Sawada, Hiroshi Fukuhara
+@c Translation status: post-GDP
+
+
+@node Editorial annotations
+@section 編集者の注釈
+
+@lilypondfile[quote]{snippets/editorial-headword.ly}
+
+このセクションでは、音符の見た目を変える方法と、@c
+分析や教育的な強調を付け加える方法について議論します。
+
+
+@node Inside the staff
+@subsection 譜の内部
+
+このセクションでは、譜の内部にある要素に強調を付け加える方法について説明します。
+
+
+@node Selecting notation font size
+@unnumberedsubsubsec 記譜フォント サイズを選択する
+
+@cindex font size (notation), scaling (フォント サイズ (記譜法) の調整)
+@cindex font size (notation) (フォント サイズ (記譜法))
+@cindex selecting font size (notation) (フォント サイズ (記譜法) を選択する)
+@cindex notation, font size (記譜フォント サイズ)
+@cindex note head (符頭)
+
+@funindex fontSize
+@funindex font-size
+@funindex magnification->font-size
+@funindex magstep
+@funindex \magnifyMusic
+@funindex \teeny
+@funindex \tiny
+@funindex \normalsize
+@funindex \small
+@funindex \large
+@funindex \huge
+
+@warning{@*
+テキストのフォント サイズに関しては、@c
+@ref{Selecting font and font size}を参照してください。@*
+譜のサイズに関しては、@ref{Setting the staff size}を参照してください。@*
+合図音符に関しては、@ref{Formatting cue notes}を参照してください。@*
+オッシア譜に関しては、@ref{Ossia staves}を参照してください。}
+
+譜のサイズを変えずに記譜のサイズを変更するには、@code{\magnifyMusic}
+コマンドに拡大縮小の割合を指定します:
+
+@c Grieg Piano Concerto (mvt.1 cadenza)
+@lilypond[verbatim,quote]
+\new Staff <<
+  \new Voice \relative {
+    \voiceOne
+    <e' e'>4 <f f'>8. <g g'>16 <f f'>8 <e e'>4 r8
+  }
+  \new Voice \relative {
+    \voiceTwo
+    \magnifyMusic 0.63 {
+      \override Score.SpacingSpanner.spacing-increment = #(* 1.2 0.63)
+      r32 c'' a c a c a c r c a c a c a c
+      r c a c a c a c a c a c a c a c
+    }
+  }
+>>
+@end lilypond
+
+上の例にある @code{\override} は、不具合の一時的な回避措置です。@c
+このセクションの最後にある@qq{既知の問題と警告}を参照してください。
+
+通常のサイズの音符が小さい音符とマージされる際には、符幹や臨時記号が正しく@c
+揃うように、小さい音符のサイズを@c
+(@w{@samp{\once@tie{}\normalsize}} によって) リセットする必要があります:
+
+@c Chopin Prelude op.28 no.8
+@lilypond[verbatim,quote]
+\new Staff <<
+  \key fis \minor
+  \mergeDifferentlyDottedOn
+  \new Voice \relative {
+    \voiceOne
+    \magnifyMusic 0.63 {
+      \override Score.SpacingSpanner.spacing-increment = #(* 1.2 0.63)
+      \once \normalsize cis'32( cis' gis b a fis \once \normalsize d d'
+      \once \normalsize cis, cis' gis b a gis \once \normalsize fis fis'
+      \once \normalsize fis, fis' ais, cis b gis \once \normalsize eis eis'
+      \once \normalsize a, a' bis, d cis b \once \normalsize gis gis')
+    }
+  }
+  \new Voice \relative {
+    \voiceTwo
+    cis'8. d16 cis8. fis16 fis8. eis16 a8. gis16
+  }
+>>
+@end lilypond
+
+@code{\magnifyMusic} コマンドは合図音符、装飾音符、オッシア譜を作るための@c
+ものとしては想定されていません -- これらには、より適切な作成方法があります。@c
+代わりに、このコマンドは以下のような場合に適しています:
+単一の譜にある、単一の楽器について、記譜サイズが変化し、@c
+しかし装飾音符を用いるのは適切ではない場合 -- 例えばカデンツァのような@c
+パッセージや上の例にあるような場合です。
+@code{\magnifyMusic} の値を 0.63 にセットすることで、@code{CueVoice} と同じ@c
+大きさになります。
+
+@warning{@code{@bs{}magnifyMusic} コマンドは譜のサイズを変更する時にも@c
+使うべきでは@i{ありません。}@ref{Setting the staff size}を参照してください。}
+
+
+@subsubsubheading 個々のレイアウト オブジェクトのサイズを変更する
+
+個々のレイアウト オブジェクトは @code{\tweak} や @code{\override} コマンドを@c
+使って、@code{font-size} プロパティを調整することでサイズを変更できます:
+
+@c KEEP LY
+@lilypond[quote,verbatim]
+\relative {
+  % 符頭のサイズを変更します
+  <f' \tweak font-size -4 b e>-5
+  % 運指記号のサイズを変更します
+  bes-\tweak font-size 0 -3
+  % 臨時記号のサイズを変更します
+  \once \override Accidental.font-size = -4 bes!-^
+  % アーティキュレーションのサイズを変更します
+  \once \override Script.font-size = 4 bes!-^
+}
+@end lilypond
+
+それぞれのレイアウト オブジェクトの @code{font-size} のデフォルト値は、@c
+内部リファレンスにリストアップされています。@code{font-size} プロパティは@c
+@code{font-interface} をサポートしているレイアウト オブジェクトにのみ@c
+設定できます。@code{font-size} がオブジェクトの @q{Standard@tie{}settings} に@c
+存在していない場合は、デフォルト値は 0 です。@c
+@rinternals{All layout objects} を参照してください。
+
+
+@subsubsubheading @code{fontSize} プロパティを理解する
+
+@code{fontSize} コンテキスト プロパティは、コンテキストに属する@c
+グリフ ベースの (訳注: フォントの文字として定義されている、詳しくは後述)
+記譜要素全ての相対サイズを調整します:
+
+@lilypond[verbatim,quote]
+\relative {
+  \time 3/4
+  d''4---5 c8( b a g) |
+  \set fontSize = -6
+  e'4-- c!8-4( b a g) |
+  \set fontSize = 0
+  fis4---3 e8( d) fis4 |
+  g2.
+}
+@end lilypond
+
+@code{fontSize} の値は、現在の譜の高さに応じた通常のサイズからの@c
+相対値を示しています。デフォルトの @code{fontSize} は 0 です。@c
+@code{fontSize} に 6 を加えることで大きさが 2 倍になり、@c
+6 を減じることで半分になります。1 が約 12% の増減になります。
+
+@code{font-size} プロパティの対数的な単位は常に直観的とは限りません。@c
+Scheme 関数 @code{magnification->font-size} はこれに対応する便利な関数です。@c
+例えば、記譜の大きさをデフォルトの 75% にしたい場合は、以下のようにします:
+
+@example
+\set fontSize = #(magnification->font-size 0.75)
+@end example
+
+Scheme 関数 @code{magstep} は逆のことをします: @code{font-size} の値を@c
+拡大縮小率に変換します。
+
+@code{fontSize} プロパティはグリフとして描かれている記譜要素のみに作用します
+-- 例えば、符頭、臨時記号、文字などです。譜のサイズそのものや、@c
+符幹、連桁のサイズ、水平方向のスペースなどは変化しません。@c
+(譜のサイズを変更せずに) 符幹、連桁のサイズや、水平方向のスペースを@c
+変更するには、上記の @code{\magnifyMusic} を使用してください。@c
+譜のサイズを含めて、全てのサイズを変更する場合は、@c
+@ref{Setting the staff size}を参照してください。
+
+@code{fontSize} @i{コンテキスト プロパティ} が設定されると、@c
+個々のレイアウト オブジェクトのグリフが出力される前に、@c
+@code{fontSize} の値と、@c
+@code{font-size} @i{グラフィカル オブジェクト プロパティ}の値が@c
+足し合わされます。これは、@code{fontSize} が既に設定されていて、@c
+個々の @code{font-size} プロパティを更に設定する場合に混乱するかもしれません:
+
+@c KEEP LY
+@lilypond[verbatim,quote,fragment]
+% NoteHead のデフォルトの font-size は 0 です
+% Fingering のデフォルトの font-size は -5 です
+c''4-3
+
+\set fontSize = -3
+% NoteHead のフォント サイズの最終的な値は -3 になります
+% Fingering のフォント サイズの最終的な値は -8 になります
+c''4-3
+
+\override Fingering.font-size = 0
+% Fingering のフォント サイズの最終的な値は -3 になります
+c''4-3
+@end lilypond
+
+以下のような短縮記法コマンドも存在します:
+
+@multitable @columnfractions .2 .4 .4
+@item @b{コマンド} @tab @b{同等なコマンド} @tab @b{相対サイズ}
+@item @code{\teeny}      @tab @code{\set fontSize = -3} @tab 71%
+@item @code{\tiny}       @tab @code{\set fontSize = -2} @tab 79%
+@item @code{\small}      @tab @code{\set fontSize = -1} @tab 89%
+@item @code{\normalsize} @tab @code{\set fontSize = 0} @tab 100%
+@item @code{\large}      @tab @code{\set fontSize = 1} @tab 112%
+@item @code{\huge}       @tab @code{\set fontSize = 2} @tab 126%
+@end multitable
+
+@lilypond[verbatim,quote]
+\relative c'' {
+  \teeny
+  c4.-> d8---3
+  \tiny
+  c4.-> d8---3
+  \small
+  c4.-> d8---3
+  \normalsize
+  c4.-> d8---3
+  \large
+  c4.-> d8---3
+  \huge
+  c4.-> d8---3
+}
+@end lilypond
+
+@cindex standard font size (notation) (標準フォント サイズ (記譜法))
+@cindex font size (notation), standard (標準フォント サイズ (記譜法))
+
+@funindex font-interface
+@funindex font-size
+
+フォント サイズの変更は、ひな形のサイズが望みのサイズに最も近くなるよう
+(一定の割合で) 増減することによって、達成されます。@c
+標準フォント サイズ (@w{@code{font-size = 0}} のフォント サイズ) は@c
+標準の譜の高さに基づきます。@c
+20pt の譜では、11pt のフォントが選択されます。
+
+
+@predefined
+@code{\magnifyMusic},
+@code{\teeny},
+@code{\tiny},
+@code{\small},
+@code{\normalsize},
+@code{\large},
+@code{\huge}
+@endpredefined
+
+@morerefs
+記譜法リファレンス:
+@ref{Selecting font and font size},
+@ref{Setting the staff size},
+@ref{Formatting cue notes},
+@ref{Ossia staves}
+
+インストールされているファイル:
+@file{ly/music-functions-init.ly},
+@file{ly/property-init.ly}
+
+コード断片集:
+@rlsr{Editorial annotations}
+
+内部リファレンス:
+@rinternals{font-interface}
+
+@c The two issues mentioned below:
+@c https://sourceforge.net/p/testlilyissues/issues/3987/
+@c https://sourceforge.net/p/testlilyissues/issues/3990/
+@knownissues
+@code{\magnifyMusic} を使用する際に、水平方向のスペースが不適切になる
+2 つの不具合があります。これを解決する方法が 1 つだけありますが、@c
+全ての場合にうまくいくとは限りません。次の例で、@var{mag} 変数を@c
+好きな値に置き換えてください。@c
+@code{\newSpacingSection} コマンドの片方や両方、あるいは
+@code{\override} や @code{\revert} コマンドを取り除いてみることができます:
+
+
+@example
+\magnifyMusic @var{mag} @{
+  \newSpacingSection
+  \override Score.SpacingSpanner.spacing-increment = #(* 1.2 @var{mag})
+  [@var{music}]
+  \newSpacingSection
+  \revert Score.SpacingSpanner.spacing-increment
+@}
+@end example
+
+@node Fingering instructions
+@unnumberedsubsubsec 運指の指示
+
+@cindex fingering (運指法)
+@cindex finger change (指を変える)
+
+@funindex \finger
+
+運指の指示は @var{音符}-@var{数字} を用いることで挿入することができます:
+
+@lilypond[verbatim,quote]
+\relative { c''4-1 d-2 f-4 e-3 }
+@end lilypond
+
+指の入れ替えのためにマークアップ テキストや文字列を使うこともできます。
+
+@lilypond[verbatim,quote]
+\relative {
+  c''4-1 d-2 f\finger \markup \tied-lyric "4~3" c\finger "2 - 3"
+}
+@end lilypond
+
+@cindex thumb script (サム スクリプト)
+
+@funindex \thumb
+
+ある音符を親指で演奏するよう指示するために、@c
+サム スクリプト (thumb script) を付け加えることができます
+(例えば、チェロ音楽で)。
+
+@lilypond[verbatim,quote]
+\relative { <a'_\thumb a'-3>2 <b_\thumb b'-3> }
+@end lilypond
+
+@cindex fingering chord (和音の運指法)
+@cindex fingering instruction, for chords (和音の運指指示)
+@cindex chord, fingering (和音の運指法)
+
+和音の個々の音符の後に運指を付け加えることによって、@c
+和音に対する運指法を付け加えることができます。
+
+@lilypond[verbatim,quote]
+\relative {
+  <c''-1 e-2 g-3 b-5>2 <d-1 f-2 a-3 c-5>
+}
+@end lilypond
+
+運指指示の配置を手動で譜の上または下にすることができます。@c
+@ref{Direction and placement} を参照してください。
+
+@snippets
+
+@cindex fingering, orientation (運指の向き)
+@cindex orientation, of fingerings (運指の向き)
+@funindex fingeringOrientations
+@funindex stringNumberOrientations
+@funindex strokeFingerOrientations
+@lilypondfile[verbatim,quote,ragged-right,texidoc,doctitle]
+{snippets/controlling-the-placement-of-chord-fingerings.ly}
+
+@cindex fingering, inside of staff (譜の内部の運指)
+@lilypondfile[verbatim,quote,texidoc,doctitle]
+{snippets/allowing-fingerings-to-be-printed-inside-the-staff.ly}
+
+@morerefs
+記譜法リファレンス:
+@ref{Direction and placement}
+
+コード断片集:
+@rlsr{Editorial annotations}
+
+内部リファレンス:
+@rinternals{FingeringEvent},
+@rinternals{fingering-event},
+@rinternals{Fingering_engraver},
+@rinternals{New_fingering_engraver},
+@rinternals{Fingering}
+
+
+@node Hidden notes
+@unnumberedsubsubsec 隠された音符
+
+@cindex hidden note (隠された音符)
+@cindex invisible note (不可視の音符)
+@cindex transparent note (透明な音符)
+@cindex note, hidden (隠された音符)
+@cindex note, invisible (不可視の音符)
+@cindex note, transparent (透明な音符)
+
+@funindex \hideNotes
+@funindex \unHideNotes
+
+隠された (または不可視、透明の) 音符は、音楽理論や作曲の演習の際に@c
+有用です。
+
+@lilypond[verbatim,quote]
+\relative {
+  c''4 d
+  \hideNotes
+  e4 f
+  \unHideNotes
+  g a
+  \hideNotes
+  b
+  \unHideNotes
+  c
+}
+@end lilypond
+
+符頭、符幹、旗、それに休符は不可視です。@c
+連桁は、隠された音符から始まる場合は、不可視です。
+不可視の音符に取り付けられたオブジェクトは可視のままです。
+
+@lilypond[verbatim,quote]
+\relative c'' {
+  e8(\p f g a)--
+  \hideNotes
+  e8(\p f g a)--
+}
+@end lilypond
+
+
+@predefined
+@code{\hideNotes},
+@code{\unHideNotes}
+@endpredefined
+
+@morerefs
+学習マニュアル:
+@rlearningnamed{Visibility and color of objects, オブジェクトの可視性と色}
+
+Notation Reference:
+@ref{Invisible rests},
+@ref{Visibility of objects},
+@ref{Hiding staves}
+
+コード断片集:
+@rlsr{Editorial annotations}
+
+内部リファレンス:
+@rinternals{Note_spacing_engraver},
+@rinternals{NoteSpacing}
+
+
+@node Coloring objects
+@unnumberedsubsubsec オブジェクトに色を付ける
+
+@cindex colored object (色付きのオブジェクト)
+@cindex object, colored (色付きのオブジェクト)
+@cindex color (色)
+@cindex coloring object (オブジェクトに色を付ける)
+@cindex colored note (色付きの音符)
+@cindex coloring note (音符に色を付ける)
+@cindex note, colored (色付きの音符)
+@cindex x11 color (X11 カラー)
+
+@funindex color
+@funindex \with-color
+@funindex x11-color
+
+個々のオブジェクトに色を割り振ることができます。@c
+有効なカラー名は @ref{List of colors} でリストアップされています。
+
+@lilypond[verbatim,quote,fragment]
+\override NoteHead.color = #red
+c''4 c''
+\override NoteHead.color = #(x11-color 'LimeGreen)
+d''
+\override Stem.color = #blue
+e''
+@end lilypond
+
+
+Scheme 関数 @code{x11-color} を用いることによって、@c
+X11 のために定義された色の全範囲にアクセスすることができます。@c
+この関数は引数を 1 つとります。@c
+この引数は @code{'@var{FooBar}} という形式のシンボルであったり、@c
+@code{"@var{FooBar}"} という形式の文字列であったりします。@c
+最初の形式はより素早く記述できて、より効率的です。@c
+しかしながら、2 番目の形式を使うと複数単語形式の X11 カラーに@c
+アクセスすることができます。
+
+@code{x11-color} がパラメータとして意味をなさない場合、@c
+その色はデフォルトの黒になります。
+
+@c KEEP LY
+@lilypond[verbatim,quote]
+\new Staff \with {
+  instrumentName = \markup {
+    \with-color #(x11-color 'red) "Clarinet"
+    }
+  }
+  \relative c'' {
+  \override Staff.StaffSymbol.color = #(x11-color 'SlateBlue2)
+  gis8 a
+  \override Beam.color = #(x11-color "medium turquoise")
+  gis a
+  \override Accidental.color = #(x11-color 'DarkRed)
+  gis a
+  \override NoteHead.color = #(x11-color "LimeGreen")
+  gis a
+  % 以下は意図的に意味をなさない色を指定しています。符幹が黒のままであることに注意してください
+  \override Stem.color = #(x11-color 'Boggle)
+  b2 cis
+}
+@end lilypond
+
+@cindex color, rgb (RGB カラー)
+@cindex rgb color (RGB カラー)
+
+@funindex rgb-color
+
+Scheme 関数 @code{rgb-color} を用いることによって、@c
+厳密な RGB カラーを指定することができます。
+
+@lilypond[verbatim,quote]
+\new Staff \with {
+  instrumentName = \markup {
+    \with-color #(x11-color 'red) "Clarinet"
+    }
+  }
+\relative c'' {
+  \override Staff.StaffSymbol.color = #(x11-color 'SlateBlue2)
+  \override Stem.color = #(rgb-color 0 0 0)
+  gis8 a
+  \override Stem.color = #(rgb-color 1 1 1)
+  gis8 a
+  \override Stem.color = #(rgb-color 0 0 0.5)
+  gis4 a
+}
+@end lilypond
+
+@morerefs
+記譜法リファレンス:
+@ref{List of colors},
+@ref{The tweak command}
+
+コード断片集:
+@rlsr{Editorial annotations}
+
+@cindex x11 color (X11 カラー)
+@cindex colored note in chord (和音の中にある色付きの音符)
+@cindex note, colored in chord (和音の中にある色付きの音符)
+@cindex color in chord (和音の中で色を付ける)
+
+@funindex x11-color
+
+@knownissues
+X11 カラーは必ずしも同様の名前を持つノーマル カラーと@c
+まったく同じとなるわけではありません。
+
+すべての X11 カラーが Web ブラウザで見分けられるわけではありません。@c
+つまり、ある Web ブラウザは @code{LineGreen} と @code{ForestGreen} を@c
+同じ色で表示するかもしれません。@c
+Web 向けでは、ノーマル カラーを使用することを推奨します
+(つまり、@code{blue}, @code{green}, @code{red})。
+
+和音の中にある音符に別々に色を付けるのに @code{\override} を使うことは@c
+できません。代わりにそれぞれの音符の前に @code{\tweak} や、それと同等な@c
+@code{\single\override} を使用してください
+-- @ref{The tweak command} を参照してください。
+
+
+@node Parentheses
+@unnumberedsubsubsec 括弧
+
+@cindex ghost note (ゴースト ノート)
+@cindex note, ghost (ゴースト ノート)
+@cindex note, parenthesized (括弧で囲まれた音符)
+@cindex parenthesis (括弧)
+@cindex bracket (囲み)
+
+@funindex \parenthesize
+
+音楽イベントの前に @code{\parenthesize} を置くことによって、@c
+そのオブジェクトに括弧を付けることができます。@c
+和音の前に @code{\parenthesize} を置くと、@c
+和音の音符それぞれに括弧が付けられます。@c
+和音内部の音符に個別に括弧を付けることもできます。
+
+@lilypond[verbatim,quote]
+\relative {
+  c''2 \parenthesize d
+  c2 \parenthesize <c e g>
+  c2 <c \parenthesize e g>
+}
+@end lilypond
+
+音符ではないオブジェクトにも括弧を付けることができます。@c
+アーティキュレーションに対して括弧をつける場合、@c
+@code{\parenthesize} コマンドの前にハイフンが必要です。
+
+@lilypond[verbatim,quote]
+\relative {
+  c''2-\parenthesize -. d
+  c2 \parenthesize r
+}
+@end lilypond
+
+@morerefs
+コード断片集:
+@rlsr{Editorial annotations}
+
+内部リファレンス:
+@rinternals{Parenthesis_engraver},
+@rinternals{Parentheses},
+@rinternals{parentheses-interface}
+
+@knownissues
+和音に括弧を付けると、和音全体に単一の大きな括弧が付くのではなく、@c
+それぞれの音符に個別に括弧が付きます。
+
+
+@node Stems
+@unnumberedsubsubsec 符幹
+
+@cindex stem (符幹)
+@cindex stem, invisible (不可視の符幹)
+@cindex invisible stem (不可視の符幹)
+
+@funindex \stemUp
+@funindex \stemDown
+@funindex \stemNeutral
+@cindex stem, direction (符幹の向き)
+@cindex stem, up (符幹を上向きにする)
+@cindex stem, down (符幹を下向きにする)
+@cindex stem, neutral (符幹の向きを元に戻す)
+
+音符が見つかった場合はいつでも @code{Stem} オブジェクトが@c
+自動的に作成されます。@c
+全音符や休符の場合でも @code{Stem} オブジェクトが作成されますが、@c
+不可視になります。
+
+符幹の向きを手動で上または下にすることができます
+-- @ref{Direction and placement} を参照してください。
+
+
+@predefined
+@code{\stemUp},
+@code{\stemDown},
+@code{\stemNeutral}
+@endpredefined
+
+
+@snippets
+
+@cindex stem, default direction on center line (中央の線上にある符幹のデフォルトの向き)
+@cindex direction, default, of stem, on center line (中央の線上にある符幹のデフォルトの向き)
+@lilypondfile[verbatim,quote,ragged-right,texidoc,doctitle]
+{snippets/default-direction-of-stems-on-the-center-line-of-the-staff.ly}
+
+@cindex stem, automatic direction on center line (中央の線上にある自動的な符幹の向き)
+@cindex direction, automatic, of stem, on center line (中央の線上にある自動的な符幹の向き)
+@lilypondfile[verbatim,quote,ragged-right,texidoc,doctitle]
+{snippets/automatically-changing-the-stem-direction-of-the-middle-note-based-on-the-melody.ly}
+
+@morerefs
+記譜法リファレンス:
+@ref{Direction and placement}
+
+コード断片集:
+@rlsr{Editorial annotations}
+
+内部リファレンス:
+@rinternals{Stem_engraver},
+@rinternals{Stem},
+@rinternals{stem-interface}
+
+
+@node Outside the staff
+@subsection 譜の外部
+
+このセクションでは、@c
+譜の外側から譜の中にある要素を強調するための方法について説明します。
+
+
+@node Note names
+@unnumberedsubsubsec 音符名
+
+@cindex note name, printing (音符名の譜刻)
+
+@funindex NoteNames
+@funindex Note_name_engraver
+@funindex noteNameFunction
+@funindex printNotesLanguage
+@funindex printOctaveNames
+@funindex noteNameSeparator
+@funindex printAccidentalNames
+
+音符名は @code{NoteNames} コンテキストを用いて、@c
+テキストとして譜刻できます。通常の譜と同時に用いると、@c
+各音符と同期してその名前を譜の上部または下部に@c
+譜刻することができます。
+
+@lilypond[verbatim,quote]
+\language "italiano"
+melody = \relative do'' {
+  fad2 si,8 dod re mi fad4. re8 fad2
+}
+
+<<
+  \new NoteNames { \melody }
+  \new Staff { \key si \minor \melody }
+  \new NoteNames {
+    \set printNotesLanguage = "deutsch"
+    \set printAccidentalNames = ##f
+    \melody
+  }
+>>
+@end lilypond
+
+デフォルトでは、音符名は音楽の入力で使われるものと同じ言語で@c
+譜刻されます。しかしながら、@code{printNotesLanguage} プロパティで@c
+他の言語を選択することが可能です
+(@ref{Note names in other languages} を参照してください) 。@c
+臨時記号を譜刻するかどうかは、@code{printAccidentalNames} プロパティで@c
+決定されます。
+
+プロパティをシンボルにセットし、@code{printOctaveNames} を @code{##t}
+にセットすることで、音符名を LilyPond の入力構文と密接に似せることが@c
+できます。より一般的な結果が欲しい場合は、@q{科学的な}
+オクターブ名にすることもできます。
+
+@lilypond[verbatim,quote]
+melody = \relative c'' {
+  fis2 b,8 cis d e fis4. d8 fis2
+}
+
+<<
+  \new NoteNames {
+    \set printOctaveNames = ##t
+    \set printAccidentalNames = #'lily
+    \melody
+  }
+  \new Staff { \key b \minor \melody }
+  \new NoteNames {
+    \set printOctaveNames = #'scientific
+    \melody
+  }
+>>
+@end lilypond
+
+@code{noteNameSeparator} プロパティは和音がどのように譜刻されるかを@c
+定義します。その他のフォーマット関数は @code{noteNameFunction} で@c
+定義され、このような関数は、いずれかを無視する場合であっても、
+@code{pitch} と @code{context} 引数を受けなければなりません。
+
+@lilypond[verbatim,quote]
+somechords = \relative c' {
+  <b d fis>2 <b cis e g> <b d fis> q
+}
+
+<<
+  \new NoteNames {
+    \set noteNameSeparator = "+"
+    \somechords
+  }
+  \new Staff { \key b \minor \somechords }
+  \new NoteNames {
+    \set noteNameFunction =
+      #(lambda (pitch ctx)
+         (accidental->text-markup
+          (ly:pitch-alteration pitch)))
+    \somechords
+  }
+>>
+@end lilypond
+
+@morerefs
+
+記譜法リファレンス:
+@ref{Note names in other languages}
+
+内部リファレンス:
+@rinternals{NoteName},
+@rinternals{NoteNames},
+@rinternals{Note_name_engraver}
+
+
+@node Balloon help
+@unnumberedsubsubsec バルーン ヘルプ
+
+@cindex balloon (バルーン)
+@cindex notation, explaining (記譜法を説明する)
+@cindex balloon help (バルーン ヘルプ)
+@cindex help, balloon (バルーン ヘルプ)
+
+@funindex \balloonGrobText
+@funindex \balloonText
+@funindex Balloon_engraver
+@funindex \balloonLengthOn
+@funindex \balloonLengthOff
+
+記譜要素に四角いバルーンで印を付けて、テキストを付け加えることができます。@c
+この機能の主目的は記譜法を説明することです。
+
+@lilypond[verbatim,quote]
+\new Voice \with { \consists Balloon_engraver }
+\relative c'' {
+  \balloonGrobText #'Stem #'(3 . 4) \markup { "I'm a Stem" }
+  a8
+  \balloonGrobText #'Rest #'(-4 . -4) \markup { "I'm a rest" }
+  r
+  <c, g'-\balloonText #'(-2 . -2) \markup { "I'm a note head" } c>2.
+}
+@end lilypond
+
+
+上の例には 2 つの音楽関数が使われています
+-- @code{balloonGrobText} と @code{balloonText} です。@c
+前者は @w{@code{\once \override}} のように使用され、@c
+任意のグラフィカル オブジェクトにテキストを付加します。@c
+後者はたいてい和音の中で @code{\tweak} のように使用され、@c
+個々の音符にテキストを付加します。
+
+バルーン ヘルプのテキストは音符の間隔に影響を与えませんが、@c
+影響を与えるように変更することもできます:
+
+@lilypond[verbatim,quote]
+\new Voice \with { \consists Balloon_engraver }
+\relative c'' {
+  \balloonGrobText #'Stem #'(3 . 4) \markup { "I'm a Stem" }
+  a8
+  \balloonGrobText #'Rest #'(-4 . -4) \markup { "I'm a rest" }
+  r
+  \balloonLengthOn
+  <c, g'-\balloonText #'(-2 . -2) \markup { "I'm a note head" } c>2.
+}
+@end lilypond
+
+@predefined
+@code{\balloonLengthOn},
+@code{\balloonLengthOff}
+@endpredefined
+
+@morerefs
+コード断片集:
+@rlsr{Editorial annotations}
+
+内部リファレンス:
+@rinternals{Balloon_engraver},
+@rinternals{BalloonText},
+@rinternals{balloon-interface}
+
+
+@node Grid lines
+@unnumberedsubsubsec グリッド ライン
+
+@cindex grid line (グリッド ライン)
+@cindex line, grid (グリッド ライン)
+@cindex vertical lines between staves (譜の間の垂直な線)
+@cindex lines, vertical, between staves (譜の間の垂直な線)
+
+@funindex Grid_point_engraver
+@funindex Grid_line_span_engraver
+@funindex gridInterval
+
+音符に同期して、譜の間に垂直な線を描くことができます。
+
+線の終点を作成するために @code{Grid_point_engraver} を用いる必要があります。@c
+一方、実際に線を描くために @code{Grid_line_span_engraver} を@c
+用いる必要があります。@c
+デフォルトでは、グリッド ラインは各符頭の左端に揃えられます。@c
+グリッド ラインは上の譜の中央線から下の譜の中央線まで引かれます。@c
+@code{gridInterval} でグリッド ライン間の演奏時間を指定する必要があります。
+
+@lilypond[verbatim,quote]
+\layout {
+  \context {
+    \Staff
+    \consists Grid_point_engraver
+    gridInterval = #1/4
+  }
+  \context {
+    \Score
+    \consists Grid_line_span_engraver
+  }
+}
+
+\score {
+  \new ChoirStaff <<
+    \new Staff \relative {
+      \stemUp
+      c''4. d8 e8 f g4
+    }
+    \new Staff \relative {
+      \clef bass
+      \stemDown
+      c4 g' f e
+    }
+  >>
+}
+@end lilypond
+
+@snippets
+
+@cindex grid lines, changing appearance (グリッド ラインの見た目を変更する)
+@lilypondfile[verbatim,quote,ragged-right,texidoc,doctitle]
+{snippets/grid-lines--changing-their-appearance.ly}
+
+@morerefs
+コード断片集:
+@rlsr{Editorial annotations}
+
+内部リファレンス:
+@rinternals{Grid_line_span_engraver},
+@rinternals{Grid_point_engraver},
+@rinternals{GridLine},
+@rinternals{GridPoint},
+@rinternals{grid-line-interface},
+@rinternals{grid-point-interface}.
+
+
+@node Analysis brackets
+@unnumberedsubsubsec 分析の囲み
+
+@cindex bracket (囲み、角括弧)
+@cindex bracket, phrasing (フレーズの囲み)
+@cindex phrasing bracket (フレーズの囲み)
+@cindex musicological analysis (音楽学的分析)
+@cindex analysis bracket, musicological (音楽学的分析の囲み)
+@cindex note grouping bracket (音符グループ化囲み)
+@cindex horizontal bracket (水平の囲み)
+@cindex bracket, horizontal (水平の囲み)
+
+@funindex Horizontal_bracket_engraver
+@funindex \startGroup
+@funindex \stopGroup
+
+音楽分析では、囲みを使って楽曲の構造を示します。@c
+シンプルな水平な囲みがサポートされています。
+
+@lilypond[verbatim,quote]
+\layout {
+  \context {
+    \Voice
+    \consists Horizontal_bracket_engraver
+  }
+}
+\relative {
+  c''2\startGroup
+  d\stopGroup
+}
+@end lilypond
+
+分析の囲みはネストすることができます。
+
+@lilypond[verbatim,quote]
+\layout {
+  \context {
+    \Voice
+    \consists Horizontal_bracket_engraver
+  }
+}
+\relative {
+  c''4\startGroup\startGroup
+  d4\stopGroup
+  e4\startGroup
+  d4\stopGroup\stopGroup
+}
+@end lilypond
+
+@snippets
+
+@lilypondfile[verbatim,quote,ragged-right,texidoc,doctitle]
+{snippets/analysis-brackets-above-the-staff.ly}
+
+@cindex analysis bracket, with label (ラベル付きの分析の囲み)
+@cindex bracket, phrasing, with label (ラベル付きのフレーズの囲み)
+@funindex HorizontalBracketText
+@lilypondfile[verbatim,quote,ragged-right,texidoc,doctitle]
+{snippets/analysis-brackets-with-labels.ly}
+
+@morerefs
+内部リファレンス:
+@rinternals{Horizontal_bracket_engraver},
+@rinternals{HorizontalBracket},
+@rinternals{horizontal-bracket-interface},
+@rinternals{HorizontalBracketText},
+@rinternals{horizontal-bracket-text-interface},
+@rinternals{Staff}

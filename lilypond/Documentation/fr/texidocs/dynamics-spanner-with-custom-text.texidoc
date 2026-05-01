@@ -1,0 +1,10 @@
+%% Translation of GIT committish: de1e42ce512f3690387cdd065109bddff1b7bd6d
+  texidocfr = "
+Il s'agit de fonctions postfix pour personnaliser l'extension des
+crescendos textuels. L'extension devrait débuter sur la première note
+de la mesure. Il faut utiliser @w{@code{-\\mycresc}} -- comme une
+articulation -- sous peine que le départ de l'extension n'apparaisse
+qu'à la note suivante.
+"
+
+  doctitlefr = "Personnalisation des extenseurs de nuance textuelle"

@@ -1,0 +1,14 @@
+%% Translation of GIT committish: fbf390d05408c5b842a22c122da734c54f92ca12
+  texidoces = "
+
+La alineación predeterminada de los números de compás depende de
+su posición: al comienzo de un pentagrama, los números se alinean
+por la derecha; en cualquier otra posición, se alinean por la
+izquierda.  Usando la función de Scheme
+@code{break-alignment-list}, se puede cambiar esto; los tres
+argumentos de la función son la alineación para las posiciones al
+final de la línea, en la parte media de la línea y al principio de
+la línea (en este orden).
+
+"
+  doctitlees = "Alineación de los números de compás"

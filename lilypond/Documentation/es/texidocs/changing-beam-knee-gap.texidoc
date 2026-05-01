@@ -1,0 +1,13 @@
+%% Translation of GIT committish: 1bf2403e1cd7038a1e7ea62da560af601e3694fc
+  texidoces = "
+Se insertan automáticamente barras en ángulo cuando se detecta un
+intervalo muy grande entre las notas.  Se puede hacer un ajuste
+fino de este comportamiento a través de la propiedad
+@code{auto-knee-gap}.  Se traza una barra doblada si el salto es
+mayor que el valor de @code{auto-knee-gap} más el ancho del objeto
+barra (que depende de la duración de las notas y de la inclinación
+de la barra).  De forma predeterminada @code{auto-knee-gap} está
+establecido a 5.5 espacios de pentagrama.
+
+"
+  doctitlees = "Cambiar el salto de las barras en ángulo"

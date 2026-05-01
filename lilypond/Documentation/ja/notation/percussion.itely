@@ -1,0 +1,588 @@
+@c -*- coding: utf-8; mode: texinfo; documentlanguage: ja -*-
+@ignore
+    Translation of GIT committish: fce9b78cb834ad4d5ef27f8ebe7ab2352823ff1d
+
+    When revising a translation, copy the HEAD committish of the
+    version that you are working on.  For details, see the Contributors'
+    Guide, node Updating translation committishes..
+@end ignore
+
+@c \version "2.17.30"
+
+@c Translators: Tomohiro Tatejima, Yoshiki Sawada
+@c Translation status: post-GDP
+
+@need 1500
+@node Percussion
+@section 打楽器
+
+
+@node Common notation for percussion
+@subsection 打楽器で共通の記譜法
+
+リズム音楽は主に打楽器とドラム記譜法で使用されますが、@c
+旋律のリズムを示すために使うこともできます。
+
+
+@node References for percussion
+@unnumberedsubsubsec 打楽器のためのリファレンス
+
+@c TODO add more references.
+
+@itemize
+
+@item 打楽器の音楽はリズム譜で記譜されることがあります。@c
+リズム譜は @ref{Showing melody rhythms} と @ref{Instantiating new staves} で@c
+説明しています。
+
+@item MIDI 出力については、別のセクションで説明します。@c
+@ref{Creating MIDI output} を参照してください。
+
+@end itemize
+
+@morerefs
+記譜法リファレンス:
+@ref{Showing melody rhythms},
+@ref{Instantiating new staves},
+@ref{Creating MIDI output}
+
+コード断片集:
+@rlsr{Percussion}
+
+
+@node Basic percussion notation
+@unnumberedsubsubsec 基本的な打楽器の記譜法
+
+@cindex percussion (打楽器)
+@cindex drum (ドラム)
+
+打楽器の音符は @code{\drummode} モードで入力することができます。@c
+このモードでの音符の入力の仕方は標準モードに似ています。@c
+打楽器の音符を入力する最も簡単な方法は、@c
+打楽器用のコンテキストとエントリを作成する @code{\drums} コマンドを@c
+用いる方法です:
+
+@lilypond[quote,verbatim]
+\drums {
+  hihat4 hh bassdrum bd
+}
+@end lilypond
+
+上記の例は、下記を短縮したものです:
+
+@lilypond[quote,verbatim]
+\new DrumStaff \drummode {
+  hihat4 hh bassdrum bd
+}
+@end lilypond
+
+打楽器の音符名には完全名と省略名があり、@c
+どちらも入力ファイルで使うことができます。@c
+打楽器の音符名の完全なリストが @ref{Percussion notes} にあります。
+
+@cindex clef, percussion (打楽器の音部記号)
+@cindex percussion clef (打楽器の音部記号)
+
+@code{DrumStaff} コンテキスト内で通常の記譜法でのピッチ (@code{cis4} 等)
+を使うとエラーになるということに注意してください。@c
+打楽器の音部記号は自動的に @code{DrumStaff} に付け加えられますが、@c
+明示的に付け加えることもできます。@c
+他の音部記号も使うことができます。
+
+@lilypond[quote,ragged-right,verbatim]
+\drums {
+  \clef percussion
+  bd4 4 4 4
+  \clef treble
+  hh4 4 4 4
+}
+@end lilypond
+
+
+打楽器のための MIDI サポートにはいくつか考慮すべき問題があります。@c
+@ref{Creating MIDI output} を参照してください。
+
+@morerefs
+記譜法リファレンス:
+@ref{Creating MIDI output},
+@ref{Percussion notes}
+
+インストールされているファイル:
+@file{ly/drumpitch-init.ly}
+
+コード断片集:
+@rlsr{Percussion}
+
+
+@node Drum rolls
+@unnumberedsubsubsec ドラム ロール
+
+ドラム ロールは符幹に 3 本のスラッシュを付けて示します。@c
+4 分音符以上の長さの音符には 3 本のスラッシュが明示的に示され、@c
+8 分音符には 2 本のスラッシュが付けられ
+(連桁が 3 本目のスラッシュになります)、@c
+8 分音符よりも短い音符には連桁に 1 本のスラッシュが付け加えられます。@c
+これは、トレモロ記譜法によって実現されます
+-- @ref{Tremolo repeats} を参照してください。
+
+@lilypond[quote,verbatim]
+\drums {
+  \time 2/4
+  sn16 8 16 8 8:32 ~
+  8 8 4:32 ~
+  4 8 16 16
+  4 r4
+}
+@end lilypond
+
+スティックは音符の上または下にマークアップ @code{"R"} または @code{"L"} を@c
+配置することによって示すことができます。@c
+マークアップの配置については @ref{Direction and placement}
+を参照してください。@c
+@code{staff-padding} プロパティを上書きして、@c
+ベースラインを好みに合わせることができます。
+
+@lilypond[quote,verbatim]
+\drums {
+  \repeat unfold 2 {
+    sn16^"L" 16^"R" 16^"L" 16^"L" 16^"R" 16^"L" 16^"R" 16^"R"
+    \stemUp
+    sn16_"L" 16_"R" 16_"L" 16_"L" 16_"R" 16_"L" 16_"R" 16_"R"
+  }
+}
+@end lilypond
+
+@morerefs
+記譜法リファレンス:
+@ref{Tremolo repeats}
+
+コード断片集:
+@rlsr{Percussion}
+
+
+@node Pitched percussion
+@unnumberedsubsubsec ピッチを持つ打楽器
+
+ピッチを持つ打楽器 (シロフォン、ビブラフォン、それにティンパニー)
+は通常の譜を用いて記述します。@c
+通常の譜については、このマニュアルの他のセクションでカバーしています。
+
+@morerefs
+記譜法リファレンス:
+@ref{Creating MIDI output}
+
+コード断片集:
+@rlsr{Percussion}
+
+
+@node Percussion staves
+@unnumberedsubsubsec 打楽器の譜
+
+@cindex percussion (打楽器)
+@cindex drums (ドラム)
+
+
+通常、複数の楽器での打楽器パートは複数線の譜を使い、@c
+譜の高さで打楽器を指定します。@c
+譜刻するには、音符を @code{DrumStaff} コンテキストや
+@code{DrumVoice} コンテキスト内に配置する必要があります。
+
+@lilypond[quote,verbatim]
+up = \drummode {
+  crashcymbal4 hihat8 halfopenhihat hh hh hh openhihat
+}
+down = \drummode {
+  bassdrum4 snare8 bd r bd sn4
+}
+\new DrumStaff <<
+  \new DrumVoice { \voiceOne \up }
+  \new DrumVoice { \voiceTwo \down }
+>>
+@end lilypond
+
+上記の例は冗長な多声記譜法です。@c
+@rlearningnamed{I'm hearing voices, 私はボイスを聴いている} で説明した短い多声記譜法を使うことも@c
+できます。@c
+例えば、以下のようになります:
+
+@lilypond[quote,verbatim]
+\new DrumStaff <<
+  \drummode {
+    bd4 sn4 bd4 sn4
+    << {
+      \repeat unfold 16 hh16
+    } \\ {
+      bd4 sn4 bd4 sn4
+    } >>
+  }
+>>
+@end lilypond
+
+他のレイアウトでも実現できます。@c
+コンテキスト @code{DrumVoice} の中にある プロパティ @code{drumStyleTable} を@c
+セットすることによってレイアウトを変更できます。@c
+以下の変数があらかじめ定義されています:
+
+@table @code
+
+@item drums-style
+これがデフォルトです。@c
+これは五線譜上に通常のドラム キットを刻譜します:
+
+@lilypond[quote,line-width=10.0\cm]
+nam = \lyricmode {
+  cymc cyms cymr hh hhc hho hhho hhp
+  cb hc bd sn ss tomh tommh tomml toml tomfh tomfl }
+mus = \drummode {
+  cymc cyms cymr hh hhc hho hhho hhp \break
+  cb hc bd sn ss tomh tommh tomml toml tomfh tomfl s16 }
+\score {
+  << \new DrumStaff \with {
+       \remove Bar_engraver
+       \remove Time_signature_engraver
+       \hide Stem
+       \override Stem.Y-extent = ##f
+     } \mus
+     \new Lyrics \nam
+  >>
+  \layout {
+    \context {
+      \Score
+      \override LyricText.font-family = #'typewriter
+      \override BarNumber.transparent =##T
+    }
+  }
+}
+@end lilypond
+
+このドラム構成は 6 種類のタムをサポートします。@c
+タムの種類が少ない場合は、望みの結果となるタムを選択してください。@c
+例えば、タムを五線譜の中間の 3 本の線に配置するのであれば、@c
+@code{tommh}, @code{tomml}, それに @code{tomfh} を使います。
+
+@item agostini-drums-style
+1965 年にフランス人のパーカッション奏者である Dante Agostini によって@c
+作られました。フランスではよく使われますが、他の国でも使われることがあります。
+
+@lilypond[quote,line-width=10.0\cm]
+nam = \lyricmode {
+  cymc cyms cymr hh hhc hho hhho hhp
+  cb hc bd sn ss tomh tommh tomml toml tomfh tomfl }
+mus = \drummode {
+  cymc cyms cymr hh hhc hho hhho hhp \break
+  cb hc bd sn ss tomh tommh tomml toml tomfh tomfl s16 }
+\score {
+  << \new DrumStaff \with {
+       \remove Bar_engraver
+       \remove Time_signature_engraver
+       \hide Stem
+       \override Stem.Y-extent = ##f
+       drumStyleTable = #agostini-drums-style
+     } \mus
+     \new Lyrics \nam
+  >>
+  \layout {
+    \context {
+      \Score
+      \override LyricText.font-family = #'typewriter
+      \override BarNumber.transparent =##T
+    }
+  }
+}
+@end lilypond
+
+@item timbales-style
+これは二線譜上にティンバレスを譜刻します:
+
+@lilypond[quote,ragged-right]
+nam = \lyricmode { timh ssh timl ssl cb }
+mus = \drummode { timh ssh timl ssl cb s16 }
+
+<<
+  \new DrumStaff \with {
+    \remove Bar_engraver
+    \remove Time_signature_engraver
+    \hide Stem
+    \override Stem.Y-extent = ##f
+    \override StaffSymbol.line-count = #2
+    \override StaffSymbol.staff-space = #2
+    \override VerticalAxisGroup.minimum-Y-extent = #'(-3.0 . 4.0)
+    drumStyleTable = #timbales-style
+  } \mus
+  \new Lyrics {
+    \override LyricText.font-family = #'typewriter
+    \nam
+  }
+>>
+@end lilypond
+
+@item congas-style
+これは二線譜上にコンガを譜刻します:
+
+@lilypond[quote,ragged-right]
+nam = \lyricmode { cgh cgho cghm ssh cgl cglo cglm ssl }
+mus = \drummode { cgh cgho cghm ssh cgl cglo cglm ssl s16 }
+
+<<
+  \new DrumStaff \with {
+    \remove Bar_engraver
+    \remove Time_signature_engraver
+    drumStyleTable = #congas-style
+    \override StaffSymbol.line-count = #2
+
+    %% this sucks; it will lengthen stems.
+    \override StaffSymbol.staff-space = #2
+    \hide Stem
+    \override Stem.Y-extent = ##f
+  } \mus
+  \new Lyrics {
+    \override LyricText.font-family = #'typewriter
+    \nam
+  }
+>>
+@end lilypond
+
+@item bongos-style
+これは二線譜上にボンゴを譜刻します:
+
+@lilypond[quote,ragged-right]
+nam = \lyricmode { boh boho bohm ssh bol bolo bolm ssl }
+mus = \drummode { boh boho bohm ssh bol bolo bolm ssl s16 }
+
+<<
+  \new DrumStaff \with {
+    \remove Bar_engraver
+    \remove Time_signature_engraver
+    \override StaffSymbol.line-count = #2
+    drumStyleTable = #bongos-style
+
+    %% this sucks; it will lengthen stems.
+    \override StaffSymbol.staff-space = #2
+    \hide Stem
+    \override Stem.Y-extent = ##f
+  } \mus
+  \new Lyrics {
+    \override LyricText.font-family = #'typewriter
+    \nam
+  }
+>>
+@end lilypond
+
+@item percussion-style
+これは全ての種類の打楽器を一線譜上に譜刻します:
+
+@lilypond[quote,ragged-right]
+nam = \lyricmode { tri trio trim gui guis guil cb cl tamb cab mar hc }
+mus = \drummode { tri trio trim gui guis guil cb cl tamb cab mar hc s16 }
+
+<<
+  \new DrumStaff \with{
+    \remove Bar_engraver
+    drumStyleTable = #percussion-style
+    \override StaffSymbol.line-count = #1
+    \remove Time_signature_engraver
+    \hide Stem
+    \override Stem.Y-extent = ##f
+  } \mus
+  \new Lyrics {
+    \override LyricText.font-family = #'typewriter
+    \nam
+  }
+>>
+@end lilypond
+@end table
+
+@ref{Custom percussion staves} で説明されているように、@c
+カスタム打楽器スタイルを定義することもできます。
+
+@morerefs
+学習マニュアル:
+@rlearning{I'm hearing voices}
+
+記譜法リファレンス:
+@ref{Custom percussion staves}
+
+インストールされているファイル:
+@file{ly/drumpitch-init.ly}
+
+コード断片集:
+@rlsr{Percussion}
+
+@node Custom percussion staves
+@unnumberedsubsubsec カスタム打楽器譜
+
+@cindex percussion, custom (カスタム打楽器)
+@funindex drumStyleTable
+
+カスタム打楽器スタイルを定義することができます。@c
+スタイルは連想配列として定義し、@code{drumStyleTable} プロパティにセットします。@c
+連想配列の各エントリは 4 つのアイテムからなります:
+名前・符頭のスタイル (デフォルトは @code{default})・@c
+アーティキュレーション (必要ない場合には @code{#f})・@c
+譜内の符頭の位置です。@c
+この連想配列は最終的に
+@code{alist->hash-table} 関数を用いて Scheme ハッシュテーブルに@c
+変換しなければなりません。
+
+@lilypond[quote,verbatim]
+#(define mydrums '(
+         (bassdrum        default   #f           -1)
+         (snare           default   #f           0)
+         (hihat           cross     #f           1)
+         (halfopenhihat   cross     halfopen     1)
+         (pedalhihat      xcircle   stopped      2)
+         (lowtom          diamond   #f           3)))
+
+up = \drummode { hh8 hh hhho hhho hhp4 hhp }
+down = \drummode { bd4 sn bd toml8 toml }
+
+\new DrumStaff <<
+  \set DrumStaff.drumStyleTable = #(alist->hash-table mydrums)
+  \new DrumVoice { \voiceOne \up }
+  \new DrumVoice { \voiceTwo \down }
+>>
+@end lilypond
+
+@funindex drumPitchNames
+
+@code{drumPitchNames} 変数を@c
+連想配列として再定義することで、これらのカスタム スタイルに@c
+新たな名前を追加することもできます
+(あるいは下の例のように、新たなリストを既存の値に
+@code{append} することによって追加することもできます)。@c
+また、各項目を直接追加することもできます。@c
+これを用いて、エイリアス (略記法) を定義することができます。
+
+@lilypond[quote,verbatim]
+drumPitchNames =
+  #(append
+    '((leftsnap . sidestick)
+      (rightsnap . ridecymbal))
+    drumPitchNames)
+
+drumPitchNames.ls = #'sidestick
+drumPitchNames.rs = #'ridecymbal
+
+\drums {
+  leftsnap4. rightsnap8 leftsnap4 rightsnap
+  ls8 rs ls rs ls4 rs
+}
+@end lilypond
+
+@funindex midiDrumPitches
+@funindex drumPitchTable
+
+同様に、@code{drumPitchTable} プロパティは@c
+音符名と MIDI ピッチ (MIDI サウンドフォントの楽器音) を関連付けています。@c
+このプロパティもハッシュテーブルとして定義される必要があり、@c
+連想配列 (デフォルト値が @code{midiDrumPitches} 変数にセットされています) から@c
+変換しなければなりません。@c
+関連付けを変更する方法は上記と同様で、@c
+連想配列全体を定義し直すか、各要素を変更するかのどちらかになります。@c
+次の例は、入力構文・出力スタイル・対応する MIDI 出力を含めた、@c
+新たな記譜法のセットを作る方法を示しています。
+
+@c KEEP LY
+@lilypond[quote,verbatim]
+drumPitchNames.dbass      = #'dbass
+drumPitchNames.dba        = #'dbass  % 'db は既に使われています
+drumPitchNames.dbassmute  = #'dbassmute
+drumPitchNames.dbm        = #'dbassmute
+drumPitchNames.do         = #'dopen
+drumPitchNames.dopenmute  = #'dopenmute
+drumPitchNames.dom        = #'dopenmute
+drumPitchNames.dslap      = #'dslap
+drumPitchNames.ds         = #'dslap
+drumPitchNames.dslapmute  = #'dslapmute
+drumPitchNames.dsm        = #'dslapmute
+
+#(define djembe-style
+  '((dbass      default  #f         -2)
+    (dbassmute  default  stopped    -2)
+    (dopen      default  #f          0)
+    (dopenmute  default  stopped     0)
+    (dslap      default  #f          2)
+    (dslapmute  default  stopped     2)))
+
+midiDrumPitches.dbass     = g
+midiDrumPitches.dbassmute = fis
+midiDrumPitches.dopen     = a
+midiDrumPitches.dopenmute = gis
+midiDrumPitches.dslap     = b
+midiDrumPitches.dslapmute = ais
+
+test = \drummode { dba4 do ds dbm dom dsm }
+
+\score {
+  \new DrumStaff \with {
+    \override StaffSymbol.line-count = #3
+    instrumentName = "Djembé "
+    drumStyleTable = #(alist->hash-table djembe-style)
+    drumPitchTable = #(alist->hash-table midiDrumPitches)
+  } {
+    \time 3/4
+    \test
+  }
+  \layout {}
+  \midi {}
+}
+@end lilypond
+
+@morerefs
+インストールされているファイル:
+@file{ly/drumpitch-init.ly}
+
+コード断片集:
+@rlsr{Percussion}
+
+内部リファレンス:
+@rinternals{DrumStaff},
+@rinternals{DrumVoice}
+
+
+@node Ghost notes
+@unnumberedsubsubsec ゴースト ノート
+
+@cindex ghost note, percussion (打楽器でのゴースト ノート)
+@cindex dead note, percussion (打楽器での dead note)
+@cindex muted note, percussion (打楽器での muted note)
+@cindex silenced note, percussion (打楽器での silenced note)
+@cindex false note, percussion (打楽器での false note)
+@cindex percussion, ghost note (打楽器でのゴースト ノート)
+@cindex percussion, dead note (打楽器での dead note)
+@cindex percussion, muted note (打楽器での muted note)
+@cindex percussion, silenced note (打楽器での silenced note)
+@cindex percussion, false note (打楽器での false note)
+
+ドラムと打楽器のゴースト ノート
+(dead note, muted note, silenced note, false note とも呼ばれます)
+は @code{\parenthesize} コマンドを用いて@c
+作ることができます。@c
+詳細は @ref{Parentheses} を参照してください。
+
+@lilypond[quote,ragged-right,verbatim]
+\new DrumStaff
+<<
+  \context DrumVoice  = "1" { s1 }
+  \context DrumVoice  = "2" { s1 }
+  \drummode {
+    <<
+      {
+        hh8[ 8] <hh sn> hh16
+        \parenthesize sn  hh
+        \parenthesize sn  hh8 <hh sn> hh
+      } \\
+      {
+        bd4 r4 bd8 8 r8 bd
+      }
+    >>
+  }
+>>
+@end lilypond
+
+@morerefs
+記譜法リファレンス:
+@ref{Parentheses}
+
+コード断片集:
+@rlsr{Percussion}

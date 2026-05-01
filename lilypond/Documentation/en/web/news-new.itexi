@@ -1,0 +1,45 @@
+@c -*- coding: utf-8; mode: texinfo; -*-
+@c This file is part of community.itexi
+
+@c when you add a new item, consider moving the lowest item(s)
+@c into news-old.itexi.
+
+@c keep two blank lines between news entries
+
+@c used for news about the upcoming release; see CG on Release Work
+
+@newsItem
+@subheading LilyPond 2.27.0 released  @emph{April 25, 2026}
+
+We are happy to announce the release of LilyPond 2.27.0, the start
+of the next development cycle. This is termed a development release,
+but these are usually reliable for testing new features and recent
+bug fixes. However, for production usage, we recommend using version
+2.26.0, the current stable release.
+
+@newsEnd
+
+@newsItem
+@subheading LilyPond 2.26.0 released!  @emph{April 21, 2026}
+
+We are proud to announce the release of GNU LilyPond 2.26.0.
+LilyPond is a music engraving program devoted to producing the
+highest-quality sheet music possible. It brings the aesthetics
+of traditionally engraved music to computer printouts.
+
+This version includes improvements and fixes since the branching
+of the previous stable release in October 2022. A list of added
+features and other user-visible changes can be found at
+@uref{https://lilypond.org/doc/v2.26/Documentation/changes/}.
+
+We dedicate this release to Urs Liska, who passed away in December
+2024. Urs was an accomplished pianist, a scholar and award-winning
+editor, a prolific advocate of real-world use of LilyPond, a
+contributor to the Frescobaldi project, and one of the initiators of
+OpenLilyLib. In 2020, he co-organized a Music Engraving Conference at
+the Mozarteum University in Salzburg, as well as a LilyPond meeting
+which brought together developers and the wider community. Urs will
+be remembered as a kind contributor whose enthusiasm for beautiful
+music engraving inspired others.
+
+@newsEnd

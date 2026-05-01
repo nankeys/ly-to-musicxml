@@ -1,0 +1,13 @@
+%% Translation of GIT committish: 6d96d9c7a40e4be6472937c5e1dd84aa01e39463
+  texidoces = "
+Este fragmento de código basado en Scheme genera notas aleatorias.
+Úselo como
+
+@example
+\\randomNotes @var{n} @var{desde} @var{hasta} @var{duración}
+@end example
+
+para generar @emph{n} notas aleatorias entre las alturas
+@emph{desde} y @emph{hasta}, con una longitud de @emph{duración}.
+"
+  doctitlees = "Generación de notas aleatorias"

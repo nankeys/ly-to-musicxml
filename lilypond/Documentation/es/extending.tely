@@ -1,0 +1,69 @@
+\input texinfo @c -*- coding: utf-8; mode: texinfo; documentlanguage: es -*-
+@ignore
+    Translation of GIT committish: d304582e9b791c7e9d54a5bbda3e37dc49a87fd1
+
+    When revising a translation, copy the HEAD committish of the
+    version that you are working on.  For details, see the Contributors'
+    Guide, node Updating translation committishes..
+@end ignore
+
+@settitle Extender LilyPond
+@documentencoding UTF-8
+@documentlanguage es
+@afourpaper
+
+@c translator: Francisco Vila
+
+@macro manualIntro
+Este archivo explica la forma de extender las funcionalidades de
+LilyPond versión @version{}.
+@end macro
+
+@c 'Extending' was born 2004-03-07 with this commit:
+@c * Documentation/user/changing-defaults.itely (Changing defaults):
+@c author: Han-Wen Nienhuys
+@c commit: c53d0cabdf9361e448cdd02a338aa5d696f4f466
+@c   file: Documentation/user/programming-interface.itely
+
+@macro copyrightDeclare
+Copyright @copyright{} 2004--2026 por los autores.
+@end macro
+
+@set FDL
+@include es/macros.itexi
+
+
+@lilyTitlePage{Extender}
+
+
+@c TOC -- non-tex
+@ifnottex
+
+@menu
+* Scheme tutorial::            Programación desde dentro de LilyPond.
+* Interfaces for programmers:: Cómo interactuar con Scheme.
+* LilyPond Scheme interfaces:: Obtener información hacia dentro y fuera de la música.
+
+Apéndices
+
+* GNU Free Documentation License:: Licencia de este documento.
+* Index of commands and concepts::
+@end menu
+
+@docMain
+@end ifnottex
+
+
+@contents
+
+@include es/extending/scheme-tutorial.itely
+@include es/extending/programming-interface.itely
+
+@include en/fdl.itexi
+
+@node Index of commands and concepts
+@appendix Índice
+
+@printindex cp
+
+@bye

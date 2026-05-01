@@ -1,0 +1,8 @@
+%% Translation of GIT committish: de1e42ce512f3690387cdd065109bddff1b7bd6d
+  texidocfr = "
+Les notes harmoniques artificielles, obtenues grâce à @code{\\harmonic},
+ne sont pas pointées. Ce comportement peut être modifié en activant la
+propriété de contexte @code{harmonicDots}.
+"
+
+  doctitlefr = "Harmoniques pointées"

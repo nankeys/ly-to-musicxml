@@ -1,0 +1,7 @@
+%% Translation of GIT committish: de1e42ce512f3690387cdd065109bddff1b7bd6d
+  texidocfr = "
+Vous pouvez ajouter une nouvelle portée, éventuellement de manière
+temporaire, après le début d'un morceau.
+"
+
+  doctitlefr = "Ajout d'une portée supplémentaire"

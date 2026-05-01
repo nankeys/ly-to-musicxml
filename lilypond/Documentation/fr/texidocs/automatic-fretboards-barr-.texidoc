@@ -1,0 +1,13 @@
+%% Translation of GIT committish: c043783aac6c35926d633aa2daf60ed4f2e7ca7a
+  texidocfr = "
+L'utilisation de diagrammes de fret automatiques permet d'imprimer une
+indication de barré dès lors qu'un même doigt s'applique à plusieurs
+cordes.
+
+Lorsqu'aucune indication de doigt n'est fournie dans l'accord qui sera
+rendu sous forme de diagramme, aucune indication de barré n'apparaîtra
+puisqu'il n'y a aucun moyen d'identifier où les barrés devraient venir
+se positionner.
+"
+
+  doctitlefr = "Barrés et diagrammes de fret automatiques"

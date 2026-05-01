@@ -1,0 +1,9 @@
+%% Translation of GIT committish: de1e42ce512f3690387cdd065109bddff1b7bd6d
+  texidocfr = "
+Dans la mesure où @code{\\repeat tremolo} requiert deux arguments
+musicaux pour un trémolo d'accords, la note ou l'accord de la portée
+opposée doit être encadré par des accolades et se voir adjoindre la
+commande @code{\\change Staff}.
+"
+
+  doctitlefr = "Trémolo et changement de portée"

@@ -1,0 +1,10 @@
+\documentclass[a4paper]{article}
+
+\begin{document}
+
+\section{\texttt{lilypond-book} should add the \textsl{graphics} package}
+
+If a \LaTeX{} file does not yet include the \textsl{graphics} package, it is
+added by \texttt{lilypond-book}.
+
+\end{document}

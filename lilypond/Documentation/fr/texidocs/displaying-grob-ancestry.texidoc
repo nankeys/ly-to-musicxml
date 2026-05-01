@@ -1,0 +1,66 @@
+%% Translation of GIT committish: c043783aac6c35926d633aa2daf60ed4f2e7ca7a
+  texidocfr = "
+Lorsque l'on manipule des rappels d'objet (@emph{grob callbacks}), il
+peut être intéressant d'en maîtriser les ascendants. La plupart des
+objets graphiques ont des parents, lesquels auront une influence sur le
+positionnement de l'objet en question. Ainsi, les parents des côtés X et
+Y influenceront respectivement les positions horizontale et verticale de
+l'objet. De plus, chacun des parents peut avoir ses propres parents.
+
+Certains aspects de la lignée d'un objet peuvent toutefois porter à
+confusion :
+
+@itemize
+@item
+Les types de parents d'un @emph{grob} peuvent dépendre du contexte.
+@item
+Dans le cas de certains @emph{grobs}, les parents X et Y peuvent être
+le même.
+@item
+Un « ascendant » particulier peut dépendre d'un @emph{grob} de
+différentes manières.
+@item
+Le concept de « générations » est trompeur.
+@end itemize
+
+Par exemple, l'objet @code{System} peut, vis à vis d'un objet
+@code{VerticalAlignment}, être à la fois parent (par son côté Y) et
+grand parent (par deux fois du côté X).
+
+La macro définie ci-dessous affiche à l'écran une représentation
+textuelle de l'ascendance d'un @emph{grob}. Par exemple, appeler
+
+@example
+@{
+  \\once \\override NoteHead.before-line-breaking = #display-ancestry
+  c
+@}
+@end example
+
+@noindent
+génère la sortie suivante :
+
+@example
+------------------------------------
+@end example
+
+@example
+NoteHead
+X,Y: NoteColumn
+     X: PaperColumn
+        X,Y: System
+     Y: VerticalAxisGroup
+        X: NonMusicalPaperColumn
+           X,Y: System
+        Y: VerticalAlignment
+           X: NonMusicalPaperColumn
+              X,Y: System
+           Y: System
+@end example
+
+Par voie de conséquence, il vous faut exécuter vous-même le code de cet
+extrait, puisque le fichier résultant ne contient pas les données qui
+nous intéressent.
+"
+
+  doctitlefr = "Affichage de la généalogie d'un objet"
