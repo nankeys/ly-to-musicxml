@@ -24,6 +24,14 @@ $env:PYTHONPATH = (Resolve-Path .\src)
 python -m ly_to_musicxml.cli "input.ly" -o "output.musicxml"
 ```
 
+Install from PyPI once published:
+
+```powershell
+pip install ly-to-musicxml
+```
+
+This package depends on an external LilyPond installation at runtime. Installing with `pip` only installs the Python package and CLI; it does not install LilyPond itself.
+
 ## Usage
 
 ```powershell
@@ -89,4 +97,20 @@ Run the focused regression test with:
 
 ```powershell
 python -m unittest tests.test_converter
+```
+
+## Build And Publish
+
+Build distributable artifacts for PyPI with:
+
+```powershell
+python -m build
+```
+
+This should produce both a wheel and an sdist in `dist/`.
+
+Upload them to PyPI with:
+
+```powershell
+python -m twine upload dist/*
 ```

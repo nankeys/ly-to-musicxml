@@ -8,9 +8,46 @@ version = "0.1.0"
 description = "Compiler-assisted LilyPond to MusicXML conversion"
 readme = "README.md"
 requires-python = ">=3.10"
+license = "MIT"
+
+authors = [{ name = "xvb8", email = "v3qu7ruif@mozmail.com" }]
+maintainers = [{ name = "xvb8", email = "v3qu7ruif@mozmail.com" }]
+
+keywords = ["lilypond", "musicxml", "music-notation", "score-conversion"]
+classifiers = [
+	"Development Status :: 4 - Beta",
+	"Environment :: Console",
+	"Intended Audience :: Developers",
+	"Intended Audience :: End Users/Desktop",
+	"License :: OSI Approved :: MIT License",
+	"Operating System :: OS Independent",
+	"Programming Language :: Python :: 3",
+	"Programming Language :: Python :: 3.10",
+	"Programming Language :: Python :: 3.11",
+	"Programming Language :: Python :: 3.12",
+	"Programming Language :: Python :: 3.13",
+	"Topic :: Artistic Software",
+	"Topic :: Multimedia :: Sound/Audio :: Conversion",
+	"Topic :: Text Processing :: Markup :: XML",
+]
+
+# Uncomment and fill these in before publishing so the PyPI page links to the real project.
+[project.urls]
+Homepage = "https://github.com/xvb8/ly-to-musicxml"
+Repository = "https://github.com/xvb8/ly-to-musicxml"
+Issues = "https://github.com/xvb8/ly-to-musicxml/issues"
+# Documentation = "https://example.com/docs"
 
 [project.scripts]
 ly-to-musicxml = "ly_to_musicxml.cli:main"
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/ly_to_musicxml"]
+
+[tool.hatch.build.targets.sdist]
+include = [
+	"/src/ly_to_musicxml",
+	"/README.md",
+	"/LICENSE",
+	"/pyproject.toml",
+]
