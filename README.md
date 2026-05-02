@@ -4,6 +4,10 @@ Compiler-assisted conversion from LilyPond `.ly` files to MusicXML 4.0.
 
 This project has been manually validated from the local source tree, from TestPyPI, and from a real PyPI install.
 
+Unlike similar software, this program can parse dynamic LilyPond. It runs LilyPond itself in a no-print extraction mode, lets LilyPond resolve `\include` files and embedded Scheme, exports LilyPond's internal music tree to XML, then translates that compiler-resolved XML into MusicXML. This makes this program more reliable than other implementations for converting when the input is not entirely static.
+
+An example conversion of Shostakovitch's 8th String Quartet is in this repository.
+
 ## Quick start
 
 Install the package:
