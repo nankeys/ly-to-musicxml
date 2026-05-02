@@ -32,6 +32,13 @@ pip install ly-to-musicxml
 
 This package depends on an external LilyPond installation at runtime. Installing with `pip` only installs the Python package and CLI; it does not install LilyPond itself.
 
+## Requirements
+
+- Python 3.10 or newer
+- A working LilyPond installation available either through `--lilypond-bin`, `LY_TO_MUSICXML_LILYPOND_BIN`, or the default configured path
+
+The converter executes LilyPond during every run, so a missing or incompatible LilyPond install is the most common setup problem.
+
 ## Usage
 
 ```powershell
@@ -88,6 +95,19 @@ The current translator maps these runtime LilyPond constructs to MusicXML:
 
 If the source file contains embedded Scheme syntax, the converter emits a warning that the output reflects one compiler evaluation.
 This is intentional: the converter uses the actual LilyPond runtime result instead of guessing what the Scheme might do.
+
+## Troubleshooting
+
+If the CLI reports that it cannot find LilyPond:
+
+```powershell
+$env:LY_TO_MUSICXML_LILYPOND_BIN = "C:\path\to\lilypond.exe"
+ly-to-musicxml "input.ly" -o "output.musicxml"
+```
+
+If a conversion writes multiple files unexpectedly, check for a sibling `stem.exports/` directory next to the main output file. That directory contains additional non-empty scores extracted from the same LilyPond input.
+
+If the output looks wrong in another notation program, first confirm you are opening the newly generated `.musicxml` file rather than an older export from a previous run.
 
 ## Test
 
