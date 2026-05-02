@@ -31,12 +31,11 @@ classifiers = [
 	"Topic :: Text Processing :: Markup :: XML",
 ]
 
-# Uncomment and fill these in before publishing so the PyPI page links to the real project.
 [project.urls]
 Homepage = "https://github.com/xvb8/ly-to-musicxml"
 Repository = "https://github.com/xvb8/ly-to-musicxml"
 Issues = "https://github.com/xvb8/ly-to-musicxml/issues"
-# Documentation = "https://example.com/docs"
+Documentation = "https://github.com/xvb8/ly-to-musicxml/tree/main/docs"
 
 [project.scripts]
 ly-to-musicxml = "ly_to_musicxml.cli:main"
