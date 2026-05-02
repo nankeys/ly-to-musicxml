@@ -10,6 +10,8 @@ The converter is compiler-assisted rather than text-only.
 4. Parse the extracted Lily XML into an intermediate representation.
 5. Serialize that representation to MusicXML 4.0.
 
+The wrapper-based extraction path is intentionally repo-owned rather than delegated to a legacy runtime init hook. This keeps the extraction flow stable on the currently used LilyPond 2.26 installation.
+
 ## Main modules
 
 - `src/ly_to_musicxml/lilypond.py`: LilyPond invocation and XML extraction
@@ -18,6 +20,12 @@ The converter is compiler-assisted rather than text-only.
 - `src/ly_to_musicxml/musicxml_writer.py`: MusicXML serialization
 - `src/ly_to_musicxml/converter.py`: end-to-end orchestration and output naming
 - `src/ly_to_musicxml/cli.py`: command-line interface
+
+## Behavioral notes
+
+- The parser consumes compiler-resolved LilyPond XML rather than raw source tokens.
+- Ottava is written as semantic MusicXML: note pitches stay at true pitch and `<octave-shift>` carries the printed shift direction required by MusicXML consumers.
+- Additional non-empty scores are preserved in `stem.exports/` rather than being dropped.
 
 LilyPond input may contain `\include`, Scheme, and other runtime constructs that are hard to convert correctly with static parsing alone.
 

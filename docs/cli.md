@@ -6,6 +6,12 @@
 ly-to-musicxml "input.ly" -o "output.musicxml"
 ```
 
+Module form:
+
+```powershell
+python -m ly_to_musicxml "input.ly" -o "output.musicxml"
+```
+
 ## Arguments
 
 - `input.ly`: input LilyPond file
@@ -28,3 +34,9 @@ stem.exports/book-NN-score-NN.musicxml
 ```
 
 On rerun, the converter clears that `stem.exports/` directory and any legacy flat `stem.bookNN.scoreNN.musicxml` files for the same output stem before writing new output.
+
+Warnings you may see during a valid run:
+
+- empty scores are skipped with warnings
+- multi-score inputs report each additional output path
+- files containing embedded Scheme may warn that output reflects one runtime evaluation

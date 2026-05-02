@@ -2,6 +2,8 @@
 
 Compiler-assisted conversion from LilyPond `.ly` files to MusicXML 4.0.
 
+This project has been manually validated both from the local source tree and from an installed TestPyPI package.
+
 ## Approach
 
 This converter does not statically parse LilyPond source and it does not use PDF or optical music recognition.
@@ -17,11 +19,13 @@ Install the project in editable mode:
 pip install -e .
 ```
 
+For packaging, testing, and documentation tasks, use a standard CPython install or a normal virtual environment. Avoid using LilyPond's bundled Python as your main project interpreter because it does not include normal packaging tooling such as `pip`, `build`, or `twine`.
+
 You can also run it without installation:
 
 ```powershell
 $env:PYTHONPATH = (Resolve-Path .\src)
-python -m ly_to_musicxml.cli "input.ly" -o "output.musicxml"
+python -m ly_to_musicxml "input.ly" -o "output.musicxml"
 ```
 
 Install from PyPI once published:
@@ -79,6 +83,16 @@ If the input produces multiple non-empty scores or books, the converter preserve
 
 If you rerun the converter for the same output path, it clears the previous `stem.exports/` directory and any legacy `stem.bookNN.scoreNN.musicxml` files before writing fresh outputs.
 
+Example output layout for a multi-score input:
+
+```text
+Shostakovich-String-Quartet-8.musicxml
+Shostakovich-String-Quartet-8.exports/
+	book-01-score-02.musicxml
+	book-02-score-01.musicxml
+	...
+```
+
 ## What Is Currently Mapped
 
 The current translator maps these runtime LilyPond constructs to MusicXML:
@@ -107,10 +121,29 @@ If a conversion writes multiple files unexpectedly, check for a sibling `stem.ex
 
 If the output looks wrong in another notation program, first confirm you are opening the newly generated `.musicxml` file rather than an older export from a previous run.
 
+If VS Code auto-selects LilyPond's bundled Python for this workspace, switch to a standard CPython interpreter or a normal venv before doing package builds, `pip install`, or `twine upload`. The bundled interpreter can run LilyPond internals but is not a good development environment for this project.
+
 ## Test
 
 Run the focused regression test with:
 
 ```powershell
 python -m unittest tests.test_converter
+```
+
+Manual smoke tests used during validation:
+
+```powershell
+$env:PYTHONPATH = (Resolve-Path .\src)
+python -m ly_to_musicxml --help
+python -m ly_to_musicxml "Shostakovich-String-Quartet-8.ly" -o "local-manual-smoke.musicxml" --lilypond-bin "C:\Users\kkris\Documents\lilypond-2.26.0-mingw-x86_64\lilypond-2.26.0\bin\lilypond.exe"
+```
+
+TestPyPI smoke test after publishing:
+
+```powershell
+py -3.13 -m venv .testpypi-venv
+.\.testpypi-venv\Scripts\python.exe -m pip install --upgrade pip
+.\.testpypi-venv\Scripts\python.exe -m pip install --index-url https://test.pypi.org/simple/ --extra-index-url https://pypi.org/simple ly-to-musicxml
+.\.testpypi-venv\Scripts\ly-to-musicxml.exe "Shostakovich-String-Quartet-8.ly" -o "testpypi-smoke.musicxml" --lilypond-bin "C:\Users\kkris\Documents\lilypond-2.26.0-mingw-x86_64\lilypond-2.26.0\bin\lilypond.exe"
 ```
