@@ -2,39 +2,29 @@
 
 Compiler-assisted conversion from LilyPond `.ly` files to MusicXML 4.0.
 
-This project has been manually validated both from the local source tree and from an installed TestPyPI package.
+This project has been manually validated from the local source tree, from TestPyPI, and from a real PyPI install.
 
-## Approach
+## Quick start
 
-This converter does not statically parse LilyPond source and it does not use PDF or optical music recognition.
-It runs LilyPond itself in a no-print extraction mode, lets LilyPond resolve `\include` files and embedded Scheme, exports LilyPond's internal music tree to XML, then translates that compiler-resolved XML into MusicXML.
-
-Normal conversion does not generate PDF output.
-
-## Installation
-
-Install the project in editable mode:
-
-```powershell
-pip install -e .
-```
-
-For packaging, testing, and documentation tasks, use a standard CPython install or a normal virtual environment. Avoid using LilyPond's bundled Python as your main project interpreter because it does not include normal packaging tooling such as `pip`, `build`, or `twine`.
-
-You can also run it without installation:
-
-```powershell
-$env:PYTHONPATH = (Resolve-Path .\src)
-python -m ly_to_musicxml "input.ly" -o "output.musicxml"
-```
-
-Install from PyPI once published:
+Install the package:
 
 ```powershell
 pip install ly-to-musicxml
 ```
 
-This package depends on an external LilyPond installation at runtime. Installing with `pip` only installs the Python package and CLI; it does not install LilyPond itself.
+Run a conversion:
+
+```powershell
+ly-to-musicxml "input.ly" -o "output.musicxml"
+```
+
+If LilyPond is not on the expected path, pass it explicitly:
+
+```powershell
+ly-to-musicxml "input.ly" -o "output.musicxml" --lilypond-bin "C:\path\to\lilypond.exe"
+```
+
+Installing with `pip` only installs the Python package and CLI. LilyPond remains an external runtime dependency.
 
 ## Requirements
 
@@ -43,13 +33,51 @@ This package depends on an external LilyPond installation at runtime. Installing
 
 The converter executes LilyPond during every run, so a missing or incompatible LilyPond install is the most common setup problem.
 
+For packaging, testing, and documentation tasks, use a standard CPython install or a normal virtual environment. Avoid using LilyPond's bundled Python as your main project interpreter because it does not include normal packaging tooling such as `pip`, `build`, or `twine`.
+
+## Installation
+
+Install from PyPI:
+
+```powershell
+pip install ly-to-musicxml
+```
+
+Install from source in editable mode:
+
+```powershell
+pip install -e .
+```
+
+Run directly from the repository without installation:
+
+```powershell
+$env:PYTHONPATH = (Resolve-Path .\src)
+python -m ly_to_musicxml "input.ly" -o "output.musicxml"
+```
+
 ## Usage
+
+Console entry point:
 
 ```powershell
 ly-to-musicxml "input.ly" -o "output.musicxml"
 ```
 
+Module entry point:
+
+```powershell
+python -m ly_to_musicxml "input.ly" -o "output.musicxml"
+```
+
 If `-o` is omitted, the converter writes the first output file next to the input using the same stem and a `.musicxml` extension.
+
+## Approach
+
+This converter does not statically parse LilyPond source and it does not use PDF or optical music recognition.
+It runs LilyPond itself in a no-print extraction mode, lets LilyPond resolve `\include` files and embedded Scheme, exports LilyPond's internal music tree to XML, then translates that compiler-resolved XML into MusicXML.
+
+Normal conversion does not generate PDF output.
 
 ## LilyPond Binary Selection
 
@@ -72,6 +100,8 @@ Or via environment variable:
 $env:LY_TO_MUSICXML_LILYPOND_BIN = "C:\path\to\lilypond.exe"
 ly-to-musicxml "input.ly" -o "output.musicxml"
 ```
+
+This is usually the easiest way to make repeated CLI runs use the same LilyPond install.
 
 ## Multi-Score Inputs
 
@@ -103,6 +133,8 @@ The current translator maps these runtime LilyPond constructs to MusicXML:
 - Ties, slurs, dynamics, text directions, tempo marks, and wedges
 - Breath marks, ottava shifts, fermatas, and common articulation/bowing marks
 
+See [docs/ly-to-musicxml-limitations.md](docs/ly-to-musicxml-limitations.md) for the current boundary conditions and known gaps.
+
 ## Scheme Handling
 
 If the source file contains embedded Scheme syntax, the converter emits a warning that the output reflects one compiler evaluation.
@@ -123,7 +155,7 @@ If the output looks wrong in another notation program, first confirm you are ope
 
 If VS Code auto-selects LilyPond's bundled Python for this workspace, switch to a standard CPython interpreter or a normal venv before doing package builds, `pip install`, or `twine upload`. The bundled interpreter can run LilyPond internals but is not a good development environment for this project.
 
-## Test
+## Validation
 
 Run the focused regression test with:
 
@@ -131,7 +163,7 @@ Run the focused regression test with:
 python -m unittest tests.test_converter
 ```
 
-Manual smoke tests used during validation:
+Manual local-source smoke test:
 
 ```powershell
 $env:PYTHONPATH = (Resolve-Path .\src)
@@ -139,7 +171,16 @@ python -m ly_to_musicxml --help
 python -m ly_to_musicxml "Shostakovich-String-Quartet-8.ly" -o "local-manual-smoke.musicxml" --lilypond-bin "C:\Users\kkris\Documents\lilypond-2.26.0-mingw-x86_64\lilypond-2.26.0\bin\lilypond.exe"
 ```
 
-TestPyPI smoke test after publishing:
+Real PyPI smoke test:
+
+```powershell
+py -3.13 -m venv .pypi-venv
+.\.pypi-venv\Scripts\python.exe -m pip install --upgrade pip
+.\.pypi-venv\Scripts\python.exe -m pip install ly-to-musicxml
+.\.pypi-venv\Scripts\ly-to-musicxml.exe "Shostakovich-String-Quartet-8.ly" -o "pypi-smoke.musicxml" --lilypond-bin "C:\Users\kkris\Documents\lilypond-2.26.0-mingw-x86_64\lilypond-2.26.0\bin\lilypond.exe"
+```
+
+TestPyPI smoke test:
 
 ```powershell
 py -3.13 -m venv .testpypi-venv
