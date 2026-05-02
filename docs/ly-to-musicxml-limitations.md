@@ -87,7 +87,3 @@ A focused single-score regression fixture used to validate the basic end-to-end 
 ## tests/test_converter.py
 
 Focused regression test covering a minimal conversion and verifying that a MusicXML partwise document with note content is written.
-
-## ly-to-musicxml-limitations.md
-
-Tracks the audited converter surface and the currently known limits from this prompt.

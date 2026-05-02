@@ -79,8 +79,6 @@ If the input produces multiple non-empty scores or books, the converter preserve
 
 If you rerun the converter for the same output path, it clears the previous `stem.exports/` directory and any legacy `stem.bookNN.scoreNN.musicxml` files before writing fresh outputs.
 
-For the provided `Shostakovich-String-Quartet-8.ly`, this means the quartet score and the extracted part books are written as separate MusicXML files.
-
 ## What Is Currently Mapped
 
 The current translator maps these runtime LilyPond constructs to MusicXML:
@@ -115,20 +113,4 @@ Run the focused regression test with:
 
 ```powershell
 python -m unittest tests.test_converter
-```
-
-## Build And Publish
-
-Build distributable artifacts for PyPI with:
-
-```powershell
-python -m build
-```
-
-This should produce both a wheel and an sdist in `dist/`.
-
-Upload them to PyPI with:
-
-```powershell
-python -m twine upload dist/*
 ```
