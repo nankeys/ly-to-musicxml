@@ -84,8 +84,6 @@ The current translator maps these runtime LilyPond constructs to MusicXML:
 - Ties, slurs, dynamics, text directions, tempo marks, and wedges
 - Breath marks, ottava shifts, fermatas, and common articulation/bowing marks
 
-If a construct cannot be mapped cleanly, the converter prefers a warning over a silent fallback.
-
 ## Scheme Handling
 
 If the source file contains embedded Scheme syntax, the converter emits a warning that the output reflects one compiler evaluation.
