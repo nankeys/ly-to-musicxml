@@ -77,6 +77,15 @@ If `-o` is omitted, the converter writes the first output file next to the input
 This converter does not statically parse LilyPond source and it does not use PDF or optical music recognition.
 It runs LilyPond itself in a no-print extraction mode, lets LilyPond resolve `\include` files and embedded Scheme, exports LilyPond's internal music tree to XML, then translates that compiler-resolved XML into MusicXML.
 
+That is the main difference between this project and most other LilyPond-to-MusicXML attempts. Many alternatives either:
+
+- parse LilyPond text directly and try to reconstruct musical meaning from source syntax
+- convert from rendered notation or PDF output after LilyPond has already laid the music out
+- depend on partial format bridges that lose information once LilyPond-specific runtime behavior appears
+- Use odd formatting or merge parts
+
+This project instead uses LilyPond itself as the front end. That means `\include` resolution, variable expansion, repeats, many context properties, and embedded Scheme are handled by the real LilyPond runtime before conversion begins. The converter still has documented limits, but it is working from the compiler-resolved score structure rather than from treating it as static.
+
 Normal conversion does not generate PDF output.
 
 ## LilyPond Binary Selection
