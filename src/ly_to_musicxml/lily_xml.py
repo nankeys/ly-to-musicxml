@@ -21,6 +21,7 @@ from .model import (
     ParsedDocument,
     Part,
     Pitch,
+    RepeatItem,
     Score,
 )
 
@@ -71,6 +72,7 @@ CLEF_MAP = {
     "alto": ("C", 3, None),
     "tenor": ("C", 4, None),
 }
+STAFF_GROUP_CONTEXTS = {"PianoStaff", "GrandStaff"}
 START_SPAN = Fraction(-1)
 STOP_SPAN = Fraction(1)
 
@@ -96,6 +98,7 @@ class PartState:
     pending_clef_glyph: str | None = None
     pending_clef_position: int | None = None
     pending_clef_transposition: int | None = None
+    active_wedge: bool = False
 
     def warn(self, message: str) -> None:
         self.warnings.append(message)
@@ -223,6 +226,17 @@ class LilyXmlParser:
             self._parse_score(score_elem, header, book_index, score_index)
             for score_index, score_elem in enumerate(book_elem.findall("score"), start=1)
         ]
+
+        # Top-level \markup in a book (e.g. a footer note after the score)
+        # becomes a MusicXML credit on the book's last score.
+        credits = []
+        for markup_elem in book_elem.findall("markup"):
+            text = _flatten_text(markup_elem)
+            if text:
+                credits.append(text)
+        if credits and scores:
+            scores[-1].credits.extend(credits)
+
         return Book(index=book_index, header=header, scores=scores)
 
     def _parse_score(
@@ -240,22 +254,32 @@ class LilyXmlParser:
             self.warnings.append(f"Book {book_index} score {score_index} has no music body.")
             return Score(identifier=f"book{book_index:02d}-score{score_index:02d}", header=header, parts=[])
 
-        staff_nodes = self._collect_staff_nodes(music_elem)
-        if not staff_nodes:
-            staff_nodes = [music_elem]
+        groups = self._collect_staff_groups(music_elem)
+        if not groups:
+            groups = [([music_elem], None)]
 
         parts: list[Part] = []
         score_warnings_start = len(self.warnings)
-        for part_index, staff_node in enumerate(staff_nodes, start=1):
-            state = PartState(
-                identifier=f"P{part_index}",
-                source_lookup=self.source_lookup,
-                warnings=self.warnings,
-            )
-            self._emit_music(staff_node, state, TraversalContext())
-            part = state.build_part()
-            if part.measures:
-                parts.append(part)
+        for part_index, (group, group_name) in enumerate(groups, start=1):
+            staff_parts: list[Part] = []
+            slur_number_start = 1
+            for staff_node in group:
+                state = PartState(
+                    identifier=f"P{part_index}",
+                    source_lookup=self.source_lookup,
+                    warnings=self.warnings,
+                    next_slur_number=slur_number_start,
+                )
+                self._emit_music(staff_node, state, TraversalContext())
+                staff_part = state.build_part()
+                if staff_part.measures:
+                    staff_parts.append(staff_part)
+                # Slur numbers must be unique within a part; continue the
+                # numbering across staves that are merged into one part.
+                slur_number_start = state.next_slur_number
+            if not staff_parts:
+                continue
+            parts.append(self._merge_staff_parts(staff_parts, f"P{part_index}", group_name))
 
         score_warnings = self.warnings[score_warnings_start:]
         return Score(
@@ -285,6 +309,71 @@ class LilyXmlParser:
             return self._collect_staff_nodes(inner) if inner is not None else []
 
         return []
+
+    def _collect_staff_groups(self, music: etree.Element) -> list[tuple[list[etree.Element], str | None]]:
+        """Return (staves, group_name) tuples; staves under one PianoStaff form one part."""
+        name = _music_name(music)
+        if name == "ContextSpeccedMusic":
+            context_type = _symbol_property(music, "context-type")
+            if context_type == "Staff":
+                return [([music], None)]
+            inner = _element_music(music)
+            if inner is None:
+                return []
+            if context_type in STAFF_GROUP_CONTEXTS and _music_name(inner) == "SimultaneousMusic":
+                staves: list[etree.Element] = []
+                for child in _elements_music(inner):
+                    staves.extend(self._collect_staff_nodes(child))
+                if len(staves) > 1:
+                    return [(staves, _group_instrument_name(music))]
+            return self._collect_staff_groups(inner)
+        if name in {"SequentialMusic", "SimultaneousMusic"}:
+            groups: list[tuple[list[etree.Element], str | None]] = []
+            for child in _elements_music(music):
+                groups.extend(self._collect_staff_groups(child))
+            return groups
+        if name in {"RelativeOctaveMusic", "TimeScaledMusic", "UnfoldedRepeatedMusic", "VoltaRepeatedMusic"}:
+            inner = _element_music(music)
+            return self._collect_staff_groups(inner) if inner is not None else []
+        return []
+
+    def _merge_staff_parts(self, staff_parts: list[Part], identifier: str, group_name: str | None) -> Part:
+        if len(staff_parts) == 1:
+            part = staff_parts[0]
+            part.identifier = identifier
+            return part
+
+        measures_by_number: dict[int, Measure] = {}
+        order: list[int] = []
+        for staff_index, staff_part in enumerate(staff_parts, start=1):
+            for measure in staff_part.measures:
+                if measure.number not in measures_by_number:
+                    measures_by_number[measure.number] = Measure(
+                        number=measure.number, implicit=measure.implicit
+                    )
+                    order.append(measure.number)
+                target = measures_by_number[measure.number]
+                for item in measure.items:
+                    item.staff = staff_index
+                    target.items.append(item)
+                target.right_barline = target.right_barline or measure.right_barline
+                target.left_repeat = target.left_repeat or measure.left_repeat
+                target.right_repeat = target.right_repeat or measure.right_repeat
+
+        combined_divisions = _compute_divisions(
+            [item for measure in measures_by_number.values() for item in measure.items]
+        )
+        for measure in measures_by_number.values():
+            for item in measure.items:
+                if isinstance(item, AttributesItem) and item.divisions is not None:
+                    item.divisions = combined_divisions
+
+        return Part(
+            identifier=identifier,
+            name=group_name or "Piano",
+            measures=[measures_by_number[number] for number in order],
+            staves=len(staff_parts),
+        )
 
     def _emit_music(self, music: etree.Element | None, state: PartState, ctx: TraversalContext) -> None:
         if music is None:
@@ -345,6 +434,18 @@ class LilyXmlParser:
                     tuplet_normal=int(numerator) if numerator is not None else None,
                 ),
             )
+            return
+
+        if name == "VoltaRepeatedMusic":
+            repeat_count = int(_number_property(music, "repeat-count") or 0)
+            inner = _element_music(music)
+            if _elements_music(music):
+                state.warn("Volta alternatives are not yet supported; writing a plain repeat without endings.")
+            if repeat_count >= 2:
+                state.add_item(RepeatItem(direction="start"))
+            self._emit_music(inner, state, ctx)
+            if repeat_count >= 2:
+                state.add_item(RepeatItem(direction="stop"))
             return
 
         if name == "UnfoldedRepeatedMusic":
@@ -430,7 +531,7 @@ class LilyXmlParser:
             return
 
         if name in {"CrescendoEvent", "DecrescendoEvent"}:
-            state.add_item(_wedge_direction(name, _number_property(music, "span-direction")))
+            state.add_item(_wedge_direction(name, music, state))
             return
 
         if name == "EventChord":
@@ -471,20 +572,32 @@ class LilyXmlParser:
     def _parse_tempo_direction(self, music: etree.Element) -> DirectionItem:
         text = _string_property(music, "text")
         tempo_unit = music.find("property[@name='tempo-unit']/duration")
-        metronome_count = _number_property(music, "metronome-count")
 
         metronome = None
-        if tempo_unit is not None and metronome_count is not None:
+        if tempo_unit is not None:
             beat_unit = _duration_type_name(tempo_unit)
             dots = int(tempo_unit.attrib.get("dots", "0"))
             unit_length = _duration_fraction_from_element(tempo_unit)
-            sound_tempo = float(Fraction(metronome_count) * unit_length * 4)
-            metronome = MetronomeMark(
-                beat_unit=beat_unit,
-                beat_unit_dots=dots,
-                per_minute=str(metronome_count),
-                sound_tempo=sound_tempo,
-            )
+
+            per_minute: str | None = None
+            count = _number_property(music, "metronome-count")
+            if count is not None:
+                per_minute = str(count)
+                sound_tempo = float(count * unit_length * 4)
+            else:
+                range_info = _tempo_range_pair(music)
+                if range_info is not None:
+                    first_text, last_text, first_value = range_info
+                    per_minute = f"{first_text} - {last_text}"
+                    sound_tempo = float(first_value * unit_length * 4)
+
+            if per_minute is not None:
+                metronome = MetronomeMark(
+                    beat_unit=beat_unit,
+                    beat_unit_dots=dots,
+                    per_minute=per_minute,
+                    sound_tempo=sound_tempo,
+                )
 
         return DirectionItem(words=text, metronome=metronome)
 
@@ -612,6 +725,11 @@ class LilyXmlParser:
         start_slurs = 0
         stop_slurs = 0
 
+        if note is None:
+            # Chord-level events arrive without a note; collect attachments on a
+            # placeholder that the caller merges into the chord's first note.
+            note = Note(pitch=None, is_rest=False, duration=Fraction(0), type_name=None, dots=0)
+
         for event in events:
             name = _music_name(event)
             if name == "TieEvent":
@@ -626,6 +744,11 @@ class LilyXmlParser:
             elif name == "ArticulationEvent":
                 if note is not None:
                     _apply_articulation(note, _symbol_property(event, "articulation-type"))
+            elif name == "FingeringEvent":
+                if note is not None:
+                    fingering = _string_property(event, "digit")
+                    if fingering is not None:
+                        note.fingerings.append(fingering)
             elif name == "AbsoluteDynamicEvent":
                 directions.append(self._dynamic_direction_from_text(_string_property(event, "text")))
             elif name == "TextScriptEvent":
@@ -633,12 +756,9 @@ class LilyXmlParser:
                 if direction is not None:
                     directions.append(direction)
             elif name in {"CrescendoEvent", "DecrescendoEvent"}:
-                directions.append(_wedge_direction(name, _number_property(event, "span-direction")))
+                directions.append(_wedge_direction(name, event, state))
             elif name == "BreathingEvent":
-                if note is not None:
-                    note.breath_mark = True
-                else:
-                    self._attach_breath_mark(state)
+                note.breath_mark = True
             elif name == "OttavaEvent":
                 direction = _parse_ottava_direction(event, self.source_lookup)
                 if direction is not None:
@@ -646,7 +766,7 @@ class LilyXmlParser:
             else:
                 state.warn(f"Unsupported attachment event '{name}' in {state.identifier}.")
 
-        if note is not None and (start_slurs or stop_slurs):
+        if start_slurs or stop_slurs:
             slur_starts, slur_stops = state.assign_slur_numbers(start_slurs, stop_slurs)
             note.slur_starts.extend(slur_starts)
             note.slur_stops.extend(slur_stops)
@@ -679,6 +799,14 @@ def _build_measures(
     measure_number = 1
 
     for item in items:
+        if isinstance(item, BarlineItem):
+            current_measure.right_barline = item.style
+            continue
+
+        if isinstance(item, RepeatItem) and item.direction == "stop":
+            current_measure.right_repeat = True
+            continue
+
         if elapsed == current_capacity and elapsed > 0:
             measure_number += 1
             current_measure = Measure(number=measure_number)
@@ -696,8 +824,8 @@ def _build_measures(
             current_measure.items.append(item)
             continue
 
-        if isinstance(item, BarlineItem):
-            current_measure.right_barline = item.style
+        if isinstance(item, RepeatItem):
+            current_measure.left_repeat = True
             continue
 
         current_measure.items.append(item)
@@ -708,7 +836,11 @@ def _build_measures(
                     f"Measure {measure_number} overfilled by {elapsed - current_capacity}; preserving note order in output."
                 )
 
-    return [measure for measure in measures if measure.items or measure.right_barline]
+    return [
+        measure
+        for measure in measures
+        if measure.items or measure.right_barline or measure.left_repeat or measure.right_repeat
+    ]
 
 
 def _compute_divisions(items: list[MeasureItem]) -> int:
@@ -772,6 +904,40 @@ def _string_property(music: etree.Element, name: str) -> str | None:
 
 def _property_text(music: etree.Element, name: str) -> str | None:
     return _string_property(music, name)
+
+
+def _tempo_range_pair(music: etree.Element) -> tuple[str, str, Fraction] | None:
+    """Return (first_text, last_text, first_value) for a tempo range like 80 - 100."""
+    child = _property_child(music, "metronome-count")
+    if child is None or child.tag != "pair":
+        return None
+    numbers = child.findall("number")
+    if len(numbers) != 2:
+        return None
+    first_text = (numbers[0].text or "").strip()
+    last_text = (numbers[1].text or "").strip()
+    if not first_text or not last_text:
+        return None
+    try:
+        first_value = _fraction_from_text(first_text)
+    except (ValueError, ZeroDivisionError):
+        return None
+    return first_text, last_text, first_value
+
+
+def _group_instrument_name(music: etree.Element) -> str | None:
+    operations = _property_child(music, "property-operations")
+    if operations is None:
+        return None
+    for operation in operations.findall("list"):
+        items = list(operation)
+        if (
+            len(items) >= 3
+            and _flatten_text(items[0]) == "assign"
+            and _flatten_text(items[1]) == "instrumentName"
+        ):
+            return _flatten_text(items[2])
+    return None
 
 
 def _symbol_property(music: etree.Element, name: str) -> str | None:
@@ -893,6 +1059,7 @@ def _merge_note_attachments(note: Note, extra: Note) -> Note:
     note.slur_stops.extend(extra.slur_stops)
     note.articulations.extend(extra.articulations)
     note.technicals.extend(extra.technicals)
+    note.fingerings.extend(extra.fingerings)
     note.fermata = note.fermata or extra.fermata
     note.breath_mark = note.breath_mark or extra.breath_mark
     return note
@@ -904,11 +1071,27 @@ def _placement_from_direction(direction: Fraction | None) -> str | None:
     return "below" if direction < 0 else "above"
 
 
-def _wedge_direction(event_name: str, span_direction: Fraction | None) -> DirectionItem:
+def _wedge_direction(event_name: str, music: etree.Element, state: "PartState") -> DirectionItem:
+    span_direction = _number_property(music, "span-direction")
+    if _symbol_property(music, "span-type") == "text":
+        # Text dynamics like \dim / \cresc are dynamics, not hairpins.
+        # <other-dynamics> renders below the staff in consumers, matching
+        # LilyPond's default dynamic placement.
+        if span_direction == START_SPAN:
+            text = _string_property(music, "span-text")
+            if text:
+                return DirectionItem(other_dynamics=[text], placement="below")
+        return DirectionItem()
     if span_direction == START_SPAN:
         wedge = "crescendo" if event_name == "CrescendoEvent" else "diminuendo"
+        state.active_wedge = True
         return DirectionItem(wedge=wedge)
-    return DirectionItem(wedge="stop")
+    if state.active_wedge:
+        # An orphan stop (e.g. \! ending a text spanner) has no matching
+        # wedge start and must not be emitted.
+        state.active_wedge = False
+        return DirectionItem(wedge="stop")
+    return DirectionItem()
 
 
 def _parse_ottava_direction(music: etree.Element, source_lookup: SourceLookup) -> DirectionItem | None:

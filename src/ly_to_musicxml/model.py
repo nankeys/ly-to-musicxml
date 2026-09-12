@@ -32,6 +32,7 @@ class MeasureItem:
 
 @dataclass(slots=True)
 class AttributesItem(MeasureItem):
+    staff: int = 1
     divisions: int | None = None
     key_fifths: int | None = None
     key_mode: str | None = None
@@ -44,8 +45,10 @@ class AttributesItem(MeasureItem):
 
 @dataclass(slots=True)
 class DirectionItem(MeasureItem):
+    staff: int = 1
     words: str | None = None
     dynamics: list[str] = field(default_factory=list)
+    other_dynamics: list[str] = field(default_factory=list)
     wedge: str | None = None
     metronome: MetronomeMark | None = None
     octave_shift: OctaveShift | None = None
@@ -66,6 +69,7 @@ class Note:
     slur_stops: list[int] = field(default_factory=list)
     articulations: list[str] = field(default_factory=list)
     technicals: list[str] = field(default_factory=list)
+    fingerings: list[str] = field(default_factory=list)
     fermata: bool = False
     breath_mark: bool = False
     tuplet_actual: int | None = None
@@ -76,6 +80,7 @@ class Note:
 class NoteGroupItem(MeasureItem):
     notes: list[Note]
     duration: Fraction
+    staff: int = 1
 
 
 @dataclass(slots=True)
@@ -84,11 +89,18 @@ class BarlineItem(MeasureItem):
 
 
 @dataclass(slots=True)
+class RepeatItem(MeasureItem):
+    direction: str  # "start" or "stop"
+
+
+@dataclass(slots=True)
 class Measure:
     number: int
     implicit: bool = False
     items: list[MeasureItem] = field(default_factory=list)
     right_barline: str | None = None
+    left_repeat: bool = False
+    right_repeat: bool = False
 
 
 @dataclass(slots=True)
@@ -96,6 +108,7 @@ class Part:
     identifier: str
     name: str
     measures: list[Measure]
+    staves: int = 1
 
 
 @dataclass(slots=True)
@@ -104,6 +117,7 @@ class Score:
     header: dict[str, str]
     parts: list[Part]
     warnings: list[str] = field(default_factory=list)
+    credits: list[str] = field(default_factory=list)
 
     @property
     def is_empty(self) -> bool:
