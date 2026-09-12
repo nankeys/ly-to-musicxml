@@ -249,9 +249,11 @@
         <voice>1</voice>
         <type>eighth</type>
       </note>
-      <direction>
+      <direction placement="below">
         <direction-type>
-          <wedge type="diminuendo" />
+          <dynamics>
+            <other-dynamics>dim.</other-dynamics>
+          </dynamics>
         </direction-type>
       </direction>
       <note>
@@ -629,9 +631,11 @@
           </dynamics>
         </direction-type>
       </direction>
-      <direction>
+      <direction placement="below">
         <direction-type>
-          <wedge type="diminuendo" />
+          <dynamics>
+            <other-dynamics>dim.</other-dynamics>
+          </dynamics>
         </direction-type>
       </direction>
       <note>
@@ -647,11 +651,6 @@
           <slur type="start" number="4" />
         </notations>
       </note>
-      <direction>
-        <direction-type>
-          <wedge type="stop" />
-        </direction-type>
-      </direction>
       <note>
         <pitch>
           <step>C</step>
@@ -2269,9 +2268,11 @@
           </dynamics>
         </direction-type>
       </direction>
-      <direction>
+      <direction placement="below">
         <direction-type>
-          <wedge type="diminuendo" />
+          <dynamics>
+            <other-dynamics>dim.</other-dynamics>
+          </dynamics>
         </direction-type>
       </direction>
       <note>
@@ -2290,11 +2291,6 @@
       </note>
     </measure>
     <measure number="84">
-      <direction>
-        <direction-type>
-          <wedge type="stop" />
-        </direction-type>
-      </direction>
       <note>
         <pitch>
           <step>B</step>
@@ -2330,9 +2326,11 @@
           </dynamics>
         </direction-type>
       </direction>
-      <direction>
+      <direction placement="below">
         <direction-type>
-          <wedge type="diminuendo" />
+          <dynamics>
+            <other-dynamics>dim.</other-dynamics>
+          </dynamics>
         </direction-type>
       </direction>
       <note>
@@ -2346,11 +2344,6 @@
       </note>
     </measure>
     <measure number="86">
-      <direction>
-        <direction-type>
-          <wedge type="stop" />
-        </direction-type>
-      </direction>
       <note>
         <pitch>
           <step>C</step>
@@ -2566,9 +2559,11 @@
         <voice>1</voice>
         <type>half</type>
       </note>
-      <direction>
+      <direction placement="below">
         <direction-type>
-          <wedge type="crescendo" />
+          <dynamics>
+            <other-dynamics>cresc.</other-dynamics>
+          </dynamics>
         </direction-type>
       </direction>
       <note>
@@ -2583,11 +2578,6 @@
           <slur type="start" number="40" />
         </notations>
       </note>
-      <direction>
-        <direction-type>
-          <wedge type="stop" />
-        </direction-type>
-      </direction>
       <note>
         <pitch>
           <step>B</step>
@@ -2638,9 +2628,11 @@
       </note>
     </measure>
     <measure number="95">
-      <direction>
+      <direction placement="below">
         <direction-type>
-          <wedge type="diminuendo" />
+          <dynamics>
+            <other-dynamics>dim.</other-dynamics>
+          </dynamics>
         </direction-type>
       </direction>
       <direction placement="above">
@@ -2662,11 +2654,6 @@
           <tied type="stop" />
         </notations>
       </note>
-      <direction>
-        <direction-type>
-          <wedge type="stop" />
-        </direction-type>
-      </direction>
       <note>
         <pitch>
           <step>D</step>
@@ -3329,9 +3316,11 @@
       </note>
     </measure>
     <measure number="117">
-      <direction>
+      <direction placement="below">
         <direction-type>
-          <wedge type="diminuendo" />
+          <dynamics>
+            <other-dynamics>dim.</other-dynamics>
+          </dynamics>
         </direction-type>
       </direction>
       <note>
@@ -3347,11 +3336,6 @@
           <tied type="stop" />
         </notations>
       </note>
-      <direction>
-        <direction-type>
-          <wedge type="stop" />
-        </direction-type>
-      </direction>
       <note>
         <pitch>
           <step>C</step>
@@ -3457,9 +3441,11 @@
           </dynamics>
         </direction-type>
       </direction>
-      <direction>
+      <direction placement="below">
         <direction-type>
-          <wedge type="diminuendo" />
+          <dynamics>
+            <other-dynamics>dim.</other-dynamics>
+          </dynamics>
         </direction-type>
       </direction>
       <note>
@@ -3474,11 +3460,6 @@
       </note>
     </measure>
     <measure number="122">
-      <direction>
-        <direction-type>
-          <wedge type="stop" />
-        </direction-type>
-      </direction>
       <note>
         <pitch>
           <step>G</step>
@@ -3586,8 +3567,6 @@
         <voice>1</voice>
         <type>whole</type>
       </note>
-    </measure>
-    <measure number="128">
       <barline location="right">
         <bar-style>light-heavy</bar-style>
       </barline>
@@ -3840,9 +3819,11 @@
         <voice>1</voice>
         <type>eighth</type>
       </note>
-      <direction>
+      <direction placement="below">
         <direction-type>
-          <wedge type="diminuendo" />
+          <dynamics>
+            <other-dynamics>dim.</other-dynamics>
+          </dynamics>
         </direction-type>
       </direction>
       <note>
@@ -4236,9 +4217,11 @@
           </dynamics>
         </direction-type>
       </direction>
-      <direction>
+      <direction placement="below">
         <direction-type>
-          <wedge type="diminuendo" />
+          <dynamics>
+            <other-dynamics>dim.</other-dynamics>
+          </dynamics>
         </direction-type>
       </direction>
       <note>
@@ -4255,11 +4238,6 @@
           <tied type="stop" />
         </notations>
       </note>
-      <direction>
-        <direction-type>
-          <wedge type="stop" />
-        </direction-type>
-      </direction>
       <note>
         <pitch>
           <step>G</step>
@@ -5725,9 +5703,11 @@
           </dynamics>
         </direction-type>
       </direction>
-      <direction>
+      <direction placement="below">
         <direction-type>
-          <wedge type="diminuendo" />
+          <dynamics>
+            <other-dynamics>dim.</other-dynamics>
+          </dynamics>
         </direction-type>
       </direction>
       <note>
@@ -5745,11 +5725,6 @@
       </note>
     </measure>
     <measure number="84">
-      <direction>
-        <direction-type>
-          <wedge type="stop" />
-        </direction-type>
-      </direction>
       <note>
         <pitch>
           <step>G</step>
@@ -5771,9 +5746,11 @@
           </dynamics>
         </direction-type>
       </direction>
-      <direction>
+      <direction placement="below">
         <direction-type>
-          <wedge type="diminuendo" />
+          <dynamics>
+            <other-dynamics>dim.</other-dynamics>
+          </dynamics>
         </direction-type>
       </direction>
       <note>
@@ -5787,11 +5764,6 @@
       </note>
     </measure>
     <measure number="86">
-      <direction>
-        <direction-type>
-          <wedge type="stop" />
-        </direction-type>
-      </direction>
       <note>
         <pitch>
           <step>G</step>
@@ -6000,9 +5972,11 @@
       </note>
     </measure>
     <measure number="93">
-      <direction>
+      <direction placement="below">
         <direction-type>
-          <wedge type="crescendo" />
+          <dynamics>
+            <other-dynamics>cresc.</other-dynamics>
+          </dynamics>
         </direction-type>
       </direction>
       <note>
@@ -6022,11 +5996,6 @@
       </note>
     </measure>
     <measure number="94">
-      <direction>
-        <direction-type>
-          <wedge type="stop" />
-        </direction-type>
-      </direction>
       <note>
         <pitch>
           <step>F</step>
@@ -6045,9 +6014,11 @@
       </note>
     </measure>
     <measure number="95">
-      <direction>
+      <direction placement="below">
         <direction-type>
-          <wedge type="diminuendo" />
+          <dynamics>
+            <other-dynamics>dim.</other-dynamics>
+          </dynamics>
         </direction-type>
       </direction>
       <note>
@@ -6065,11 +6036,6 @@
           <tied type="stop" />
         </notations>
       </note>
-      <direction>
-        <direction-type>
-          <wedge type="stop" />
-        </direction-type>
-      </direction>
       <note>
         <pitch>
           <step>G</step>
@@ -6757,9 +6723,11 @@
           </dynamics>
         </direction-type>
       </direction>
-      <direction>
+      <direction placement="below">
         <direction-type>
-          <wedge type="diminuendo" />
+          <dynamics>
+            <other-dynamics>dim.</other-dynamics>
+          </dynamics>
         </direction-type>
       </direction>
       <note>
@@ -6778,11 +6746,6 @@
       </note>
     </measure>
     <measure number="122">
-      <direction>
-        <direction-type>
-          <wedge type="stop" />
-        </direction-type>
-      </direction>
       <note>
         <pitch>
           <step>B</step>
@@ -6955,9 +6918,11 @@
           </dynamics>
         </direction-type>
       </direction>
-      <direction>
+      <direction placement="below">
         <direction-type>
-          <wedge type="crescendo" />
+          <dynamics>
+            <other-dynamics>cresc.</other-dynamics>
+          </dynamics>
         </direction-type>
       </direction>
       <note>
@@ -6976,11 +6941,6 @@
       </note>
     </measure>
     <measure number="127">
-      <direction>
-        <direction-type>
-          <wedge type="stop" />
-        </direction-type>
-      </direction>
       <note>
         <pitch>
           <step>G</step>
@@ -6995,8 +6955,6 @@
           <tied type="stop" />
         </notations>
       </note>
-    </measure>
-    <measure number="128">
       <barline location="right">
         <bar-style>light-heavy</bar-style>
       </barline>
@@ -7275,9 +7233,11 @@
       </note>
     </measure>
     <measure number="12">
-      <direction>
+      <direction placement="below">
         <direction-type>
-          <wedge type="diminuendo" />
+          <dynamics>
+            <other-dynamics>dim.</other-dynamics>
+          </dynamics>
         </direction-type>
       </direction>
       <note>
@@ -7295,11 +7255,6 @@
       </note>
     </measure>
     <measure number="13">
-      <direction>
-        <direction-type>
-          <wedge type="stop" />
-        </direction-type>
-      </direction>
       <note>
         <pitch>
           <step>G</step>
@@ -7750,9 +7705,11 @@
           </dynamics>
         </direction-type>
       </direction>
-      <direction>
+      <direction placement="below">
         <direction-type>
-          <wedge type="diminuendo" />
+          <dynamics>
+            <other-dynamics>dim.</other-dynamics>
+          </dynamics>
         </direction-type>
       </direction>
       <note>
@@ -7766,11 +7723,6 @@
       </note>
     </measure>
     <measure number="27">
-      <direction>
-        <direction-type>
-          <wedge type="stop" />
-        </direction-type>
-      </direction>
       <note>
         <pitch>
           <step>C</step>
@@ -8710,9 +8662,11 @@
           </dynamics>
         </direction-type>
       </direction>
-      <direction>
+      <direction placement="below">
         <direction-type>
-          <wedge type="diminuendo" />
+          <dynamics>
+            <other-dynamics>dim.</other-dynamics>
+          </dynamics>
         </direction-type>
       </direction>
       <note>
@@ -8785,9 +8739,11 @@
           </dynamics>
         </direction-type>
       </direction>
-      <direction>
+      <direction placement="below">
         <direction-type>
-          <wedge type="diminuendo" />
+          <dynamics>
+            <other-dynamics>dim.</other-dynamics>
+          </dynamics>
         </direction-type>
       </direction>
       <note>
@@ -8801,11 +8757,6 @@
       </note>
     </measure>
     <measure number="86">
-      <direction>
-        <direction-type>
-          <wedge type="stop" />
-        </direction-type>
-      </direction>
       <note>
         <pitch>
           <step>C</step>
@@ -9018,9 +8969,11 @@
           <slur type="stop" number="11" />
         </notations>
       </note>
-      <direction>
+      <direction placement="below">
         <direction-type>
-          <wedge type="crescendo" />
+          <dynamics>
+            <other-dynamics>cresc.</other-dynamics>
+          </dynamics>
         </direction-type>
       </direction>
       <note>
@@ -9047,11 +9000,6 @@
       </note>
     </measure>
     <measure number="94">
-      <direction>
-        <direction-type>
-          <wedge type="stop" />
-        </direction-type>
-      </direction>
       <note>
         <pitch>
           <step>A</step>
@@ -9089,9 +9037,11 @@
       </note>
     </measure>
     <measure number="95">
-      <direction>
+      <direction placement="below">
         <direction-type>
-          <wedge type="diminuendo" />
+          <dynamics>
+            <other-dynamics>dim.</other-dynamics>
+          </dynamics>
         </direction-type>
       </direction>
       <note>
@@ -9108,11 +9058,6 @@
           <tied type="stop" />
         </notations>
       </note>
-      <direction>
-        <direction-type>
-          <wedge type="stop" />
-        </direction-type>
-      </direction>
       <note>
         <pitch>
           <step>C</step>
@@ -9790,9 +9735,11 @@
       </note>
     </measure>
     <measure number="117">
-      <direction>
+      <direction placement="below">
         <direction-type>
-          <wedge type="diminuendo" />
+          <dynamics>
+            <other-dynamics>dim.</other-dynamics>
+          </dynamics>
         </direction-type>
       </direction>
       <note>
@@ -9808,11 +9755,6 @@
           <slur type="start" number="19" />
         </notations>
       </note>
-      <direction>
-        <direction-type>
-          <wedge type="stop" />
-        </direction-type>
-      </direction>
       <note>
         <pitch>
           <step>A</step>
@@ -9956,9 +9898,11 @@
           <slur type="start" number="20" />
         </notations>
       </note>
-      <direction>
+      <direction placement="below">
         <direction-type>
-          <wedge type="diminuendo" />
+          <dynamics>
+            <other-dynamics>dim.</other-dynamics>
+          </dynamics>
         </direction-type>
       </direction>
       <note>
@@ -9977,11 +9921,6 @@
       </note>
     </measure>
     <measure number="122">
-      <direction>
-        <direction-type>
-          <wedge type="stop" />
-        </direction-type>
-      </direction>
       <note>
         <pitch>
           <step>E</step>
@@ -10097,9 +10036,11 @@
           </dynamics>
         </direction-type>
       </direction>
-      <direction>
+      <direction placement="below">
         <direction-type>
-          <wedge type="crescendo" />
+          <dynamics>
+            <other-dynamics>cresc.</other-dynamics>
+          </dynamics>
         </direction-type>
       </direction>
       <note>
@@ -10118,11 +10059,6 @@
       </note>
     </measure>
     <measure number="127">
-      <direction>
-        <direction-type>
-          <wedge type="stop" />
-        </direction-type>
-      </direction>
       <note>
         <pitch>
           <step>G</step>
@@ -10137,8 +10073,6 @@
           <tied type="stop" />
         </notations>
       </note>
-    </measure>
-    <measure number="128">
       <barline location="right">
         <bar-style>light-heavy</bar-style>
       </barline>
@@ -10405,9 +10339,11 @@
         <voice>1</voice>
         <type>eighth</type>
       </note>
-      <direction>
+      <direction placement="below">
         <direction-type>
-          <wedge type="diminuendo" />
+          <dynamics>
+            <other-dynamics>dim.</other-dynamics>
+          </dynamics>
         </direction-type>
       </direction>
       <note>
@@ -10727,9 +10663,11 @@
           </dynamics>
         </direction-type>
       </direction>
-      <direction>
+      <direction placement="below">
         <direction-type>
-          <wedge type="diminuendo" />
+          <dynamics>
+            <other-dynamics>dim.</other-dynamics>
+          </dynamics>
         </direction-type>
       </direction>
       <note>
@@ -10743,11 +10681,6 @@
       </note>
     </measure>
     <measure number="27">
-      <direction>
-        <direction-type>
-          <wedge type="stop" />
-        </direction-type>
-      </direction>
       <note>
         <pitch>
           <step>C</step>
@@ -11771,9 +11704,11 @@
           </dynamics>
         </direction-type>
       </direction>
-      <direction>
+      <direction placement="below">
         <direction-type>
-          <wedge type="diminuendo" />
+          <dynamics>
+            <other-dynamics>dim.</other-dynamics>
+          </dynamics>
         </direction-type>
       </direction>
       <note>
@@ -11791,11 +11726,6 @@
       </note>
     </measure>
     <measure number="84">
-      <direction>
-        <direction-type>
-          <wedge type="stop" />
-        </direction-type>
-      </direction>
       <note>
         <pitch>
           <step>G</step>
@@ -11818,9 +11748,11 @@
           </dynamics>
         </direction-type>
       </direction>
-      <direction>
+      <direction placement="below">
         <direction-type>
-          <wedge type="diminuendo" />
+          <dynamics>
+            <other-dynamics>dim.</other-dynamics>
+          </dynamics>
         </direction-type>
       </direction>
       <note>
@@ -12162,9 +12094,11 @@
       </note>
     </measure>
     <measure number="93">
-      <direction>
+      <direction placement="below">
         <direction-type>
-          <wedge type="crescendo" />
+          <dynamics>
+            <other-dynamics>cresc.</other-dynamics>
+          </dynamics>
         </direction-type>
       </direction>
       <note>
@@ -12196,11 +12130,6 @@
       </note>
     </measure>
     <measure number="94">
-      <direction>
-        <direction-type>
-          <wedge type="stop" />
-        </direction-type>
-      </direction>
       <note>
         <pitch>
           <step>C</step>
@@ -12259,9 +12188,11 @@
       </note>
     </measure>
     <measure number="95">
-      <direction>
+      <direction placement="below">
         <direction-type>
-          <wedge type="diminuendo" />
+          <dynamics>
+            <other-dynamics>dim.</other-dynamics>
+          </dynamics>
         </direction-type>
       </direction>
       <note>
@@ -12278,11 +12209,6 @@
           <slur type="start" number="14" />
         </notations>
       </note>
-      <direction>
-        <direction-type>
-          <wedge type="stop" />
-        </direction-type>
-      </direction>
       <note>
         <pitch>
           <step>C</step>
@@ -12909,9 +12835,11 @@
           </dynamics>
         </direction-type>
       </direction>
-      <direction>
+      <direction placement="below">
         <direction-type>
-          <wedge type="diminuendo" />
+          <dynamics>
+            <other-dynamics>dim.</other-dynamics>
+          </dynamics>
         </direction-type>
       </direction>
       <note>
@@ -12926,11 +12854,6 @@
       </note>
     </measure>
     <measure number="118">
-      <direction>
-        <direction-type>
-          <wedge type="stop" />
-        </direction-type>
-      </direction>
       <note>
         <pitch>
           <step>E</step>
@@ -13018,9 +12941,11 @@
           </dynamics>
         </direction-type>
       </direction>
-      <direction>
+      <direction placement="below">
         <direction-type>
-          <wedge type="diminuendo" />
+          <dynamics>
+            <other-dynamics>dim.</other-dynamics>
+          </dynamics>
         </direction-type>
       </direction>
       <note>
@@ -13038,11 +12963,6 @@
       </note>
     </measure>
     <measure number="122">
-      <direction>
-        <direction-type>
-          <wedge type="stop" />
-        </direction-type>
-      </direction>
       <note>
         <pitch>
           <step>G</step>
@@ -13148,9 +13068,11 @@
           </dynamics>
         </direction-type>
       </direction>
-      <direction>
+      <direction placement="below">
         <direction-type>
-          <wedge type="crescendo" />
+          <dynamics>
+            <other-dynamics>cresc.</other-dynamics>
+          </dynamics>
         </direction-type>
       </direction>
       <note>
@@ -13169,11 +13091,6 @@
       </note>
     </measure>
     <measure number="127">
-      <direction>
-        <direction-type>
-          <wedge type="stop" />
-        </direction-type>
-      </direction>
       <note>
         <pitch>
           <step>G</step>
@@ -13188,8 +13105,6 @@
           <tied type="stop" />
         </notations>
       </note>
-    </measure>
-    <measure number="128">
       <barline location="right">
         <bar-style>light-heavy</bar-style>
       </barline>

@@ -2524,6 +2524,11 @@
         <duration>3</duration>
         <voice>1</voice>
         <type>quarter</type>
+        <notations>
+          <articulations>
+            <accent />
+          </articulations>
+        </notations>
       </note>
       <note>
         <chord />
@@ -2571,6 +2576,11 @@
         <duration>3</duration>
         <voice>1</voice>
         <type>quarter</type>
+        <notations>
+          <articulations>
+            <accent />
+          </articulations>
+        </notations>
       </note>
       <note>
         <chord />
@@ -2618,6 +2628,11 @@
         <duration>3</duration>
         <voice>1</voice>
         <type>quarter</type>
+        <notations>
+          <articulations>
+            <accent />
+          </articulations>
+        </notations>
       </note>
       <note>
         <chord />
@@ -2665,6 +2680,11 @@
         <duration>3</duration>
         <voice>1</voice>
         <type>quarter</type>
+        <notations>
+          <articulations>
+            <accent />
+          </articulations>
+        </notations>
       </note>
       <note>
         <chord />
@@ -2712,6 +2732,11 @@
         <duration>3</duration>
         <voice>1</voice>
         <type>quarter</type>
+        <notations>
+          <technical>
+            <down-bow />
+          </technical>
+        </notations>
       </note>
       <note>
         <chord />
@@ -2737,6 +2762,11 @@
         <duration>3</duration>
         <voice>1</voice>
         <type>quarter</type>
+        <notations>
+          <technical>
+            <down-bow />
+          </technical>
+        </notations>
       </note>
       <note>
         <chord />
@@ -2765,6 +2795,11 @@
         <duration>3</duration>
         <voice>1</voice>
         <type>quarter</type>
+        <notations>
+          <technical>
+            <down-bow />
+          </technical>
+        </notations>
       </note>
       <note>
         <chord />
@@ -2790,6 +2825,11 @@
         <duration>3</duration>
         <voice>1</voice>
         <type>quarter</type>
+        <notations>
+          <technical>
+            <down-bow />
+          </technical>
+        </notations>
       </note>
       <note>
         <chord />
@@ -2818,6 +2858,11 @@
         <duration>3</duration>
         <voice>1</voice>
         <type>quarter</type>
+        <notations>
+          <technical>
+            <down-bow />
+          </technical>
+        </notations>
       </note>
       <note>
         <chord />
@@ -2843,6 +2888,11 @@
         <duration>3</duration>
         <voice>1</voice>
         <type>quarter</type>
+        <notations>
+          <technical>
+            <down-bow />
+          </technical>
+        </notations>
       </note>
       <note>
         <chord />
@@ -2871,6 +2921,11 @@
         <duration>3</duration>
         <voice>1</voice>
         <type>quarter</type>
+        <notations>
+          <technical>
+            <down-bow />
+          </technical>
+        </notations>
       </note>
       <note>
         <chord />
@@ -2896,6 +2951,11 @@
         <duration>3</duration>
         <voice>1</voice>
         <type>quarter</type>
+        <notations>
+          <technical>
+            <down-bow />
+          </technical>
+        </notations>
       </note>
       <note>
         <chord />
@@ -2924,6 +2984,11 @@
         <duration>3</duration>
         <voice>1</voice>
         <type>quarter</type>
+        <notations>
+          <technical>
+            <down-bow />
+          </technical>
+        </notations>
       </note>
       <note>
         <chord />
@@ -2949,6 +3014,11 @@
         <duration>3</duration>
         <voice>1</voice>
         <type>quarter</type>
+        <notations>
+          <technical>
+            <down-bow />
+          </technical>
+        </notations>
       </note>
       <note>
         <chord />
@@ -2977,6 +3047,11 @@
         <duration>3</duration>
         <voice>1</voice>
         <type>quarter</type>
+        <notations>
+          <technical>
+            <down-bow />
+          </technical>
+        </notations>
       </note>
       <note>
         <chord />
@@ -3002,6 +3077,11 @@
         <duration>3</duration>
         <voice>1</voice>
         <type>quarter</type>
+        <notations>
+          <technical>
+            <down-bow />
+          </technical>
+        </notations>
       </note>
       <note>
         <chord />
@@ -3030,6 +3110,11 @@
         <duration>3</duration>
         <voice>1</voice>
         <type>quarter</type>
+        <notations>
+          <technical>
+            <down-bow />
+          </technical>
+        </notations>
       </note>
       <note>
         <chord />
@@ -3055,6 +3140,11 @@
         <duration>3</duration>
         <voice>1</voice>
         <type>quarter</type>
+        <notations>
+          <technical>
+            <down-bow />
+          </technical>
+        </notations>
       </note>
       <note>
         <chord />
@@ -3083,6 +3173,11 @@
         <duration>3</duration>
         <voice>1</voice>
         <type>quarter</type>
+        <notations>
+          <technical>
+            <down-bow />
+          </technical>
+        </notations>
       </note>
       <note>
         <chord />
@@ -3108,6 +3203,11 @@
         <duration>3</duration>
         <voice>1</voice>
         <type>quarter</type>
+        <notations>
+          <technical>
+            <down-bow />
+          </technical>
+        </notations>
       </note>
       <note>
         <chord />
@@ -3136,6 +3236,11 @@
         <duration>3</duration>
         <voice>1</voice>
         <type>quarter</type>
+        <notations>
+          <technical>
+            <down-bow />
+          </technical>
+        </notations>
       </note>
       <note>
         <chord />
@@ -3161,6 +3266,11 @@
         <duration>3</duration>
         <voice>1</voice>
         <type>quarter</type>
+        <notations>
+          <technical>
+            <down-bow />
+          </technical>
+        </notations>
       </note>
       <note>
         <chord />
@@ -3189,6 +3299,11 @@
         <duration>3</duration>
         <voice>1</voice>
         <type>quarter</type>
+        <notations>
+          <technical>
+            <down-bow />
+          </technical>
+        </notations>
       </note>
       <note>
         <chord />
@@ -3214,6 +3329,11 @@
         <duration>3</duration>
         <voice>1</voice>
         <type>quarter</type>
+        <notations>
+          <technical>
+            <down-bow />
+          </technical>
+        </notations>
       </note>
       <note>
         <chord />
@@ -3242,6 +3362,11 @@
         <duration>3</duration>
         <voice>1</voice>
         <type>quarter</type>
+        <notations>
+          <technical>
+            <down-bow />
+          </technical>
+        </notations>
       </note>
       <note>
         <chord />
@@ -3267,6 +3392,11 @@
         <duration>3</duration>
         <voice>1</voice>
         <type>quarter</type>
+        <notations>
+          <technical>
+            <down-bow />
+          </technical>
+        </notations>
       </note>
       <note>
         <chord />
@@ -3295,6 +3425,11 @@
         <duration>3</duration>
         <voice>1</voice>
         <type>quarter</type>
+        <notations>
+          <technical>
+            <down-bow />
+          </technical>
+        </notations>
       </note>
       <note>
         <chord />
@@ -3320,6 +3455,11 @@
         <duration>3</duration>
         <voice>1</voice>
         <type>quarter</type>
+        <notations>
+          <technical>
+            <down-bow />
+          </technical>
+        </notations>
       </note>
       <note>
         <chord />
@@ -3348,6 +3488,11 @@
         <duration>3</duration>
         <voice>1</voice>
         <type>quarter</type>
+        <notations>
+          <technical>
+            <down-bow />
+          </technical>
+        </notations>
       </note>
       <note>
         <chord />
@@ -3373,6 +3518,11 @@
         <duration>3</duration>
         <voice>1</voice>
         <type>quarter</type>
+        <notations>
+          <technical>
+            <down-bow />
+          </technical>
+        </notations>
       </note>
       <note>
         <chord />
@@ -3401,6 +3551,11 @@
         <duration>3</duration>
         <voice>1</voice>
         <type>quarter</type>
+        <notations>
+          <technical>
+            <down-bow />
+          </technical>
+        </notations>
       </note>
       <note>
         <chord />
@@ -3426,6 +3581,11 @@
         <duration>3</duration>
         <voice>1</voice>
         <type>quarter</type>
+        <notations>
+          <technical>
+            <down-bow />
+          </technical>
+        </notations>
       </note>
       <note>
         <chord />
@@ -3454,6 +3614,11 @@
         <duration>3</duration>
         <voice>1</voice>
         <type>quarter</type>
+        <notations>
+          <technical>
+            <down-bow />
+          </technical>
+        </notations>
       </note>
       <note>
         <chord />
@@ -3479,6 +3644,11 @@
         <duration>3</duration>
         <voice>1</voice>
         <type>quarter</type>
+        <notations>
+          <technical>
+            <down-bow />
+          </technical>
+        </notations>
       </note>
       <note>
         <chord />
@@ -11673,9 +11843,11 @@
       </note>
     </measure>
     <measure number="312">
-      <direction>
+      <direction placement="below">
         <direction-type>
-          <wedge type="crescendo" />
+          <dynamics>
+            <other-dynamics>cresc.</other-dynamics>
+          </dynamics>
         </direction-type>
       </direction>
       <note>
@@ -11697,11 +11869,6 @@
         <voice>1</voice>
         <type>quarter</type>
       </note>
-      <direction>
-        <direction-type>
-          <wedge type="stop" />
-        </direction-type>
-      </direction>
       <note>
         <pitch>
           <step>A</step>
@@ -12805,8 +12972,6 @@
         <voice>1</voice>
         <type>whole</type>
       </note>
-    </measure>
-    <measure number="350">
       <barline location="right">
         <bar-style>light-heavy</bar-style>
       </barline>
